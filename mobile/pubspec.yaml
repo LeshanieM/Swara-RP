@@ -1,0 +1,77 @@
+name: swara
+description: Swara - A Sinhala-Based Intelligent Framework for Supporting Children with Stuttering
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.1.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management
+  flutter_riverpod: any
+  riverpod_annotation: any
+
+  # Navigation
+  go_router: any
+
+  # HTTP Client
+  dio: any
+
+  # Storage
+  shared_preferences: any
+  flutter_secure_storage: any
+
+  # Audio
+  record: any
+  just_audio: any
+  path_provider: any
+
+  # File Picker
+  file_picker: any
+
+  # Image Picker
+  image_picker: any
+
+  # Charts
+  fl_chart: ^0.62.0
+
+  # Networking / Cache
+  cached_network_image: any
+
+  # Date/Time
+  intl: any
+
+  # Permissions
+  permission_handler: any
+
+  # Icons
+  cupertino_icons: any
+
+  # Misc utilities
+  equatable: any
+  json_annotation: any
+  freezed_annotation: any
+  uuid: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: any
+  build_runner: any
+  json_serializable: any
+  freezed: any
+  riverpod_generator: any
+  custom_lint: any
+  riverpod_lint: any
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/illustrations/
+    - assets/icons/
+    - assets/audio/
