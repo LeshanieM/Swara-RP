@@ -4,8 +4,9 @@ import 'package:swara/core/theme/app_theme.dart';
 
 class MainScaffold extends StatelessWidget {
   final Widget child;
+  final String? currentLocation;
 
-  const MainScaffold({super.key, required this.child});
+  const MainScaffold({super.key, required this.child, this.currentLocation});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +49,16 @@ class MainScaffold extends StatelessWidget {
   }
 
   Widget _buildKidsBottomNav(BuildContext context) {
-    final location = GoRouterState.of(context).uri.toString();
+    String location = currentLocation ?? '/';
+    if (currentLocation == null) {
+      try {
+        location = GoRouterState.of(context).uri.toString();
+      } catch (_) {
+        try {
+          location = GoRouter.of(context).routeInformationProvider.value.uri.toString();
+        } catch (_) {}
+      }
+    }
     
     int currentIndex = 0;
     if (location.startsWith('/activities')) currentIndex = 2;
