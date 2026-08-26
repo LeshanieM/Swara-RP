@@ -1,0 +1,108 @@
+# ==========================================
+# Node.js Backend
+# ==========================================
+
+backend/node_modules/
+backend/.env
+backend/.env.*
+!backend/.env.example
+backend/npm-debug.log*
+backend/yarn-debug.log*
+backend/yarn-error.log*
+backend/pnpm-debug.log*
+backend/coverage/
+
+
+# ==========================================
+# Flutter / Dart
+# ==========================================
+
+mobile/.dart_tool/
+mobile/.packages
+mobile/build/
+mobile/.flutter-plugins
+mobile/.flutter-plugins-dependencies
+mobile/.flutter-plugin-dependencies
+mobile/.pub-cache/
+
+# Flutter generated files
+mobile/**/Generated.xcconfig
+mobile/**/flutter_export_environment.sh
+
+# Keep pubspec.lock for Flutter apps
+# mobile/pubspec.lock
+
+
+# ==========================================
+# Android
+# ==========================================
+
+mobile/android/.gradle/
+mobile/android/local.properties
+mobile/android/**/GeneratedPluginRegistrant.java
+
+# Android build outputs
+mobile/android/app/build/
+mobile/android/build/
+
+
+# ==========================================
+# iOS
+# ==========================================
+
+mobile/ios/Pods/
+mobile/ios/.symlinks/
+mobile/ios/Flutter/ephemeral/
+mobile/ios/Flutter/Generated.xcconfig
+mobile/ios/Flutter/flutter_export_environment.sh
+mobile/ios/Runner/GeneratedPluginRegistrant.m
+
+
+# ==========================================
+# IDE / Editors
+# ==========================================
+
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+*.swn
+
+
+# ==========================================
+# Fonts / Generated Assets
+# ==========================================
+
+public/fonts/
+
+
+# ==========================================
+# OS / Environment
+# ==========================================
+
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.log
+
+
+# ==========================================
+# Environment / Secrets
+# ==========================================
+
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+
+# ==========================================
+# Temporary / Cache Files
+# ==========================================
+
+*.tmp
+*.temp
+.cache/
+.tmp/
