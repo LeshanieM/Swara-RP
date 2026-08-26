@@ -228,3 +228,16 @@ Desktop.ini
 
 # Xcode scheme user data
 **/xcshareddata/xcschemes/*.xcscheme
+
+# Windows Flutter generated files
+/windows/flutter/
+/windows/runner/GeneratedPluginRegistrant.*
+/windows/CMakeLists.txt.user
+/windows/Runner/Debug/
+/windows/Runner/Release/
+/windows/Runner/Generated Files/
+
+# Web builds
+/build/web/
+
+/windows/flutter/generated_plugins.cmake
