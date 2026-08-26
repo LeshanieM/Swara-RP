@@ -6,7 +6,15 @@ import 'core/storage/storage_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await StorageService.init();
+  try {
+    await StorageService.init();
+  } catch (e, stack) {
+    debugPrint('StorageService init error: $e\n$stack');
+  }
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    debugPrint('Flutter Error: ${details.exception}\n${details.stack}');
+  };
   runApp(const ProviderScope(child: SwaraApp()));
 }
 

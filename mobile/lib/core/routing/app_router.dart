@@ -29,7 +29,10 @@ final _appRouter = GoRouter(
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
       builder: (context, state, child) {
-        return MainScaffold(child: child);
+        return MainScaffold(
+          currentLocation: state.uri.toString(),
+          child: child,
+        );
       },
       routes: [
         GoRoute(
