@@ -27,7 +27,7 @@ class _CommunicationResultScreenState extends State<CommunicationResultScreen> {
                 // Header Mode Switcher
                 Container(
                   padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(color: Colors.black.withOpacity(0.3), borderRadius: BorderRadius.circular(30)),
+                  decoration: BoxDecoration(color: AppColors.c4Blue.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(30)),
                   child: Row(
                     children: [
                       Expanded(
@@ -39,7 +39,7 @@ class _CommunicationResultScreenState extends State<CommunicationResultScreen> {
                               color: _viewMode == 0 ? AppColors.ctaOrange : Colors.transparent,
                               borderRadius: BorderRadius.circular(26),
                             ),
-                            child: const Text('🧒 Child View', textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                            child: Text('🧒 Child View', textAlign: TextAlign.center, style: TextStyle(color: _viewMode == 0 ? Colors.white : const Color(0xFF0F172A), fontWeight: FontWeight.bold)),
                           ),
                         ),
                       ),
@@ -52,7 +52,7 @@ class _CommunicationResultScreenState extends State<CommunicationResultScreen> {
                               color: _viewMode == 1 ? AppColors.ctaOrange : Colors.transparent,
                               borderRadius: BorderRadius.circular(26),
                             ),
-                            child: const Text('🩺 Clinician Analysis', textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                            child: Text('🩺 Clinician Analysis', textAlign: TextAlign.center, style: TextStyle(color: _viewMode == 1 ? Colors.white : const Color(0xFF0F172A), fontWeight: FontWeight.bold)),
                           ),
                         ),
                       ),
@@ -93,13 +93,13 @@ class _CommunicationResultScreenState extends State<CommunicationResultScreen> {
           child: const Text('🌱', style: TextStyle(fontSize: 60)),
         ),
         const SizedBox(height: 16),
-        const Text('Great Work! 🎉', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white)),
-        const Text('ගොඩක් හොඳයි!', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.softYellow)),
+        const Text('Great Work! 🎉', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF0F172A))),
+        const Text('ගොඩක් හොඳයි!', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF0066CC))),
         const SizedBox(height: 6),
         const Text(
-          'You practiced speaking in different situations today.\nඅද ඔයා විවිධ අවස්ථාවල කතා කරලා පුහුණුවුණා.',
+          'You practiced speaking in different situations today.\nඅද ඔයා විවිද අවස්ඐවල කතා කරලා පුහුණවුණා.',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 14, color: Colors.white70),
+          style: TextStyle(fontSize: 14, color: Color(0xFF475569)),
         ),
         const SizedBox(height: 28),
 

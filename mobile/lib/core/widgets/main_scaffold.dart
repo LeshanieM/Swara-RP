@@ -12,37 +12,6 @@ class MainScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.jewelNavy,
-      appBar: AppBar(
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text('🌟 ', style: TextStyle(fontSize: 24)),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('ස්වර / Swara', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
-                Text('Speech Adventure', style: TextStyle(fontSize: 12, color: AppColors.softYellow.withOpacity(0.9))),
-              ],
-            ),
-          ],
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: AppColors.softYellow,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(color: AppColors.softYellow.withOpacity(0.4), blurRadius: 10)
-                ],
-              ),
-              child: const Text('🦊', style: TextStyle(fontSize: 24)), // Mascot!
-            ),
-          )
-        ],
-      ),
       body: child,
       bottomNavigationBar: _buildKidsBottomNav(context),
     );
@@ -61,9 +30,15 @@ class MainScaffold extends StatelessWidget {
     }
     
     int currentIndex = 0;
-    if (location.startsWith('/activities') || location.startsWith('/c3')) currentIndex = 2;
-    else if (location.startsWith('/profile')) currentIndex = 3;
-    else if (location.startsWith('/c1') || location.startsWith('/c2')) currentIndex = 1;
+    if (location.startsWith('/activities') || location.startsWith('/c3')) {
+      currentIndex = 2;
+    } else if (location.startsWith('/profile')) {
+      currentIndex = 3;
+    } else if (location.startsWith('/c1') || location.startsWith('/c2') || location.startsWith('/c4')) {
+      currentIndex = 1;
+    } else {
+      currentIndex = 0;
+    }
 
     return Container(
       margin: const EdgeInsets.all(16),

@@ -118,17 +118,6 @@ extension _AppThemeX on _AppTheme {
     }
   }
 
-  String get headerQuote {
-    switch (this) {
-      case _AppTheme.forest:      return "Let's continue your forest journey! 🌲";
-      case _AppTheme.beach:       return "Let's continue your beach journey! 🌊🐢";
-      case _AppTheme.space:       return "Let's explore cosmic speech quests! 🚀✨";
-      case _AppTheme.underwater:  return "Let's discover deep coral sounds! 🐠🫧";
-      case _AppTheme.safari:      return "Let's explore the golden savanna! 🦁🌾";
-      case _AppTheme.candyland:   return "Let's find sweet sound treats! 🍭🍬";
-    }
-  }
-
   String get mascotName {
     switch (this) {
       case _AppTheme.forest:      return 'Milo';
@@ -385,14 +374,12 @@ class _MainGalleryShellState extends State<_MainGalleryShell> {
     return _InheritedTheme(
       theme: _theme,
       onChanged: (t) => setState(() => _theme = t),
-      child: Scaffold(
-        body: Stack(children: [
+      child: Stack(children: [
           _InheritedNav(
             index: _idx,
             go: _go,
             child: Column(children: [
               Expanded(child: _screens[_idx]['w'] as Widget),
-              if (_idx != 0) _BottomNav(index: _idx, go: _go),
             ]),
           ),
 
@@ -462,7 +449,6 @@ class _MainGalleryShellState extends State<_MainGalleryShell> {
               ),
             ),
         ]),
-      ),
     );
   }
 }
@@ -664,96 +650,6 @@ class _BackHeader extends StatelessWidget {
   }
 }
 
-class _UserHeader extends StatelessWidget {
-  const _UserHeader();
-  @override
-  Widget build(BuildContext context) {
-    final nav = _InheritedNav.of(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.95),
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: _C.blue.withValues(alpha: 0.15), width: 1.5),
-        boxShadow: [BoxShadow(color: _C.blue.withValues(alpha: 0.12), blurRadius: 12, offset: const Offset(0, 4))],
-      ),
-      child: Row(children: [
-        Container(
-          padding: const EdgeInsets.all(2),
-          decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: _C.blue, width: 2)),
-          child: const CircleAvatar(radius: 22, backgroundColor: _C.chipBg,
-            child: Icon(Icons.person_rounded, color: _C.blue, size: 26)),
-        ),
-        const SizedBox(width: 14),
-        Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const Text('Hi, Aseliya! 👋', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w800, color: _C.darkText)),
-          const SizedBox(height: 2),
-          Builder(builder: (ctx) => Text(
-            _InheritedTheme.themeOf(ctx).headerQuote,
-            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: _C.blue),
-          )),
-        ])),
-        IconButton(onPressed: () => nav?.go(17), icon: const Icon(Icons.tune_rounded, color: _C.blue, size: 22)),
-      ]),
-    );
-  }
-}
-
-class _BottomNav extends StatelessWidget {
-  final int index;
-  final void Function(int) go;
-  const _BottomNav({required this.index, required this.go});
-
-  int _tab() {
-    if (index == 14 || index == 15 || index == 16) return 1;
-    if (index == 12) return 2;
-    if (index == 17) return 3;
-    return 0;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final tab = _tab();
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-        boxShadow: [BoxShadow(color: _C.blue.withValues(alpha: 0.15), blurRadius: 16, offset: const Offset(0, -4))],
-      ),
-      child: SafeArea(top: false, child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-          _navItem(1, 'Home',     Icons.home_rounded,      tab == 0),
-          _navItem(14,'Therapy',  Icons.psychology_rounded, tab == 1),
-          _navItem(12,'Progress', Icons.insights_rounded,   tab == 2),
-          _navItem(17,'Profile',  Icons.person_rounded,     tab == 3),
-        ]),
-      )),
-    );
-  }
-
-  Widget _navItem(int target, String label, IconData icon, bool sel) {
-    return GestureDetector(
-      onTap: () => go(target),
-      behavior: HitTestBehavior.opaque,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: sel ? _C.blue.withValues(alpha: 0.12) : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Row(mainAxisSize: MainAxisSize.min, children: [
-          Icon(icon, color: sel ? _C.blue : Colors.grey.shade500, size: 24),
-          if (sel) ...[
-            const SizedBox(width: 8),
-            Text(label, style: const TextStyle(color: _C.blue, fontWeight: FontWeight.bold, fontSize: 13)),
-          ],
-        ]),
-      ),
-    );
-  }
-}
 
 // ============================================================================
 // SCENE PAINTERS
@@ -1078,8 +974,7 @@ class _S2Home extends StatelessWidget {
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        const _UserHeader(),
-        const SizedBox(height: 16),
+
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.95), borderRadius: BorderRadius.circular(24), boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 12)]),
