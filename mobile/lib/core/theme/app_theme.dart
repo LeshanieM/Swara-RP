@@ -78,7 +78,8 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       scaffoldBackgroundColor: AppColors.jewelNavy,
-      fontFamily: 'Roboto',
+      fontFamily: 'Outfit',
+      fontFamilyFallback: const ['Noto Sans Sinhala', 'Roboto', 'sans-serif'],
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.white,
