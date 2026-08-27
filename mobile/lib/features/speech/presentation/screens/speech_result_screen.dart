@@ -66,7 +66,7 @@ class _SpeechResultScreenState extends State<SpeechResultScreen> {
           const SizedBox(height: 24),
           const Text(
             'Analyzing Speech Fluency...\nඔයාගේ කතාව බලමින්...',
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 40),
@@ -120,7 +120,7 @@ class _SpeechResultScreenState extends State<SpeechResultScreen> {
           // Header Mode Switcher (Child vs Clinician View)
           Container(
             padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(color: Colors.black.withOpacity(0.3), borderRadius: BorderRadius.circular(30)),
+            decoration: BoxDecoration(color: AppColors.c1Blue.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(30)),
             child: Row(
               children: [
                 Expanded(
@@ -132,7 +132,7 @@ class _SpeechResultScreenState extends State<SpeechResultScreen> {
                         color: _viewMode == 0 ? AppColors.ctaOrange : Colors.transparent,
                         borderRadius: BorderRadius.circular(26),
                       ),
-                      child: const Text('🧒 Child View', textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                      child: Text('🧒 Child View', textAlign: TextAlign.center, style: TextStyle(color: _viewMode == 0 ? Colors.white : const Color(0xFF0F172A), fontWeight: FontWeight.bold)),
                     ),
                   ),
                 ),
@@ -145,7 +145,7 @@ class _SpeechResultScreenState extends State<SpeechResultScreen> {
                         color: _viewMode == 1 ? AppColors.ctaOrange : Colors.transparent,
                         borderRadius: BorderRadius.circular(26),
                       ),
-                      child: const Text('🩺 Clinician View', textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                      child: Text('🩺 Clinician View', textAlign: TextAlign.center, style: TextStyle(color: _viewMode == 1 ? Colors.white : const Color(0xFF0F172A), fontWeight: FontWeight.bold)),
                     ),
                   ),
                 ),
@@ -183,8 +183,8 @@ class _SpeechResultScreenState extends State<SpeechResultScreen> {
           child: const Text('🌟', style: TextStyle(fontSize: 60)),
         ),
         const SizedBox(height: 16),
-        const Text('Speech Activity Completed! 🎉', style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.white)),
-        const Text('ගොඩක් හොඳයි! ඔයා හොඳින් කළා.', style: TextStyle(fontSize: 14, color: Colors.white70)),
+        const Text('Speech Activity Completed! 🎉', style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Color(0xFF0F172A))),
+        const Text('ගොඩක් හොඳයි! ඔයා හොඳින් කළා.', style: TextStyle(fontSize: 14, color: Color(0xFF475569))),
         const SizedBox(height: 24),
 
         Container(

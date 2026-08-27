@@ -39,15 +39,26 @@ class ParentHomeScreen extends ConsumerWidget {
                   children: [
                     Row(
                       children: [
-                        CircleAvatar(
-                          backgroundColor: Colors.white24,
-                          radius: 22,
-                          child: Text(
-                            (user?.name ?? 'P').substring(0, 1).toUpperCase(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
+                        Container(
+                          width: 44,
+                          height: 44,
+                          decoration: const BoxDecoration(shape: BoxShape.circle),
+                          child: ClipOval(
+                            child: Image.asset(
+                              'assets/images/common/user_pic.jpg',
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) => CircleAvatar(
+                                backgroundColor: Colors.white24,
+                                radius: 22,
+                                child: Text(
+                                  (user?.name ?? 'P').substring(0, 1).toUpperCase(),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -57,7 +68,7 @@ class ParentHomeScreen extends ConsumerWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Hello, ${user?.name?.split(' ').first ?? 'Parent'}! 👋',
+                                'Hello, ${user?.name.split(' ').first ?? 'Parent'}! 👋',
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,

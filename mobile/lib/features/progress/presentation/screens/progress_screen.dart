@@ -21,15 +21,15 @@ class ProgressScreen extends StatelessWidget {
                 Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Colors.white, size: 28),
+                      icon: const Icon(Icons.arrow_back, color: AppColors.primary, size: 28),
                       onPressed: () => context.go('/'),
                     ),
                     const SizedBox(width: 8),
                     const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('🏆 මගේ ප්‍රගතිය', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-                        Text('My Speech Adventure Progress', style: TextStyle(color: AppColors.softYellow, fontSize: 12)),
+                        Text('🏆 මගේ ප්‍රගතිය', style: TextStyle(color: AppColors.text, fontSize: 20, fontWeight: FontWeight.bold)),
+                        Text('My Speech Adventure Progress', style: TextStyle(color: AppColors.primary, fontSize: 12)),
                       ],
                     ),
                   ],
@@ -46,7 +46,7 @@ class ProgressScreen extends StatelessWidget {
                   child: const Text('🦊', style: TextStyle(fontSize: 64)),
                 ),
                 const SizedBox(height: 12),
-                const Text('මගේ ගමන 🌱 / My Journey', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white)),
+                const Text('මගේ ගමන 🌱 / My Journey', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.text)),
                 const SizedBox(height: 28),
 
                 Container(

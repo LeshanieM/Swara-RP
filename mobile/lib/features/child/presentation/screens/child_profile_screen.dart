@@ -40,15 +40,31 @@ class ChildProfileScreen extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const SizedBox(height: 40),
-                      CircleAvatar(
-                        radius: 40,
-                        backgroundColor: Colors.white24,
-                        child: Text(
-                          child.firstName.substring(0, 1),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 36,
-                            fontWeight: FontWeight.bold,
+                      Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 3),
+                          boxShadow: const [
+                            BoxShadow(color: Colors.black26, blurRadius: 10, offset: Offset(0, 4)),
+                          ],
+                        ),
+                        child: ClipOval(
+                          child: Image.asset(
+                            'assets/images/common/user_pic.jpg',
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) => CircleAvatar(
+                              backgroundColor: Colors.white24,
+                              child: Text(
+                                child.firstName.isNotEmpty ? child.firstName.substring(0, 1) : 'A',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 36,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ),

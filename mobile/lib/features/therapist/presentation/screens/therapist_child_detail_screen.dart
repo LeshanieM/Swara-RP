@@ -27,12 +27,22 @@ class TherapistChildDetailScreen extends ConsumerWidget {
               SwaraGradientCard(
                 child: Row(
                   children: [
-                    CircleAvatar(
-                      radius: 28,
-                      backgroundColor: Colors.white24,
-                      child: Text(
-                        child.firstName.substring(0, 1),
-                        style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                    Container(
+                      width: 56,
+                      height: 56,
+                      decoration: const BoxDecoration(shape: BoxShape.circle),
+                      child: ClipOval(
+                        child: Image.asset(
+                          'assets/images/common/user_pic.jpg',
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) => CircleAvatar(
+                            backgroundColor: Colors.white24,
+                            child: Text(
+                              child.firstName.substring(0, 1),
+                              style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(width: 14),
