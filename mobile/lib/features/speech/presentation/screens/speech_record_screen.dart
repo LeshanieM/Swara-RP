@@ -118,7 +118,7 @@ class _SpeechRecordScreenState extends ConsumerState<SpeechRecordScreen> with Si
                 child: Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Colors.white, size: 28),
+                      icon: const Icon(Icons.arrow_back_rounded, color: Color(0xFF0F172A), size: 26),
                       onPressed: () => context.go('/'),
                     ),
                     const SizedBox(width: 8),
@@ -128,18 +128,22 @@ class _SpeechRecordScreenState extends ConsumerState<SpeechRecordScreen> with Si
                         children: [
                           Text(
                             _currentActivity == 0 ? 'Activity 1: Reading Practice' : 'Activity 2: Picture Description',
-                            style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                            style: const TextStyle(color: Color(0xFF0F172A), fontSize: 18, fontWeight: FontWeight.bold),
                           ),
-                          const Text("Component 1 — Speech Assessment", style: TextStyle(color: AppColors.softYellow, fontSize: 12)),
+                          const Text("Component 1 — Speech Assessment", style: TextStyle(color: Color(0xFF0066CC), fontSize: 12, fontWeight: FontWeight.w600)),
                         ],
                       ),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(color: AppColors.softYellow, borderRadius: BorderRadius.circular(16)),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF0066CC).withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: const Color(0xFF0066CC).withValues(alpha: 0.25)),
+                      ),
                       child: Text(
-                        '${_currentActivity + 1}/2',
-                        style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.jewelEmerald),
+                        _currentActivity == 0 ? 'Step 1/2' : 'Step 2/2',
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF0066CC)),
                       ),
                     ),
                   ],

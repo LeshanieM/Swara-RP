@@ -61,7 +61,7 @@ class MainScaffold extends StatelessWidget {
     }
     
     int currentIndex = 0;
-    if (location.startsWith('/activities')) currentIndex = 2;
+    if (location.startsWith('/activities') || location.startsWith('/c3')) currentIndex = 2;
     else if (location.startsWith('/profile')) currentIndex = 3;
     else if (location.startsWith('/c1') || location.startsWith('/c2')) currentIndex = 1;
 
@@ -69,25 +69,28 @@ class MainScaffold extends StatelessWidget {
       margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(35),
+        borderRadius: BorderRadius.circular(28),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
+            color: const Color(0xFF0066CC).withValues(alpha: 0.15),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
           )
         ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildNavItem(context, index: 0, icon: Icons.map, emoji: '🗺️', label: 'මුල් පිටුව\nHome', isActive: currentIndex == 0, route: '/'),
-            _buildNavItem(context, index: 1, icon: Icons.mic, emoji: '🎤', label: 'කතා\nSpeech', isActive: currentIndex == 1, route: '/c1/record'),
-            _buildNavItem(context, index: 2, icon: Icons.menu_book, emoji: '📖', label: 'ක්‍රියාකාරකම්\nActivities', isActive: currentIndex == 2, route: '/activities'),
-            _buildNavItem(context, index: 3, icon: Icons.military_tech, emoji: '🏆', label: 'මගේ\nProfile', isActive: currentIndex == 3, route: '/profile'),
-          ],
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildNavItem(context, index: 0, icon: Icons.home_rounded, label: 'Home', isActive: currentIndex == 0, route: '/'),
+              _buildNavItem(context, index: 1, icon: Icons.mic_rounded, label: 'Speech', isActive: currentIndex == 1, route: '/c1/record'),
+              _buildNavItem(context, index: 2, icon: Icons.psychology_rounded, label: 'Therapy', isActive: currentIndex == 2, route: '/activities'),
+              _buildNavItem(context, index: 3, icon: Icons.person_rounded, label: 'Profile', isActive: currentIndex == 3, route: '/profile'),
+            ],
+          )
         ),
       ),
     );
@@ -96,28 +99,38 @@ class MainScaffold extends StatelessWidget {
   Widget _buildNavItem(BuildContext context, {
     required int index,
     required IconData icon,
-    required String emoji,
     required String label,
     required bool isActive,
     required String route,
   }) {
+    const blueColor = Color(0xFF0066CC);
     return GestureDetector(
       onTap: () => context.go(route),
+      behavior: HitTestBehavior.opaque,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isActive ? AppColors.ctaOrange : Colors.transparent,
-          borderRadius: BorderRadius.circular(25),
+          color: isActive ? blueColor.withValues(alpha: 0.12) : Colors.transparent,
+          borderRadius: BorderRadius.circular(20),
         ),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Text(emoji, style: const TextStyle(fontSize: 22)),
+            Icon(
+              icon,
+              color: isActive ? blueColor : Colors.grey.shade500,
+              size: 24,
+            ),
             if (isActive) ...[
-              const SizedBox(width: 6),
+              const SizedBox(width: 8),
               Text(
-                label.split('\n')[0],
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+                label,
+                style: const TextStyle(
+                  color: blueColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                ),
               ),
             ]
           ],

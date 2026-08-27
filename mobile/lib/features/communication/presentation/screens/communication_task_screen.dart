@@ -113,15 +113,15 @@ class _CommunicationTaskScreenState extends State<CommunicationTaskScreen> {
           child: Row(
             children: [
               IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.white, size: 28),
+                icon: const Icon(Icons.arrow_back_rounded, color: Color(0xFF0F172A), size: 26),
                 onPressed: () => context.go('/'),
               ),
               const SizedBox(width: 8),
               const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('🌱 Component 4: Spontaneous Speech', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-                  Text('Natural Communication Generalization', style: TextStyle(color: AppColors.softYellow, fontSize: 12)),
+                  Text('🌱 Component 4: Spontaneous Speech', style: TextStyle(color: Color(0xFF0F172A), fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text('Natural Communication Generalization', style: TextStyle(color: Color(0xFF0369A1), fontSize: 12, fontWeight: FontWeight.w600)),
                 ],
               ),
             ],
@@ -134,9 +134,9 @@ class _CommunicationTaskScreenState extends State<CommunicationTaskScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Generate Spontaneous Topic', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white)),
+                const Text('Generate Spontaneous Topic', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF0F172A))),
                 const SizedBox(height: 4),
-                const Text('Select a familiar real-life communication scenario.', style: TextStyle(fontSize: 13, color: Colors.white70)),
+                const Text('Select a familiar real-life communication scenario.', style: TextStyle(fontSize: 13, color: Color(0xFF64748B))),
                 const SizedBox(height: 20),
 
                 ...List.generate(_topics.length, (index) {
@@ -188,7 +188,7 @@ class _CommunicationTaskScreenState extends State<CommunicationTaskScreen> {
           child: Row(
             children: [
               IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.white, size: 28),
+                icon: const Icon(Icons.arrow_back, color: AppColors.text, size: 28),
                 onPressed: () {
                   _timer?.cancel();
                   setState(() { _selectedTopic = null; _isRecording = false; _hasRecorded = false; _seconds = 0; });
@@ -198,8 +198,8 @@ class _CommunicationTaskScreenState extends State<CommunicationTaskScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(topic['titleEn']!, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-                  const Text('Spontaneous Speaking Task', style: TextStyle(color: AppColors.softYellow, fontSize: 12)),
+                  Text(topic['titleEn']!, style: const TextStyle(color: AppColors.text, fontSize: 18, fontWeight: FontWeight.bold)),
+                  const Text('Spontaneous Speaking Task', style: TextStyle(color: AppColors.primary, fontSize: 12)),
                 ],
               ),
             ],
@@ -275,8 +275,8 @@ class _CommunicationTaskScreenState extends State<CommunicationTaskScreen> {
                       Expanded(
                         child: OutlinedButton(
                           onPressed: () => setState(() => _hasRecorded = false),
-                          style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.white, width: 2), padding: const EdgeInsets.symmetric(vertical: 16), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
-                          child: const Text('Replay / Re-record', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                          style: OutlinedButton.styleFrom(side: const BorderSide(color: AppColors.primary, width: 2), padding: const EdgeInsets.symmetric(vertical: 16), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
+                          child: const Text('Replay / Re-record', style: TextStyle(color: AppColors.primary, fontSize: 16, fontWeight: FontWeight.bold)),
                         ),
                       ),
                       const SizedBox(width: 12),

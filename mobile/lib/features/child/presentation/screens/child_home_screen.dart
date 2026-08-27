@@ -23,17 +23,17 @@ class ChildHomeScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [AppColors.cardCream, Color(0xFFFFF5E6)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(28),
+                  border: Border.all(
+                    color: const Color(0xFF0066CC).withValues(alpha: 0.15),
+                    width: 1.5,
+                  ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.12),
+                      color: const Color(0xFF0066CC).withValues(alpha: 0.08),
                       blurRadius: 16,
-                      offset: const Offset(0, 6),
+                      offset: const Offset(0, 4),
                     ),
                   ],
                 ),
@@ -43,20 +43,24 @@ class ChildHomeScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
-                          colors: [AppColors.softYellow, AppColors.ctaOrange],
+                          colors: [Color(0xFFE0F2FE), Color(0xFFBAE6FD)],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
                         borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: const Color(0xFF0066CC).withValues(alpha: 0.2),
+                          width: 1,
+                        ),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.ctaOrange.withOpacity(0.25),
-                            blurRadius: 10,
-                            offset: const Offset(0, 3),
+                            color: const Color(0xFF0066CC).withValues(alpha: 0.1),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
                           ),
                         ],
                       ),
-                      child: const Text('🦊', style: TextStyle(fontSize: 32)),
+                      child: const Text('🦊', style: TextStyle(fontSize: 30)),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
@@ -68,15 +72,15 @@ class ChildHomeScreen extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.text,
+                              color: Color(0xFF0F172A),
                               height: 1.1,
                             ),
                           ),
-                          Text(
+                          const Text(
                             'අද අපි මොනවා කරමුද?',
                             style: TextStyle(
                               fontSize: 13,
-                              color: AppColors.textLight,
+                              color: Color(0xFF475569),
                               fontWeight: FontWeight.w600,
                               height: 1.1,
                             ),
@@ -85,7 +89,7 @@ class ChildHomeScreen extends StatelessWidget {
                             'What shall we do today? 🌟',
                             style: TextStyle(
                               fontSize: 11,
-                              color: AppColors.textLight.withOpacity(0.6),
+                              color: const Color(0xFF64748B).withValues(alpha: 0.8),
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -96,24 +100,24 @@ class ChildHomeScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
-                        color: AppColors.mintGreen.withOpacity(0.15),
+                        color: const Color(0xFF0066CC).withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
-                            color: AppColors.mintGreen.withOpacity(0.3),
+                            color: const Color(0xFF0066CC).withValues(alpha: 0.2),
                             width: 1),
                       ),
-                      child: Row(
+                      child: const Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.local_fire_department,
-                              color: AppColors.ctaOrange, size: 14),
-                          const SizedBox(width: 3),
+                          Icon(Icons.local_fire_department,
+                              color: Color(0xFF0066CC), size: 14),
+                          SizedBox(width: 3),
                           Text(
                             '3 🔥',
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.text.withOpacity(0.7),
+                              color: Color(0xFF0066CC),
                             ),
                           ),
                         ],
@@ -132,14 +136,14 @@ class ChildHomeScreen extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [AppColors.ctaOrange, Color(0xFFFF6B35)],
+                    colors: [Color(0xFF0066CC), Color(0xFF0284C7)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.ctaOrange.withOpacity(0.3),
+                      color: const Color(0xFF0066CC).withValues(alpha: 0.25),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
@@ -171,7 +175,7 @@ class ChildHomeScreen extends StatelessWidget {
                           Text(
                             'Let\'s begin the Swara journey 🚀',
                             style: TextStyle(
-                              color: Colors.white.withOpacity(0.85),
+                              color: Colors.white.withValues(alpha: 0.9),
                               fontSize: 11,
                             ),
                           ),
@@ -188,7 +192,7 @@ class ChildHomeScreen extends StatelessWidget {
                       child: const Text(
                         '4 Activities',
                         style: TextStyle(
-                          color: AppColors.ctaOrange,
+                          color: Color(0xFF0066CC),
                           fontWeight: FontWeight.bold,
                           fontSize: 10,
                         ),
@@ -207,7 +211,7 @@ class ChildHomeScreen extends StatelessWidget {
                   const Text(
                     '🎯 අද ගවේෂණය',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Color(0xFF0F172A),
                       fontSize: 17,
                       fontWeight: FontWeight.bold,
                     ),
@@ -218,16 +222,16 @@ class ChildHomeScreen extends StatelessWidget {
                     width: 30,
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
-                        colors: [AppColors.softYellow, Colors.transparent],
+                        colors: [Color(0xFF0066CC), Colors.transparent],
                       ),
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
                   const Spacer(),
-                  Text(
+                  const Text(
                     'Today\'s Quest',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.4),
+                      color: Color(0xFF64748B),
                       fontSize: 11,
                       fontWeight: FontWeight.w500,
                     ),
@@ -237,7 +241,7 @@ class ChildHomeScreen extends StatelessWidget {
               const SizedBox(height: 12),
 
               // ============================================================
-              // 4. COMPONENT CARDS - SMALLER
+              // 4. COMPONENT CARDS - 4 DISTINCT SHADES OF BLUE
               // ============================================================
               GridView.count(
                 shrinkWrap: true,
@@ -245,63 +249,67 @@ class ChildHomeScreen extends StatelessWidget {
                 crossAxisCount: 2,
                 crossAxisSpacing: 12,
                 mainAxisSpacing: 12,
-                childAspectRatio: 0.7, // SMALLER: reduced from 0.8 to 0.7
+                childAspectRatio: 0.7,
                 children: [
+                  // Comp 1: Royal Blue
                   _CompactAdventureCard(
                     emoji: '🎤',
                     titleSi: 'කතා කරමු',
                     titleEn: "Let's Talk",
                     subtitleSi: 'Reading & Picture',
                     subtitleEn: 'Speech practice',
-                    colorAccent: AppColors.mintGreen,
+                    colorAccent: const Color(0xFF0066CC),
                     gradientColors: const [
-                      Color(0xFF6BCB77),
-                      Color(0xFF4CAF50)
+                      Color(0xFF0066CC),
+                      Color(0xFF2563EB)
                     ],
                     badgeText: 'Comp 1',
                     onTap: () => context.push('/c1/record'),
                     icon: Icons.mic,
                   ),
+                  // Comp 2: Deep Indigo Blue
                   _CompactAdventureCard(
                     emoji: '🎥',
                     titleSi: 'කතා කරන විදිහ',
                     titleEn: 'Camera Fun',
                     subtitleSi: 'Video Analysis',
                     subtitleEn: 'Watch & learn',
-                    colorAccent: const Color(0xFFAEB8F0),
+                    colorAccent: const Color(0xFF1D4ED8),
                     gradientColors: const [
-                      Color(0xFF7C8CDB),
-                      Color(0xFF5B6FC7)
+                      Color(0xFF1D4ED8),
+                      Color(0xFF3B82F6)
                     ],
                     badgeText: 'Comp 2',
                     onTap: () => context.push('/c2/dashboard'),
                     icon: Icons.videocam,
                   ),
+                  // Comp 3: Cerulean / Sky Blue
                   _CompactAdventureCard(
                     emoji: '📖',
                     titleSi: 'ක්‍රියාකාරකම්',
                     titleEn: 'Story Time',
                     subtitleSi: 'Guided Therapy',
                     subtitleEn: 'Relax & practice',
-                    colorAccent: AppColors.softYellow,
+                    colorAccent: const Color(0xFF0284C7),
                     gradientColors: const [
-                      Color(0xFFFFD93D),
-                      Color(0xFFFFC107)
+                      Color(0xFF0284C7),
+                      Color(0xFF0EA5E9)
                     ],
                     badgeText: 'Comp 3',
                     onTap: () => context.push('/activities'),
                     icon: Icons.auto_stories,
                   ),
+                  // Comp 4: Marine / Electric Blue
                   _CompactAdventureCard(
                     emoji: '🌱',
                     titleSi: 'නිදහසේ කතා',
                     titleEn: 'Free Talk',
                     subtitleSi: 'Spontaneous Topics',
                     subtitleEn: 'Speak freely!',
-                    colorAccent: AppColors.ctaOrange,
+                    colorAccent: const Color(0xFF0369A1),
                     gradientColors: const [
-                      Color(0xFFFF8A65),
-                      Color(0xFFFF5722)
+                      Color(0xFF0369A1),
+                      Color(0xFF38BDF8)
                     ],
                     badgeText: 'Comp 4',
                     onTap: () => context.push('/c4/task'),
@@ -320,19 +328,15 @@ class ChildHomeScreen extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [AppColors.cardCream, Color(0xFFFFF5E6)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(24),
                     border: Border.all(
-                      color: AppColors.softYellow.withOpacity(0.4),
+                      color: const Color(0xFF0066CC).withValues(alpha: 0.15),
                       width: 1.5,
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.12),
+                        color: const Color(0xFF0066CC).withValues(alpha: 0.08),
                         blurRadius: 16,
                         offset: const Offset(0, 4),
                       ),
@@ -345,14 +349,14 @@ class ChildHomeScreen extends StatelessWidget {
                         height: 44,
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
-                            colors: [AppColors.softYellow, AppColors.ctaOrange],
+                            colors: [Color(0xFF0066CC), Color(0xFF0284C7)],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                           ),
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.ctaOrange.withOpacity(0.25),
+                              color: const Color(0xFF0066CC).withValues(alpha: 0.25),
                               blurRadius: 10,
                               offset: const Offset(0, 3),
                             ),
@@ -374,7 +378,7 @@ class ChildHomeScreen extends StatelessWidget {
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
-                                    color: AppColors.text,
+                                    color: Color(0xFF0F172A),
                                   ),
                                 ),
                                 SizedBox(width: 4),
@@ -382,7 +386,7 @@ class ChildHomeScreen extends StatelessWidget {
                                   '• My Journey',
                                   style: TextStyle(
                                     fontSize: 11,
-                                    color: AppColors.textLight,
+                                    color: Color(0xFF64748B),
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -393,24 +397,24 @@ class ChildHomeScreen extends StatelessWidget {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 3),
                               decoration: BoxDecoration(
-                                color: AppColors.mintGreen.withOpacity(0.12),
+                                color: const Color(0xFF0066CC).withValues(alpha: 0.08),
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
-                                  color: AppColors.mintGreen.withOpacity(0.2),
+                                  color: const Color(0xFF0066CC).withValues(alpha: 0.15),
                                   width: 1,
                                 ),
                               ),
-                              child: Row(
+                              child: const Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  const Icon(Icons.star,
-                                      color: AppColors.softYellow, size: 12),
-                                  const SizedBox(width: 3),
+                                  Icon(Icons.star_rounded,
+                                      color: Color(0xFF0066CC), size: 14),
+                                  SizedBox(width: 3),
                                   Text(
                                     'වැඩි වෙලාවක් කතා කළා! 🌟',
                                     style: TextStyle(
                                       fontSize: 10,
-                                      color: AppColors.text.withOpacity(0.7),
+                                      color: Color(0xFF0066CC),
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
@@ -423,18 +427,18 @@ class ChildHomeScreen extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: const BoxDecoration(
-                          color: AppColors.ctaOrange,
+                          color: Color(0xFF0066CC),
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.ctaOrange,
-                              blurRadius: 10,
-                              offset: Offset(0, 3),
+                              color: Color(0xFF0066CC),
+                              blurRadius: 8,
+                              offset: Offset(0, 2),
                             ),
                           ],
                         ),
                         child: const Icon(
-                          Icons.arrow_forward_ios,
+                          Icons.arrow_forward_ios_rounded,
                           color: Colors.white,
                           size: 14,
                         ),
@@ -451,21 +455,28 @@ class ChildHomeScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.08),
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.white.withOpacity(0.08)),
+                  border: Border.all(color: const Color(0xFF0066CC).withValues(alpha: 0.15)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF0066CC).withValues(alpha: 0.05),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
-                child: Row(
+                child: const Row(
                   children: [
-                    const Icon(Icons.lightbulb,
-                        color: AppColors.softYellow, size: 16),
-                    const SizedBox(width: 10),
+                    Icon(Icons.lightbulb_rounded,
+                        color: Color(0xFF0066CC), size: 18),
+                    SizedBox(width: 10),
                     Expanded(
                       child: Text(
                         '✨ ඔබට ඕනෑම ක්‍රියාකාරකමක් තෝරා ගත හැකියි!',
                         style: TextStyle(
                           fontSize: 12,
-                          color: Colors.white.withOpacity(0.85),
+                          color: Color(0xFF0F172A),
                           fontWeight: FontWeight.w500,
                           height: 1.2,
                         ),

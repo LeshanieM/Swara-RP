@@ -10,6 +10,7 @@ import 'package:swara/features/concomitant/presentation/screens/concomitant_reco
 import 'package:swara/features/concomitant/presentation/screens/concomitant_processing_screen.dart';
 import 'package:swara/features/concomitant/presentation/screens/concomitant_result_screen.dart';
 import 'package:swara/features/storybook/presentation/screens/storybook_screen.dart';
+import 'package:swara/features/therapy_ui/swara_therapy_ui.dart';
 import 'package:swara/features/communication/presentation/screens/communication_task_screen.dart';
 import 'package:swara/features/communication/presentation/screens/communication_result_screen.dart';
 import 'package:swara/features/progress/presentation/screens/progress_screen.dart';
@@ -98,6 +99,10 @@ final _appRouter = GoRouter(
     GoRoute(
       path: '/c3/activities',
       builder: (context, state) => const StorybookScreen(childId: 'child_1'),
+    ),
+    GoRoute(
+      path: '/c3/forest-therapy',
+      builder: (context, state) => const SwaraTherapyUI(),
     ),
 
     // Component 4 - Spontaneous Analysis
