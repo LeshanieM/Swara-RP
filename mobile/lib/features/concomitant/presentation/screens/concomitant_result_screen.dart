@@ -29,7 +29,7 @@ class ConcomitantResultScreen extends StatelessWidget {
                     const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('🎥 Secondary Behavior Summary', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                        Text('🎥 Secondary Behavior Summary', style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold)),
                         Text('Component 2 — Multimodal Video & Audio Analysis', style: TextStyle(color: AppColors.softYellow, fontSize: 12)),
                       ],
                     ),
@@ -48,7 +48,7 @@ class ConcomitantResultScreen extends StatelessWidget {
                       Expanded(
                         child: Text(
                           'Note: These are AI-based observations, not a formal clinical diagnosis.',
-                          style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600),
+                          style: TextStyle(color: Colors.blue, fontSize: 12, fontWeight: FontWeight.w600),
                         ),
                       ),
                     ],

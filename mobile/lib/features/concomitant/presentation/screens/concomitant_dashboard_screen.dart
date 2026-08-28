@@ -59,7 +59,7 @@ class _ConcomitantDashboardScreenState extends ConsumerState<ConcomitantDashboar
                       const SizedBox(height: 4),
                       const Text(
                         'Analyze facial tension, eye blinking, posture, and speech blocks.',
-                        style: TextStyle(fontSize: 13, color: Colors.white70),
+                        style: TextStyle(fontSize: 13, color: Colors.blue),
                       ),
                       const SizedBox(height: 20),
 
@@ -72,7 +72,7 @@ class _ConcomitantDashboardScreenState extends ConsumerState<ConcomitantDashboar
                               child: Container(
                                 padding: const EdgeInsets.all(14),
                                 decoration: BoxDecoration(
-                                  color: _selectedOption == 0 ? AppColors.cardCream : Colors.white.withOpacity(0.15),
+                                  color: _selectedOption == 0 ? AppColors.cardCream : Colors.blue.withOpacity(0.15),
                                   borderRadius: BorderRadius.circular(20),
                                   border: Border.all(color: _selectedOption == 0 ? AppColors.ctaOrange : Colors.transparent, width: 2),
                                 ),
@@ -93,7 +93,7 @@ class _ConcomitantDashboardScreenState extends ConsumerState<ConcomitantDashboar
                               child: Container(
                                 padding: const EdgeInsets.all(14),
                                 decoration: BoxDecoration(
-                                  color: _selectedOption == 1 ? AppColors.cardCream : Colors.white.withOpacity(0.15),
+                                  color: _selectedOption == 1 ? AppColors.cardCream : Colors.blue.withOpacity(0.15),
                                   borderRadius: BorderRadius.circular(20),
                                   border: Border.all(color: _selectedOption == 1 ? AppColors.ctaOrange : Colors.transparent, width: 2),
                                 ),
