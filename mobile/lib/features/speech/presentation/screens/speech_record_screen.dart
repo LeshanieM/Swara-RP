@@ -210,7 +210,7 @@ class _SpeechRecordScreenState extends ConsumerState<SpeechRecordScreen> with Si
                       Container(
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.15),
+                          color: Colors.white.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: const Row(
@@ -219,7 +219,7 @@ class _SpeechRecordScreenState extends ConsumerState<SpeechRecordScreen> with Si
                             Text('🌟 ', style: TextStyle(fontSize: 20)),
                             Text(
                               'Take your time! / ඔයාට පුළුවන්!',
-                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                              style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold, fontSize: 16),
                             ),
                           ],
                         ),
@@ -258,7 +258,7 @@ class _SpeechRecordScreenState extends ConsumerState<SpeechRecordScreen> with Si
                                   padding: const EdgeInsets.symmetric(vertical: 16),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                                 ),
-                                child: Text(_isPaused ? 'Resume' : 'Pause', style: const TextStyle(color: AppColors.text, fontSize: 18, fontWeight: FontWeight.bold)),
+                                child: Text(_isPaused ? 'Resume' : 'Pause', style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
                               ),
                             ),
                             const SizedBox(width: 12),
@@ -282,11 +282,11 @@ class _SpeechRecordScreenState extends ConsumerState<SpeechRecordScreen> with Si
                               child: OutlinedButton(
                                 onPressed: _resetRecording,
                                 style: OutlinedButton.styleFrom(
-                                  side: const BorderSide(color: Colors.white, width: 2),
+                                  side: const BorderSide(color: Colors.blue, width: 2),
                                   padding: const EdgeInsets.symmetric(vertical: 16),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                                 ),
-                                child: const Text('Try Again', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                                child: const Text('Try Again', style: TextStyle(color: Colors.blue, fontSize: 18, fontWeight: FontWeight.bold)),
                               ),
                             ),
                             const SizedBox(width: 12),
