@@ -25,13 +25,7 @@ class ParentHomeScreen extends ConsumerWidget {
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [AppColors.gradient1, AppColors.gradient2],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
+                color: AppColors.primaryDeep,
                 padding: const EdgeInsets.fromLTRB(20, 60, 20, 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -254,9 +248,7 @@ class _ChildCard extends StatelessWidget {
               width: 52,
               height: 52,
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppColors.gradient1, AppColors.gradient2],
-                ),
+                color: AppColors.primaryDeep,
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Center(
@@ -282,7 +274,7 @@ class _ChildCard extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
-                          color: AppColors.primaryLight,
+                          color: AppColors.primaryWash,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(

@@ -70,50 +70,40 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           children: [
             // Header
             Container(
-              height: 280,
+              height: 240,
               width: double.infinity,
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFF5B5FEF), Color(0xFF7C83FD)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(32),
-                  bottomRight: Radius.circular(32),
-                ),
-              ),
-              child: const Column(
+              color: AppColors.primaryDeep,
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: 40),
-                  CircleAvatar(
-                    radius: 40,
-                    backgroundColor: Colors.white24,
-                    child: Text(
-                      'S',
-                      style: TextStyle(
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                  const SizedBox(height: 36),
+                  Container(
+                    width: 72,
+                    height: 72,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.35),
+                      borderRadius: BorderRadius.circular(AppRadii.md),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'ස',
+                        style: AppTextStyles.heading1.copyWith(
+                          color: AppColors.onPrimary,
+                          fontSize: 36,
+                        ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Text(
                     'Welcome to Swara',
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                    style: AppTextStyles.heading2.copyWith(color: AppColors.onPrimary),
                   ),
-                  SizedBox(height: 6),
+                  const SizedBox(height: 6),
                   Text(
-                    'Sinhala Speech Support System',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white70,
+                    'Sinhala speech support',
+                    style: AppTextStyles.bodySmall.copyWith(
+                      color: AppColors.onPrimary.withValues(alpha: 0.85),
                     ),
                   ),
                 ],
@@ -144,7 +134,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         decoration: BoxDecoration(
                           color: _isDemoMode
                               ? AppColors.warning.withOpacity(0.1)
-                              : AppColors.primaryLight,
+                              : AppColors.primaryWash,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
                             color: _isDemoMode

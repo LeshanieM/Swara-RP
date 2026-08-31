@@ -33,13 +33,7 @@ class TherapistHomeScreen extends ConsumerWidget {
             ],
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Color(0xFF3730A3), Color(0xFF5B5FEF)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
+                color: AppColors.primaryDeep,
                 padding: const EdgeInsets.fromLTRB(20, 60, 20, 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -196,7 +190,7 @@ class _TherapistChildCard extends StatelessWidget {
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
-                    color: AppColors.primaryLight,
+                    color: AppColors.primaryWash,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Center(
@@ -222,7 +216,7 @@ class _TherapistChildCard extends StatelessWidget {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                             decoration: BoxDecoration(
-                              color: AppColors.primaryLight,
+                              color: AppColors.primaryWash,
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(

@@ -35,7 +35,7 @@ class _ConcomitantRecordingScreenState extends ConsumerState<ConcomitantRecordin
 
   void _finishRecording() {
     _timer?.cancel();
-    context.pushReplacement('/c2/process', extra: {
+    context.pushReplacement('/c2/success', extra: {
       ...widget.assessmentData,
       'duration': _seconds,
     });

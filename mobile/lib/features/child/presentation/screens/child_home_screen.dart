@@ -11,14 +11,14 @@ class ChildHomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider);
     final rawName = user?.name.trim();
-    final childName = (rawName != null && rawName.isNotEmpty && rawName.toLowerCase() != 'child')
+    final childName = (rawName != null &&
+            rawName.isNotEmpty &&
+            rawName.toLowerCase() != 'child')
         ? rawName.split(' ').first
         : 'Aseliya';
 
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: AppColors.homeGradient,
-      ),
+    return ColoredBox(
+      color: AppColors.background,
       child: SafeArea(
         bottom: false,
         child: Column(
@@ -43,681 +43,367 @@ class ChildHomeScreen extends ConsumerWidget {
                     // ============================================================
                     // 3. SECTION TITLE - Compact
                     // ============================================================
-                    Row(
-                children: [
-                  const Text(
-                    '🎯 අද ගවේෂණය',
-                    style: TextStyle(
-                      color: Color(0xFF0F172A),
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  Container(
-                    height: 2,
-                    width: 30,
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFF0066CC), Colors.transparent],
-                      ),
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                  const Spacer(),
-                  const Text(
-                    'Today\'s Quest',
-                    style: TextStyle(
-                      color: Color(0xFF64748B),
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-
-              // ============================================================
-              // 4. COMPONENT CARDS - MODERN DARK BLUE DESIGN
-              // ============================================================
-              GridView.count(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: 2,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 0.72,
-                children: [
-                  // Comp 1: Royal / Electric Blue
-                  _CompactAdventureCard(
-                    icon: Icons.mic_rounded,
-                    titleSi: 'කතා කරමු',
-                    titleEn: "Let's Talk",
-                    subtitleSi: 'Reading & Picture',
-                    subtitleEn: 'Speech practice',
-                    colorAccent: const Color(0xFF38BDF8),
-                    gradientColors: const [
-                      Color(0xFF0066CC),
-                      Color(0xFF0284C7),
-                    ],
-                    badgeText: 'SPEECH',
-                    onTap: () => context.push('/c1/record'),
-                  ),
-                  // Comp 2: Deep Indigo / Cobalt Blue
-                  _CompactAdventureCard(
-                    icon: Icons.videocam_rounded,
-                    titleSi: 'කතා කරන විදිහ',
-                    titleEn: 'Camera Fun',
-                    subtitleSi: 'Video Analysis',
-                    subtitleEn: 'Watch & learn',
-                    colorAccent: const Color(0xFF818CF8),
-                    gradientColors: const [
-                      Color(0xFF1D4ED8),
-                      Color(0xFF6366F1),
-                    ],
-                    badgeText: 'VIDEO',
-                    onTap: () => context.push('/c2/dashboard'),
-                  ),
-                  // Comp 3: Cerulean / Sky Blue
-                  _CompactAdventureCard(
-                    icon: Icons.auto_stories_rounded,
-                    titleSi: 'ක්‍රියාකාරකම්',
-                    titleEn: 'Story Time',
-                    subtitleSi: 'Guided Therapy',
-                    subtitleEn: 'Relax & practice',
-                    colorAccent: const Color(0xFF22D3EE),
-                    gradientColors: const [
-                      Color(0xFF0284C7),
-                      Color(0xFF0EA5E9),
-                    ],
-                    badgeText: 'THERAPY',
-                    onTap: () => context.push('/activities'),
-                  ),
-                  // Comp 4: Cyan / Marine Blue
-                  _CompactAdventureCard(
-                    icon: Icons.forum_rounded,
-                    titleSi: 'නිදහසේ කතා',
-                    titleEn: 'Free Talk',
-                    subtitleSi: 'Spontaneous Topics',
-                    subtitleEn: 'Speak freely!',
-                    colorAccent: const Color(0xFF60A5FA),
-                    gradientColors: const [
-                      Color(0xFF0369A1),
-                      Color(0xFF38BDF8),
-                    ],
-                    badgeText: 'FREE TALK',
-                    onTap: () => context.push('/c4/task'),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 20),
-
-              // ============================================================
-              // 5. PROGRESS PATH - Compact
-              // ============================================================
-              GestureDetector(
-                onTap: () => context.push('/profile'),
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(
-                      color: const Color(0xFF0066CC).withValues(alpha: 0.15),
-                      width: 1.5,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF0066CC).withValues(alpha: 0.08),
-                        blurRadius: 16,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 44,
-                        height: 44,
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFF0066CC), Color(0xFF0284C7)],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(0xFF0066CC).withValues(alpha: 0.25),
-                              blurRadius: 10,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        child: const Center(
-                          child: Icon(
-                            Icons.emoji_events_rounded,
-                            color: Colors.white,
-                            size: 22,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Row(
-                              children: [
-                                Text(
-                                  'මගේ ගමන',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF0F172A),
-                                  ),
-                                ),
-                                SizedBox(width: 4),
-                                Text(
-                                  '• My Journey',
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    color: Color(0xFF64748B),
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 2),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 3),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF0066CC).withValues(alpha: 0.08),
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: const Color(0xFF0066CC).withValues(alpha: 0.15),
-                                  width: 1,
-                                ),
-                              ),
-                              child: const Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(Icons.star_rounded,
-                                      color: Color(0xFF0066CC), size: 14),
-                                  SizedBox(width: 3),
-                                  Text(
-                                    'වැඩි වෙලාවක් කතා කළා!',
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      color: Color(0xFF0066CC),
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: const BoxDecoration(
-                          color: Color(0xFF0066CC),
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color(0xFF0066CC),
-                              blurRadius: 8,
-                              offset: Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: const Icon(
-                          Icons.arrow_forward_ios_rounded,
-                          color: Colors.white,
-                          size: 14,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // ============================================================
-              // 6. QUICK TIPS - Compact
-              // ============================================================
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: const Color(0xFF0066CC).withValues(alpha: 0.15)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFF0066CC).withValues(alpha: 0.05),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: const Row(
-                  children: [
-                    Icon(Icons.tips_and_updates_rounded,
-                        color: Color(0xFF0066CC), size: 18),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        'ඔබට ඕනෑම ක්‍රියාකාරකමක් තෝරා ගත හැකියි!',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Color(0xFF0F172A),
-                          fontWeight: FontWeight.w500,
-                          height: 1.2,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
-            ],
-          ),
-        ),
-      ),
-    ],
-  ),
-),
-);
-  }
-
-  Widget _buildFixedHeader(BuildContext context, String childName) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(
-          color: const Color(0xFF0066CC).withValues(alpha: 0.12),
-          width: 1.2,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF0066CC).withValues(alpha: 0.08),
-            blurRadius: 16,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // Speech-support branded app logo (Soundwaves + Voice + Gradient Badge)
-          Container(
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF0066CC), Color(0xFF0284C7)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(14),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF0066CC).withValues(alpha: 0.3),
-                  blurRadius: 8,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: const Center(
-              child: Icon(
-                Icons.record_voice_over_rounded,
-                color: Colors.white,
-                size: 24,
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
-          // App Name in both Sinhala & English
-          const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'ස්වර',
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF0066CC),
-                      letterSpacing: -0.2,
-                      height: 1.1,
-                    ),
-                  ),
-                  SizedBox(width: 4),
-                  Text(
-                    '• Swara',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF0284C7),
-                      letterSpacing: -0.2,
-                      height: 1.1,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 2),
-              Text(
-                'Speech Support',
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF64748B),
-                  letterSpacing: 0.2,
-                  height: 1.1,
-                ),
-              ),
-            ],
-          ),
-          const Spacer(),
-
-          // Child Profile (Aseliya + Profile Icon)
-          GestureDetector(
-            onTap: () => context.push('/profile'),
-            behavior: HitTestBehavior.opaque,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
                     Text(
-                      childName,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFF0F172A),
-                        height: 1.1,
-                      ),
+                      'අද ගවේෂණය',
+                      style: AppTextStyles.heading3,
                     ),
                     const SizedBox(height: 2),
-                    const Row(
-                      mainAxisSize: MainAxisSize.min,
+                    Text(
+                      'Pick a practice for today',
+                      style: AppTextStyles.bodySmall,
+                    ),
+                    const SizedBox(height: 16),
+
+                    // ============================================================
+                    // 4. COMPONENT CARDS - ILLUSTRATED, COLOR-CODED SET
+                    // ============================================================
+                    GridView.count(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 12,
+                      mainAxisSpacing: 12,
+                      childAspectRatio: 0.72,
                       children: [
-                        Text(
-                          'Explorer',
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: Color(0xFF0066CC),
-                            fontWeight: FontWeight.w600,
-                          ),
+                        // Card 1: Royal / Electric Blue — hero action
+                        _CompactAdventureCard(
+                          icon: Icons.mic_rounded,
+                          imageAsset: 'images/home/talk_card.png',
+                          titleSi: 'කතා කරමු',
+                          titleEn: "Let's Talk",
+                          subtitle: 'Reading and picture practice',
+                          accentColor: const Color(0xFF3B82F6),
+                          onAccentColor: Colors.white,
+                          onTap: () => context.push('/c1/record'),
+                        ),
+                        // Card 2: Teal / Aqua — visual feedback
+                        _CompactAdventureCard(
+                          icon: Icons.videocam_rounded,
+                          imageAsset: 'images/home/camera_card.png',
+                          titleSi: 'කතා කරන විදිහ',
+                          titleEn: 'Camera Fun',
+                          subtitle: 'Watch how speech looks',
+                          accentColor: const Color(0xFF0FA3A3),
+                          onAccentColor: Colors.white,
+                          onTap: () => context.push('/c2/upload'),
+                        ),
+                        // Card 3: Warm Amber — guided storytelling
+                        _CompactAdventureCard(
+                          icon: Icons.auto_stories_rounded,
+                          imageAsset: 'images/home/story_card.png',
+                          titleSi: 'ක්‍රියාකාරකම්',
+                          titleEn: 'Story Time',
+                          subtitle: 'Guided, slower practice',
+                          accentColor: const Color(0xFFE08A2E),
+                          onAccentColor: Colors.white,
+                          onTap: () => context.push('/activities'),
+                        ),
+                        // Card 4: Violet — open expression
+                        _CompactAdventureCard(
+                          icon: Icons.forum_rounded,
+                          imageAsset: 'images/home/free_talk_card.png',
+                          titleSi: 'නිදහසේ කතා',
+                          titleEn: 'Free Talk',
+                          subtitle: 'Speak on a topic you like',
+                          accentColor: const Color(0xFF7C5CE0),
+                          onAccentColor: Colors.white,
+                          onTap: () => context.push('/c4/task'),
                         ),
                       ],
                     ),
-                  ],
-                ),
-                const SizedBox(width: 10),
-                // Child avatar profile icon with active indicator
-                Stack(
-                  children: [
-                    Container(
-                      width: 42,
-                      height: 42,
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFFE0F2FE), Color(0xFFBAE6FD)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: const Color(0xFF0066CC).withValues(alpha: 0.25),
-                          width: 2,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFF0066CC).withValues(alpha: 0.12),
-                            blurRadius: 6,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
+                    const SizedBox(height: 20),
+                    
+                    // Progress Card - Now matches the adventure cards
+                    Material(
+                      color: AppColors.surfaceRaised,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppRadii.lg),
+                        side: const BorderSide(color: AppColors.divider),
                       ),
-                      child: ClipOval(
-                        child: Image.asset(
-                          'assets/images/common/user_pic.jpg',
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => const Center(
-                            child: Icon(
-                              Icons.face_rounded,
-                              color: Color(0xFF0066CC),
-                              size: 26,
-                            ),
+                      clipBehavior: Clip.antiAlias,
+                      child: InkWell(
+                        onTap: () => context.push('/profile'),
+                        borderRadius: BorderRadius.circular(AppRadii.lg),
+                        overlayColor: WidgetStateProperty.all(
+                          AppColors.primaryDeep.withValues(alpha: 0.08),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 56,
+                                height: 56,
+                                decoration: BoxDecoration(
+                                  color: AppColors.primaryWash,
+                                  borderRadius: BorderRadius.circular(AppRadii.sm),
+                                ),
+                                child: const Icon(
+                                  Icons.emoji_events_outlined,
+                                  color: AppColors.primaryDeep,
+                                  size: 28,
+                                ),
+                              ),
+                              const SizedBox(width: 14),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'මගේ ගමන',
+                                      style: AppTextStyles.heading3.copyWith(
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      'My progress',
+                                      style: AppTextStyles.label.copyWith(
+                                        color: AppColors.primaryDeep,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      'Track your journey',
+                                      style: AppTextStyles.caption.copyWith(
+                                        color: AppColors.textLight,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const Icon(
+                                Icons.chevron_right_rounded,
+                                color: AppColors.textLight,
+                                size: 24,
+                              ),
+                            ],
                           ),
                         ),
                       ),
                     ),
-                    Positioned(
-                      right: 0,
-                      bottom: 0,
-                      child: Container(
-                        width: 12,
-                        height: 12,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF10B981),
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 2),
-                        ),
+                    const SizedBox(height: 12),
+                    
+                    // Footer text
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 4, vertical: 8),
+                      child: Text(
+                        'ඔබට ඕනෑම ක්‍රියාකාරකමක් තෝරා ගත හැකියි.',
+                        style: AppTextStyles.bodySmall,
                       ),
                     ),
+                    const SizedBox(height: 12),
                   ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
+    );
+  }
+
+  Widget _buildFixedHeader(BuildContext context, String childName) {
+    return Row(
+      children: [
+        Container(
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            color: AppColors.primaryDeep,
+            borderRadius: BorderRadius.circular(AppRadii.sm),
+          ),
+          child: const Icon(
+            Icons.record_voice_over_rounded,
+            color: AppColors.onPrimary,
+            size: 24,
+          ),
+        ),
+        const SizedBox(width: 10),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('ස්වර',
+                style: AppTextStyles.heading3
+                    .copyWith(color: AppColors.primaryDeep)),
+            Text('Speech support', style: AppTextStyles.caption),
+          ],
+        ),
+        const Spacer(),
+        InkWell(
+          onTap: () => context.push('/profile'),
+          borderRadius: AppRadii.smAll,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(childName, style: AppTextStyles.label),
+                  Text('Practice',
+                      style: AppTextStyles.caption
+                          .copyWith(color: AppColors.primary)),
+                ],
+              ),
+              const SizedBox(width: 10),
+              CircleAvatar(
+                radius: 20,
+                backgroundColor: AppColors.primaryWash,
+                foregroundImage:
+                    const AssetImage('assets/images/common/user_pic.jpg'),
+                onForegroundImageError: (_, __) {},
+                child: const Icon(Icons.face_rounded,
+                    color: AppColors.primaryDeep),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
 
-// ============================================================
-// COMPACT ADVENTURE CARD - Modern Dark Blue Card Design
-// ============================================================
+/// A single "adventure" card used on the child home screen.
+///
+/// All cards share the exact same shape, spacing, and type scale so
+/// they read as one cohesive family — the only things that vary are the
+/// accent color, illustration, and copy.
 class _CompactAdventureCard extends StatelessWidget {
   final IconData icon;
+  final String imageAsset;
   final String titleSi;
   final String titleEn;
-  final String subtitleSi;
-  final String subtitleEn;
-  final Color colorAccent;
-  final List<Color> gradientColors;
-  final String badgeText;
+  final String subtitle;
+  final Color accentColor;
+  final Color onAccentColor;
   final VoidCallback onTap;
+  final bool emphasized;
 
   const _CompactAdventureCard({
     required this.icon,
+    required this.imageAsset,
     required this.titleSi,
     required this.titleEn,
-    required this.subtitleSi,
-    required this.subtitleEn,
-    required this.colorAccent,
-    required this.gradientColors,
-    required this.badgeText,
+    required this.subtitle,
+    required this.accentColor,
+    required this.onAccentColor,
     required this.onTap,
+    this.emphasized = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              const Color(0xFF0F172A),
-              Color.lerp(const Color(0xFF1E293B), colorAccent, 0.18) ?? const Color(0xFF1E293B),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(22),
-          border: Border.all(
-            color: colorAccent.withValues(alpha: 0.35),
-            width: 1.5,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: colorAccent.withValues(alpha: 0.20),
-              blurRadius: 16,
-              offset: const Offset(0, 6),
-            ),
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.30),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
+    return Material(
+      color: AppColors.surfaceRaised, // All cards now have the same background
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadii.lg),
+        side: BorderSide(
+          color: AppColors.divider, // All cards now have the same border
+        ),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        overlayColor: WidgetStateProperty.all(
+          accentColor.withValues(alpha: 0.08), // All cards use the same ripple effect
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Top Row: Modern Icon Badge & Tag Pill
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: 38,
-                  height: 38,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: gradientColors,
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: gradientColors.first.withValues(alpha: 0.45),
-                        blurRadius: 8,
-                        offset: const Offset(0, 3),
+            // ---- Illustration band ----
+            // Every card reserves the same fixed-ratio image band at the
+            // top; only the artwork and its tint differ.
+            AspectRatio(
+              aspectRatio: 16 / 10,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  // Background tint - now consistent across all cards
+                  Container(
+                    color: accentColor.withValues(alpha: 0.12),
+                  ),
+                  Image.asset(
+                    imageAsset,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Center(
+                      child: Icon(
+                        icon,
+                        size: 34,
+                        color: accentColor,
                       ),
-                    ],
-                  ),
-                  child: Center(
-                    child: Icon(
-                      icon,
-                      color: Colors.white,
-                      size: 20,
                     ),
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
-                  decoration: BoxDecoration(
-                    color: colorAccent.withValues(alpha: 0.18),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: colorAccent.withValues(alpha: 0.45),
-                      width: 1,
+                  // Icon badge - now consistent across all cards
+                  Positioned(
+                    left: 8,
+                    top: 8,
+                    child: Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: accentColor,
+                        borderRadius: BorderRadius.circular(AppRadii.sm),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.12),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Icon(
+                        icon,
+                        size: 18,
+                        color: onAccentColor,
+                      ),
                     ),
                   ),
-                  child: Text(
-                    badgeText,
-                    style: TextStyle(
-                      color: colorAccent,
-                      fontSize: 8.5,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const Spacer(),
-            // Sinhala Title - High contrast crisp white
-            Text(
-              titleSi,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                height: 1.1,
+                ],
               ),
             ),
-            const SizedBox(height: 2),
-            // English Title - Highlighted Accent Blue
-            Text(
-              titleEn,
-              style: TextStyle(
-                fontSize: 11.5,
-                fontWeight: FontWeight.w600,
-                color: colorAccent,
-                height: 1.1,
-              ),
-            ),
-            const SizedBox(height: 4),
-            // Subtitles - Crisp Slate Tones
-            Text(
-              subtitleSi,
-              style: const TextStyle(
-                fontSize: 9.5,
-                color: Color(0xFF94A3B8),
-                fontWeight: FontWeight.w500,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            Text(
-              subtitleEn,
-              style: const TextStyle(
-                fontSize: 8.5,
-                color: Color(0xFF64748B),
-                fontWeight: FontWeight.w400,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 6),
-            // Bottom Action Arrow Pill
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.08),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Start',
-                        style: TextStyle(
-                          fontSize: 9,
-                          fontWeight: FontWeight.w600,
-                          color: colorAccent,
+
+            // ---- Text block ----
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          titleSi,
+                          style: AppTextStyles.heading3.copyWith(
+                            color: AppColors.text, // All cards use the same text color
+                            fontSize: 16,
+                          ),
                         ),
+                        const SizedBox(height: 2),
+                        Text(
+                          titleEn,
+                          style: AppTextStyles.label.copyWith(
+                            color: accentColor, // Only the subtitle label shows accent color
+                          ),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      subtitle,
+                      style: AppTextStyles.caption.copyWith(
+                        color: AppColors.textLight, // All cards use the same caption color
                       ),
-                      const SizedBox(width: 3),
-                      Icon(
-                        Icons.arrow_forward_rounded,
-                        size: 10,
-                        color: colorAccent,
-                      ),
-                    ],
-                  ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ],
         ),

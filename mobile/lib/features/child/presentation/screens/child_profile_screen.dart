@@ -29,13 +29,7 @@ class ChildProfileScreen extends ConsumerWidget {
               ),
               flexibleSpace: FlexibleSpaceBar(
                 background: Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [AppColors.gradient1, AppColors.gradient2],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                  ),
+                  color: AppColors.primaryDeep,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

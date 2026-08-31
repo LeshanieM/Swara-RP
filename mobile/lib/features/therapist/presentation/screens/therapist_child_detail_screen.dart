@@ -138,7 +138,7 @@ class _ActionTile extends StatelessWidget {
       contentPadding: const EdgeInsets.symmetric(horizontal: 0),
       leading: Container(
         padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(10)),
+        decoration: BoxDecoration(color: AppColors.primaryWash, borderRadius: BorderRadius.circular(10)),
         child: Icon(icon, color: AppColors.primary, size: 20),
       ),
       title: Text(label, style: AppTextStyles.label),
