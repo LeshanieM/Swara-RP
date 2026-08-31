@@ -96,7 +96,7 @@ class ChildHomeScreen extends ConsumerWidget {
                           subtitle: 'Guided, slower practice',
                           accentColor: const Color(0xFFE08A2E),
                           onAccentColor: Colors.white,
-                          onTap: () => context.push('/activities'),
+                          onTap: () => context.push('/c3/theme'),
                         ),
                         // Card 4: Violet — open expression
                         _CompactAdventureCard(
