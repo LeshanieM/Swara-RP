@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swara/core/widgets/main_scaffold.dart';
 import 'package:swara/features/child/presentation/screens/child_home_screen.dart';
-import 'package:swara/features/speech/presentation/screens/speech_record_screen.dart';
+import 'package:swara/features/speech/presentation/screens/speech_task_screen.dart';
+import 'package:swara/features/speech/presentation/screens/speech_completion_screen.dart';
 import 'package:swara/features/speech/presentation/screens/speech_result_screen.dart';
 import 'package:swara/features/concomitant/presentation/screens/concomitant_upload_screen.dart';
 import 'package:swara/features/concomitant/presentation/screens/concomitant_ready_screen.dart';
@@ -48,14 +49,23 @@ final _appRouter = GoRouter(
           builder: (context, state) => const ProgressScreen(childId: 'child_1'),
         ),
         
-        // Component 1 - Speech Check
         GoRoute(
           path: '/c1/record',
-          builder: (context, state) => const SpeechRecordScreen(childId: 'child_1'),
+          builder: (context, state) => const SpeechTaskScreen(),
+        ),
+        GoRoute(
+          path: '/c1/complete',
+          builder: (context, state) {
+            final duration = state.extra as int? ?? 0;
+            return SpeechCompletionScreen(durationSeconds: duration);
+          }
         ),
         GoRoute(
           path: '/c1/result',
-          builder: (context, state) => const SpeechResultScreen(assessmentId: 'mock_c1'),
+          builder: (context, state) {
+            final duration = state.extra as int? ?? 0;
+            return SpeechResultScreen(durationSeconds: duration);
+          }
         ),
         
         // Component 2 - Secondary Behaviour

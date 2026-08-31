@@ -28,7 +28,7 @@ class ProgressScreen extends StatelessWidget {
                     const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('🏆 මගේ ප්‍රගතිය', style: TextStyle(color: AppColors.text, fontSize: 20, fontWeight: FontWeight.bold)),
+                        Text('🏆 My Progress', style: TextStyle(color: AppColors.text, fontSize: 20, fontWeight: FontWeight.bold)),
                         Text('My Speech Adventure Progress', style: TextStyle(color: AppColors.primary, fontSize: 12)),
                       ],
                     ),
@@ -58,7 +58,7 @@ class ProgressScreen extends StatelessWidget {
   ),
 ),
                 const SizedBox(height: 12),
-                const Text('මගේ ගමන 🌱 / My Journey', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.text)),
+                const Text('My Journey 🌱', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.text)),
                 const SizedBox(height: 28),
 
                 Container(
@@ -77,7 +77,7 @@ class ProgressScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'පසුගිය වතාවට වඩා අද වැඩි වෙලාවක් කතා කළා!',
+                              'You spoke longer today than last time!',
                               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.text),
                             ),
                             Text(
@@ -93,23 +93,23 @@ class ProgressScreen extends StatelessWidget {
                 const SizedBox(height: 24),
 
                 _buildAchievement(
-                  'පළමු පියවර',
                   'First Steps',
-                  'ඔයාගේ පළමු ක්‍රියාකාරකම කළා!',
+                  'First Steps',
+                  'You completed your first activity!',
                   '🌟',
                   AppColors.softYellow,
                 ),
                 _buildAchievement(
-                  'දින 3ක්',
                   '3-Day Streak',
-                  'දවස් 3ක් එක දිගට පුහුණු වුණා!',
+                  '3-Day Streak',
+                  'You practiced 3 days in a row!',
                   '🔥',
                   AppColors.coralRed,
                 ),
                 _buildAchievement(
-                  'කතා මිතුරා',
                   'Speech Buddy',
-                  'කතා ක්‍රියාකාරකම් 5ක් කළා!',
+                  'Speech Buddy',
+                  'You completed 5 speech activities!',
                   '🏆',
                   AppColors.ctaOrange,
                 ),
@@ -128,7 +128,7 @@ class ProgressScreen extends StatelessWidget {
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('තව ක්‍රියාකාරකම් කරමු', style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold)),
+                        Text('Let\'s Do More Activities', style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold)),
                         SizedBox(width: 8),
                         Text('/ Continue Quests', style: TextStyle(fontSize: 12, color: Colors.white70)),
                       ],
