@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../data/providers/auth_provider.dart';
 import 'package:swara/core/constants/app_constants.dart';
-import 'package:swara/core/storage/storage_service.dart';
+import 'package:swara/core/theme/app_theme.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -16,27 +16,21 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnim;
-  late Animation<double> _scaleAnim;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1500),
+      duration: AppMotion.entrance,
     );
-    _fadeAnim = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
-    );
-    _scaleAnim = Tween<double>(begin: 0.7, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.elasticOut),
-    );
+    _fadeAnim = CurvedAnimation(parent: _controller, curve: AppMotion.entranceCurve);
     _controller.forward();
     _navigate();
   }
 
   Future<void> _navigate() async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(milliseconds: 1600));
     if (!mounted) return;
     final authState = ref.read(authProvider);
     if (authState.isAuthenticated) {
@@ -71,79 +65,50 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF5B5FEF), Color(0xFF7C83FD)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
+      backgroundColor: AppColors.primaryDeep,
+      body: FadeTransition(
+        opacity: _fadeAnim,
         child: Center(
-          child: FadeTransition(
-            opacity: _fadeAnim,
-            child: ScaleTransition(
-              scale: _scaleAnim,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.15),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'S',
-                        style: TextStyle(
-                          fontSize: 60,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 88,
+                height: 88,
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.35),
+                  borderRadius: BorderRadius.circular(AppRadii.md),
+                ),
+                child: Center(
+                  child: Text(
+                    'ස',
+                    style: AppTextStyles.heading1.copyWith(
+                      color: AppColors.onPrimary,
+                      fontSize: 44,
                     ),
                   ),
-                  const SizedBox(height: 24),
-                  const Text(
-                    'Swara',
-                    style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      letterSpacing: 2,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Sinhala Speech Support',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white.withOpacity(0.85),
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                  const SizedBox(height: 48),
-                  const SizedBox(
-                    width: 32,
-                    height: 32,
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
-                      strokeWidth: 2.5,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Research Prototype',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.white.withOpacity(0.6),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
+              const SizedBox(height: AppSpacing.xl),
+              Text(
+                'Swara',
+                style: AppTextStyles.heading1.copyWith(color: AppColors.onPrimary),
+              ),
+              const SizedBox(height: AppSpacing.sm),
+              Text(
+                'Sinhala speech support',
+                style: AppTextStyles.bodySmall.copyWith(
+                  color: AppColors.onPrimary.withValues(alpha: 0.85),
+                ),
+              ),
+              const SizedBox(height: AppSpacing.xxl),
+              Text(
+                'Research prototype',
+                style: AppTextStyles.caption.copyWith(
+                  color: AppColors.onPrimary.withValues(alpha: 0.65),
+                ),
+              ),
+            ],
           ),
         ),
       ),

@@ -84,7 +84,7 @@ class TherapyRecommendationsScreen extends ConsumerWidget {
                 const SizedBox(height: 20),
 
                 SwaraCard(
-                  color: AppColors.primaryLight,
+                  color: AppColors.primaryWash,
                   child: Row(
                     children: [
                       const Icon(Icons.info_outline, color: AppColors.primary, size: 20),
@@ -160,7 +160,7 @@ class _ActivityCard extends StatelessWidget {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: AppColors.primaryLight,
+              color: AppColors.primaryWash,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Center(
