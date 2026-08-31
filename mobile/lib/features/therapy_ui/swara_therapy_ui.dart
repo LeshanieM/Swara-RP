@@ -12,6 +12,7 @@
 // ============================================================================
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 // ---------------------------------------------------------------------------
 // PUBLIC ENTRY POINT
@@ -362,14 +363,12 @@ class _MainGalleryShellState extends State<_MainGalleryShell> {
     {'title': '15. Therapist Dashboard',   'w': _S15TherapistDash()},
     {'title': '16. Activity Library',      'w': _S16Library()},
     {'title': '17. Activity Detail',       'w': _S17Detail()},
-    {'title': '18. Settings',              'w': _S18Settings()},
     {'title': '19. Story Generated',       'w': _S19StoryGenerated()},
     {'title': '20. Syllable Practice',     'w': _S20SyllablePractice()},
     {'title': '21. Breathing Exercise',    'w': _S21Breathing()},
     {'title': '22. Why This Activity?',    'w': _S22BanditReasoning()},
     {'title': '23. Therapist Knowledge Base', 'w': _S23TherapistKB()},
     {'title': '24. Engagement & Trend',    'w': _S24Engagement()},
-    {'title': '25. Therapy Home',           'w': _S25TherapyHome()},
   ];
 
   void _go(int i) {
@@ -977,43 +976,113 @@ class _S2Home extends StatelessWidget {
   Widget build(BuildContext context) {
     final nav = _InheritedNav.of(context);
     final theme = _InheritedTheme.themeOf(context);
-    return _BgScaffold(child: SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.95), borderRadius: BorderRadius.circular(24), boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 12)]),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            const Text('Current Adventure', style: TextStyle(fontSize: 12, color: Colors.grey)),
-            const SizedBox(height: 4),
-            Row(children: [
-              Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(theme.journeyName, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: _C.darkText)),
-                const SizedBox(height: 6),
-                const Text('3 / 5 Activities Completed', style: TextStyle(fontSize: 11, color: Colors.grey)),
-              ])),
+    return _BgScaffold(
+      paintScene: false,
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Row(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.arrow_back_rounded, color: _C.darkText),
+                onPressed: () => context.go('/'),
+              ),
               const SizedBox(width: 8),
-              const _Mascot(size: 74),
+              const Expanded(
+                child: Text(
+                  'Speech Therapy',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: _C.darkText,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.95), borderRadius: BorderRadius.circular(24), boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 12)]),
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const Text("Today's Plan", style: TextStyle(fontSize: 12, color: Colors.grey)),
+              const SizedBox(height: 4),
+              Row(children: [
+                const Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text("Today's Therapy Plan", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: _C.darkText)),
+                  SizedBox(height: 6),
+                  Text('Ready to start your daily practice!', style: TextStyle(fontSize: 11, color: Colors.grey)),
+                ])),
+                const SizedBox(width: 8),
+                const _Mascot(size: 74),
+              ]),
+              const SizedBox(height: 16),
+              _Btn(text: 'Start Today\'s Therapy Plan', onTap: () => nav?.go(2)),
             ]),
-            const SizedBox(height: 10),
-            LinearProgressIndicator(value: 0.6, backgroundColor: Colors.blue.shade50, color: theme.accentColor, minHeight: 10, borderRadius: BorderRadius.circular(5)),
-            const SizedBox(height: 16),
-            _Btn(text: 'Continue Adventure', onTap: () => nav?.go(0)),
-          ]),
-        ),
-        const SizedBox(height: 20),
-        _item(context, '🗺️', 'My Journey Map', () => nav?.go(4)),
-        const SizedBox(height: 10),
-        _item(context, '🎨', 'Explore Adventure Themes (6 Worlds)', () => nav?.go(2)),
-        const SizedBox(height: 10),
+          ),
+          const SizedBox(height: 20),
+          _item(context, '🎤', 'Let\'s Talk (Reading Practice)', () => context.push('/c1/record')),
+          const SizedBox(height: 10),
+        _item(context, '🎨', 'Explore Adventure Themes', () => nav?.go(2)),
+          const SizedBox(height: 10),
         _item(context, '🏆', 'Achievements & Badges', () => nav?.go(12)),
-        const SizedBox(height: 10),
-        _item(context, '🐾', 'Meet My Guide (${theme.mascotName})', () => nav?.go(13)),
-        const SizedBox(height: 20),
-      ]),
-    ));
+          const SizedBox(height: 10),
+        _item(context, '🐾', 'Thrapy History (${theme.mascotName})', () => nav?.go(13)),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(color: Colors.orange.shade50, borderRadius: BorderRadius.circular(18)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text('🔥', style: TextStyle(fontSize: 24)),
+                      SizedBox(height: 8),
+                      Text('Current Streak', style: TextStyle(fontSize: 12, color: Colors.black54)),
+                      Text('5 Days', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: _C.darkText)),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(color: Colors.green.shade50, borderRadius: BorderRadius.circular(18)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text('⭐', style: TextStyle(fontSize: 24)),
+                      SizedBox(height: 8),
+                      Text('Total Stars', style: TextStyle(fontSize: 12, color: Colors.black54)),
+                      Text('1,250', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: _C.darkText)),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(color: Colors.blue.shade50, borderRadius: BorderRadius.circular(18)),
+            child: Row(children: [
+              const Text('💡', style: TextStyle(fontSize: 24)),
+              const SizedBox(width: 12),
+              const Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text('Daily Tip', style: TextStyle(fontWeight: FontWeight.bold, color: _C.darkText)),
+                SizedBox(height: 4),
+                Text('Remember to take deep breaths and speak slowly during your exercises.', style: TextStyle(fontSize: 12, color: Colors.black54)),
+              ])),
+            ]),
+          ),
+          const SizedBox(height: 20),
+        ]),
+      ),
+    );
   }
   Widget _item(BuildContext ctx, String em, String title, VoidCallback onTap) {
     return Container(
@@ -1085,7 +1154,7 @@ class _S3State extends State<_S3ThemeSelection> {
               ])),
             ]),
             const SizedBox(height: 12),
-            _Btn(text: 'Continue with ${cur.name} Adventure', onTap: () => nav?.go(3)),
+            _Btn(text: 'Continue with ${cur.name} Adventure', onTap: () => nav?.go(13)),
           ]),
         ),
         const SizedBox(height: 20),
@@ -1589,7 +1658,7 @@ class _S14Character extends StatelessWidget {
           decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24), boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 8)]),
           child: Text(theme.mascotDescription, textAlign: TextAlign.center, style: const TextStyle(fontSize: 15, color: _C.darkText, height: 1.4))),
         const SizedBox(height: 24),
-        _Btn(text: 'Back to Home', onTap: () => nav?.go(1)),
+        _Btn(text: 'Continue to Adventure Plan', onTap: () => nav?.go(3)),
         const SizedBox(height: 20),
       ]),
     ));
@@ -1764,69 +1833,6 @@ class _S17Detail extends StatelessWidget {
   }
 }
 
-// 18. SETTINGS
-class _S18Settings extends StatelessWidget {
-  const _S18Settings();
-  @override
-  Widget build(BuildContext context) {
-    final nav = _InheritedNav.of(context);
-    return _BgScaffold(child: SingleChildScrollView(
-      physics: const BouncingScrollPhysics(), padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      child: Column(children: [
-        const _BackHeader(title: ''),
-        const Text('Settings', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: _C.darkText)),
-        const SizedBox(height: 20),
-        _STile(icon: Icons.person_outline_rounded, title: 'Profile', onTap: () {}),
-        const SizedBox(height: 10),
-        _SSwitchTile(icon: Icons.volume_up_outlined, title: 'Sound Effects', value: true, onChanged: (v) {}),
-        const SizedBox(height: 10),
-        _STile(icon: Icons.mic_none_rounded, title: 'Voice', trailing: 'Sinhala / English', onTap: () {}),
-        const SizedBox(height: 10),
-        _SSwitchTile(icon: Icons.access_time_rounded, title: 'Daily Reminders', value: true, onChanged: (v) {}),
-        const SizedBox(height: 10),
-        _STile(icon: Icons.palette_outlined, title: 'Change Theme', trailing: '6 Worlds', onTap: () => nav?.go(2)),
-        const SizedBox(height: 10),
-        _STile(icon: Icons.help_outline_rounded, title: 'Help & Support', onTap: () {}),
-        const SizedBox(height: 10),
-        _STile(icon: Icons.arrow_back_rounded, title: 'Back to Main App', color: _C.blue, onTap: () => Navigator.of(context).maybePop()),
-        const SizedBox(height: 20),
-      ]),
-    ));
-  }
-}
-
-class _STile extends StatelessWidget {
-  final IconData icon; final String title; final String? trailing; final Color? color; final VoidCallback onTap;
-  const _STile({required this.icon, required this.title, this.trailing, this.color, required this.onTap});
-  @override
-  Widget build(BuildContext context) => Container(
-    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)]),
-    child: ListTile(
-      leading: Icon(icon, color: color ?? _C.blue),
-      title: Text(title, style: TextStyle(fontWeight: FontWeight.bold, color: color ?? _C.darkText)),
-      trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-        if (trailing != null) Text(trailing!, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-        const SizedBox(width: 4),
-        const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: Colors.grey),
-      ]),
-      onTap: onTap,
-    ),
-  );
-}
-
-class _SSwitchTile extends StatelessWidget {
-  final IconData icon; final String title; final bool value; final ValueChanged<bool> onChanged;
-  const _SSwitchTile({required this.icon, required this.title, required this.value, required this.onChanged});
-  @override
-  Widget build(BuildContext context) => Container(
-    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)]),
-    child: ListTile(
-      leading: Icon(icon, color: _C.blue),
-      title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold, color: _C.darkText)),
-      trailing: Switch(value: value, activeTrackColor: _C.blue, onChanged: onChanged),
-    ),
-  );
-}
 
 // ============================================================================
 // ADDITIONAL SCREENS 19-24 — Component 3 pillars made visible
@@ -2546,385 +2552,4 @@ class _ReasoningSheet extends StatelessWidget {
       ]),
     );
   }
-}
-
-// ============================================================================
-// 25. THERAPY HOME — clean dashboard, no adventure theme
-// ============================================================================
-class _S25TherapyHome extends StatelessWidget {
-  const _S25TherapyHome();
-
-  // Today's plan: 3 activities, child is halfway through (2 done)
-  static const _planActivities = [
-    {'label': 'Story Reading',        'done': true,  'icon': '📖', 'dur': '8 min'},
-    {'label': 'Syllable Practice',    'done': true,  'icon': '🔤', 'dur': '5 min'},
-    {'label': 'Breathing Exercise',   'done': false, 'icon': '🫁', 'dur': '4 min'},
-    {'label': 'Guided Conversation',  'done': false, 'icon': '🎙️', 'dur': '8 min'},
-  ];
-
-  static const _achievements = [
-    {'emoji': '🥇', 'label': 'First Steps'},
-    {'emoji': '🗣️', 'label': 'Great Talker'},
-    {'emoji': '🌟', 'label': 'Explorer'},
-    {'emoji': '🔥', 'label': '7-day Streak'},
-    {'emoji': '🎯', 'label': 'On Target'},
-  ];
-
-  static const _history = [
-    {'date': 'Today',        'activity': 'Story Reading + Syllable', 'score': '8/10', 'up': true},
-    {'date': 'Yesterday',   'activity': 'Picture Description',       'score': '7/10', 'up': false},
-    {'date': 'Aug 29',      'activity': 'Guided Conversation',       'score': '8/10', 'up': true},
-    {'date': 'Aug 28',      'activity': 'Breathing + Syllable',      'score': '6/10', 'up': false},
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    final nav = _InheritedNav.of(context);
-    final done = _planActivities.where((a) => a['done'] as bool).length;
-    final total = _planActivities.length;
-    final progress = done / total;
-
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFFF0F4FF), Color(0xFFF7F9FC), Color(0xFFEFF6FF)],
-        ),
-      ),
-      child: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-
-            // ── Header ──────────────────────────────────────────────
-            Row(children: [
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: const [
-                Text('Good morning,', style: TextStyle(fontSize: 13, color: Colors.black45, fontWeight: FontWeight.w500)),
-                Text('Aseliya 👋', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF1A2B4A))),
-              ]),
-              const Spacer(),
-              _ThSmallBtn(
-                icon: Icons.settings_outlined,
-                onTap: () => nav?.go(17),
-              ),
-              const SizedBox(width: 8),
-              _ThSmallBtn(
-                icon: Icons.person_outline_rounded,
-                onTap: () {},
-              ),
-            ]),
-            const SizedBox(height: 18),
-
-            // ── Today's Therapy Plan Card ────────────────────────────
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(18),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF0057B8), Color(0xFF0096FF)],
-                  begin: Alignment.topLeft, end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(22),
-                boxShadow: const [BoxShadow(color: Color(0x330057B8), blurRadius: 18, offset: Offset(0, 6))],
-              ),
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Row(children: [
-                  const Icon(Icons.today_rounded, color: Colors.white70, size: 16),
-                  const SizedBox(width: 6),
-                  const Text("Today's Therapy Plan", style: TextStyle(fontSize: 12, color: Colors.white70, fontWeight: FontWeight.w600)),
-                  const Spacer(),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(20)),
-                    child: Text('$done / $total done', style: const TextStyle(fontSize: 11, color: Colors.white, fontWeight: FontWeight.bold)),
-                  ),
-                ]),
-                const SizedBox(height: 10),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: LinearProgressIndicator(
-                    value: progress, minHeight: 8,
-                    backgroundColor: Colors.white24,
-                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
-                  ),
-                ),
-                const SizedBox(height: 14),
-                ...(_planActivities.map((a) => _ThPlanRow(
-                  icon: a['icon'] as String,
-                  label: a['label'] as String,
-                  dur: a['dur'] as String,
-                  done: a['done'] as bool,
-                ))),
-                const SizedBox(height: 14),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: const Color(0xFF0057B8),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                      elevation: 0,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                    ),
-                    onPressed: () => nav?.go(6), // -> Milestone Intro
-                    child: const Text('Resume Session', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                  ),
-                ),
-              ]),
-            ),
-            const SizedBox(height: 22),
-
-            // ── Quick Navigation ─────────────────────────────────────
-            const Text('Quick Navigation', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF1A2B4A))),
-            const SizedBox(height: 12),
-            GridView.count(
-              crossAxisCount: 3,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 0.95,
-              children: [
-                _ThQuickCard(icon: Icons.map_rounded,            label: 'Journey Map',     color: const Color(0xFF7C3AED), onTap: () => nav?.go(4)),
-                _ThQuickCard(icon: Icons.auto_stories_rounded,   label: 'Start Story',     color: const Color(0xFF0EA5E9), onTap: () => nav?.go(6)),
-                _ThQuickCard(icon: Icons.palette_rounded,        label: 'Themes',          color: const Color(0xFFF59E0B), onTap: () => nav?.go(2)),
-                _ThQuickCard(icon: Icons.library_books_rounded,  label: 'Activity Library',color: const Color(0xFF10B981), onTap: () => nav?.go(15)),
-                _ThQuickCard(icon: Icons.bar_chart_rounded,      label: 'My Progress',     color: const Color(0xFFEF4444), onTap: () => nav?.go(12)),
-                _ThQuickCard(icon: Icons.medical_information_rounded, label: 'Therapist',  color: const Color(0xFF6366F1), onTap: () => nav?.go(14)),
-              ],
-            ),
-            const SizedBox(height: 22),
-
-            // ── Achievements ─────────────────────────────────────────
-            Row(children: [
-              const Text('Achievements', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF1A2B4A))),
-              const Spacer(),
-              GestureDetector(
-                onTap: () => nav?.go(12),
-                child: const Text('See all', style: TextStyle(fontSize: 12, color: Color(0xFF0096FF), fontWeight: FontWeight.w600)),
-              ),
-            ]),
-            const SizedBox(height: 12),
-            SizedBox(
-              height: 88,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                physics: const BouncingScrollPhysics(),
-                itemCount: _achievements.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 10),
-                itemBuilder: (_, i) => _ThBadgeCard(
-                  emoji: _achievements[i]['emoji'] as String,
-                  label: _achievements[i]['label'] as String,
-                ),
-              ),
-            ),
-            const SizedBox(height: 22),
-
-            // ── Theme Selection Shortcut ──────────────────────────────
-            GestureDetector(
-              onTap: () => nav?.go(2),
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(18),
-                  border: Border.all(color: const Color(0xFFE2E8F0), width: 1.5),
-                  boxShadow: const [BoxShadow(color: Colors.black, blurRadius: 8, offset: Offset(0, 2))],
-                ),
-                child: Row(children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF0F4FF),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Icon(Icons.palette_rounded, color: Color(0xFF6366F1), size: 22),
-                  ),
-                  const SizedBox(width: 14),
-                  const Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text('Adventure Theme', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF1A2B4A))),
-                    SizedBox(height: 2),
-                    Text('6 worlds available — tap to switch', style: TextStyle(fontSize: 11, color: Colors.black45)),
-                  ])),
-                  const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: Colors.black38),
-                ]),
-              ),
-            ),
-            const SizedBox(height: 22),
-
-            // ── Therapy History ───────────────────────────────────────
-            Row(children: [
-              const Text('Therapy History', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF1A2B4A))),
-              const Spacer(),
-              GestureDetector(
-                onTap: () => nav?.go(12),
-                child: const Text('See all', style: TextStyle(fontSize: 12, color: Color(0xFF0096FF), fontWeight: FontWeight.w600)),
-              ),
-            ]),
-            const SizedBox(height: 12),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(18),
-                border: Border.all(color: const Color(0xFFE2E8F0), width: 1.5),
-                boxShadow: const [BoxShadow(color: Colors.black, blurRadius: 8, offset: Offset(0, 2))],
-              ),
-              child: Column(
-                children: _history.asMap().entries.map((e) => _ThHistoryRow(
-                  date: e.value['date'] as String,
-                  activity: e.value['activity'] as String,
-                  score: e.value['score'] as String,
-                  up: e.value['up'] as bool,
-                  isLast: e.key == _history.length - 1,
-                )).toList(),
-              ),
-            ),
-            const SizedBox(height: 28),
-          ]),
-        ),
-      ),
-    );
-  }
-}
-
-// ─── Supporting widgets for _S25TherapyHome ────────────────────────────────
-
-class _ThSmallBtn extends StatelessWidget {
-  final IconData icon;
-  final VoidCallback onTap;
-  const _ThSmallBtn({required this.icon, required this.onTap});
-  @override
-  Widget build(BuildContext context) => GestureDetector(
-    onTap: onTap,
-    child: Container(
-      padding: const EdgeInsets.all(9),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: const [BoxShadow(color: Colors.black, blurRadius: 6, offset: Offset(0, 2))],
-      ),
-      child: Icon(icon, size: 20, color: const Color(0xFF1A2B4A)),
-    ),
-  );
-}
-
-class _ThPlanRow extends StatelessWidget {
-  final String icon, label, dur;
-  final bool done;
-  const _ThPlanRow({required this.icon, required this.label, required this.dur, required this.done});
-  @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(bottom: 8),
-    child: Row(children: [
-      Text(done ? '✅' : icon, style: const TextStyle(fontSize: 16)),
-      const SizedBox(width: 10),
-      Expanded(child: Text(label,
-        style: TextStyle(
-          fontSize: 13, fontWeight: FontWeight.w600,
-          color: done ? Colors.white54 : Colors.white,
-          decoration: done ? TextDecoration.lineThrough : null,
-          decorationColor: Colors.white54,
-        ))),
-      Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-        decoration: BoxDecoration(color: Colors.white12, borderRadius: BorderRadius.circular(8)),
-        child: Text(dur, style: const TextStyle(fontSize: 10, color: Colors.white70, fontWeight: FontWeight.bold)),
-      ),
-    ]),
-  );
-}
-
-class _ThQuickCard extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final Color color;
-  final VoidCallback onTap;
-  const _ThQuickCard({required this.icon, required this.label, required this.color, required this.onTap});
-  @override
-  Widget build(BuildContext context) => GestureDetector(
-    onTap: onTap,
-    child: Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: const [BoxShadow(color: Colors.black, blurRadius: 6, offset: Offset(0, 2))],
-      ),
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Container(
-          padding: const EdgeInsets.all(11),
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Icon(icon, color: color, size: 24),
-        ),
-        const SizedBox(height: 8),
-        Text(label, textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF1A2B4A))),
-      ]),
-    ),
-  );
-}
-
-class _ThBadgeCard extends StatelessWidget {
-  final String emoji, label;
-  const _ThBadgeCard({required this.emoji, required this.label});
-  @override
-  Widget build(BuildContext context) => Container(
-    width: 72,
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(16),
-      boxShadow: const [BoxShadow(color: Colors.black, blurRadius: 6, offset: Offset(0, 2))],
-    ),
-    child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Text(emoji, style: const TextStyle(fontSize: 28)),
-      const SizedBox(height: 4),
-      Text(label, textAlign: TextAlign.center,
-        style: const TextStyle(fontSize: 9.5, fontWeight: FontWeight.bold, color: Color(0xFF1A2B4A))),
-    ]),
-  );
-}
-
-class _ThHistoryRow extends StatelessWidget {
-  final String date, activity, score;
-  final bool up, isLast;
-  const _ThHistoryRow({required this.date, required this.activity, required this.score, required this.up, required this.isLast});
-  @override
-  Widget build(BuildContext context) => Column(children: [
-    Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: Row(children: [
-        Container(
-          width: 38,
-          padding: const EdgeInsets.symmetric(vertical: 5),
-          decoration: BoxDecoration(
-            color: const Color(0xFFF0F4FF),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Column(children: [
-            Text(date.contains('Aug') ? date.split(' ')[1] : date == 'Today' ? '🟢' : '📅',
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF1A2B4A))),
-          ]),
-        ),
-        const SizedBox(width: 12),
-        Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(date, style: const TextStyle(fontSize: 10, color: Colors.black38, fontWeight: FontWeight.w600)),
-          Text(activity, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF1A2B4A))),
-        ])),
-        Row(children: [
-          Icon(up ? Icons.trending_up_rounded : Icons.trending_flat_rounded,
-            size: 14, color: up ? const Color(0xFF10B981) : Colors.black38),
-          const SizedBox(width: 4),
-          Text(score, style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold,
-            color: up ? const Color(0xFF10B981) : const Color(0xFF64748B))),
-        ]),
-      ]),
-    ),
-    if (!isLast) const Divider(height: 1, indent: 16, endIndent: 16, color: Color(0xFFF1F5F9)),
-  ]);
 }
