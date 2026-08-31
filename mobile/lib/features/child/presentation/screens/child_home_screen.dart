@@ -107,7 +107,7 @@ class ChildHomeScreen extends ConsumerWidget {
                           subtitle: 'Speak on a topic you like',
                           accentColor: const Color(0xFF7C5CE0),
                           onAccentColor: Colors.white,
-                          onTap: () => context.push('/c4/task'),
+                          onTap: () => context.push('/c4'),
                         ),
                       ],
                     ),

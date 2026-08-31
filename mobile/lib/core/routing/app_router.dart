@@ -9,10 +9,22 @@ import 'package:swara/features/concomitant/presentation/screens/concomitant_uplo
 import 'package:swara/features/concomitant/presentation/screens/concomitant_ready_screen.dart';
 import 'package:swara/features/concomitant/presentation/screens/concomitant_processing_screen.dart';
 import 'package:swara/features/concomitant/presentation/screens/concomitant_result_screen.dart';
-import 'package:swara/features/communication/presentation/screens/communication_task_screen.dart';
-import 'package:swara/features/communication/presentation/screens/communication_result_screen.dart';
 import 'package:swara/features/progress/presentation/screens/progress_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:swara/components/component4/screens/component4_home_screen.dart';
+import 'package:swara/components/component4/screens/personalization_screen.dart';
+import 'package:swara/components/component4/screens/topic_screen.dart';
+import 'package:swara/components/component4/screens/preparation_screen.dart';
+import 'package:swara/components/component4/screens/recording_screen.dart';
+import 'package:swara/components/component4/screens/recording_review_screen.dart';
+import 'package:swara/components/component4/screens/analysis_screen.dart';
+import 'package:swara/components/component4/screens/child_result_screen.dart';
+import 'package:swara/components/component4/screens/communication_report_screen.dart';
+import 'package:swara/components/component4/screens/speech_metrics_screen.dart';
+import 'package:swara/components/component4/screens/language_metrics_screen.dart';
+import 'package:swara/components/component4/screens/communication_metrics_screen.dart';
+import 'package:swara/components/component4/models/communication_topic.dart';
 
 import 'package:swara/components/component3/theme_selection_screen.dart';
 import 'package:swara/components/component3/personalized_plan_screen.dart';
@@ -166,12 +178,55 @@ final _appRouter = GoRouter(
 
         // Component 4 - Spontaneous Analysis
         GoRoute(
-          path: '/c4/task',
-          builder: (context, state) => const CommunicationTaskScreen(childId: 'child_1'),
+          path: '/c4',
+          builder: (context, state) => const Component4HomeScreen(),
         ),
         GoRoute(
-          path: '/c4/result',
-          builder: (context, state) => const CommunicationResultScreen(),
+          path: '/c4/personalization',
+          builder: (context, state) => const PersonalizationScreen(),
+        ),
+        GoRoute(
+          path: '/c4/topic',
+          builder: (context, state) {
+            final topic = state.extra as CommunicationTopic;
+            return TopicScreen(topic: topic);
+          },
+        ),
+        GoRoute(
+          path: '/c4/preparation',
+          builder: (context, state) => const PreparationScreen(),
+        ),
+        GoRoute(
+          path: '/c4/record',
+          builder: (context, state) => const RecordingScreen(),
+        ),
+        GoRoute(
+          path: '/c4/review',
+          builder: (context, state) => const RecordingReviewScreen(),
+        ),
+        GoRoute(
+          path: '/c4/analysis',
+          builder: (context, state) => const AnalysisScreen(),
+        ),
+        GoRoute(
+          path: '/c4/child_result',
+          builder: (context, state) => const ChildResultScreen(),
+        ),
+        GoRoute(
+          path: '/c4/report',
+          builder: (context, state) => const CommunicationReportScreen(),
+        ),
+        GoRoute(
+          path: '/c4/metrics/speech',
+          builder: (context, state) => const SpeechMetricsScreen(),
+        ),
+        GoRoute(
+          path: '/c4/metrics/language',
+          builder: (context, state) => const LanguageMetricsScreen(),
+        ),
+        GoRoute(
+          path: '/c4/metrics/communication',
+          builder: (context, state) => const CommunicationMetricsScreen(),
         ),
       ],
     ),
