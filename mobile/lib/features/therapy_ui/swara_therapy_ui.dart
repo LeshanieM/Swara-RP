@@ -363,6 +363,13 @@ class _MainGalleryShellState extends State<_MainGalleryShell> {
     {'title': '16. Activity Library',      'w': _S16Library()},
     {'title': '17. Activity Detail',       'w': _S17Detail()},
     {'title': '18. Settings',              'w': _S18Settings()},
+    {'title': '19. Story Generated',       'w': _S19StoryGenerated()},
+    {'title': '20. Syllable Practice',     'w': _S20SyllablePractice()},
+    {'title': '21. Breathing Exercise',    'w': _S21Breathing()},
+    {'title': '22. Why This Activity?',    'w': _S22BanditReasoning()},
+    {'title': '23. Therapist Knowledge Base', 'w': _S23TherapistKB()},
+    {'title': '24. Engagement & Trend',    'w': _S24Engagement()},
+    {'title': '25. Therapy Home',           'w': _S25TherapyHome()},
   ];
 
   void _go(int i) {
@@ -398,7 +405,7 @@ class _MainGalleryShellState extends State<_MainGalleryShell> {
                   child: Row(mainAxisSize: MainAxisSize.min, children: [
                     const Icon(Icons.grid_view_rounded, color: Colors.white, size: 18),
                     const SizedBox(width: 6),
-                    Text('Screen ${_idx + 1}/18', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
+                    Text('Screen ${_idx + 1}/25', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
                     const Icon(Icons.arrow_drop_down, color: Colors.white, size: 18),
                   ]),
                 ),
@@ -420,7 +427,7 @@ class _MainGalleryShellState extends State<_MainGalleryShell> {
                   decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 15)]),
                   child: Column(mainAxisSize: MainAxisSize.min, children: [
                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                      const Text('All 18 Screens', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: _C.darkText)),
+                      const Text('All 25 Screens', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: _C.darkText)),
                       IconButton(icon: const Icon(Icons.close, size: 20), onPressed: () => setState(() => _drawer = false)),
                     ]),
                     const Divider(height: 1),
@@ -993,7 +1000,7 @@ class _S2Home extends StatelessWidget {
             const SizedBox(height: 10),
             LinearProgressIndicator(value: 0.6, backgroundColor: Colors.blue.shade50, color: theme.accentColor, minHeight: 10, borderRadius: BorderRadius.circular(5)),
             const SizedBox(height: 16),
-            _Btn(text: 'Continue Adventure', onTap: () => nav?.go(3)),
+            _Btn(text: 'Continue Adventure', onTap: () => nav?.go(0)),
           ]),
         ),
         const SizedBox(height: 20),
@@ -1320,7 +1327,7 @@ class _S7StoryIntro extends StatelessWidget {
           icon: const Icon(Icons.volume_up_rounded), label: const Text('Listen to Audio Guide'),
         ),
         const SizedBox(height: 16),
-        _Btn(text: 'Continue >', onTap: () => nav?.go(7)),
+        _Btn(text: 'Continue >', onTap: () => nav?.go(18)), // -> 19. Story Generated
         const SizedBox(height: 20),
       ]),
     ));
@@ -1422,6 +1429,11 @@ class _S10AdaptiveNext extends StatelessWidget {
         ]),
         const SizedBox(height: 24),
         _Btn(text: "Let's Go!", onTap: () => nav?.go(10)),
+        const SizedBox(height: 8),
+        TextButton(
+          onPressed: () => nav?.go(21), // -> 22. Why This Activity?
+          child: const Text('See why this activity was chosen →', style: TextStyle(fontSize: 13, color: _C.blue)),
+        ),
         const SizedBox(height: 20),
       ]),
     ));
@@ -1598,10 +1610,14 @@ class _S15TherapistDash extends StatelessWidget {
         const Center(child: Text("Aseliya's Overview", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: _C.darkText))),
         Center(child: Text(theme.journeyName, style: const TextStyle(fontSize: 13, color: Colors.black54))),
         const SizedBox(height: 16),
-        const Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          _MCard(title: 'Severity', value: 'Moderate'),
-          _MCard(title: 'Stutter Type', value: 'Repetition'),
-          _MCard(title: 'Psych Score', value: '5 / 10'),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          const _MCard(title: 'Severity', value: 'Moderate'),
+          const _MCard(title: 'Stutter Type', value: 'Repetition'),
+          // Replaced "Psych Score" (out-of-scope) with Engagement metric
+          GestureDetector(
+            onTap: () => nav?.go(23), // -> 24. Engagement & Trend
+            child: const _MCard(title: 'Engagement', value: '0.78'),
+          ),
         ]),
         const SizedBox(height: 20),
         const Text('Recent Activities', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: _C.darkText)),
@@ -1612,7 +1628,13 @@ class _S15TherapistDash extends StatelessWidget {
         const SizedBox(height: 8),
         const _ARow(icon: '🎙️', title: 'Guided Conversation', score: '8 / 10'),
         const SizedBox(height: 24),
-        _Btn(text: 'View Full Report', onTap: () => nav?.go(15)),
+        Row(children: [
+          Expanded(child: _Btn(text: 'Knowledge Base', onTap: () => nav?.go(22))), // -> 23. Therapist KB
+          const SizedBox(width: 10),
+          Expanded(child: _Btn(text: 'Engagement', onTap: () => nav?.go(23))), // -> 24. Engagement
+        ]),
+        const SizedBox(height: 10),
+        _Btn(text: 'View Full Report', onTap: () => nav?.go(14)),
         const SizedBox(height: 20),
       ]),
     ));
@@ -1672,9 +1694,9 @@ class _S16Library extends StatelessWidget {
         const SizedBox(height: 10),
         _LItem(icon: '🎙️', title: 'Guided Conversation', sub: 'Focus: Pausing & Phrasing', onTap: () => nav?.go(16)),
         const SizedBox(height: 10),
-        _LItem(icon: '🔤', title: 'Syllable Practice', sub: 'Focus: Easy Onset', onTap: () {}),
+        _LItem(icon: '🔤', title: 'Syllable Practice', sub: 'Focus: Easy Onset', onTap: () => nav?.go(19)), // -> 20. Syllable Practice
         const SizedBox(height: 10),
-        _LItem(icon: '🫁', title: 'Breathing Exercise', sub: 'Focus: Relaxation', onTap: () {}),
+        _LItem(icon: '🫁', title: 'Breathing Exercise', sub: 'Focus: Relaxation', onTap: () => nav?.go(20)), // -> 21. Breathing
         const SizedBox(height: 20),
         _Btn(text: '+ Add Activity', onTap: () {}),
         const SizedBox(height: 20),
@@ -1804,4 +1826,1105 @@ class _SSwitchTile extends StatelessWidget {
       trailing: Switch(value: value, activeTrackColor: _C.blue, onChanged: onChanged),
     ),
   );
+}
+
+// ============================================================================
+// ADDITIONAL SCREENS 19-24 — Component 3 pillars made visible
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// 19. STORY GENERATED — makes Pillar 1 (LLM + phonetic loading) visible
+// ----------------------------------------------------------------------------
+class _S19StoryGenerated extends StatelessWidget {
+  const _S19StoryGenerated();
+
+  static const List<Map<String, String>> _targets = [
+    {'word': 'පොත', 'reason': 'Plosive onset'},
+    {'word': 'ගස', 'reason': 'Plosive onset'},
+    {'word': 'ආරක්ෂාව', 'reason': 'Long vowel + cluster'},
+    {'word': 'රත්තරන්', 'reason': 'Multisyllabic — repetition target'},
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final nav = _InheritedNav.of(context);
+    final theme = _InheritedTheme.themeOf(context);
+    return _BgScaffold(child: SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      child: Column(children: [
+        const _BackHeader(title: ''),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(color: theme.accentColor.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(12)),
+          child: Text('✨ Story generated for ${theme.name}', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: theme.accentColor)),
+        ),
+        const SizedBox(height: 12),
+        const _Plaque(text: 'A New Page Today', fontSize: 17),
+        const SizedBox(height: 12),
+        Container(
+          width: double.infinity, padding: const EdgeInsets.all(18),
+          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 8)]),
+          child: RichText(text: TextSpan(
+            style: const TextStyle(fontSize: 18, height: 1.9, color: _C.darkText, fontWeight: FontWeight.w500),
+            children: [
+              const TextSpan(text: 'මිලෝ '),
+              _S19StoryGenerated._hl('පොත'),
+              const TextSpan(text: ' ගබඩාවෙන් ලස්සන '),
+              _S19StoryGenerated._hl('රත්තරන්'),
+              const TextSpan(text: ' පෙට්ටියක් හම්බුනා. ඒක '),
+              _S19StoryGenerated._hl('ආරක්ෂාව'),
+              const TextSpan(text: 'ෙන් තියෙන '),
+              _S19StoryGenerated._hl('ගස'),
+              const TextSpan(text: ' යට තිබ්බා.'),
+            ],
+          )),
+        ),
+        const SizedBox(height: 16),
+        Container(
+          width: double.infinity, padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(color: const Color(0xFFF1F5F9), borderRadius: BorderRadius.circular(16)),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const Text('Why these words?', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black54)),
+            const SizedBox(height: 8),
+            ..._targets.map((t) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 3),
+              child: Row(children: [
+                Text(t['word']!, style: const TextStyle(fontWeight: FontWeight.bold, color: _C.blue, fontSize: 13)),
+                const SizedBox(width: 8),
+                Expanded(child: Text(t['reason']!, style: const TextStyle(fontSize: 12, color: Colors.black54))),
+              ]),
+            )),
+          ]),
+        ),
+        const SizedBox(height: 20),
+        _Btn(text: 'Read the Story', onTap: () => nav?.go(7)), // -> Screen 8. Activity
+        const SizedBox(height: 20),
+      ]),
+    ));
+  }
+
+  static TextSpan _hl(String word) => TextSpan(
+    text: word,
+    style: const TextStyle(color: _C.gold, fontWeight: FontWeight.w900, decoration: TextDecoration.underline, decorationColor: _C.gold, decorationThickness: 2),
+  );
+}
+
+// ----------------------------------------------------------------------------
+// 20. SYLLABLE PRACTICE — one of the five bandit arms
+// ----------------------------------------------------------------------------
+class _S20SyllablePractice extends StatelessWidget {
+  const _S20SyllablePractice();
+  static const _syllables = ['ක', 'ක-ක', 'ක-ර', 'රැ-ට', 'රැ-ට-ල'];
+
+  @override
+  Widget build(BuildContext context) {
+    final nav = _InheritedNav.of(context);
+    return _BgScaffold(child: SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      child: Column(children: [
+        const _BackHeader(title: ''),
+        const Text('Syllable Practice', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: _C.darkText)),
+        const Text('Say each one slowly with me', style: TextStyle(fontSize: 13, color: Colors.black54)),
+        const SizedBox(height: 20),
+        const _Mascot(size: 130),
+        const SizedBox(height: 20),
+        Wrap(spacing: 10, runSpacing: 10, alignment: WrapAlignment.center, children: _syllables.asMap().entries.map((e) {
+          final active = e.key == 2;
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+            decoration: BoxDecoration(
+              color: active ? _C.blue : Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: active ? _C.blue : Colors.grey.shade300, width: 2),
+              boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
+            ),
+            child: Text(e.value, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: active ? Colors.white : _C.darkText)),
+          );
+        }).toList()),
+        const SizedBox(height: 30),
+        const CircleAvatar(radius: 34, backgroundColor: _C.blue, child: Icon(Icons.mic, color: Colors.white, size: 32)),
+        const SizedBox(height: 8),
+        const Text('Tap and speak', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 20),
+        _Btn(text: 'Next Syllable', onTap: () => nav?.go(8)),
+        const SizedBox(height: 20),
+      ]),
+    ));
+  }
+}
+
+// ----------------------------------------------------------------------------
+// 21. BREATHING EXERCISE — second missing arm; simple animated cue
+// ----------------------------------------------------------------------------
+class _S21Breathing extends StatefulWidget {
+  const _S21Breathing();
+  @override State<_S21Breathing> createState() => _S21State();
+}
+class _S21State extends State<_S21Breathing> with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController(vsync: this, duration: const Duration(seconds: 4))..repeat(reverse: true);
+  @override
+  void dispose() { _c.dispose(); super.dispose(); }
+
+  @override
+  Widget build(BuildContext context) {
+    final nav = _InheritedNav.of(context);
+    final theme = _InheritedTheme.themeOf(context);
+    return _BgScaffold(child: SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      child: Column(children: [
+        const _BackHeader(title: ''),
+        const Text('Breathing Break', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: _C.darkText)),
+        const SizedBox(height: 30),
+        AnimatedBuilder(animation: _c, builder: (_, __) {
+          final scale = 0.85 + _c.value * 0.3;
+          return Transform.scale(scale: scale, child: Container(
+            width: 160, height: 160,
+            decoration: BoxDecoration(shape: BoxShape.circle, color: theme.accentColor.withValues(alpha: 0.25), border: Border.all(color: theme.accentColor, width: 3)),
+            child: Center(child: Text(_c.value > 0.5 ? 'Breathe In' : 'Breathe Out', style: TextStyle(fontWeight: FontWeight.bold, color: theme.accentColor, fontSize: 15))),
+          ));
+        }),
+        const SizedBox(height: 30),
+        Container(padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(18), boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)]),
+          child: const Text('Follow the circle. Breathe in as it grows, out as it shrinks.', textAlign: TextAlign.center, style: TextStyle(fontSize: 13, color: _C.darkText))),
+        const SizedBox(height: 24),
+        _Btn(text: "I'm Ready", onTap: () => nav?.go(9)),
+        const SizedBox(height: 20),
+      ]),
+    ));
+  }
+}
+
+// ----------------------------------------------------------------------------
+// 22. WHY THIS ACTIVITY? — Pillar 2, the bandit's reasoning made visible.
+// ----------------------------------------------------------------------------
+class _S22BanditReasoning extends StatelessWidget {
+  const _S22BanditReasoning();
+
+  static const _arms = [
+    {'name': 'Story reading', 'score': 0.71, 'picked': true},
+    {'name': 'Syllable practice', 'score': 0.52, 'picked': false},
+    {'name': 'Breathing exercise', 'score': 0.38, 'picked': false},
+    {'name': 'Conversation prompt', 'score': 0.47, 'picked': false},
+    {'name': 'DAF-lite', 'score': 0.21, 'picked': false},
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final nav = _InheritedNav.of(context);
+    return _BgScaffold(paintScene: false, child: SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        const _BackHeader(title: ''),
+        const Center(child: Text('Why this activity?', style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold, color: _C.darkText))),
+        const SizedBox(height: 4),
+        const Center(child: Text('Contextual bandit decision for this session', style: TextStyle(fontSize: 12, color: Colors.black54))),
+        const SizedBox(height: 18),
+        Container(padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)]),
+          child: const Wrap(spacing: 8, runSpacing: 8, children: [
+            _CtxChip(label: 'Severity: Moderate'),
+            _CtxChip(label: 'Age: 8'),
+            _CtxChip(label: 'Concomitants: Low'),
+            _CtxChip(label: 'Engagement (last session): 0.74'),
+          ]),
+        ),
+        const SizedBox(height: 18),
+        const Text('Arm scores', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: _C.darkText)),
+        const SizedBox(height: 10),
+        ..._arms.map((a) => Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              Text(a['name'] as String, style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: (a['picked'] as bool) ? _C.blue : _C.darkText)),
+              Text((a['score'] as double).toStringAsFixed(2), style: const TextStyle(fontSize: 12, color: Colors.black54)),
+            ]),
+            const SizedBox(height: 4),
+            ClipRRect(borderRadius: BorderRadius.circular(8), child: LinearProgressIndicator(
+              value: a['score'] as double, minHeight: 12,
+              backgroundColor: const Color(0xFFF1F5F9),
+              color: (a['picked'] as bool) ? _C.blue : Colors.grey.shade400,
+            )),
+          ]),
+        )),
+        const SizedBox(height: 8),
+        Container(padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(color: const Color(0xFFE1F5FE), borderRadius: BorderRadius.circular(14)),
+          child: const Text('Story reading scored highest given low concomitants and strong engagement last session — the therapist knowledge base allowed it, so it was selected.',
+            style: TextStyle(fontSize: 12, color: _C.darkText, height: 1.4))),
+        const SizedBox(height: 20),
+        _Btn(text: 'See Guardrails →', onTap: () => nav?.go(22)), // -> 23. Therapist KB
+        const SizedBox(height: 20),
+      ]),
+    ));
+  }
+}
+
+class _CtxChip extends StatelessWidget {
+  final String label;
+  const _CtxChip({required this.label});
+  @override
+  Widget build(BuildContext context) => Container(
+    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+    decoration: BoxDecoration(color: const Color(0xFFF1F5F9), borderRadius: BorderRadius.circular(10)),
+    child: Text(label, style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600, color: Color(0xFF334155))),
+  );
+}
+
+// ----------------------------------------------------------------------------
+// 23. THERAPIST KNOWLEDGE BASE — Pillar 3, SLP-authored guardrails visible
+// ----------------------------------------------------------------------------
+class _S23TherapistKB extends StatelessWidget {
+  const _S23TherapistKB();
+
+  static const _rules = [
+    {'rule': 'No DAF-lite two sessions in a row', 'status': 'Active — fired today'},
+    {'rule': 'Prioritize breathing when concomitants trend up', 'status': 'Active'},
+    {'rule': 'Cap syllable drills at 8 minutes for age < 7', 'status': 'Active'},
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return _BgScaffold(paintScene: false, child: SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        const _BackHeader(title: ''),
+        const Center(child: Text('Therapist Knowledge Base', style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold, color: _C.darkText))),
+        const SizedBox(height: 4),
+        const Center(child: Text('SLP-authored guardrails constrain the bandit', style: TextStyle(fontSize: 12, color: Colors.black54))),
+        const SizedBox(height: 18),
+        ..._rules.map((r) => Container(
+          margin: const EdgeInsets.only(bottom: 10), padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14), boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5)]),
+          child: Row(children: [
+            const Icon(Icons.shield_outlined, color: _C.blue, size: 20),
+            const SizedBox(width: 10),
+            Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(r['rule']!, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: _C.darkText)),
+              const SizedBox(height: 2),
+              Text(r['status']!, style: TextStyle(fontSize: 11, color: r['status']!.contains('fired') ? _C.green : Colors.black54)),
+            ])),
+          ]),
+        )),
+        const SizedBox(height: 8),
+        Container(padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(color: const Color(0xFFFFF3E0), borderRadius: BorderRadius.circular(14)),
+          child: const Text('Guardrails always override the bandit\'s raw preference — the policy proposes, the knowledge base disposes.',
+            style: TextStyle(fontSize: 12, color: _C.darkText, height: 1.4))),
+        const SizedBox(height: 20),
+      ]),
+    ));
+  }
+}
+
+// ----------------------------------------------------------------------------
+// 24. ENGAGEMENT & TREND — composite index + longitudinal view for clinicians
+// ----------------------------------------------------------------------------
+class _S24Engagement extends StatelessWidget {
+  const _S24Engagement();
+  static const _hist = [0.55, 0.6, 0.58, 0.65, 0.7, 0.68, 0.72, 0.75, 0.7, 0.74, 0.72, 0.78];
+
+  @override
+  Widget build(BuildContext context) {
+    return _BgScaffold(paintScene: false, child: SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        const _BackHeader(title: ''),
+        const Center(child: Text('Engagement', style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold, color: _C.darkText))),
+        const SizedBox(height: 16),
+        Container(padding: const EdgeInsets.all(18),
+          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)]),
+          child: const Column(children: [
+            Text('0.78', style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: _C.blue)),
+            Text('THIS SESSION', style: TextStyle(fontSize: 10, letterSpacing: 1, color: Colors.grey, fontWeight: FontWeight.bold)),
+            SizedBox(height: 16),
+            _CompRow(label: 'Task completion', value: 0.9),
+            _CompRow(label: 'Response latency (norm.)', value: 0.68),
+            _CompRow(label: 'Voluntary continuation', value: 0.8),
+            _CompRow(label: 'Prosodic enthusiasm', value: 0.72),
+          ]),
+        ),
+        const SizedBox(height: 18),
+        Container(padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)]),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const Text('Last 12 sessions', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black54)),
+            const SizedBox(height: 12),
+            SizedBox(height: 70, child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: _hist.map((v) => Expanded(
+              child: Container(margin: const EdgeInsets.symmetric(horizontal: 2), height: v * 70,
+                decoration: BoxDecoration(color: v < 0.5 ? const Color(0xFFD9C7A8) : _C.green, borderRadius: const BorderRadius.vertical(top: Radius.circular(4)))),
+            )).toList())),
+          ]),
+        ),
+        const SizedBox(height: 20),
+      ]),
+    ));
+  }
+}
+
+class _CompRow extends StatelessWidget {
+  final String label; final double value;
+  const _CompRow({required this.label, required this.value});
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(vertical: 6),
+    child: Row(children: [
+      Expanded(flex: 3, child: Text(label, style: const TextStyle(fontSize: 12, color: Colors.black54))),
+      Expanded(flex: 4, child: ClipRRect(borderRadius: BorderRadius.circular(6), child: LinearProgressIndicator(value: value, minHeight: 8, backgroundColor: const Color(0xFFF1F5F9), color: _C.blue))),
+      const SizedBox(width: 8),
+      Text(value.toStringAsFixed(2), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+    ]),
+  );
+}
+
+// ============================================================================
+// STORYBOOK READER — activities delivered AS pages inside a single PageView
+// ============================================================================
+
+enum _ActivityType { narration, syllable, breathing, conversation, dafLite }
+
+extension _ActivityTypeX on _ActivityType {
+  String get label {
+    switch (this) {
+      case _ActivityType.narration:    return 'Story reading';
+      case _ActivityType.syllable:     return 'Syllable practice';
+      case _ActivityType.breathing:    return 'Breathing break';
+      case _ActivityType.conversation: return 'Talk about it';
+      case _ActivityType.dafLite:      return 'Slow & steady reading';
+    }
+  }
+  IconData get icon {
+    switch (this) {
+      case _ActivityType.narration:    return Icons.auto_stories_rounded;
+      case _ActivityType.syllable:     return Icons.graphic_eq_rounded;
+      case _ActivityType.breathing:    return Icons.air_rounded;
+      case _ActivityType.conversation: return Icons.chat_bubble_outline_rounded;
+      case _ActivityType.dafLite:      return Icons.hourglass_bottom_rounded;
+    }
+  }
+}
+
+/// One page of the session's story, as decided by the bandit.
+class _StoryPageModel {
+  final _ActivityType type;
+  final String narration;
+  final List<String> targetWords;
+  final List<String> syllables;
+  final String prompt;
+  final Map<String, dynamic> banditContext;
+  final List<Map<String, dynamic>> armScores;
+
+  const _StoryPageModel({
+    required this.type,
+    required this.narration,
+    this.targetWords = const [],
+    this.syllables = const [],
+    this.prompt = '',
+    this.banditContext = const {},
+    this.armScores = const [],
+  });
+}
+
+/// Dummy session: five pages, each a different bandit-picked activity type.
+final List<_StoryPageModel> _demoSession = [
+  _StoryPageModel(
+    type: _ActivityType.narration,
+    narration: 'මිලෝ වනාන්තරය තුළින් ඇවිද ගියා. ඉදිරියෙන් පැරණි ගසක් තිබුණා.',
+    targetWords: const ['ගසක්'],
+    banditContext: {'severity': 'Moderate', 'age': 8, 'concomitants': 'Low', 'engagement_prev': 0.74},
+    armScores: const [
+      {'name': 'Story reading', 'score': 0.71, 'picked': true},
+      {'name': 'Syllable practice', 'score': 0.52, 'picked': false},
+      {'name': 'Breathing exercise', 'score': 0.38, 'picked': false},
+      {'name': 'Conversation prompt', 'score': 0.47, 'picked': false},
+      {'name': 'Slow & steady reading', 'score': 0.21, 'picked': false},
+    ],
+  ),
+  _StoryPageModel(
+    type: _ActivityType.syllable,
+    narration: 'ගසේ මුදුනේ රත්තරන් කූඩුවක් තිබුණා. එය කියන්න උදව් කරන්න...',
+    syllables: const ['ර', 'ර-ත්', 'රත්-ත', 'රත්-තරන්'],
+    banditContext: {'severity': 'Moderate', 'age': 8, 'concomitants': 'Low', 'engagement_prev': 0.7},
+    armScores: const [
+      {'name': 'Story reading', 'score': 0.44, 'picked': false},
+      {'name': 'Syllable practice', 'score': 0.68, 'picked': true},
+      {'name': 'Breathing exercise', 'score': 0.30, 'picked': false},
+      {'name': 'Conversation prompt', 'score': 0.41, 'picked': false},
+      {'name': 'Slow & steady reading', 'score': 0.25, 'picked': false},
+    ],
+  ),
+  _StoryPageModel(
+    type: _ActivityType.breathing,
+    narration: 'කූඩුව අරින්න කලින්, මිලෝ එක්ක සෙමින් හුස්ම ගමු.',
+    banditContext: {'severity': 'Moderate', 'age': 8, 'concomitants': 'Elevated', 'engagement_prev': 0.6},
+    armScores: const [
+      {'name': 'Story reading', 'score': 0.40, 'picked': false},
+      {'name': 'Syllable practice', 'score': 0.35, 'picked': false},
+      {'name': 'Breathing exercise', 'score': 0.66, 'picked': true},
+      {'name': 'Conversation prompt', 'score': 0.30, 'picked': false},
+      {'name': 'Slow & steady reading', 'score': 0.18, 'picked': false},
+    ],
+  ),
+  _StoryPageModel(
+    type: _ActivityType.conversation,
+    narration: 'කූඩුව ඇරී ගියා! ඇතුළේ මොකක්ද තියෙන්නේ කියලා මිලෝ හිතනවා...',
+    prompt: 'ඔයාට කුමන අන්දමේ බෝනස් සොයාගන්න ලැබෙයිද කියා හිතුනාද?',
+    banditContext: {'severity': 'Moderate', 'age': 8, 'concomitants': 'Low', 'engagement_prev': 0.78},
+    armScores: const [
+      {'name': 'Story reading', 'score': 0.50, 'picked': false},
+      {'name': 'Syllable practice', 'score': 0.42, 'picked': false},
+      {'name': 'Breathing exercise', 'score': 0.33, 'picked': false},
+      {'name': 'Conversation prompt', 'score': 0.69, 'picked': true},
+      {'name': 'Slow & steady reading', 'score': 0.20, 'picked': false},
+    ],
+  ),
+  _StoryPageModel(
+    type: _ActivityType.dafLite,
+    narration: 'මිලෝ සහ ඔයා දෙන්නා එකට කතාවේ අවසාන පිටුව කියවමු, සෙමින්.',
+    targetWords: const ['කතාවේ', 'අවසාන'],
+    banditContext: {'severity': 'Moderate', 'age': 8, 'concomitants': 'Low', 'engagement_prev': 0.72},
+    armScores: const [
+      {'name': 'Story reading', 'score': 0.48, 'picked': false},
+      {'name': 'Syllable practice', 'score': 0.30, 'picked': false},
+      {'name': 'Breathing exercise', 'score': 0.25, 'picked': false},
+      {'name': 'Conversation prompt', 'score': 0.35, 'picked': false},
+      {'name': 'Slow & steady reading', 'score': 0.61, 'picked': true},
+    ],
+  ),
+];
+
+// THE READER — one continuous book; page content varies by bandit pick.
+class _StoryReaderScreen extends StatefulWidget {
+  final List<_StoryPageModel> pages;
+  const _StoryReaderScreen({required this.pages});
+  @override State<_StoryReaderScreen> createState() => _StoryReaderState();
+}
+
+class _StoryReaderState extends State<_StoryReaderScreen> {
+  final _controller = PageController();
+  int _page = 0;
+
+  void _next() {
+    if (_page < widget.pages.length - 1) {
+      _controller.nextPage(duration: const Duration(milliseconds: 420), curve: Curves.easeOutCubic);
+    } else {
+      final nav = _InheritedNav.of(context);
+      nav?.go(8); // -> Feedback screen once the book ends
+    }
+  }
+
+  void _showReasoning(_StoryPageModel p) {
+    showModalBottomSheet(context: context, backgroundColor: Colors.transparent, isScrollControlled: true,
+      builder: (_) => _ReasoningSheet(page: p));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = _InheritedTheme.themeOf(context);
+    return _BgScaffold(child: Column(children: [
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Row(children: [
+          const _BackHeader(title: ''),
+          const Spacer(),
+          Row(children: List.generate(widget.pages.length, (i) => Container(
+            width: 7, height: 7, margin: const EdgeInsets.symmetric(horizontal: 3),
+            decoration: BoxDecoration(shape: BoxShape.circle, color: i == _page ? theme.accentColor : Colors.grey.shade300),
+          ))),
+          const SizedBox(width: 8),
+          IconButton(
+            icon: const Icon(Icons.info_outline_rounded, size: 20, color: _C.blue),
+            onPressed: () => _showReasoning(widget.pages[_page]),
+            tooltip: 'Why this page?',
+          ),
+        ]),
+      ),
+      Expanded(child: PageView.builder(
+        controller: _controller,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: widget.pages.length,
+        onPageChanged: (i) => setState(() => _page = i),
+        itemBuilder: (_, i) => _StoryPageView(page: widget.pages[i], onDone: _next),
+      )),
+    ]));
+  }
+}
+
+// PAGE FRAME — constant across all activity types.
+class _StoryPageView extends StatelessWidget {
+  final _StoryPageModel page;
+  final VoidCallback onDone;
+  const _StoryPageView({required this.page, required this.onDone});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+      child: Column(children: [
+        const _SceneWidget(height: 170),
+        const SizedBox(height: 14),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12), boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)]),
+          child: Row(mainAxisSize: MainAxisSize.min, children: [
+            Icon(page.type.icon, size: 14, color: _C.blue),
+            const SizedBox(width: 6),
+            Text(page.type.label, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: _C.blue)),
+          ]),
+        ),
+        const SizedBox(height: 14),
+        _PageBody(page: page, onDone: onDone),
+      ]),
+    );
+  }
+}
+
+// PAGE BODY — the only part that changes per activity type.
+class _PageBody extends StatelessWidget {
+  final _StoryPageModel page;
+  final VoidCallback onDone;
+  const _PageBody({required this.page, required this.onDone});
+
+  @override
+  Widget build(BuildContext context) {
+    switch (page.type) {
+      case _ActivityType.narration:
+      case _ActivityType.dafLite:
+        return _NarrationBody(page: page, onDone: onDone, slow: page.type == _ActivityType.dafLite);
+      case _ActivityType.syllable:
+        return _SyllableBody(page: page, onDone: onDone);
+      case _ActivityType.breathing:
+        return _BreathingBody(onDone: onDone);
+      case _ActivityType.conversation:
+        return _ConversationBody(page: page, onDone: onDone);
+    }
+  }
+}
+
+class _NarrationBody extends StatelessWidget {
+  final _StoryPageModel page; final VoidCallback onDone; final bool slow;
+  const _NarrationBody({required this.page, required this.onDone, this.slow = false});
+  @override
+  Widget build(BuildContext context) {
+    final spans = <InlineSpan>[];
+    var text = page.narration;
+    for (final w in page.targetWords) {
+      final i = text.indexOf(w);
+      if (i < 0) continue;
+      spans.add(TextSpan(text: text.substring(0, i)));
+      spans.add(TextSpan(text: w, style: const TextStyle(color: _C.gold, fontWeight: FontWeight.w900, decoration: TextDecoration.underline, decorationColor: _C.gold)));
+      text = text.substring(i + w.length);
+    }
+    spans.add(TextSpan(text: text));
+    return Column(children: [
+      Container(width: double.infinity, padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 8)]),
+        child: RichText(text: TextSpan(style: const TextStyle(fontSize: 18, height: 1.8, color: _C.darkText, fontWeight: FontWeight.w500), children: spans))),
+      if (slow) Padding(padding: const EdgeInsets.only(top: 8), child: Text('Take your time on the underlined words', style: TextStyle(fontSize: 11, color: Colors.grey.shade600))),
+      const SizedBox(height: 22),
+      const CircleAvatar(radius: 30, backgroundColor: _C.blue, child: Icon(Icons.mic, color: Colors.white, size: 28)),
+      const SizedBox(height: 8),
+      const Text('Tap and read', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+      const SizedBox(height: 18),
+      _Btn(text: 'Turn the page', onTap: onDone),
+      const SizedBox(height: 20),
+    ]);
+  }
+}
+
+class _SyllableBody extends StatelessWidget {
+  final _StoryPageModel page; final VoidCallback onDone;
+  const _SyllableBody({required this.page, required this.onDone});
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      Container(width: double.infinity, padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(18), boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)]),
+        child: Text(page.narration, textAlign: TextAlign.center, style: const TextStyle(fontSize: 15, color: _C.darkText, height: 1.5))),
+      const SizedBox(height: 16),
+      Wrap(spacing: 10, runSpacing: 10, alignment: WrapAlignment.center, children: page.syllables.asMap().entries.map((e) {
+        final active = e.key == page.syllables.length - 1;
+        return Container(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          decoration: BoxDecoration(color: active ? _C.blue : Colors.white, borderRadius: BorderRadius.circular(14), border: Border.all(color: active ? _C.blue : Colors.grey.shade300, width: 2)),
+          child: Text(e.value, style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: active ? Colors.white : _C.darkText)));
+      }).toList()),
+      const SizedBox(height: 22),
+      const CircleAvatar(radius: 30, backgroundColor: _C.blue, child: Icon(Icons.mic, color: Colors.white, size: 28)),
+      const SizedBox(height: 18),
+      _Btn(text: 'Turn the page', onTap: onDone),
+      const SizedBox(height: 20),
+    ]);
+  }
+}
+
+class _BreathingBody extends StatefulWidget {
+  final VoidCallback onDone;
+  const _BreathingBody({required this.onDone});
+  @override State<_BreathingBody> createState() => _BreathingBodyState();
+}
+class _BreathingBodyState extends State<_BreathingBody> with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController(vsync: this, duration: const Duration(seconds: 4))..repeat(reverse: true);
+  @override void dispose() { _c.dispose(); super.dispose(); }
+  @override
+  Widget build(BuildContext context) {
+    final theme = _InheritedTheme.themeOf(context);
+    return Column(children: [
+      AnimatedBuilder(animation: _c, builder: (_, __) {
+        final scale = 0.85 + _c.value * 0.3;
+        return Transform.scale(scale: scale, child: Container(
+          width: 150, height: 150,
+          decoration: BoxDecoration(shape: BoxShape.circle, color: theme.accentColor.withValues(alpha: 0.25), border: Border.all(color: theme.accentColor, width: 3)),
+          child: Center(child: Text(_c.value > 0.5 ? 'Breathe In' : 'Breathe Out', style: TextStyle(fontWeight: FontWeight.bold, color: theme.accentColor, fontSize: 14)))));
+      }),
+      const SizedBox(height: 22),
+      _Btn(text: 'Turn the page', onTap: widget.onDone),
+      const SizedBox(height: 20),
+    ]);
+  }
+}
+
+class _ConversationBody extends StatelessWidget {
+  final _StoryPageModel page; final VoidCallback onDone;
+  const _ConversationBody({required this.page, required this.onDone});
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      Container(width: double.infinity, padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(18), boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)]),
+        child: Column(children: [
+          Text(page.narration, textAlign: TextAlign.center, style: const TextStyle(fontSize: 14, color: Colors.black54, height: 1.4)),
+          const SizedBox(height: 10),
+          Text(page.prompt, textAlign: TextAlign.center, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: _C.darkText)),
+        ])),
+      const SizedBox(height: 22),
+      const CircleAvatar(radius: 30, backgroundColor: _C.blue, child: Icon(Icons.mic, color: Colors.white, size: 28)),
+      const SizedBox(height: 18),
+      _Btn(text: 'Turn the page', onTap: onDone),
+      const SizedBox(height: 20),
+    ]);
+  }
+}
+
+// "WHY THIS PAGE?" — inline bottom sheet, not a screen you navigate away to.
+class _ReasoningSheet extends StatelessWidget {
+  final _StoryPageModel page;
+  const _ReasoningSheet({required this.page});
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(20, 14, 20, 28),
+      decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(2)))),
+        const SizedBox(height: 14),
+        const Text('Why this page?', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: _C.darkText)),
+        const SizedBox(height: 10),
+        Wrap(spacing: 6, runSpacing: 6, children: page.banditContext.entries.map((e) => Container(
+          padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+          decoration: BoxDecoration(color: const Color(0xFFF1F5F9), borderRadius: BorderRadius.circular(9)),
+          child: Text('${e.key}: ${e.value}', style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Color(0xFF334155))),
+        )).toList()),
+        const SizedBox(height: 14),
+        ...page.armScores.map((a) => Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Row(children: [
+            SizedBox(width: 130, child: Text(a['name'] as String, style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: (a['picked'] as bool) ? _C.blue : _C.darkText))),
+            Expanded(child: ClipRRect(borderRadius: BorderRadius.circular(6), child: LinearProgressIndicator(
+              value: a['score'] as double, minHeight: 10, backgroundColor: const Color(0xFFF1F5F9),
+              color: (a['picked'] as bool) ? _C.blue : Colors.grey.shade400))),
+            const SizedBox(width: 8),
+            Text((a['score'] as double).toStringAsFixed(2), style: const TextStyle(fontSize: 11, color: Colors.black54)),
+          ]),
+        )),
+      ]),
+    );
+  }
+}
+
+// ============================================================================
+// 25. THERAPY HOME — clean dashboard, no adventure theme
+// ============================================================================
+class _S25TherapyHome extends StatelessWidget {
+  const _S25TherapyHome();
+
+  // Today's plan: 3 activities, child is halfway through (2 done)
+  static const _planActivities = [
+    {'label': 'Story Reading',        'done': true,  'icon': '📖', 'dur': '8 min'},
+    {'label': 'Syllable Practice',    'done': true,  'icon': '🔤', 'dur': '5 min'},
+    {'label': 'Breathing Exercise',   'done': false, 'icon': '🫁', 'dur': '4 min'},
+    {'label': 'Guided Conversation',  'done': false, 'icon': '🎙️', 'dur': '8 min'},
+  ];
+
+  static const _achievements = [
+    {'emoji': '🥇', 'label': 'First Steps'},
+    {'emoji': '🗣️', 'label': 'Great Talker'},
+    {'emoji': '🌟', 'label': 'Explorer'},
+    {'emoji': '🔥', 'label': '7-day Streak'},
+    {'emoji': '🎯', 'label': 'On Target'},
+  ];
+
+  static const _history = [
+    {'date': 'Today',        'activity': 'Story Reading + Syllable', 'score': '8/10', 'up': true},
+    {'date': 'Yesterday',   'activity': 'Picture Description',       'score': '7/10', 'up': false},
+    {'date': 'Aug 29',      'activity': 'Guided Conversation',       'score': '8/10', 'up': true},
+    {'date': 'Aug 28',      'activity': 'Breathing + Syllable',      'score': '6/10', 'up': false},
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final nav = _InheritedNav.of(context);
+    final done = _planActivities.where((a) => a['done'] as bool).length;
+    final total = _planActivities.length;
+    final progress = done / total;
+
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0xFFF0F4FF), Color(0xFFF7F9FC), Color(0xFFEFF6FF)],
+        ),
+      ),
+      child: SafeArea(
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+
+            // ── Header ──────────────────────────────────────────────
+            Row(children: [
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: const [
+                Text('Good morning,', style: TextStyle(fontSize: 13, color: Colors.black45, fontWeight: FontWeight.w500)),
+                Text('Aseliya 👋', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF1A2B4A))),
+              ]),
+              const Spacer(),
+              _ThSmallBtn(
+                icon: Icons.settings_outlined,
+                onTap: () => nav?.go(17),
+              ),
+              const SizedBox(width: 8),
+              _ThSmallBtn(
+                icon: Icons.person_outline_rounded,
+                onTap: () {},
+              ),
+            ]),
+            const SizedBox(height: 18),
+
+            // ── Today's Therapy Plan Card ────────────────────────────
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF0057B8), Color(0xFF0096FF)],
+                  begin: Alignment.topLeft, end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(22),
+                boxShadow: const [BoxShadow(color: Color(0x330057B8), blurRadius: 18, offset: Offset(0, 6))],
+              ),
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Row(children: [
+                  const Icon(Icons.today_rounded, color: Colors.white70, size: 16),
+                  const SizedBox(width: 6),
+                  const Text("Today's Therapy Plan", style: TextStyle(fontSize: 12, color: Colors.white70, fontWeight: FontWeight.w600)),
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(20)),
+                    child: Text('$done / $total done', style: const TextStyle(fontSize: 11, color: Colors.white, fontWeight: FontWeight.bold)),
+                  ),
+                ]),
+                const SizedBox(height: 10),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: LinearProgressIndicator(
+                    value: progress, minHeight: 8,
+                    backgroundColor: Colors.white24,
+                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                ),
+                const SizedBox(height: 14),
+                ...(_planActivities.map((a) => _ThPlanRow(
+                  icon: a['icon'] as String,
+                  label: a['label'] as String,
+                  dur: a['dur'] as String,
+                  done: a['done'] as bool,
+                ))),
+                const SizedBox(height: 14),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: const Color(0xFF0057B8),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                    ),
+                    onPressed: () => nav?.go(6), // -> Milestone Intro
+                    child: const Text('Resume Session', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                  ),
+                ),
+              ]),
+            ),
+            const SizedBox(height: 22),
+
+            // ── Quick Navigation ─────────────────────────────────────
+            const Text('Quick Navigation', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF1A2B4A))),
+            const SizedBox(height: 12),
+            GridView.count(
+              crossAxisCount: 3,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
+              childAspectRatio: 0.95,
+              children: [
+                _ThQuickCard(icon: Icons.map_rounded,            label: 'Journey Map',     color: const Color(0xFF7C3AED), onTap: () => nav?.go(4)),
+                _ThQuickCard(icon: Icons.auto_stories_rounded,   label: 'Start Story',     color: const Color(0xFF0EA5E9), onTap: () => nav?.go(6)),
+                _ThQuickCard(icon: Icons.palette_rounded,        label: 'Themes',          color: const Color(0xFFF59E0B), onTap: () => nav?.go(2)),
+                _ThQuickCard(icon: Icons.library_books_rounded,  label: 'Activity Library',color: const Color(0xFF10B981), onTap: () => nav?.go(15)),
+                _ThQuickCard(icon: Icons.bar_chart_rounded,      label: 'My Progress',     color: const Color(0xFFEF4444), onTap: () => nav?.go(12)),
+                _ThQuickCard(icon: Icons.medical_information_rounded, label: 'Therapist',  color: const Color(0xFF6366F1), onTap: () => nav?.go(14)),
+              ],
+            ),
+            const SizedBox(height: 22),
+
+            // ── Achievements ─────────────────────────────────────────
+            Row(children: [
+              const Text('Achievements', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF1A2B4A))),
+              const Spacer(),
+              GestureDetector(
+                onTap: () => nav?.go(12),
+                child: const Text('See all', style: TextStyle(fontSize: 12, color: Color(0xFF0096FF), fontWeight: FontWeight.w600)),
+              ),
+            ]),
+            const SizedBox(height: 12),
+            SizedBox(
+              height: 88,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                itemCount: _achievements.length,
+                separatorBuilder: (_, __) => const SizedBox(width: 10),
+                itemBuilder: (_, i) => _ThBadgeCard(
+                  emoji: _achievements[i]['emoji'] as String,
+                  label: _achievements[i]['label'] as String,
+                ),
+              ),
+            ),
+            const SizedBox(height: 22),
+
+            // ── Theme Selection Shortcut ──────────────────────────────
+            GestureDetector(
+              onTap: () => nav?.go(2),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(color: const Color(0xFFE2E8F0), width: 1.5),
+                  boxShadow: const [BoxShadow(color: Colors.black, blurRadius: 8, offset: Offset(0, 2))],
+                ),
+                child: Row(children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF0F4FF),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(Icons.palette_rounded, color: Color(0xFF6366F1), size: 22),
+                  ),
+                  const SizedBox(width: 14),
+                  const Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Text('Adventure Theme', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF1A2B4A))),
+                    SizedBox(height: 2),
+                    Text('6 worlds available — tap to switch', style: TextStyle(fontSize: 11, color: Colors.black45)),
+                  ])),
+                  const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: Colors.black38),
+                ]),
+              ),
+            ),
+            const SizedBox(height: 22),
+
+            // ── Therapy History ───────────────────────────────────────
+            Row(children: [
+              const Text('Therapy History', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF1A2B4A))),
+              const Spacer(),
+              GestureDetector(
+                onTap: () => nav?.go(12),
+                child: const Text('See all', style: TextStyle(fontSize: 12, color: Color(0xFF0096FF), fontWeight: FontWeight.w600)),
+              ),
+            ]),
+            const SizedBox(height: 12),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: const Color(0xFFE2E8F0), width: 1.5),
+                boxShadow: const [BoxShadow(color: Colors.black, blurRadius: 8, offset: Offset(0, 2))],
+              ),
+              child: Column(
+                children: _history.asMap().entries.map((e) => _ThHistoryRow(
+                  date: e.value['date'] as String,
+                  activity: e.value['activity'] as String,
+                  score: e.value['score'] as String,
+                  up: e.value['up'] as bool,
+                  isLast: e.key == _history.length - 1,
+                )).toList(),
+              ),
+            ),
+            const SizedBox(height: 28),
+          ]),
+        ),
+      ),
+    );
+  }
+}
+
+// ─── Supporting widgets for _S25TherapyHome ────────────────────────────────
+
+class _ThSmallBtn extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onTap;
+  const _ThSmallBtn({required this.icon, required this.onTap});
+  @override
+  Widget build(BuildContext context) => GestureDetector(
+    onTap: onTap,
+    child: Container(
+      padding: const EdgeInsets.all(9),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: const [BoxShadow(color: Colors.black, blurRadius: 6, offset: Offset(0, 2))],
+      ),
+      child: Icon(icon, size: 20, color: const Color(0xFF1A2B4A)),
+    ),
+  );
+}
+
+class _ThPlanRow extends StatelessWidget {
+  final String icon, label, dur;
+  final bool done;
+  const _ThPlanRow({required this.icon, required this.label, required this.dur, required this.done});
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(bottom: 8),
+    child: Row(children: [
+      Text(done ? '✅' : icon, style: const TextStyle(fontSize: 16)),
+      const SizedBox(width: 10),
+      Expanded(child: Text(label,
+        style: TextStyle(
+          fontSize: 13, fontWeight: FontWeight.w600,
+          color: done ? Colors.white54 : Colors.white,
+          decoration: done ? TextDecoration.lineThrough : null,
+          decorationColor: Colors.white54,
+        ))),
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        decoration: BoxDecoration(color: Colors.white12, borderRadius: BorderRadius.circular(8)),
+        child: Text(dur, style: const TextStyle(fontSize: 10, color: Colors.white70, fontWeight: FontWeight.bold)),
+      ),
+    ]),
+  );
+}
+
+class _ThQuickCard extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
+  const _ThQuickCard({required this.icon, required this.label, required this.color, required this.onTap});
+  @override
+  Widget build(BuildContext context) => GestureDetector(
+    onTap: onTap,
+    child: Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: const [BoxShadow(color: Colors.black, blurRadius: 6, offset: Offset(0, 2))],
+      ),
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Container(
+          padding: const EdgeInsets.all(11),
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.12),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(icon, color: color, size: 24),
+        ),
+        const SizedBox(height: 8),
+        Text(label, textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF1A2B4A))),
+      ]),
+    ),
+  );
+}
+
+class _ThBadgeCard extends StatelessWidget {
+  final String emoji, label;
+  const _ThBadgeCard({required this.emoji, required this.label});
+  @override
+  Widget build(BuildContext context) => Container(
+    width: 72,
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(16),
+      boxShadow: const [BoxShadow(color: Colors.black, blurRadius: 6, offset: Offset(0, 2))],
+    ),
+    child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Text(emoji, style: const TextStyle(fontSize: 28)),
+      const SizedBox(height: 4),
+      Text(label, textAlign: TextAlign.center,
+        style: const TextStyle(fontSize: 9.5, fontWeight: FontWeight.bold, color: Color(0xFF1A2B4A))),
+    ]),
+  );
+}
+
+class _ThHistoryRow extends StatelessWidget {
+  final String date, activity, score;
+  final bool up, isLast;
+  const _ThHistoryRow({required this.date, required this.activity, required this.score, required this.up, required this.isLast});
+  @override
+  Widget build(BuildContext context) => Column(children: [
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Row(children: [
+        Container(
+          width: 38,
+          padding: const EdgeInsets.symmetric(vertical: 5),
+          decoration: BoxDecoration(
+            color: const Color(0xFFF0F4FF),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Column(children: [
+            Text(date.contains('Aug') ? date.split(' ')[1] : date == 'Today' ? '🟢' : '📅',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF1A2B4A))),
+          ]),
+        ),
+        const SizedBox(width: 12),
+        Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(date, style: const TextStyle(fontSize: 10, color: Colors.black38, fontWeight: FontWeight.w600)),
+          Text(activity, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF1A2B4A))),
+        ])),
+        Row(children: [
+          Icon(up ? Icons.trending_up_rounded : Icons.trending_flat_rounded,
+            size: 14, color: up ? const Color(0xFF10B981) : Colors.black38),
+          const SizedBox(width: 4),
+          Text(score, style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold,
+            color: up ? const Color(0xFF10B981) : const Color(0xFF64748B))),
+        ]),
+      ]),
+    ),
+    if (!isLast) const Divider(height: 1, indent: 16, endIndent: 16, color: Color(0xFFF1F5F9)),
+  ]);
 }
