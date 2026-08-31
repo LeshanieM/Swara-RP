@@ -1,51 +1,57 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swara/core/theme/app_theme.dart';
-import '../../data/providers/concomitant_provider.dart';
+import 'dart:async';
 
-class ConcomitantProcessingScreen extends ConsumerStatefulWidget {
+class ConcomitantProcessingScreen extends StatefulWidget {
   final Map<String, dynamic> assessmentData;
   const ConcomitantProcessingScreen({super.key, required this.assessmentData});
 
   @override
-  ConsumerState<ConcomitantProcessingScreen> createState() => _ConcomitantProcessingScreenState();
+  State<ConcomitantProcessingScreen> createState() => _ConcomitantProcessingScreenState();
 }
 
-class _ConcomitantProcessingScreenState extends ConsumerState<ConcomitantProcessingScreen> {
-  int _currentStep = 0;
-  final List<String> _steps = [
-    'කතාව ලැබුණා',
-    'ශබ්දය බලමින්',
-    'කතා කරන වෙලාවේ සිදුවන දේ බලමින්',
-    'ප්‍රතිඵල සූදානම් කරමින්'
+class _ConcomitantProcessingScreenState extends State<ConcomitantProcessingScreen> {
+  double _progress = 0;
+  int _currentStage = 0;
+  
+  final List<Map<String, String>> _stages = [
+    {'en': 'Detecting face', 'si': 'මුහුණ හඳුනාගනිමින්'},
+    {'en': 'Tracking head movement', 'si': 'හිස චලනය නිරීක්ෂණය කරමින්'},
+    {'en': 'Analyzing eye blinks', 'si': 'ඇස් පිළිසැරීම විශ්ලේෂණය කරමින්'},
+    {'en': 'Analyzing facial movement', 'si': 'මුහුණේ චලනය විශ්ලේෂණය කරමින්'},
+    {'en': 'Detecting hand/body movement', 'si': 'අත්/ශරීර චලනයන් හඳුනාගනිමින්'},
+    {'en': 'Calculating physical behavior score', 'si': 'ශාරීරික හැසිරීම් දර්ශකය ගණනය කරමින්'},
   ];
-  String? _error;
 
   @override
   void initState() {
     super.initState();
-    _startProcessing();
+    _startMockAnalysis();
   }
 
-  Future<void> _startProcessing() async {
-    try {
-      for (int i = 0; i < _steps.length; i++) {
-        await Future.delayed(const Duration(milliseconds: 1000));
-        if (mounted) setState(() => _currentStep = i);
+  void _startMockAnalysis() {
+    // Mock progress over 6 seconds
+    const totalDuration = Duration(seconds: 6);
+    const updateInterval = Duration(milliseconds: 100);
+    final totalSteps = totalDuration.inMilliseconds ~/ updateInterval.inMilliseconds;
+    int currentStep = 0;
+
+    Timer.periodic(updateInterval, (timer) {
+      if (currentStep >= totalSteps) {
+        timer.cancel();
+        if (mounted) {
+          context.pushReplacement('/c2/result', extra: widget.assessmentData);
+        }
+        return;
       }
 
-      final provider = ref.read(component2MockProvider);
-      final result = await provider.getAssessmentResults('mock-session-id');
-
-      if (mounted) {
-        context.pushReplacement('/c2/result/${result.id}');
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() => _error = e.toString());
-      }
-    }
+      setState(() {
+        _progress = currentStep / totalSteps;
+        _currentStage = (_progress * _stages.length).floor().clamp(0, _stages.length - 1);
+      });
+      currentStep++;
+    });
   }
 
   @override
@@ -54,63 +60,139 @@ class _ConcomitantProcessingScreenState extends ConsumerState<ConcomitantProcess
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(32.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Center(child: Text('🌟', style: TextStyle(fontSize: 80))),
-              const SizedBox(height: 32),
-              Text('ඔයාගේ කතාව බලමින්...', style: AppTextStyles.heading1.copyWith(color: AppColors.component2Lavender, fontSize: 28), textAlign: TextAlign.center),
+              // Header
+              const Text(
+                'Analyzing Your Video',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.primaryDeep,
+                ),
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'ඔබගේ වීඩියෝව විශ්ලේෂණය කරමින් පවතී',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.primary,
+                ),
+              ),
+              const SizedBox(height: 40),
+
+              // Progress Indicator
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  SizedBox(
+                    width: 160,
+                    height: 160,
+                    child: CircularProgressIndicator(
+                      value: _progress,
+                      strokeWidth: 12,
+                      backgroundColor: AppColors.divider,
+                      valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+                      strokeCap: StrokeCap.round,
+                    ),
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        '${(_progress * 100).toInt()}%',
+                        style: const TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.text,
+                        ),
+                      ),
+                      const Text(
+                        'Analyzing...',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.textLight,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
               const SizedBox(height: 48),
-              if (_error != null) ...[
-                Text(_error!, style: const TextStyle(color: AppColors.error)),
-                const SizedBox(height: 16),
-                ElevatedButton(onPressed: () { setState(() => _error = null); _startProcessing(); }, child: const Text('නැවත උත්සාහ කරන්න')),
-              ] else ...[
-                for (int i = 0; i < _steps.length; i++)
-                  _buildStepIndicator(_steps[i], i < _currentStep, i == _currentStep, i > _currentStep),
-              ]
+
+              // Stages List
+              Expanded(
+                child: ListView.builder(
+                  itemCount: _stages.length,
+                  itemBuilder: (context, index) {
+                    final isCompleted = index < _currentStage;
+                    final isActive = index == _currentStage;
+                    final isPending = index > _currentStage;
+
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 20.0),
+                      child: Row(
+                        children: [
+                          // Icon
+                          Container(
+                            width: 28,
+                            height: 28,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: isCompleted 
+                                  ? AppColors.mintGreen 
+                                  : (isActive ? AppColors.primaryWash : AppColors.surfaceRaised),
+                              border: Border.all(
+                                color: isCompleted ? AppColors.mintGreen : (isActive ? AppColors.primary : AppColors.divider),
+                                width: 2,
+                              ),
+                            ),
+                            child: isCompleted
+                                ? const Icon(Icons.check, size: 16, color: Colors.white)
+                                : (isActive 
+                                    ? const Padding(
+                                        padding: EdgeInsets.all(4.0),
+                                        child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary)),
+                                      )
+                                    : const SizedBox()),
+                          ),
+                          const SizedBox(width: 16),
+                          
+                          // Text
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _stages[index]['en']!,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: isActive || isCompleted ? FontWeight.bold : FontWeight.normal,
+                                    color: isPending ? AppColors.textLight : AppColors.text,
+                                  ),
+                                ),
+                                Text(
+                                  _stages[index]['si']!,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: isPending ? AppColors.textLight.withOpacity(0.5) : AppColors.primary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildStepIndicator(String text, bool isCompleted, bool isCurrent, bool isWaiting) {
-    IconData iconData;
-    Color iconColor;
-
-    if (isCompleted) {
-      iconData = Icons.check_circle;
-      iconColor = AppColors.success;
-    } else if (isCurrent) {
-      iconData = Icons.radio_button_checked;
-      iconColor = AppColors.component2Lavender;
-    } else {
-      iconData = Icons.radio_button_unchecked;
-      iconColor = AppColors.divider;
-    }
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Row(
-        children: [
-          Icon(iconData, color: iconColor, size: 28),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Text(
-              text,
-              style: TextStyle(
-                color: isWaiting ? AppColors.textLight : AppColors.deepNavy,
-                fontSize: 18,
-                fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
-              ),
-            ),
-          ),
-          if (isCurrent)
-            const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 3, color: AppColors.component2Lavender)),
-        ],
       ),
     );
   }

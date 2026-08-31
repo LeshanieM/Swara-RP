@@ -186,7 +186,7 @@ class _RoleCard extends StatelessWidget {
           duration: const Duration(milliseconds: 200),
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: selected ? AppColors.primaryLight : AppColors.surface,
+            color: selected ? AppColors.primaryWash : AppColors.surface,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
               color: selected ? AppColors.primary : AppColors.divider,

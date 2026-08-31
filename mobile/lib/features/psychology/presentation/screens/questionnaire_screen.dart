@@ -60,7 +60,7 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
                   borderRadius: BorderRadius.circular(6),
                   child: LinearProgressIndicator(
                     value: (_currentPage + 1) / total,
-                    backgroundColor: AppColors.primaryLight,
+                    backgroundColor: AppColors.primaryWash,
                     valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
                     minHeight: 8,
                   ),
@@ -78,7 +78,7 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: AppColors.primaryLight,
+                      color: AppColors.primaryWash,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
@@ -111,7 +111,7 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
                         margin: const EdgeInsets.only(bottom: 10),
                         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
                         decoration: BoxDecoration(
-                          color: isSelected ? AppColors.primaryLight : AppColors.surface,
+                          color: isSelected ? AppColors.primaryWash : AppColors.surface,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
                             color: isSelected ? AppColors.primary : AppColors.divider,

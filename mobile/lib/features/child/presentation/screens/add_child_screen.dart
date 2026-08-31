@@ -140,7 +140,7 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
                               _selectedInterests.remove(i);
                             }
                           }),
-                          selectedColor: AppColors.primaryLight,
+                          selectedColor: AppColors.primaryWash,
                           checkmarkColor: AppColors.primary,
                         ))
                     .toList(),

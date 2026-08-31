@@ -25,13 +25,7 @@ class ParentHomeScreen extends ConsumerWidget {
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [AppColors.gradient1, AppColors.gradient2],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
+                color: AppColors.primaryDeep,
                 padding: const EdgeInsets.fromLTRB(20, 60, 20, 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,15 +33,26 @@ class ParentHomeScreen extends ConsumerWidget {
                   children: [
                     Row(
                       children: [
-                        CircleAvatar(
-                          backgroundColor: Colors.white24,
-                          radius: 22,
-                          child: Text(
-                            (user?.name ?? 'P').substring(0, 1).toUpperCase(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
+                        Container(
+                          width: 44,
+                          height: 44,
+                          decoration: const BoxDecoration(shape: BoxShape.circle),
+                          child: ClipOval(
+                            child: Image.asset(
+                              'assets/images/common/user_pic.jpg',
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) => CircleAvatar(
+                                backgroundColor: Colors.white24,
+                                radius: 22,
+                                child: Text(
+                                  (user?.name ?? 'P').substring(0, 1).toUpperCase(),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -57,7 +62,7 @@ class ParentHomeScreen extends ConsumerWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Hello, ${user?.name?.split(' ').first ?? 'Parent'}! 👋',
+                                'Hello, ${user?.name.split(' ').first ?? 'Parent'}! 👋',
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,
@@ -243,9 +248,7 @@ class _ChildCard extends StatelessWidget {
               width: 52,
               height: 52,
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppColors.gradient1, AppColors.gradient2],
-                ),
+                color: AppColors.primaryDeep,
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Center(
@@ -271,7 +274,7 @@ class _ChildCard extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
-                          color: AppColors.primaryLight,
+                          color: AppColors.primaryWash,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(

@@ -31,15 +31,15 @@ class _ConcomitantDashboardScreenState extends ConsumerState<ConcomitantDashboar
                 child: Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Colors.white, size: 28),
+                      icon: const Icon(Icons.arrow_back_rounded, color: Color(0xFF0F172A), size: 26),
                       onPressed: () => context.go('/'),
                     ),
                     const SizedBox(width: 8),
                     const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('🎥 Secondary Behavior Analysis', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-                        Text('Component 2 — Multimodal Video & Audio', style: TextStyle(color: AppColors.softYellow, fontSize: 12)),
+                        Text('🎥 Secondary Behavior Analysis', style: TextStyle(color: Color(0xFF0F172A), fontSize: 18, fontWeight: FontWeight.bold)),
+                        Text('Component 2 — Multimodal Video & Audio', style: TextStyle(color: Color(0xFF1D4ED8), fontSize: 12, fontWeight: FontWeight.w600)),
                       ],
                     ),
                   ],
@@ -54,12 +54,12 @@ class _ConcomitantDashboardScreenState extends ConsumerState<ConcomitantDashboar
                     children: [
                       const Text(
                         'Select Video Input Source',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
                       ),
                       const SizedBox(height: 4),
                       const Text(
                         'Analyze facial tension, eye blinking, posture, and speech blocks.',
-                        style: TextStyle(fontSize: 13, color: Colors.white70),
+                        style: TextStyle(fontSize: 13, color: Colors.blue),
                       ),
                       const SizedBox(height: 20),
 
@@ -72,7 +72,7 @@ class _ConcomitantDashboardScreenState extends ConsumerState<ConcomitantDashboar
                               child: Container(
                                 padding: const EdgeInsets.all(14),
                                 decoration: BoxDecoration(
-                                  color: _selectedOption == 0 ? AppColors.cardCream : Colors.white.withOpacity(0.15),
+                                  color: _selectedOption == 0 ? AppColors.cardCream : Colors.blue.withOpacity(0.15),
                                   borderRadius: BorderRadius.circular(20),
                                   border: Border.all(color: _selectedOption == 0 ? AppColors.ctaOrange : Colors.transparent, width: 2),
                                 ),
@@ -93,7 +93,7 @@ class _ConcomitantDashboardScreenState extends ConsumerState<ConcomitantDashboar
                               child: Container(
                                 padding: const EdgeInsets.all(14),
                                 decoration: BoxDecoration(
-                                  color: _selectedOption == 1 ? AppColors.cardCream : Colors.white.withOpacity(0.15),
+                                  color: _selectedOption == 1 ? AppColors.cardCream : Colors.blue.withOpacity(0.15),
                                   borderRadius: BorderRadius.circular(20),
                                   border: Border.all(color: _selectedOption == 1 ? AppColors.ctaOrange : Colors.transparent, width: 2),
                                 ),

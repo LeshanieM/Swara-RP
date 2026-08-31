@@ -94,7 +94,7 @@ class _ActivityCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: AppColors.primaryLight,
+                  color: AppColors.primaryWash,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(difficulty, style: const TextStyle(color: AppColors.primary, fontSize: 12, fontWeight: FontWeight.w600)),

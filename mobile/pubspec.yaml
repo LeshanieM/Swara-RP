@@ -50,6 +50,9 @@ dependencies:
   # Icons
   cupertino_icons: ^1.0.8
 
+  # Typography
+  google_fonts: ^6.2.1
+
   # Misc utilities
   equatable: ^2.0.5
   json_annotation: ^4.9.0
@@ -72,6 +75,8 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/common/
+    - assets/images/component3/
     - assets/illustrations/
     - assets/icons/
     - assets/audio/

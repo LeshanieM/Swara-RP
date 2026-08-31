@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'core/routing/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/storage/storage_service.dart';
@@ -10,6 +11,14 @@ void main() async {
     await StorageService.init();
   } catch (e, stack) {
     debugPrint('StorageService init error: $e\n$stack');
+  }
+  try {
+    await GoogleFonts.pendingFonts([
+      GoogleFonts.nunito(),
+      GoogleFonts.notoSansSinhala(),
+    ]);
+  } catch (e) {
+    debugPrint('Font preload skipped: $e');
   }
   FlutterError.onError = (FlutterErrorDetails details) {
     FlutterError.presentError(details);

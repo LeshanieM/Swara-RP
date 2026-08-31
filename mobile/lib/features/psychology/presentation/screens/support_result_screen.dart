@@ -118,7 +118,7 @@ class SupportResultScreen extends ConsumerWidget {
             const SizedBox(height: 16),
             // Caregiver Guidance
             SwaraCard(
-              color: AppColors.primaryLight,
+              color: AppColors.primaryWash,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -192,7 +192,7 @@ class _SupportAreaCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
               value: areaScore / 100,
-              backgroundColor: AppColors.primaryLight,
+              backgroundColor: AppColors.primaryWash,
               valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
               minHeight: 6,
             ),
