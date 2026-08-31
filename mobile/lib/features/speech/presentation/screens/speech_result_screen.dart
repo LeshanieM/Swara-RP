@@ -4,8 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:swara/core/theme/app_theme.dart';
 
 class SpeechResultScreen extends StatefulWidget {
-  final String assessmentId;
-  const SpeechResultScreen({super.key, required this.assessmentId});
+  final int durationSeconds;
+
+  const SpeechResultScreen({super.key, required this.durationSeconds});
 
   @override
   State<SpeechResultScreen> createState() => _SpeechResultScreenState();
@@ -14,14 +15,29 @@ class SpeechResultScreen extends StatefulWidget {
 class _SpeechResultScreenState extends State<SpeechResultScreen> {
   bool _isProcessing = true;
   int _currentStep = 0;
-  int _viewMode = 0; // 0 = Child View, 1 = Clinician View
+  int _progress = 0;
 
   final List<Map<String, String>> _steps = [
-    {'si': 'කතාව ලැබුණා', 'en': 'Speech Received'},
-    {'si': 'කතා කිරීම සකස් කළා', 'en': 'Audio Prepared'},
-    {'si': 'කතා කරන ආකාරය බලමින්', 'en': 'Analyzing Speech'},
-    {'si': 'ප්‍රතිඵල සූදානම් කරමින්', 'en': 'Preparing Results'}
+    {'en': 'Processing speech', 'si': 'කථනය සකසමින්'},
+    {'en': 'Detecting syllables', 'si': 'අක්ෂර ඒකක හඳුනාගනිමින්'},
+    {'en': 'Detecting repetitions', 'si': 'පුනරාවර්තන හඳුනාගනිමින්'},
+    {'en': 'Detecting prolongations', 'si': 'දිගු කිරීම් හඳුනාගනිමින්'},
+    {'en': 'Detecting blocks', 'si': 'අවහිරවීම් හඳුනාගනිමින්'},
+    {'en': 'Calculating severity', 'si': 'තීව්‍රතාවය ගණනය කරමින්'},
+    {'en': 'Preparing results', 'si': 'ප්‍රතිඵල සූදානම් කරමින්'},
   ];
+
+  // Mock Data
+  final int totalSyllables = 312;
+  final int stutteredWords = 24;
+  final double stutterRate = 7.7;
+  final int repetitions = 12;
+  final int prolongations = 5;
+  final int blocks = 3;
+  final String primaryStutteringType = "Repetition";
+  final String primaryStutteringTypeSi = "පුනරාවර්තනය";
+  final String severity = "Moderate";
+  final String severitySi = "මධ්‍යම";
 
   @override
   void initState() {
@@ -31,11 +47,22 @@ class _SpeechResultScreenState extends State<SpeechResultScreen> {
 
   Future<void> _startProcessing() async {
     for (int i = 0; i < _steps.length; i++) {
-      await Future.delayed(const Duration(milliseconds: 700));
-      if (mounted) setState(() => _currentStep = i);
+      await Future.delayed(const Duration(milliseconds: 600));
+      if (mounted) {
+        setState(() {
+          _currentStep = i;
+          _progress = ((i + 1) / _steps.length * 100).toInt();
+        });
+      }
     }
-    await Future.delayed(const Duration(milliseconds: 400));
+    await Future.delayed(const Duration(milliseconds: 800));
     if (mounted) setState(() => _isProcessing = false);
+  }
+
+  String _formatTime(int sec) {
+    final m = sec ~/ 60;
+    final s = sec % 60;
+    return '${m.toString().padLeft(2, '0')}:${s.toString().padLeft(2, '0')}';
   }
 
   @override
@@ -46,7 +73,7 @@ class _SpeechResultScreenState extends State<SpeechResultScreen> {
           gradient: AppColors.c1Gradient,
         ),
         child: SafeArea(
-          child: _isProcessing ? _buildProcessing() : _buildResultsDashboard(),
+          child: _isProcessing ? _buildProcessing() : _buildResults(),
         ),
       ),
     );
@@ -54,29 +81,41 @@ class _SpeechResultScreenState extends State<SpeechResultScreen> {
 
   Widget _buildProcessing() {
     return Padding(
-      padding: const EdgeInsets.all(28.0),
+      padding: const EdgeInsets.all(24.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: const BoxDecoration(color: AppColors.softYellow, shape: BoxShape.circle),
-            child: const Text('🔍', style: TextStyle(fontSize: 60)),
-          ),
-          const SizedBox(height: 24),
           const Text(
-            'Analyzing Speech Fluency...\nඔයාගේ කතාව බලමින්...',
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
+            'Analyzing Your Speech',
+            style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: AppColors.text),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'ඔබගේ කථනය විශ්ලේෂණය කරමින් පවතී',
+            style: TextStyle(fontSize: 18, color: AppColors.textLight, fontWeight: FontWeight.w600),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 40),
+          
+          Text(
+            'Analyzing... $_progress%',
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.primaryDeep),
+          ),
+          const Text(
+            'විශ්ලේෂණය වෙමින් පවතී...',
+            style: TextStyle(fontSize: 14, color: AppColors.textLight, fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 24),
+          
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               color: AppColors.cardCream,
               borderRadius: BorderRadius.circular(28),
             ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 for (int i = 0; i < _steps.length; i++)
                   _buildStepIndicator(_steps[i], i < _currentStep, i == _currentStep, i > _currentStep),
@@ -93,18 +132,19 @@ class _SpeechResultScreenState extends State<SpeechResultScreen> {
     Color iconColor = isCompleted ? AppColors.mintGreen : (isCurrent ? AppColors.ctaOrange : AppColors.divider);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          Icon(iconData, color: iconColor, size: 28),
-          const SizedBox(width: 14),
+          Icon(iconData, color: iconColor, size: 24),
+          const SizedBox(width: 12),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(step['en']!, style: TextStyle(color: isWaiting ? AppColors.textLight : AppColors.text, fontSize: 16, fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal)),
-                Text(step['si']!, style: const TextStyle(color: AppColors.textLight, fontSize: 12)),
-              ],
+            child: Text(
+              step['en']!,
+              style: TextStyle(
+                color: isWaiting ? AppColors.textLight : AppColors.text,
+                fontSize: 16,
+                fontWeight: isCurrent || isCompleted ? FontWeight.bold : FontWeight.normal,
+              ),
             ),
           ),
         ],
@@ -112,222 +152,235 @@ class _SpeechResultScreenState extends State<SpeechResultScreen> {
     );
   }
 
-  Widget _buildResultsDashboard() {
+  Widget _buildResults() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Header Mode Switcher (Child vs Clinician View)
+          // Header
+          const Text(
+            'Speech Analysis Results',
+            style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: AppColors.text),
+            textAlign: TextAlign.center,
+          ),
+          const Text(
+            'කථන විශ්ලේෂණ ප්‍රතිඵල',
+            style: TextStyle(fontSize: 18, color: AppColors.textLight, fontWeight: FontWeight.w600),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 24),
+
+          // Main Result Summary
           Container(
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(color: AppColors.c1Blue.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(30)),
-            child: Row(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(color: AppColors.divider, width: 2),
+              boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10)],
+            ),
+            child: Column(
               children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () => setState(() => _viewMode = 0),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      decoration: BoxDecoration(
-                        color: _viewMode == 0 ? AppColors.ctaOrange : Colors.transparent,
-                        borderRadius: BorderRadius.circular(26),
-                      ),
-                      child: Text('🧒 Child View', textAlign: TextAlign.center, style: TextStyle(color: _viewMode == 0 ? Colors.white : const Color(0xFF0F172A), fontWeight: FontWeight.bold)),
-                    ),
-                  ),
+                const Text('Assessment Result', style: TextStyle(fontSize: 14, color: AppColors.textLight, fontWeight: FontWeight.bold)),
+                const Text('ඇගයීමේ ප්‍රතිඵල', style: TextStyle(fontSize: 12, color: AppColors.textLight)),
+                const Divider(height: 24),
+                
+                const Text('STUTTERING TYPE', style: TextStyle(fontSize: 12, color: AppColors.textLight, fontWeight: FontWeight.bold, letterSpacing: 1.2)),
+                Text(primaryStutteringType, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: AppColors.coralRed)),
+                Text(primaryStutteringTypeSi, style: const TextStyle(fontSize: 16, color: AppColors.coralRed, fontWeight: FontWeight.bold)),
+                
+                const SizedBox(height: 24),
+                
+                const Text('SEVERITY', style: TextStyle(fontSize: 12, color: AppColors.textLight, fontWeight: FontWeight.bold, letterSpacing: 1.2)),
+                Text(severity, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: AppColors.ctaOrange)),
+                Text(severitySi, style: const TextStyle(fontSize: 16, color: AppColors.ctaOrange, fontWeight: FontWeight.bold)),
+              ],
+            ),
+          ),
+          
+          const SizedBox(height: 24),
+          
+          // Child Friendly Feedback
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: AppColors.softYellow.withValues(alpha: 0.3),
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: const Column(
+              children: [
+                Text('Great Work! 🌟', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.text)),
+                Text('ඉතා හොඳයි! 🌟', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.textLight)),
+                SizedBox(height: 8),
+                Text('You completed the speaking activity successfully.', style: TextStyle(fontSize: 14, color: AppColors.text), textAlign: TextAlign.center),
+                Text('ඔබ කථන ක්‍රියාකාරකම සාර්ථකව අවසන් කළා.', style: TextStyle(fontSize: 12, color: AppColors.textLight), textAlign: TextAlign.center),
+              ],
+            ),
+          ),
+          
+          const SizedBox(height: 24),
+
+          // Speech Statistics
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: AppColors.cardCream,
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Speech Statistics', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.text)),
+                const Text('කථන සංඛ්‍යාලේඛන', style: TextStyle(fontSize: 14, color: AppColors.textLight)),
+                const SizedBox(height: 16),
+                
+                _StatRow(label: 'Speaking Duration', value: _formatTime(widget.durationSeconds)),
+                const Divider(),
+                _StatRow(label: 'Total Syllables', value: totalSyllables.toString()),
+                const Divider(),
+                _StatRow(label: 'Stuttered Words', value: stutteredWords.toString()),
+                const Divider(),
+                _StatRow(label: 'Stutter Rate', value: '$stutterRate%'),
+                const SizedBox(height: 8),
+                Text(
+                  '$stutteredWords stuttered words / $totalSyllables spoken syllables',
+                  style: const TextStyle(fontSize: 12, color: AppColors.textLight, fontStyle: FontStyle.italic),
                 ),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () => setState(() => _viewMode = 1),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      decoration: BoxDecoration(
-                        color: _viewMode == 1 ? AppColors.ctaOrange : Colors.transparent,
-                        borderRadius: BorderRadius.circular(26),
-                      ),
-                      child: Text('🩺 Clinician View', textAlign: TextAlign.center, style: TextStyle(color: _viewMode == 1 ? Colors.white : const Color(0xFF0F172A), fontWeight: FontWeight.bold)),
-                    ),
+              ],
+            ),
+          ),
+          
+          const SizedBox(height: 24),
+
+          // Detected Events
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: AppColors.cardCream,
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Detected Stuttering Events', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.text)),
+                const SizedBox(height: 16),
+                
+                _EventRow(label: 'Repetition', count: repetitions, isHighlight: primaryStutteringType == "Repetition"),
+                _EventRow(label: 'Prolongation', count: prolongations, isHighlight: primaryStutteringType == "Prolongation"),
+                _EventRow(label: 'Block', count: blocks, isHighlight: primaryStutteringType == "Block"),
+                
+                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryWash,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    '$primaryStutteringType was the most frequently detected stuttering event.\nවැඩිම වාර ගණනක් හඳුනාගත් කථන අවහිරතා වර්ගය $primaryStutteringTypeSi.',
+                    style: const TextStyle(fontSize: 13, color: AppColors.primaryDeep, fontWeight: FontWeight.w600),
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 24),
-
-          if (_viewMode == 0) _buildChildView() else _buildClinicianView(),
-
+          
           const SizedBox(height: 32),
+          
+          // Disclaimer
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColors.divider),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: const Column(
+              children: [
+                Text('AI-based speech analysis', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.textLight)),
+                Text('AI මත පදනම් වූ කථන විශ්ලේෂණය', style: TextStyle(fontSize: 10, color: AppColors.textLight)),
+                SizedBox(height: 8),
+                Text(
+                  'These results are intended to support assessment and should be interpreted by a qualified Speech-Language Pathologist.',
+                  style: TextStyle(fontSize: 11, color: AppColors.textLight),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 4),
+                Text(
+                  'මෙම ප්‍රතිඵල ඇගයීම සඳහා සහායක් ලෙස භාවිත කළ යුතු අතර සුදුසුකම් ලත් කථන හා භාෂා චිකිත්සකයෙකු විසින් අර්ථකථනය කළ යුතුය.',
+                  style: TextStyle(fontSize: 10, color: AppColors.textLight),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+          
+          const SizedBox(height: 24),
+          
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () => context.go('/'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.ctaOrange,
-                padding: const EdgeInsets.symmetric(vertical: 18),
+                backgroundColor: AppColors.primaryDeep,
+                padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
               ),
-              child: const Text('Continue to Home Quest', style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold)),
+              child: const Text('Back to Home', style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold)),
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildChildView() {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(18),
-          decoration: const BoxDecoration(color: AppColors.softYellow, shape: BoxShape.circle),
-          child: const Text('🌟', style: TextStyle(fontSize: 60)),
-        ),
-        const SizedBox(height: 16),
-        const Text('Speech Activity Completed! 🎉', style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Color(0xFF0F172A))),
-        const Text('ගොඩක් හොඳයි! ඔයා හොඳින් කළා.', style: TextStyle(fontSize: 14, color: Color(0xFF475569))),
-        const SizedBox(height: 24),
-
-        Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(color: AppColors.cardCream, borderRadius: BorderRadius.circular(28)),
-          child: const Column(
-            children: [
-              _InfoRow(icon: Icons.check_circle_outline, label: 'Activity Status', value: 'Completed 2/2 Tasks'),
-              Divider(height: 24),
-              _InfoRow(icon: Icons.timer_outlined, label: 'Practice Time', value: '1 min 30 sec'),
-              Divider(height: 24),
-              _InfoRow(icon: Icons.star_border, label: 'Fluency Progress', value: 'Great effort today! ⭐'),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildClinicianView() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(color: AppColors.cardCream, borderRadius: BorderRadius.circular(28)),
-      child: const Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.analytics, color: AppColors.jewelEmerald, size: 28),
-              SizedBox(width: 10),
-              Text('Speech Fluency Analytics', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.text)),
-            ],
-          ),
-          SizedBox(height: 4),
-          Text('Evidence-oriented preliminary observations', style: TextStyle(fontSize: 12, color: AppColors.textLight)),
-          Divider(height: 28),
-
-          _MetricRow(label: 'Total Speech Duration', value: '90.4s'),
-          _MetricRow(label: 'Speaking Rate (SPM)', value: '142 syllables/min'),
-          _MetricRow(label: 'Pause Count', value: '8 pauses (>1.5s)'),
-          _MetricRow(label: 'Stuttering Event Count', value: '6 events'),
-          _MetricRow(label: '% Syllables Stuttered (%SS)', value: '4.2%'),
-          _MetricRow(label: 'Speech Fluency Score', value: '82 / 100'),
-          
-          Divider(height: 24),
-          Text('Disfluency Types Identified', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.text)),
-          SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _ChipMetric(label: 'Repetitions', count: '3'),
-              _ChipMetric(label: 'Prolongations', count: '2'),
-              _ChipMetric(label: 'Blocks', count: '1'),
-            ],
-          ),
-
-          Divider(height: 24),
-          Text('Reading vs Picture-Description Comparison', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.text)),
-          SizedBox(height: 8),
-          _ComparisonBar(task: 'Reading Task', score: '90%', color: AppColors.mintGreen),
-          SizedBox(height: 6),
-          _ComparisonBar(task: 'Picture Description', score: '74%', color: AppColors.softYellow),
+          const SizedBox(height: 24),
         ],
       ),
     );
   }
 }
 
-class _InfoRow extends StatelessWidget {
-  final IconData icon;
+class _StatRow extends StatelessWidget {
   final String label;
   final String value;
-  const _InfoRow({required this.icon, required this.label, required this.value});
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(icon, color: AppColors.ctaOrange, size: 24),
-        const SizedBox(width: 12),
-        Text(label, style: const TextStyle(fontWeight: FontWeight.w600, color: AppColors.text)),
-        const Spacer(),
-        Text(value, style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.jewelEmerald)),
-      ],
-    );
-  }
-}
-
-class _MetricRow extends StatelessWidget {
-  final String label;
-  final String value;
-  const _MetricRow({required this.label, required this.value});
+  const _StatRow({required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(color: AppColors.textLight, fontSize: 14)),
-          Text(value, style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.text, fontSize: 14)),
+          Text(label, style: const TextStyle(fontSize: 16, color: AppColors.text, fontWeight: FontWeight.w600)),
+          Text(value, style: const TextStyle(fontSize: 18, color: AppColors.primaryDeep, fontWeight: FontWeight.bold)),
         ],
       ),
     );
   }
 }
 
-class _ChipMetric extends StatelessWidget {
+class _EventRow extends StatelessWidget {
   final String label;
-  final String count;
-  const _ChipMetric({required this.label, required this.count});
+  final int count;
+  final bool isHighlight;
+
+  const _EventRow({required this.label, required this.count, required this.isHighlight});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(color: AppColors.softYellow.withOpacity(0.3), borderRadius: BorderRadius.circular(16)),
-      child: Text('$label: $count', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.text)),
-    );
-  }
-}
-
-class _ComparisonBar extends StatelessWidget {
-  final String task;
-  final String score;
-  final Color color;
-  const _ComparisonBar({required this.task, required this.score, required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        SizedBox(width: 130, child: Text(task, style: const TextStyle(fontSize: 12, color: AppColors.text))),
-        Expanded(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: LinearProgressIndicator(value: double.parse(score.replaceAll('%', '')) / 100, color: color, backgroundColor: AppColors.divider, minHeight: 12),
-          ),
-        ),
-        const SizedBox(width: 10),
-        Text(score, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
-      ],
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      margin: const EdgeInsets.only(bottom: 8),
+      decoration: BoxDecoration(
+        color: isHighlight ? AppColors.coralRed.withValues(alpha: 0.1) : Colors.transparent,
+        border: Border.all(color: isHighlight ? AppColors.coralRed : AppColors.divider),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: TextStyle(fontSize: 16, fontWeight: isHighlight ? FontWeight.bold : FontWeight.normal, color: AppColors.text)),
+          Text(count.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: isHighlight ? AppColors.coralRed : AppColors.text)),
+        ],
+      ),
     );
   }
 }
