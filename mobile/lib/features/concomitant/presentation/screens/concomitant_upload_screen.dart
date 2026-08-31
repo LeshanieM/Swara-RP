@@ -12,6 +12,7 @@ class ConcomitantUploadScreen extends StatefulWidget {
 
 class _ConcomitantUploadScreenState extends State<ConcomitantUploadScreen> {
   bool _hasSelectedVideo = false;
+  int _selectedOption = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -65,39 +66,65 @@ class _ConcomitantUploadScreenState extends State<ConcomitantUploadScreen> {
               ),
               const SizedBox(height: 40),
 
-              // Upload Area
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _hasSelectedVideo = true;
-                  });
-                },
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(32),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(
-                      color: _hasSelectedVideo ? AppColors.primary : AppColors.divider,
-                      width: 2,
-                      style: BorderStyle.solid,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.primary.withOpacity(0.05),
-                        blurRadius: 20,
-                        offset: const Offset(0, 10),
+              // Input Selector Tabs
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => setState(() => _selectedOption = 0),
+                      child: Container(
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: _selectedOption == 0 ? Colors.white : AppColors.primary.withOpacity(0.05),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: _selectedOption == 0 ? AppColors.primary : Colors.transparent, width: 2),
+                          boxShadow: _selectedOption == 0 ? [
+                            BoxShadow(color: AppColors.primary.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, 4)),
+                          ] : [],
+                        ),
+                        child: Column(
+                          children: [
+                            Text('🎤 Option A', style: TextStyle(fontWeight: FontWeight.bold, color: _selectedOption == 0 ? AppColors.primary : AppColors.textLight)),
+                            const SizedBox(height: 2),
+                            Text('Use Comp 1 Recording', style: TextStyle(fontSize: 11, color: _selectedOption == 0 ? AppColors.primaryDeep : AppColors.textLight)),
+                          ],
+                        ),
                       ),
-                    ],
+                    ),
                   ),
-                  child: _hasSelectedVideo ? _buildVideoSelectedState() : _buildEmptyUploadState(),
-                ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => setState(() => _selectedOption = 1),
+                      child: Container(
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: _selectedOption == 1 ? Colors.white : AppColors.primary.withOpacity(0.05),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: _selectedOption == 1 ? AppColors.primary : Colors.transparent, width: 2),
+                          boxShadow: _selectedOption == 1 ? [
+                            BoxShadow(color: AppColors.primary.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, 4)),
+                          ] : [],
+                        ),
+                        child: Column(
+                          children: [
+                            Text('📁 Option B', style: TextStyle(fontWeight: FontWeight.bold, color: _selectedOption == 1 ? AppColors.primary : AppColors.textLight)),
+                            const SizedBox(height: 2),
+                            Text('Upload Video File', style: TextStyle(fontSize: 11, color: _selectedOption == 1 ? AppColors.primaryDeep : AppColors.textLight)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
+              const SizedBox(height: 24),
+
+              if (_selectedOption == 0) _buildComponent1VideoState() else _buildUploadVideoState(),
 
               const SizedBox(height: 40),
 
-              if (_hasSelectedVideo)
+              if (_selectedOption == 0 || (_selectedOption == 1 && _hasSelectedVideo))
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -130,6 +157,93 @@ class _ConcomitantUploadScreenState extends State<ConcomitantUploadScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildUploadVideoState() {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _hasSelectedVideo = true;
+        });
+      },
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(32),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(
+            color: _hasSelectedVideo ? AppColors.primary : AppColors.divider,
+            width: 2,
+            style: BorderStyle.solid,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.primary.withOpacity(0.05),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
+            ),
+          ],
+        ),
+        child: _hasSelectedVideo ? _buildVideoSelectedState() : _buildEmptyUploadState(),
+      ),
+    );
+  }
+
+  Widget _buildComponent1VideoState() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.primary, width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary.withOpacity(0.05),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            children: [
+              Icon(Icons.video_library, color: AppColors.primaryDeep, size: 24),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text('Previous Activity Recording', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.text)),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(color: AppColors.primaryWash, borderRadius: BorderRadius.circular(16)),
+            child: const Row(
+              children: [
+                Icon(Icons.check_circle, color: AppColors.primary),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Component 1: Speech Assessment Task', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.text, fontSize: 13)),
+                      SizedBox(height: 4),
+                      Text('Recorded today • Duration: 1 min 30 sec', style: TextStyle(fontSize: 12, color: AppColors.textLight)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          const Text('This video recording will be automatically used for physical behavior analysis.', style: TextStyle(fontSize: 12, color: AppColors.textLight)),
+        ],
       ),
     );
   }
