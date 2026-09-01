@@ -87,16 +87,16 @@ class ChildHomeScreen extends ConsumerWidget {
                           onAccentColor: Colors.white,
                           onTap: () => context.push('/c2/upload'),
                         ),
-                        // Card 3: Warm Amber — guided storytelling
+                        // Card 3: Warm Amber — guided therapy journey
                         _CompactAdventureCard(
                           icon: Icons.auto_stories_rounded,
                           imageAsset: 'images/home/story_card.png',
-                          titleSi: 'ක්‍රියාකාරකම්',
-                          titleEn: 'Story Time',
-                          subtitle: 'Guided, slower practice',
+                          titleSi: 'කතා පුහුණුව',
+                          titleEn: 'Therapy Journey',
+                          subtitle: 'Guided speech practice',
                           accentColor: const Color(0xFFE08A2E),
                           onAccentColor: Colors.white,
-                          onTap: () => context.push('/c3/theme'),
+                          onTap: () => context.push('/c3/forest-therapy'),
                         ),
                         // Card 4: Violet — open expression
                         _CompactAdventureCard(
