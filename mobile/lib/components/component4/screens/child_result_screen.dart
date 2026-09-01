@@ -70,7 +70,7 @@ class ChildResultScreen extends StatelessWidget {
                 '💬',
                 'අද මම කතා කළා',
                 'Activity completed',
-                Colors.orange,
+                AppColors.primary,
               ),
               const SizedBox(height: 16),
               
@@ -78,7 +78,7 @@ class ChildResultScreen extends StatelessWidget {
                 '📖',
                 'මගේ කතාව',
                 'You shared your ideas with Swara',
-                Colors.blue,
+                AppColors.primary,
               ),
               const SizedBox(height: 16),
               
@@ -86,7 +86,7 @@ class ChildResultScreen extends StatelessWidget {
                 '⭐',
                 'අදගේ තරුව',
                 'You completed today\'s talking activity',
-                Colors.amber,
+                AppColors.warning,
               ),
               const SizedBox(height: 16),
               
@@ -94,7 +94,7 @@ class ChildResultScreen extends StatelessWidget {
                 '🌱',
                 'දිගටම කතා කරමු',
                 'Every conversation is a chance to share your ideas.',
-                Colors.green,
+                AppColors.success,
               ),
               
               const SizedBox(height: 48),
@@ -117,7 +117,7 @@ class ChildResultScreen extends StatelessWidget {
                     const SizedBox(width: 12),
                     Text(
                       'ගෙදර යන්න (Go Home)',
-                      style: AppTextStyles.heading3.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                      style: AppTextStyles.heading3.copyWith(color: AppColors.white, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -129,16 +129,16 @@ class ChildResultScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildJourneyCard(String emoji, String titleSi, String titleEn, MaterialColor color) {
+  Widget _buildJourneyCard(String emoji, String titleSi, String titleEn, Color color) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: color.shade50,
+        color: color.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: color.shade200, width: 2),
+        border: Border.all(color: color.withValues(alpha: 0.2), width: 2),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           )
@@ -149,7 +149,7 @@ class ChildResultScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.8),
+              color: AppColors.white.withValues(alpha: 0.8),
               shape: BoxShape.circle,
             ),
             child: Text(
@@ -164,12 +164,12 @@ class ChildResultScreen extends StatelessWidget {
               children: [
                 Text(
                   titleSi,
-                  style: AppTextStyles.heading3.copyWith(color: color.shade800, fontWeight: FontWeight.bold),
+                  style: AppTextStyles.heading3.copyWith(color: color, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   titleEn,
-                  style: AppTextStyles.caption.copyWith(color: color.shade700),
+                  style: AppTextStyles.caption.copyWith(color: color.withValues(alpha: 0.8)),
                 ),
               ],
             ),

@@ -41,7 +41,7 @@ class PersonalizationScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(32),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.white,
                   borderRadius: BorderRadius.circular(32),
                   border: Border.all(color: AppColors.primaryLight, width: 2),
                   boxShadow: [
@@ -58,7 +58,7 @@ class PersonalizationScreen extends StatelessWidget {
                       width: 120,
                       height: 120,
                       decoration: BoxDecoration(
-                        color: Colors.blue.shade50,
+                        color: AppColors.primaryWash,
                         shape: BoxShape.circle,
                       ),
                       child: ClipOval(
@@ -71,7 +71,7 @@ class PersonalizationScreen extends StatelessWidget {
                     const SizedBox(height: 24),
                     Text(
                       'Picture Story',
-                      style: AppTextStyles.heading2.copyWith(color: Colors.blue.shade800),
+                      style: AppTextStyles.heading2.copyWith(color: AppColors.primaryDeep),
                     ),
                     const SizedBox(height: 16),
                     Text(
@@ -98,9 +98,9 @@ class PersonalizationScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.green.shade50,
+                  color: AppColors.success.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.green.shade200),
+                  border: Border.all(color: AppColors.success.withValues(alpha: 0.3)),
                 ),
                 child: Row(
                   children: [
@@ -112,12 +112,12 @@ class PersonalizationScreen extends StatelessWidget {
                         children: [
                           Text(
                             'මේ ක්‍රියාකාරකම ඔයාගේ කතා ගමනට ගැලපෙන විදිහට තෝරලා තියෙනවා.',
-                            style: AppTextStyles.label.copyWith(color: Colors.green.shade900),
+                            style: AppTextStyles.label.copyWith(color: AppColors.success),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             'This activity was selected to match your talking journey.',
-                            style: AppTextStyles.caption.copyWith(color: Colors.green.shade800),
+                            style: AppTextStyles.caption.copyWith(color: AppColors.success),
                           ),
                         ],
                       ),
@@ -145,7 +145,7 @@ class PersonalizationScreen extends StatelessWidget {
                   children: [
                     Text(
                       'හරි, කතා කරමු! →',
-                      style: AppTextStyles.heading2.copyWith(color: Colors.white, fontSize: 20),
+                      style: AppTextStyles.heading2.copyWith(color: AppColors.white, fontSize: 20),
                     ),
                   ],
                 ),

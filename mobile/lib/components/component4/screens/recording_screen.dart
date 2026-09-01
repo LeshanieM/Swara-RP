@@ -65,19 +65,19 @@ class _RecordingScreenState extends State<RecordingScreen> {
                       width: double.infinity,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [Colors.blue.shade100, Colors.blue.shade300],
+                          colors: [AppColors.primaryWash, AppColors.primaryLight],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
                         borderRadius: BorderRadius.circular(32),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.blue.withOpacity(0.3),
+                            color: AppColors.primaryWash,
                             blurRadius: 15,
                             offset: const Offset(0, 8),
                           ),
                         ],
-                        border: Border.all(color: Colors.white, width: 6),
+                        border: Border.all(color: AppColors.white, width: 6),
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(26),
@@ -93,7 +93,7 @@ class _RecordingScreenState extends State<RecordingScreen> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.white,
                         borderRadius: BorderRadius.circular(24),
                         boxShadow: [
                           BoxShadow(
@@ -144,19 +144,19 @@ class _RecordingScreenState extends State<RecordingScreen> {
                           });
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF4ADE80), // Playful Green
-                          foregroundColor: Colors.white,
+                          backgroundColor: AppColors.success, // Playful Green
+                          foregroundColor: AppColors.white,
                           padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 20),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
                           elevation: 6,
-                          shadowColor: const Color(0xFF4ADE80).withOpacity(0.5),
+                          shadowColor: AppColors.success.withOpacity(0.5),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             const Icon(Icons.mic, size: 32),
                             const SizedBox(width: 12),
-                            Text('කතා කරන්න (Start)', style: AppTextStyles.heading3.copyWith(color: Colors.white)),
+                            Text('කතා කරන්න (Start)', style: AppTextStyles.heading3.copyWith(color: AppColors.white)),
                           ],
                         ),
                       ),
@@ -165,10 +165,10 @@ class _RecordingScreenState extends State<RecordingScreen> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.white,
                           borderRadius: BorderRadius.circular(32),
                           border: Border.all(
-                            color: _isRecording ? Colors.red.shade300 : Colors.grey.shade300,
+                            color: _isRecording ? AppColors.error : AppColors.divider,
                             width: 2,
                           ),
                         ),
@@ -181,7 +181,7 @@ class _RecordingScreenState extends State<RecordingScreen> {
                                 fontWeight: FontWeight.w800,
                                 fontFamily: 'Nunito', // Playful font
                                 fontFeatures: const [FontFeature.tabularFigures()],
-                                color: _isRecording ? Colors.red.shade400 : Colors.grey,
+                                color: _isRecording ? AppColors.error : AppColors.textLight,
                               ),
                             ),
                             const SizedBox(height: 16),
@@ -197,8 +197,8 @@ class _RecordingScreenState extends State<RecordingScreen> {
                                   height: _isRecording ? (20.0 + (index % 3) * 15.0 + (index % 2) * 10.0) : 12.0,
                                   decoration: BoxDecoration(
                                     color: _isRecording 
-                                        ? Colors.redAccent.shade100 
-                                        : Colors.grey.shade300,
+                                        ? AppColors.error 
+                                        : AppColors.divider,
                                     borderRadius: BorderRadius.circular(4),
                                   ),
                                 ),
@@ -218,11 +218,11 @@ class _RecordingScreenState extends State<RecordingScreen> {
               Container(
                 padding: const EdgeInsets.all(24.0),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.white,
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: AppColors.divider,
                       blurRadius: 20,
                       offset: const Offset(0, -5),
                     )
@@ -258,7 +258,7 @@ class _RecordingScreenState extends State<RecordingScreen> {
                     Expanded(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFF43F5E), // Playful Red
+                          backgroundColor: AppColors.error, // Playful Red
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                           elevation: 4,
@@ -267,7 +267,7 @@ class _RecordingScreenState extends State<RecordingScreen> {
                           _stopTimer();
                           context.pushReplacement('/c4/analysis');
                         },
-                        child: const Text('🛑 Stop & Finish', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+                        child: const Text('🛑 Stop & Finish', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.white)),
                       ),
                     ),
                   ],

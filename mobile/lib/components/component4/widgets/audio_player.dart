@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:swara/core/theme/app_theme.dart';
 
 class AudioPlayerWidget extends StatefulWidget {
   const AudioPlayerWidget({Key? key}) : super(key: key);
@@ -16,7 +17,7 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.blue.shade50,
+        color: AppColors.primaryWash,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -45,13 +46,13 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                         });
                       },
                       activeColor: Theme.of(context).primaryColor,
-                      inactiveColor: Colors.grey.shade300,
+                      inactiveColor: AppColors.divider,
                     ),
                     const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("00:00", style: TextStyle(color: Colors.grey, fontSize: 12)),
-                        Text("01:12", style: TextStyle(color: Colors.grey, fontSize: 12)),
+                        Text("00:00", style: TextStyle(color: AppColors.textLight, fontSize: 12)),
+                        Text("01:12", style: TextStyle(color: AppColors.textLight, fontSize: 12)),
                       ],
                     ),
                   ],

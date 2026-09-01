@@ -22,14 +22,14 @@ class _AnalysisScreenState extends State<AnalysisScreen>
     'titleEn': 'Speech Captured',
     'titleSi': 'කතාව ලබාගත්තා',
     'desc': 'Your talking sample is ready.',
-    'color': Colors.blue
+    'color': AppColors.primary
   },
   {
     'icon': '📝',
     'titleEn': 'Transcription',
     'titleSi': 'කතාව වචන වලට හරවනවා',
     'desc': 'Converting speech to text...',
-    'color': Colors.orange
+    'color': AppColors.primary
   },
   {
     'icon': '💬',
@@ -64,7 +64,7 @@ class _AnalysisScreenState extends State<AnalysisScreen>
     'titleEn': 'Preparing Results',
     'titleSi': 'ප්‍රතිඵල සකස් කරනවා',
     'desc': 'Almost ready!',
-    'color': Colors.green
+    'color': AppColors.success
   },
 
   ];
@@ -116,7 +116,7 @@ class _AnalysisScreenState extends State<AnalysisScreen>
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.blue.shade50, Colors.purple.shade50],
+              colors: [AppColors.primaryWash, Colors.purple.shade50],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -199,7 +199,7 @@ class _AnalysisScreenState extends State<AnalysisScreen>
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
                             color: isCurrent
-                                ? Colors.white
+                                ? AppColors.white
                                 : (isCompleted
                                     ? step['color'].withOpacity(0.05)
                                     : Colors.transparent),
@@ -296,7 +296,7 @@ class _AnalysisScreenState extends State<AnalysisScreen>
                       child: const Text('See My Results (මගේ ප්‍රතිඵල බලමු) →',
                           style: TextStyle(
                               fontSize: 18,
-                              color: Colors.white,
+                              color: AppColors.white,
                               fontWeight: FontWeight.bold)),
                     ),
                   ),

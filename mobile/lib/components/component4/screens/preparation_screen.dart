@@ -42,7 +42,7 @@ class PreparationScreen extends StatelessWidget {
                 '🎤',
                 'මයික් එක ළඟින් කතා කරන්න.',
                 'Speak near the microphone.',
-                Colors.blue,
+                AppColors.primary,
               ),
               const SizedBox(height: 16),
               
@@ -51,7 +51,7 @@ class PreparationScreen extends StatelessWidget {
                 '💬',
                 'ඔයාට පහසු විදිහට කතා කරන්න.',
                 'Speak comfortably in your own way.',
-                Colors.orange,
+                AppColors.primary,
               ),
               const SizedBox(height: 16),
               
@@ -60,7 +60,7 @@ class PreparationScreen extends StatelessWidget {
                 '🌱',
                 'ඉක්මන් වෙන්න ඕනේ නැහැ.',
                 'Take your time, no need to rush.',
-                Colors.green,
+                AppColors.success,
               ),
               
               const SizedBox(height: 48),
@@ -88,7 +88,7 @@ class PreparationScreen extends StatelessWidget {
                   children: [
                     Text(
                       'කතා කරන්න පටන් ගමු 🎙️',
-                      style: AppTextStyles.heading2.copyWith(color: Colors.white, fontSize: 20),
+                      style: AppTextStyles.heading2.copyWith(color: AppColors.white, fontSize: 20),
                     ),
                   ],
                 ),
@@ -107,16 +107,16 @@ class PreparationScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStepCard(String number, String emoji, String titleSi, String titleEn, MaterialColor color) {
+  Widget _buildStepCard(String number, String emoji, String titleSi, String titleEn, Color color) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: color.shade50,
+        color: color.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: color.shade200, width: 2),
+        border: Border.all(color: color.withValues(alpha: 0.2), width: 2),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           )
@@ -129,7 +129,7 @@ class PreparationScreen extends StatelessWidget {
             height: 56,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.8),
+              color: AppColors.white.withValues(alpha: 0.8),
               shape: BoxShape.circle,
             ),
             child: Text(
@@ -144,12 +144,12 @@ class PreparationScreen extends StatelessWidget {
               children: [
                 Text(
                   titleSi,
-                  style: AppTextStyles.heading3.copyWith(color: color.shade800, fontWeight: FontWeight.bold),
+                  style: AppTextStyles.heading3.copyWith(color: color, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   titleEn,
-                  style: AppTextStyles.caption.copyWith(color: color.shade700),
+                  style: AppTextStyles.caption.copyWith(color: color.withValues(alpha: 0.8)),
                 ),
               ],
             ),
