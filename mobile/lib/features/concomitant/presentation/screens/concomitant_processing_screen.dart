@@ -57,7 +57,7 @@ class _ConcomitantProcessingScreenState extends State<ConcomitantProcessingScree
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF9F5FF), // Soft lavender
+      backgroundColor: AppColors.background, // Soft lavender
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
@@ -70,7 +70,7 @@ class _ConcomitantProcessingScreenState extends State<ConcomitantProcessingScree
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w800,
-                  color: Color(0xFF4C1D95),
+                  color: AppColors.primaryDeep,
                 ),
               ),
               const SizedBox(height: 4),
@@ -79,7 +79,7 @@ class _ConcomitantProcessingScreenState extends State<ConcomitantProcessingScree
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF8B5CF6),
+                  color: AppColors.primary,
                 ),
               ),
               const SizedBox(height: 40),
@@ -95,7 +95,7 @@ class _ConcomitantProcessingScreenState extends State<ConcomitantProcessingScree
                       value: _progress,
                       strokeWidth: 14,
                       backgroundColor: const Color(0xFFF3E8FF),
-                      valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF8B5CF6)),
+                      valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
                       strokeCap: StrokeCap.round,
                     ),
                   ),
@@ -107,14 +107,14 @@ class _ConcomitantProcessingScreenState extends State<ConcomitantProcessingScree
                         style: const TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.w800,
-                          color: Color(0xFF4C1D95),
+                          color: AppColors.primaryDeep,
                         ),
                       ),
                       const Text(
                         'Wait a moment...',
                         style: TextStyle(
                           fontSize: 13,
-                          color: Color(0xFF7C3AED),
+                          color: AppColors.primary,
                         ),
                       ),
                     ],
@@ -143,10 +143,10 @@ class _ConcomitantProcessingScreenState extends State<ConcomitantProcessingScree
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: isCompleted 
-                                  ? const Color(0xFF10B981) 
+                                  ? AppColors.success 
                                   : (isActive ? const Color(0xFFF3E8FF) : Colors.white),
                               border: Border.all(
-                                color: isCompleted ? const Color(0xFF10B981) : (isActive ? const Color(0xFF8B5CF6) : const Color(0xFFE5E7EB)),
+                                color: isCompleted ? AppColors.success : (isActive ? AppColors.primary : const Color(0xFFE5E7EB)),
                                 width: 2,
                               ),
                             ),
@@ -155,7 +155,7 @@ class _ConcomitantProcessingScreenState extends State<ConcomitantProcessingScree
                                 : (isActive 
                                     ? const Padding(
                                         padding: EdgeInsets.all(4.0),
-                                        child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF8B5CF6))),
+                                        child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary)),
                                       )
                                     : const SizedBox()),
                           ),
@@ -171,7 +171,7 @@ class _ConcomitantProcessingScreenState extends State<ConcomitantProcessingScree
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: isActive || isCompleted ? FontWeight.w800 : FontWeight.w600,
-                                    color: isPending ? const Color(0xFF9CA3AF) : const Color(0xFF4C1D95),
+                                    color: isPending ? AppColors.mutedText : AppColors.primaryDeep,
                                   ),
                                 ),
                                 Text(
@@ -179,7 +179,7 @@ class _ConcomitantProcessingScreenState extends State<ConcomitantProcessingScree
                                   style: TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w600,
-                                    color: isPending ? const Color(0xFF9CA3AF).withOpacity(0.5) : const Color(0xFF8B5CF6),
+                                    color: isPending ? AppColors.mutedText.withOpacity(0.5) : AppColors.primary,
                                   ),
                                 ),
                               ],

@@ -21,7 +21,7 @@ class _ConcomitantDashboardScreenState extends ConsumerState<ConcomitantDashboar
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          color: Color(0xFFF9F5FF), // Soft lavender background
+          color: AppColors.background, // Soft lavender background
         ),
         child: SafeArea(
           child: Column(
@@ -31,15 +31,15 @@ class _ConcomitantDashboardScreenState extends ConsumerState<ConcomitantDashboar
                 child: Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.arrow_back_rounded, color: Color(0xFF4C1D95), size: 28),
+                      icon: const Icon(Icons.arrow_back_rounded, color: AppColors.primaryDeep, size: 28),
                       onPressed: () => context.go('/'),
                     ),
                     const SizedBox(width: 8),
                     const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('🎈 Let\'s Talk with Swara', style: TextStyle(color: Color(0xFF4C1D95), fontSize: 20, fontWeight: FontWeight.bold)),
-                        Text('Swara is listening and watching you talk', style: TextStyle(color: Color(0xFF8B5CF6), fontSize: 13, fontWeight: FontWeight.w600)),
+                        Text('🎈 Let\'s Talk with Swara', style: TextStyle(color: AppColors.primaryDeep, fontSize: 20, fontWeight: FontWeight.bold)),
+                        Text('Swara is listening and watching you talk', style: TextStyle(color: AppColors.primary, fontSize: 13, fontWeight: FontWeight.w600)),
                       ],
                     ),
                   ],
@@ -54,12 +54,12 @@ class _ConcomitantDashboardScreenState extends ConsumerState<ConcomitantDashboar
                     children: [
                       const Text(
                         'How would you like to start? ✨',
-                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: Color(0xFF4C1D95)),
+                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: AppColors.primaryDeep),
                       ),
                       const SizedBox(height: 8),
                       const Text(
                         'You can use a video we just made, or pick a new one.',
-                        style: TextStyle(fontSize: 15, color: Color(0xFF7C3AED)),
+                        style: TextStyle(fontSize: 15, color: AppColors.primary),
                       ),
                       const SizedBox(height: 24),
 
@@ -74,16 +74,16 @@ class _ConcomitantDashboardScreenState extends ConsumerState<ConcomitantDashboar
                                 decoration: BoxDecoration(
                                   color: _selectedOption == 0 ? Colors.white : const Color(0xFFF3E8FF),
                                   borderRadius: BorderRadius.circular(24),
-                                  border: Border.all(color: _selectedOption == 0 ? const Color(0xFF8B5CF6) : Colors.transparent, width: 3),
+                                  border: Border.all(color: _selectedOption == 0 ? AppColors.primary : Colors.transparent, width: 3),
                                   boxShadow: [
-                                    if (_selectedOption == 0) const BoxShadow(color: Color(0x1A8B5CF6), blurRadius: 12, offset: Offset(0, 4)),
+                                    if (_selectedOption == 0) const BoxShadow(color: AppColors.primaryWash, blurRadius: 12, offset: Offset(0, 4)),
                                   ],
                                 ),
                                 child: Column(
                                   children: [
                                     Text('🌟', style: TextStyle(fontSize: _selectedOption == 0 ? 28 : 24)),
                                     const SizedBox(height: 8),
-                                    Text('Use Last Video', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: _selectedOption == 0 ? const Color(0xFF4C1D95) : const Color(0xFF7C3AED))),
+                                    Text('Use Last Video', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: _selectedOption == 0 ? AppColors.primaryDeep : AppColors.primary)),
                                   ],
                                 ),
                               ),
@@ -98,16 +98,16 @@ class _ConcomitantDashboardScreenState extends ConsumerState<ConcomitantDashboar
                                 decoration: BoxDecoration(
                                   color: _selectedOption == 1 ? Colors.white : const Color(0xFFF3E8FF),
                                   borderRadius: BorderRadius.circular(24),
-                                  border: Border.all(color: _selectedOption == 1 ? const Color(0xFF8B5CF6) : Colors.transparent, width: 3),
+                                  border: Border.all(color: _selectedOption == 1 ? AppColors.primary : Colors.transparent, width: 3),
                                   boxShadow: [
-                                    if (_selectedOption == 1) const BoxShadow(color: Color(0x1A8B5CF6), blurRadius: 12, offset: Offset(0, 4)),
+                                    if (_selectedOption == 1) const BoxShadow(color: AppColors.primaryWash, blurRadius: 12, offset: Offset(0, 4)),
                                   ],
                                 ),
                                 child: Column(
                                   children: [
                                     Text('✨', style: TextStyle(fontSize: _selectedOption == 1 ? 28 : 24)),
                                     const SizedBox(height: 8),
-                                    Text('Pick New Video', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: _selectedOption == 1 ? const Color(0xFF4C1D95) : const Color(0xFF7C3AED))),
+                                    Text('Pick New Video', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: _selectedOption == 1 ? AppColors.primaryDeep : AppColors.primary)),
                                   ],
                                 ),
                               ),
@@ -126,11 +126,11 @@ class _ConcomitantDashboardScreenState extends ConsumerState<ConcomitantDashboar
                         child: ElevatedButton(
                           onPressed: () => context.push('/c2/process', extra: {'childId': widget.childId}),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF8B5CF6), // Primary purple
+                            backgroundColor: AppColors.primary, // Primary purple
                             padding: const EdgeInsets.symmetric(vertical: 20),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                             elevation: 4,
-                            shadowColor: const Color(0x408B5CF6),
+                            shadowColor: AppColors.primary,
                           ),
                           child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -162,16 +162,16 @@ class _ConcomitantDashboardScreenState extends ConsumerState<ConcomitantDashboar
             children: [
               Text('📼', style: TextStyle(fontSize: 28)),
               SizedBox(width: 12),
-              Text('Previous Adventure', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF4C1D95))),
+              Text('Previous Adventure', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: AppColors.primaryDeep)),
             ],
           ),
           const SizedBox(height: 16),
           Container(
             padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(color: const Color(0xFFF0FDF4), borderRadius: BorderRadius.circular(24)),
+            decoration: BoxDecoration(color: AppColors.primaryWash, borderRadius: BorderRadius.circular(24)),
             child: const Row(
               children: [
-                Icon(Icons.check_circle_rounded, color: Color(0xFF10B981), size: 28),
+                Icon(Icons.check_circle_rounded, color: AppColors.success, size: 28),
                 SizedBox(width: 12),
                 Expanded(
                   child: Column(
@@ -186,7 +186,7 @@ class _ConcomitantDashboardScreenState extends ConsumerState<ConcomitantDashboar
             ),
           ),
           const SizedBox(height: 16),
-          const Text('Swara will quietly listen to this video and learn how you speak! 🌱', style: TextStyle(fontSize: 14, color: Color(0xFF6B7280), height: 1.4)),
+          const Text('Swara will quietly listen to this video and learn how you speak! 🌱', style: TextStyle(fontSize: 14, color: AppColors.textLight, height: 1.4)),
         ],
       ),
     );
@@ -199,9 +199,9 @@ class _ConcomitantDashboardScreenState extends ConsumerState<ConcomitantDashboar
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Upload New Video', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF4C1D95))),
+          const Text('Upload New Video', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: AppColors.primaryDeep)),
           const SizedBox(height: 8),
-          const Text('Pick a fun video of you talking (MP4 or MOV).', style: TextStyle(fontSize: 14, color: Color(0xFF6B7280))),
+          const Text('Pick a fun video of you talking (MP4 or MOV).', style: TextStyle(fontSize: 14, color: AppColors.textLight)),
           const SizedBox(height: 20),
 
           GestureDetector(
@@ -210,19 +210,19 @@ class _ConcomitantDashboardScreenState extends ConsumerState<ConcomitantDashboar
               height: 160,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: _hasVideoSelected ? const Color(0xFFF0FDF4) : const Color(0xFFF9FAFB),
+                color: _hasVideoSelected ? AppColors.primaryWash : const Color(0xFFF9FAFB),
                 borderRadius: BorderRadius.circular(28),
-                border: Border.all(color: _hasVideoSelected ? const Color(0xFF34D399) : const Color(0xFFE5E7EB), width: 3, style: BorderStyle.solid),
+                border: Border.all(color: _hasVideoSelected ? AppColors.success : const Color(0xFFE5E7EB), width: 3, style: BorderStyle.solid),
               ),
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(_hasVideoSelected ? Icons.video_file_rounded : Icons.cloud_upload_rounded, size: 56, color: _hasVideoSelected ? const Color(0xFF10B981) : const Color(0xFF9CA3AF)),
+                    Icon(_hasVideoSelected ? Icons.video_file_rounded : Icons.cloud_upload_rounded, size: 56, color: _hasVideoSelected ? AppColors.success : AppColors.mutedText),
                     const SizedBox(height: 12),
                     Text(
                       _hasVideoSelected ? 'speaking_video_sample.mp4 selected ✨' : 'Tap to select a video',
-                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15, color: _hasVideoSelected ? const Color(0xFF065F46) : const Color(0xFF6B7280)),
+                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15, color: _hasVideoSelected ? const Color(0xFF065F46) : AppColors.textLight),
                     ),
                   ],
                 ),

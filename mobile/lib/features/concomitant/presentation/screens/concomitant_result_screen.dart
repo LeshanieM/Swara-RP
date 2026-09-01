@@ -9,7 +9,7 @@ class ConcomitantResultScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF9F5FF), // Very light lavender
+      backgroundColor: AppColors.background, // Very light lavender
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -20,7 +20,7 @@ class ConcomitantResultScreen extends StatelessWidget {
         title: const Column(
           children: [
             Text('⭐ Swara\'s Observations', style: TextStyle(color: AppColors.text, fontSize: 18, fontWeight: FontWeight.bold)),
-            Text('ස්වරගේ නිරීක්ෂණ', style: TextStyle(color: Color(0xFF8B5CF6), fontSize: 13, fontWeight: FontWeight.w600)),
+            Text('ස්වරගේ නිරීක්ෂණ', style: TextStyle(color: AppColors.primary, fontSize: 13, fontWeight: FontWeight.w600)),
           ],
         ),
         centerTitle: true,
@@ -46,7 +46,7 @@ class ConcomitantResultScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () => context.go('/'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF8B5CF6), // Soft lavender primary
+                  backgroundColor: AppColors.primary, // Soft lavender primary
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
@@ -75,10 +75,10 @@ class ConcomitantResultScreen extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: const BoxDecoration(
-            color: Color(0xFFFDFBF7),
+            color: AppColors.surfaceRaised,
             shape: BoxShape.circle,
             boxShadow: [
-              BoxShadow(color: Color(0x118B5CF6), blurRadius: 20, spreadRadius: 5),
+              BoxShadow(color: AppColors.primaryWash, blurRadius: 20, spreadRadius: 5),
             ],
           ),
           child: const Text('👋', style: TextStyle(fontSize: 48)),
@@ -106,7 +106,7 @@ class ConcomitantResultScreen extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(28),
         boxShadow: const [
-          BoxShadow(color: Color(0x0A000000), blurRadius: 24, offset: Offset(0, 8)),
+          BoxShadow(color: AppColors.divider, blurRadius: 24, offset: Offset(0, 8)),
         ],
       ),
       child: Column(
@@ -120,8 +120,8 @@ class ConcomitantResultScreen extends StatelessWidget {
                 child: CircularProgressIndicator(
                   value: 0.72,
                   strokeWidth: 14,
-                  backgroundColor: const Color(0xFFF3F4F6),
-                  valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF34D399)), // Mint green
+                  backgroundColor: AppColors.divider,
+                  valueColor: const AlwaysStoppedAnimation<Color>(AppColors.success), // Mint green
                   strokeCap: StrokeCap.round,
                 ),
               ),
@@ -137,14 +137,14 @@ class ConcomitantResultScreen extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           const Text('Gentle Observation Score', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.text)),
-          const Text('නිරීක්ෂණ ලකුණු', style: TextStyle(fontSize: 14, color: Color(0xFF8B5CF6), fontWeight: FontWeight.w600)),
+          const Text('නිරීක්ෂණ ලකුණු', style: TextStyle(fontSize: 14, color: AppColors.primary, fontWeight: FontWeight.w600)),
           const SizedBox(height: 16),
           Container(
             padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(color: const Color(0xFFF0FDF4), borderRadius: BorderRadius.circular(16)), // Pale mint
+            decoration: BoxDecoration(color: AppColors.primaryWash, borderRadius: BorderRadius.circular(16)), // Pale mint
             child: const Row(
               children: [
-                Icon(Icons.auto_awesome, color: Color(0xFF34D399), size: 24),
+                Icon(Icons.auto_awesome, color: AppColors.success, size: 24),
                 SizedBox(width: 12),
                 Expanded(
                   child: Text(
@@ -182,7 +182,7 @@ class ConcomitantResultScreen extends StatelessWidget {
           mainValue: '12 moments',
           details: ['Expression changes: 12', 'Smoothness: 84%'],
           bgColor: const Color(0xFFFEF2F2),
-          iconColor: const Color(0xFFEF4444),
+          iconColor: AppColors.error,
         ),
         _buildDetectionCard(
           emoji: '👄',
@@ -191,7 +191,7 @@ class ConcomitantResultScreen extends StatelessWidget {
           mainValue: '15 moments',
           details: ['Speaking articulations: 15', 'Average intensity: 42%'],
           bgColor: const Color(0xFFFFFBEB),
-          iconColor: const Color(0xFFF59E0B),
+          iconColor: AppColors.warning,
         ),
         _buildDetectionCard(
           emoji: '🙂',
@@ -199,8 +199,8 @@ class ConcomitantResultScreen extends StatelessWidget {
           titleSi: 'හිස චලනයන්',
           mainValue: '18 noticed',
           details: ['Soft nods: 18', 'Duration involved: 8.4 sec'],
-          bgColor: const Color(0xFFF0FDF4),
-          iconColor: const Color(0xFF10B981),
+          bgColor: AppColors.primaryWash,
+          iconColor: AppColors.success,
         ),
         _buildDetectionCard(
           emoji: '👋',
@@ -208,8 +208,8 @@ class ConcomitantResultScreen extends StatelessWidget {
           titleSi: 'අත් චලනයන්',
           mainValue: '9 moments',
           details: ['Gestures made: 9', 'Average duration: 1.2 sec'],
-          bgColor: const Color(0xFFF5F3FF),
-          iconColor: const Color(0xFF8B5CF6),
+          bgColor: AppColors.primaryWash,
+          iconColor: AppColors.primary,
         ),
       ],
     );
@@ -230,9 +230,9 @@ class ConcomitantResultScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: const Color(0xFFF3F4F6), width: 2),
+        border: Border.all(color: AppColors.divider, width: 2),
         boxShadow: const [
-          BoxShadow(color: Color(0x05000000), blurRadius: 10, offset: Offset(0, 4)),
+          BoxShadow(color: AppColors.divider, blurRadius: 10, offset: Offset(0, 4)),
         ],
       ),
       child: Column(
@@ -257,7 +257,7 @@ class ConcomitantResultScreen extends StatelessWidget {
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(color: const Color(0xFFF3F4F6), borderRadius: BorderRadius.circular(20)),
+                decoration: BoxDecoration(color: AppColors.divider, borderRadius: BorderRadius.circular(20)),
                 child: Text(mainValue, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.textLight)),
               ),
             ],
@@ -284,13 +284,13 @@ class ConcomitantResultScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: const Color(0xFFF3F4F6), width: 2),
+        border: Border.all(color: AppColors.divider, width: 2),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text('〰️ Sound Wave Timeline', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.text)),
-          const Text('හැසිරීම් කාලරේඛාව', style: TextStyle(fontSize: 13, color: Color(0xFF8B5CF6))),
+          const Text('හැසිරීම් කාලරේඛාව', style: TextStyle(fontSize: 13, color: AppColors.primary)),
           const SizedBox(height: 24),
           const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -303,19 +303,19 @@ class ConcomitantResultScreen extends StatelessWidget {
           Stack(
             alignment: Alignment.center,
             children: [
-              Container(height: 8, width: double.infinity, decoration: BoxDecoration(color: const Color(0xFFF3F4F6), borderRadius: BorderRadius.circular(4))),
-              _buildTimelineMarker(0.14, const Color(0xFF10B981)), // Head
+              Container(height: 8, width: double.infinity, decoration: BoxDecoration(color: AppColors.divider, borderRadius: BorderRadius.circular(4))),
+              _buildTimelineMarker(0.14, AppColors.success), // Head
               _buildTimelineMarker(0.18, const Color(0xFF3B82F6)), // Blink
-              _buildTimelineMarker(0.30, const Color(0xFFEF4444)), // Facial
-              _buildTimelineMarker(0.46, const Color(0xFFF59E0B)), // Jaw/Lip
-              _buildTimelineMarker(0.62, const Color(0xFF8B5CF6)), // Hand
+              _buildTimelineMarker(0.30, AppColors.error), // Facial
+              _buildTimelineMarker(0.46, AppColors.warning), // Jaw/Lip
+              _buildTimelineMarker(0.62, AppColors.primary), // Hand
             ],
           ),
           const SizedBox(height: 24),
           // Selected point mock
           Container(
             padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(color: const Color(0xFFF5F3FF), borderRadius: BorderRadius.circular(16)),
+            decoration: BoxDecoration(color: AppColors.primaryWash, borderRadius: BorderRadius.circular(16)),
             child: const Row(
               children: [
                 Text('👄', style: TextStyle(fontSize: 20)),
@@ -325,11 +325,11 @@ class ConcomitantResultScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Jaw/Lip Movement', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Color(0xFF6D28D9))),
-                      Text('A moment you were talking', style: TextStyle(fontSize: 12, color: Color(0xFF8B5CF6))),
+                      Text('A moment you were talking', style: TextStyle(fontSize: 12, color: AppColors.primary)),
                     ],
                   ),
                 ),
-                Text('00:47', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF8B5CF6))),
+                Text('00:47', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary)),
               ],
             ),
           ),
@@ -355,19 +355,19 @@ class ConcomitantResultScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: const Color(0xFFF3F4F6), width: 2),
+        border: Border.all(color: AppColors.divider, width: 2),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text('📊 Quick Summary', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.text)),
-          const Text('සාරාංශය', style: TextStyle(fontSize: 13, color: Color(0xFF8B5CF6))),
+          const Text('සාරාංශය', style: TextStyle(fontSize: 13, color: AppColors.primary)),
           const SizedBox(height: 20),
           _buildSummaryBar('Eye blinking', 0.35, const Color(0xFF3B82F6)),
-          _buildSummaryBar('Facial movement', 0.25, const Color(0xFFEF4444)),
-          _buildSummaryBar('Jaw/Lip movements', 0.20, const Color(0xFFF59E0B)),
-          _buildSummaryBar('Head movements', 0.10, const Color(0xFF10B981)),
-          _buildSummaryBar('Hand movements', 0.10, const Color(0xFF8B5CF6)),
+          _buildSummaryBar('Facial movement', 0.25, AppColors.error),
+          _buildSummaryBar('Jaw/Lip movements', 0.20, AppColors.warning),
+          _buildSummaryBar('Head movements', 0.10, AppColors.success),
+          _buildSummaryBar('Hand movements', 0.10, AppColors.primary),
         ],
       ),
     );
@@ -382,7 +382,7 @@ class ConcomitantResultScreen extends StatelessWidget {
           Expanded(
             child: Container(
               height: 10,
-              decoration: BoxDecoration(color: const Color(0xFFF3F4F6), borderRadius: BorderRadius.circular(5)),
+              decoration: BoxDecoration(color: AppColors.divider, borderRadius: BorderRadius.circular(5)),
               child: FractionallySizedBox(
                 alignment: Alignment.centerLeft,
                 widthFactor: percent,

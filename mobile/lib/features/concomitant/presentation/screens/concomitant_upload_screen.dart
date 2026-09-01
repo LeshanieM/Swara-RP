@@ -17,12 +17,12 @@ class _ConcomitantUploadScreenState extends State<ConcomitantUploadScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF9F5FF), // Soft lavender
+      backgroundColor: AppColors.background, // Soft lavender
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded, color: Color(0xFF4C1D95)),
+          icon: const Icon(Icons.arrow_back_rounded, color: AppColors.primaryDeep),
           onPressed: () => context.pop(),
         ),
       ),
@@ -38,7 +38,7 @@ class _ConcomitantUploadScreenState extends State<ConcomitantUploadScreen> {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w800,
-                  color: Color(0xFF4C1D95),
+                  color: AppColors.primaryDeep,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -48,20 +48,20 @@ class _ConcomitantUploadScreenState extends State<ConcomitantUploadScreen> {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF8B5CF6),
+                  color: AppColors.primary,
                 ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
               const Text(
                 'Pick a video where you are speaking! 🌟',
-                style: TextStyle(fontSize: 15, color: Color(0xFF6B7280)),
+                style: TextStyle(fontSize: 15, color: AppColors.textLight),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 4),
               const Text(
                 'ඔබ කතා කරන වීඩියෝවක් තෝරන්න! 🌟',
-                style: TextStyle(fontSize: 13, color: Color(0xFF9CA3AF)),
+                style: TextStyle(fontSize: 13, color: AppColors.mutedText),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 40),
@@ -132,14 +132,14 @@ class _ConcomitantUploadScreenState extends State<ConcomitantUploadScreen> {
                       context.push('/c2/ready');
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF8B5CF6), // Soft lavender primary
+                      backgroundColor: AppColors.primary, // Soft lavender primary
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24),
                       ),
                       elevation: 2,
-                      shadowColor: const Color(0x408B5CF6),
+                      shadowColor: AppColors.primary,
                     ),
                     child: const Column(
                       children: [

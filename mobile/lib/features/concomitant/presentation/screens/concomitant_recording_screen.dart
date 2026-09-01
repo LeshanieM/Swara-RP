@@ -58,7 +58,7 @@ class _ConcomitantRecordingScreenState extends ConsumerState<ConcomitantRecordin
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          color: Color(0xFFF9F5FF), // Soft lavender
+          color: AppColors.background, // Soft lavender
         ),
         child: SafeArea(
           child: Column(
@@ -68,15 +68,15 @@ class _ConcomitantRecordingScreenState extends ConsumerState<ConcomitantRecordin
                 child: Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.arrow_back_rounded, color: Color(0xFF4C1D95), size: 28),
+                      icon: const Icon(Icons.arrow_back_rounded, color: AppColors.primaryDeep, size: 28),
                       onPressed: () => context.pop(),
                     ),
                     const SizedBox(width: 8),
                     const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('🎥 කැමරා ක්‍රියාකාරකම', style: TextStyle(color: Color(0xFF4C1D95), fontSize: 20, fontWeight: FontWeight.bold)),
-                        Text('Camera Recording Activity', style: TextStyle(color: Color(0xFF8B5CF6), fontSize: 13, fontWeight: FontWeight.w600)),
+                        Text('🎥 කැමරා ක්‍රියාකාරකම', style: TextStyle(color: AppColors.primaryDeep, fontSize: 20, fontWeight: FontWeight.bold)),
+                        Text('Camera Recording Activity', style: TextStyle(color: AppColors.primary, fontSize: 13, fontWeight: FontWeight.w600)),
                       ],
                     ),
                   ],
@@ -93,18 +93,18 @@ class _ConcomitantRecordingScreenState extends ConsumerState<ConcomitantRecordin
                 child: Container(
                   margin: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: _isRecording ? const Color(0xFFF0FDF4) : Colors.white,
+                    color: _isRecording ? AppColors.primaryWash : Colors.white,
                     borderRadius: BorderRadius.circular(32),
-                    border: Border.all(color: _isRecording ? const Color(0xFF34D399) : const Color(0xFFE5E7EB), width: 4),
+                    border: Border.all(color: _isRecording ? AppColors.success : const Color(0xFFE5E7EB), width: 4),
                     boxShadow: const [
-                      BoxShadow(color: Color(0x0A000000), blurRadius: 15, offset: Offset(0, 4))
+                      BoxShadow(color: AppColors.divider, blurRadius: 15, offset: Offset(0, 4))
                     ],
                   ),
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.face_retouching_natural_rounded, size: 90, color: _isRecording ? const Color(0xFF10B981) : const Color(0xFF9CA3AF)),
+                        Icon(Icons.face_retouching_natural_rounded, size: 90, color: _isRecording ? AppColors.success : AppColors.mutedText),
                         const SizedBox(height: 16),
                         Text(
                           _isRecording ? '📸 කැමරාව ක්‍රියාත්මකයි\nCamera Active' : 'කැමරාව සූදානම්\nCamera Ready',
@@ -136,8 +136,8 @@ class _ConcomitantRecordingScreenState extends ConsumerState<ConcomitantRecordin
                         onTap: () => setState(() => _seconds = 0),
                         child: Container(
                           padding: const EdgeInsets.all(16),
-                          decoration: const BoxDecoration(color: Color(0xFFFEE2E2), shape: BoxShape.circle),
-                          child: const Icon(Icons.refresh_rounded, size: 32, color: Color(0xFFEF4444)),
+                          decoration: const BoxDecoration(color: AppColors.error, shape: BoxShape.circle),
+                          child: const Icon(Icons.refresh_rounded, size: 32, color: AppColors.error),
                         ),
                       )
                     else
@@ -150,9 +150,9 @@ class _ConcomitantRecordingScreenState extends ConsumerState<ConcomitantRecordin
                         width: 90,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: _isRecording ? const Color(0xFFEF4444) : const Color(0xFF8B5CF6),
+                          color: _isRecording ? AppColors.error : AppColors.primary,
                           border: Border.all(color: Colors.white, width: 4),
-                          boxShadow: [BoxShadow(color: (_isRecording ? const Color(0xFFEF4444) : const Color(0xFF8B5CF6)).withOpacity(0.4), blurRadius: 15, offset: const Offset(0, 6))],
+                          boxShadow: [BoxShadow(color: (_isRecording ? AppColors.error : AppColors.primary).withOpacity(0.4), blurRadius: 15, offset: const Offset(0, 6))],
                         ),
                         child: Icon(
                           _isRecording ? Icons.pause_rounded : Icons.mic_rounded,
@@ -167,7 +167,7 @@ class _ConcomitantRecordingScreenState extends ConsumerState<ConcomitantRecordin
                         onTap: _finishRecording,
                         child: Container(
                           padding: const EdgeInsets.all(16),
-                          decoration: const BoxDecoration(color: Color(0xFF10B981), shape: BoxShape.circle),
+                          decoration: const BoxDecoration(color: AppColors.success, shape: BoxShape.circle),
                           child: const Icon(Icons.check_rounded, size: 32, color: Colors.white),
                         ),
                       )

@@ -8,7 +8,7 @@ class ConcomitantReadyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF9F5FF), // Soft lavender
+      backgroundColor: AppColors.background, // Soft lavender
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -63,7 +63,7 @@ class ConcomitantReadyScreen extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF4C1D95), // Deep purple
+                        color: AppColors.primaryDeep, // Deep purple
                       ),
                     ),
                     SizedBox(height: 4),
@@ -71,7 +71,7 @@ class ConcomitantReadyScreen extends StatelessWidget {
                       'Total Duration / මුළු කාලය',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Color(0xFF8B5CF6),
+                        color: AppColors.primary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -86,7 +86,7 @@ class ConcomitantReadyScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF4C1D95),
+                  color: AppColors.primaryDeep,
                 ),
               ),
               const SizedBox(height: 4),
@@ -95,20 +95,20 @@ class ConcomitantReadyScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF8B5CF6),
+                  color: AppColors.primary,
                 ),
               ),
               const SizedBox(height: 16),
               
               const Text(
                 "You're ready to let Swara observe your video.",
-                style: TextStyle(fontSize: 16, color: Color(0xFF6B7280)),
+                style: TextStyle(fontSize: 16, color: AppColors.textLight),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 4),
               const Text(
                 'වීඩියෝව ස්වරට සවන් දීමට ඔබ සූදානම්.',
-                style: TextStyle(fontSize: 14, color: Color(0xFF6B7280)),
+                style: TextStyle(fontSize: 14, color: AppColors.textLight),
                 textAlign: TextAlign.center,
               ),
               
@@ -122,14 +122,14 @@ class ConcomitantReadyScreen extends StatelessWidget {
                     context.push('/c2/process');
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF8B5CF6), // Soft lavender primary
+                    backgroundColor: AppColors.primary, // Soft lavender primary
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 18),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),
                     elevation: 2,
-                    shadowColor: const Color(0x408B5CF6),
+                    shadowColor: AppColors.primary,
                   ),
                   child: const Column(
                     children: [
