@@ -87,16 +87,16 @@ class ChildHomeScreen extends ConsumerWidget {
                           onAccentColor: Colors.white,
                           onTap: () => context.push('/c2/upload'),
                         ),
-                        // Card 3: Warm Amber — guided storytelling
+                        // Card 3: Warm Amber — guided therapy journey
                         _CompactAdventureCard(
                           icon: Icons.auto_stories_rounded,
                           imageAsset: 'images/home/story_card.png',
-                          titleSi: 'ක්‍රියාකාරකම්',
-                          titleEn: 'Story Time',
-                          subtitle: 'Guided, slower practice',
+                          titleSi: 'කතා පුහුණුව',
+                          titleEn: 'Therapy Journey',
+                          subtitle: 'Guided speech practice',
                           accentColor: const Color(0xFFE08A2E),
                           onAccentColor: Colors.white,
-                          onTap: () => context.push('/c3/theme'),
+                          onTap: () => context.push('/c3/forest-therapy'),
                         ),
                         // Card 4: Violet — open expression
                         _CompactAdventureCard(
@@ -110,63 +110,6 @@ class ChildHomeScreen extends ConsumerWidget {
                           onTap: () => context.push('/c4'),
                         ),
                       ],
-                    ),
-                    const SizedBox(height: 20),
-                    
-                    // Forest Adventure Speech Therapy Button
-                    Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: () => context.push('/c3/forest-therapy'),
-                        borderRadius: BorderRadius.circular(18),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [Color(0xFF0066CC), Color(0xFF0284C7)],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(18),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xFF0066CC).withValues(alpha: 0.3),
-                                blurRadius: 10,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: const Row(
-                            children: [
-                              Text('🌲', style: TextStyle(fontSize: 26)),
-                              SizedBox(width: 12),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Forest Adventure Speech Therapy',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    Text(
-                                      'Open 18-Screen Adventure Journey (6 Themes)',
-                                      style: TextStyle(
-                                        color: Colors.white70,
-                                        fontSize: 11,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Icon(Icons.arrow_forward_ios_rounded, color: Colors.white, size: 16),
-                            ],
-                          ),
-                        ),
-                      ),
                     ),
                     const SizedBox(height: 20),
                     
