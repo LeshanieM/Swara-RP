@@ -115,6 +115,11 @@ class ProgressScreen extends StatelessWidget {
                 ),
 
                 const SizedBox(height: 32),
+                const Text('Clinical Progress Summary', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.text)),
+                const SizedBox(height: 16),
+                _buildComponentsSummary(),
+
+                const SizedBox(height: 32),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -179,6 +184,51 @@ class ProgressScreen extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+
+  Widget _buildComponentsSummary() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppColors.cardCream,
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(color: AppColors.primaryLight, width: 2),
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 12)],
+      ),
+      child: Column(
+        children: [
+          _buildComponentRow('Component 1', 'Fluency / Stuttering', 'Moderate'),
+          const Divider(height: 24),
+          _buildComponentRow('Component 2', 'Secondary Behaviors', 'Mild–Moderate'),
+          const Divider(height: 24),
+          _buildComponentRow('Component 3', 'Therapy Activity', 'Storytelling'),
+          const Divider(height: 24),
+          _buildComponentRow('Component 4', 'Language Characteristics', 'Increasing lexical diversity'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildComponentRow(String comp, String label, String value) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 100,
+          child: Text(comp, style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.primaryDeep)),
+        ),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(label, style: const TextStyle(fontSize: 12, color: AppColors.textLight)),
+              const SizedBox(height: 2),
+              Text(value, style: const TextStyle(fontSize: 14, color: AppColors.text)),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

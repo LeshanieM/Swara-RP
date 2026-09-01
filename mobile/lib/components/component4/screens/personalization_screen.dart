@@ -1,126 +1,217 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../services/topic_recommendation_service.dart';
-import '../mock/component4_mock_data.dart';
-import '../models/communication_topic.dart';
+import 'package:swara/core/theme/app_theme.dart';
 
-class PersonalizationScreen extends StatefulWidget {
-  const PersonalizationScreen({Key? key}) : super(key: key);
-
-  @override
-  State<PersonalizationScreen> createState() => _PersonalizationScreenState();
-}
-
-class _PersonalizationScreenState extends State<PersonalizationScreen> {
-  int _currentStep = 0;
-  final List<String> _steps = [
-    'Component 1 ✓',
-    'Component 2 ✓',
-    'Age ✓',
-    'Therapist Assessment ✓',
-    'Creating Topic...'
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-    _startAnimation();
-  }
-
-  void _startAnimation() async {
-    for (int i = 0; i < _steps.length; i++) {
-      await Future.delayed(const Duration(milliseconds: 600));
-      if (mounted) {
-        setState(() {
-          _currentStep = i;
-        });
-      }
-    }
-    
-    final topic = await TopicRecommendationService().generateTopic(Component4MockData.mockAssessment);
-    
-    if (mounted) {
-      context.pushReplacement('/c4/topic', extra: topic);
-    }
-  }
+class PersonalizationScreen extends StatelessWidget {
+  const PersonalizationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
+      appBar: AppBar(
+        title: const Text('Personalized Speaking Activity'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        foregroundColor: AppColors.text,
+      ),
       body: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const CircularProgressIndicator(color: Colors.blueAccent),
-                const SizedBox(height: 32),
-                const Text(
-                  'Creating Your Challenge...',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                const Text(
-                  'ඔයාගේ අභියෝගය සූදානම් කරනවා...',
-                  style: TextStyle(fontSize: 18, color: Colors.blueAccent),
-                ),
-                const SizedBox(height: 48),
-                Container(
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: Colors.blue.shade50,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: _steps.asMap().entries.map((entry) {
-                      int idx = entry.key;
-                      String text = entry.value;
-                      bool isActive = idx <= _currentStep;
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Row(
-                          children: [
-                            Icon(
-                              isActive ? Icons.check_circle : Icons.radio_button_unchecked,
-                              color: isActive ? Colors.green : Colors.grey,
-                            ),
-                            const SizedBox(width: 12),
-                            Text(
-                              text,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: isActive ? Colors.black87 : Colors.grey,
-                                fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                const SizedBox(height: 32),
-                const Text(
-                  'Finding the right challenge for you...',
-                  style: TextStyle(fontSize: 16, color: Colors.black87),
-                ),
-                const Text(
-                  'ඔයාට ගැළපෙන අභියෝගය සොයනවා...',
-                  style: TextStyle(fontSize: 14, color: Colors.black54),
-                ),
-                if (_currentStep == _steps.length - 1) ...[
-                  const SizedBox(height: 24),
-                  const Text(
-                    'Almost ready! 🌟',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.orange),
-                  ),
-                ]
-              ],
-            ),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Child Performance Profile',
+                style: AppTextStyles.heading2,
+              ),
+              const SizedBox(height: 16),
+              _buildPerformanceGrid(),
+              const SizedBox(height: 32),
+              Text(
+                'Recommended Activity',
+                style: AppTextStyles.heading2,
+              ),
+              const SizedBox(height: 16),
+              _buildRecommendedActivityCard(context),
+            ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildPerformanceGrid() {
+    return Column(
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: _buildProfileSection(
+                'Fluency',
+                [
+                  'Stuttering severity: Moderate',
+                  'Speech rate: 2.8 words/sec',
+                  'Pause frequency: Elevated',
+                ],
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _buildProfileSection(
+                'Secondary Behaviors',
+                [
+                  'Eye blinking: Mild',
+                  'Head movement: Low',
+                  'Facial tension: Moderate',
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: _buildProfileSection(
+                'Previous Therapy Activities',
+                [
+                  'Picture description',
+                  'Storytelling',
+                  'Conversation',
+                ],
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _buildProfileSection(
+                'Previous Language Performance',
+                [
+                  'NDW: 38',
+                  'MATTR: 0.48',
+                  'VocD: 51',
+                  'MLU: 3.1',
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildProfileSection(String title, List<String> items) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceRaised,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.divider),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title, style: AppTextStyles.label.copyWith(color: AppColors.primaryDeep)),
+          const SizedBox(height: 8),
+          ...items.map((item) => Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('• ', style: TextStyle(color: AppColors.textLight)),
+                    Expanded(child: Text(item, style: AppTextStyles.bodySmall)),
+                  ],
+                ),
+              )),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRecommendedActivityCard(BuildContext context) {
+    return Builder(
+      builder: (context) => Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        color: AppColors.surfaceRaised,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '“Describe what is happening in this picture.”',
+                style: AppTextStyles.heading2,
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  _buildBadge('Category', 'Picture Description'),
+                  const SizedBox(width: 12),
+                  _buildBadge('Difficulty', 'Moderate', color: AppColors.warning),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Text('Reason:', style: AppTextStyles.label),
+              const SizedBox(height: 4),
+              Text(
+                '“Selected to encourage spontaneous vocabulary use and longer utterances while remaining appropriate for the child\'s recent performance.”',
+                style: AppTextStyles.bodySmall.copyWith(fontStyle: FontStyle.italic),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Alternative topic generation requested (Mock)')),
+                        );
+                      },
+                      child: const Text('Choose Another'),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        context.push('/c4/record');
+                      },
+                      child: const Text('Start Activity'),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Center(
+                child: Text(
+                  'AI personalization model recommendation',
+                  style: AppTextStyles.caption,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBadge(String label, String value, {Color color = AppColors.primary}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: color.withOpacity(0.3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: AppTextStyles.caption.copyWith(color: color)),
+          Text(value, style: AppTextStyles.label.copyWith(color: color)),
+        ],
       ),
     );
   }
