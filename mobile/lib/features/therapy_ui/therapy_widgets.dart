@@ -8,7 +8,7 @@ class _BgScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = _InheritedTheme.themeOf(context);
-    final overlayOpacity = theme == _AppTheme.space ? 0.78 : (paintScene ? 0.35 : 0.15);
+    final overlayOpacity = theme == _AppTheme.space ? 0.48 : (paintScene ? 0.35 : 0.15);
     return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(

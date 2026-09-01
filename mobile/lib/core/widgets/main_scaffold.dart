@@ -58,7 +58,7 @@ class MainScaffold extends StatelessWidget {
               children: [
                 _buildNavItem(context, icon: Icons.home_rounded, label: 'Home', isActive: currentIndex == 0, route: '/'),
                 _buildNavItem(context, icon: Icons.mic_rounded, label: 'Speech', isActive: currentIndex == 1, route: '/c1/record'),
-                _buildNavItem(context, icon: Icons.psychology_rounded, label: 'Therapy', isActive: currentIndex == 2, route: '/c3/theme'),
+                _buildNavItem(context, icon: Icons.psychology_rounded, label: 'Therapy', isActive: currentIndex == 2, route: '/c3/forest-therapy'),
                 _buildNavItem(context, icon: Icons.person_rounded, label: 'Profile', isActive: currentIndex == 3, route: '/profile'),
               ],
             ),
