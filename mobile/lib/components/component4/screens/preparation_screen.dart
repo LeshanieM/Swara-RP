@@ -1,89 +1,160 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:swara/core/theme/app_theme.dart';
 
 class PreparationScreen extends StatelessWidget {
-  const PreparationScreen({Key? key}) : super(key: key);
+  const PreparationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Preparation'),
+        title: const Text('Swara Speech'),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        foregroundColor: Colors.black,
+        foregroundColor: AppColors.primaryDeep,
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text(
-                'Ready to Tell Your Story? 🎙️',
+              Text(
+                'කතාව කියන්න ලෑස්තිද? 🎙️',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                style: AppTextStyles.heading1.copyWith(
+                  color: AppColors.primaryDeep,
+                  fontSize: 28,
+                ),
               ),
-              const SizedBox(height: 12),
-              const Text(
-                'ඔයාගේ කතාව කියන්න සූදානම්ද? 🎙️',
+              const SizedBox(height: 8),
+              Text(
+                'Ready to tell your story?',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 22, color: Colors.blueAccent, fontWeight: FontWeight.bold),
+                style: AppTextStyles.heading3.copyWith(color: AppColors.textLight),
               ),
               const SizedBox(height: 48),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  color: Colors.orange.shade50,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: Colors.orange.shade200, width: 2),
+
+              _buildStepCard(
+                '1',
+                '🎤',
+                'මයික් එක ළඟින් කතා කරන්න.',
+                'Speak near the microphone.',
+                Colors.blue,
+              ),
+              const SizedBox(height: 16),
+              
+              _buildStepCard(
+                '2',
+                '💬',
+                'ඔයාට පහසු විදිහට කතා කරන්න.',
+                'Speak comfortably in your own way.',
+                Colors.orange,
+              ),
+              const SizedBox(height: 16),
+              
+              _buildStepCard(
+                '3',
+                '🌱',
+                'ඉක්මන් වෙන්න ඕනේ නැහැ.',
+                'Take your time, no need to rush.',
+                Colors.green,
+              ),
+              
+              const SizedBox(height: 48),
+              
+              Text(
+                'මම ලෑස්තියි! (I\'m ready!)',
+                textAlign: TextAlign.center,
+                style: AppTextStyles.heading3.copyWith(color: AppColors.primaryDeep),
+              ),
+              const SizedBox(height: 16),
+              
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                  elevation: 6,
+                  shadowColor: AppColors.primary.withOpacity(0.5),
                 ),
-                child: const Column(
+                onPressed: () {
+                  context.pushReplacement('/c4/record');
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Remember:',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.orange),
+                      'කතා කරන්න පටන් ගමු 🎙️',
+                      style: AppTextStyles.heading2.copyWith(color: Colors.white, fontSize: 20),
                     ),
-                    SizedBox(height: 24),
-                    Text('Take your time.', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                    Text('ඔයාට ඕනෑ තරම් කාලය ගන්න.', style: TextStyle(fontSize: 16, color: Colors.black54)),
-                    SizedBox(height: 16),
-                    Text('Use your own words.', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                    Text('ඔයාගේම වචන භාවිතා කරන්න.', style: TextStyle(fontSize: 16, color: Colors.black54)),
-                    SizedBox(height: 16),
-                    Text('There is no perfect answer.', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                    Text('හරිම එකම උත්තරයක් නැහැ.', style: TextStyle(fontSize: 16, color: Colors.black54)),
                   ],
                 ),
               ),
-              const SizedBox(height: 48),
-              SizedBox(
-                width: double.infinity,
-                height: 70,
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    context.pushReplacement('/c4/record');
-                  },
-                  icon: const Icon(Icons.mic, size: 32),
-                  label: const Text(
-                    '🎙️ Start Speaking\n🎙️ කතා කරන්න පටන් ගමු',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueAccent,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
+              const SizedBox(height: 8),
+              Text(
+                'Let\'s start speaking',
+                textAlign: TextAlign.center,
+                style: AppTextStyles.caption.copyWith(color: AppColors.primaryDeep),
               ),
+              const SizedBox(height: 32),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildStepCard(String number, String emoji, String titleSi, String titleEn, MaterialColor color) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: color.shade50,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: color.shade200, width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: color.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          )
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 56,
+            height: 56,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.8),
+              shape: BoxShape.circle,
+            ),
+            child: Text(
+              emoji,
+              style: const TextStyle(fontSize: 28),
+            ),
+          ),
+          const SizedBox(width: 20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  titleSi,
+                  style: AppTextStyles.heading3.copyWith(color: color.shade800, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  titleEn,
+                  style: AppTextStyles.caption.copyWith(color: color.shade700),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

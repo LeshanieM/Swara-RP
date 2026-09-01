@@ -59,20 +59,20 @@ class _RecordingScreenState extends State<RecordingScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
                 child: Column(
                   children: [
-                    // Playful Image Container
+                    // Playful Image Container for Picture Story Task
                     Container(
                       height: 280,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFFFFE0B2), Color(0xFFFFCC80)],
+                        gradient: LinearGradient(
+                          colors: [Colors.blue.shade100, Colors.blue.shade300],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
                         borderRadius: BorderRadius.circular(32),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.orange.withOpacity(0.3),
+                            color: Colors.blue.withOpacity(0.3),
                             blurRadius: 15,
                             offset: const Offset(0, 8),
                           ),
@@ -82,7 +82,7 @@ class _RecordingScreenState extends State<RecordingScreen> {
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
-                          const Icon(Icons.pets, size: 120, color: Colors.orange),
+                          Icon(Icons.image, size: 120, color: Colors.blue.shade700),
                           Positioned(
                             top: 20,
                             right: 30,
@@ -91,7 +91,7 @@ class _RecordingScreenState extends State<RecordingScreen> {
                           Positioned(
                             bottom: 30,
                             left: 40,
-                            child: Icon(Icons.favorite, color: Colors.red.shade300, size: 35),
+                            child: Icon(Icons.favorite, color: Colors.red.shade400, size: 35),
                           ),
                         ],
                       ),
@@ -112,21 +112,38 @@ class _RecordingScreenState extends State<RecordingScreen> {
                           )
                         ],
                       ),
-                      child: Text(
-                        '“Look at the picture and tell me what is happening.”',
-                        textAlign: TextAlign.center,
-                        style: AppTextStyles.heading2.copyWith(
-                          color: AppColors.primaryDeep,
-                          height: 1.4,
-                        ),
+                      child: Column(
+                        children: [
+                          Text(
+                            'ඔයාගේ කතාව මට කියන්න 💬',
+                            textAlign: TextAlign.center,
+                            style: AppTextStyles.heading2.copyWith(
+                              color: AppColors.primaryDeep,
+                              height: 1.4,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Tell me your story',
+                            textAlign: TextAlign.center,
+                            style: AppTextStyles.label.copyWith(color: AppColors.textLight),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'ඉක්මන් වෙන්න ඕනේ නැහැ. ඔයාට පහසු විදිහට කතා කරන්න.\n(Take your time. Speak comfortably.)',
+                            textAlign: TextAlign.center,
+                            style: AppTextStyles.label.copyWith(
+                              color: AppColors.textLight,
+                              height: 1.5,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     
                     const SizedBox(height: 48),
                     
                     if (!_isRecording && _seconds == 0) ...[
-                      Text('🎤 Ready to Talk?', style: AppTextStyles.heading2.copyWith(color: AppColors.text)),
-                      const SizedBox(height: 24),
                       // Big friendly start button
                       ElevatedButton(
                         onPressed: () {
@@ -146,9 +163,9 @@ class _RecordingScreenState extends State<RecordingScreen> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.play_arrow_rounded, size: 32),
+                            const Icon(Icons.mic, size: 32),
                             const SizedBox(width: 12),
-                            Text('Start Recording', style: AppTextStyles.heading3.copyWith(color: Colors.white)),
+                            Text('කතා කරන්න (Start)', style: AppTextStyles.heading3.copyWith(color: Colors.white)),
                           ],
                         ),
                       ),

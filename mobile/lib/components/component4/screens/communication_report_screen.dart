@@ -10,10 +10,10 @@ class CommunicationReportScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Spontaneous Speech Analysis'),
+        title: const Text('Linguistic & Lexical Analysis'),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        foregroundColor: AppColors.text,
+        foregroundColor: AppColors.primaryDeep,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -21,19 +21,25 @@ class CommunicationReportScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildImportantMLConcept(),
+              _buildHeaderInfo(),
+              const SizedBox(height: 32),
+              _buildPersonalizedTaskSelection(),
+              const SizedBox(height: 32),
+              _buildSpeechSample(),
+              const SizedBox(height: 32),
+              _buildLanguageProfile(),
               const SizedBox(height: 32),
               _buildLexicalDiversity(),
               const SizedBox(height: 24),
-              _buildUtteranceProduction(),
+              _buildMLUSection(),
+              const SizedBox(height: 24),
+              _buildSpeechFlowSection(),
               const SizedBox(height: 32),
               _buildPersonalizedInterpretation(),
               const SizedBox(height: 32),
-              _buildPersonalizedLanguageResult(),
+              _buildObservationSummary(),
               const SizedBox(height: 32),
               _buildSessionComparison(),
-              const SizedBox(height: 32),
-              _buildPersonalizedNextActivity(),
             ],
           ),
         ),
@@ -41,32 +47,147 @@ class CommunicationReportScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildImportantMLConcept() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.primaryWash,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.primaryLight),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Icon(Icons.psychology, color: AppColors.primaryDeep),
-              const SizedBox(width: 8),
-              Text('How this activity was chosen', style: AppTextStyles.label.copyWith(color: AppColors.primaryDeep)),
+  Widget _buildHeaderInfo() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Spontaneous Speech — Sinhala', style: AppTextStyles.heading2.copyWith(color: AppColors.textLight)),
+        const SizedBox(height: 24),
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              )
             ],
           ),
-          const SizedBox(height: 12),
-          Text(
-            'Child History + Component 1 + Component 2 + Component 3 + Previous Component 4 Results\n↓\nPersonalization Model\n↓\nTopic / Activity Selection',
-            style: AppTextStyles.caption.copyWith(height: 1.6, color: AppColors.text),
-            textAlign: TextAlign.center,
+          child: Column(
+            children: [
+              _buildInfoRow('Child ID', 'SW-8472 (Anonymized)'),
+              const Divider(),
+              _buildInfoRow('Session', '04'),
+              const Divider(),
+              _buildInfoRow('Date', 'Nov 14, 2024'),
+              const Divider(),
+              _buildInfoRow('Task Type', 'Picture Sequence Narrative'),
+              const Divider(),
+              _buildInfoRow('Task ID', 'TSK-PSN-02'),
+              const Divider(),
+              _buildInfoRow('Analysis Status', '✅ Completed'),
+            ],
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: AppTextStyles.label.copyWith(color: AppColors.textLight)),
+          Text(value, style: AppTextStyles.heading3),
         ],
       ),
+    );
+  }
+
+  Widget _buildSpeechSample() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Speech Transcript', style: AppTextStyles.heading2),
+        const SizedBox(height: 16),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: AppColors.surfaceRaised,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppColors.divider),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '“මගේ බල්ලාගේ නම ටොමී. එයා මාත් එක්ක සෙල්ලම් කරන්න ගොඩක් කැමතියි. අපි හැමදාම හවසට සෙල්ලම් කරනවා. එයා ගොඩක් හොඳයි.”',
+                style: AppTextStyles.heading3.copyWith(
+                  height: 1.6,
+                  color: AppColors.text,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text('00:00 - 00:18', style: AppTextStyles.caption.copyWith(color: AppColors.textLight)),
+              )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLanguageProfile() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Language Profile', style: AppTextStyles.heading2),
+        const SizedBox(height: 16),
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppColors.primaryLight, width: 2),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.primaryLight.withOpacity(0.3),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              )
+            ],
+          ),
+          child: Column(
+            children: [
+              _buildProfileItem('Lexical Diversity', 'Detected vocabulary diversity during the session.'),
+              const Divider(height: 24),
+              _buildProfileItem('Utterance Length', 'Observed average utterance length.'),
+              const Divider(height: 24),
+              _buildProfileItem('Speech Rate', 'Observed speaking rate.'),
+              const Divider(height: 24),
+              _buildProfileItem('Pausing', 'Observed pause frequency and duration.'),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildProfileItem(String label, String desc) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Icon(Icons.check_circle_outline, color: AppColors.primary, size: 20),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(label, style: AppTextStyles.heading3),
+              const SizedBox(height: 4),
+              Text(desc, style: AppTextStyles.caption.copyWith(color: AppColors.textLight)),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -89,26 +210,86 @@ class CommunicationReportScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildUtteranceProduction() {
+  Widget _buildMLUSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Utterance / Language Production', style: AppTextStyles.heading2),
+        Text('Mean Length of Utterance', style: AppTextStyles.heading2),
         const SizedBox(height: 16),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: AppColors.primaryWash,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppColors.primaryLight),
+          ),
+          child: Column(
+            children: [
+              const Text('MLU', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.primaryDeep)),
+              const SizedBox(height: 8),
+              const Text('3.5', style: TextStyle(fontSize: 48, fontWeight: FontWeight.w900, color: AppColors.primaryDeep)),
+              const SizedBox(height: 8),
+              Text('Average length of analyzed utterances.', style: AppTextStyles.caption.copyWith(color: AppColors.text)),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSpeechFlowSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Speech Flow', style: AppTextStyles.heading2),
+        const SizedBox(height: 16),
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppColors.divider),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              )
+            ],
+          ),
+          child: Column(
+            children: [
+              _buildFlowRow('Speech Rate', '2.8 words/sec', 0.6),
+              const SizedBox(height: 16),
+              _buildFlowRow('Pause Frequency', '12 pauses', 0.4),
+              const SizedBox(height: 16),
+              _buildFlowRow('Avg Pause Duration', '0.9s', 0.3),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFlowRow(String label, String value, double percent) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(child: _buildMetricCard('MLU', '3.1', 'Mean Length of Utterance')),
-            const SizedBox(width: 12),
-            Expanded(child: _buildMetricCard('Speech Rate', '2.8 w/s', 'Words per second')),
+            Text(label, style: AppTextStyles.label.copyWith(color: AppColors.textLight)),
+            Text(value, style: AppTextStyles.heading3),
           ],
         ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(child: _buildMetricCard('Pause Freq.', '12', 'Number of pauses')),
-            const SizedBox(width: 12),
-            Expanded(child: _buildMetricCard('Avg Pause', '0.9s', 'Average pause duration')),
-          ],
+        const SizedBox(height: 8),
+        LinearProgressIndicator(
+          value: percent,
+          backgroundColor: AppColors.surfaceRaised,
+          color: AppColors.primary,
+          minHeight: 8,
+          borderRadius: BorderRadius.circular(4),
         ),
       ],
     );
@@ -184,11 +365,11 @@ class CommunicationReportScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPersonalizedLanguageResult() {
+  Widget _buildObservationSummary() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Child\'s Language Profile', style: AppTextStyles.heading2),
+        Text('Language Observations', style: AppTextStyles.heading2),
         const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.all(16),
@@ -202,23 +383,17 @@ class CommunicationReportScreen extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Expanded(child: _buildStatusRow('Vocabulary Diversity', 'Increasing', AppColors.success)),
-                  Expanded(child: _buildStatusRow('Utterance Length', 'Increasing', AppColors.success)),
+                  const Text('🤖', style: TextStyle(fontSize: 20)),
+                  const SizedBox(width: 8),
+                  Text('Automated Observation', style: AppTextStyles.label.copyWith(color: AppColors.primaryDeep)),
                 ],
               ),
               const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(child: _buildStatusRow('Speech Rate', 'Stable', AppColors.warning)),
-                  Expanded(child: _buildStatusRow('Pausing', 'Variable', AppColors.warning)),
-                ],
-              ),
-              const SizedBox(height: 24),
-              Text('Overall Language Observation', style: AppTextStyles.label),
-              const SizedBox(height: 8),
               Text(
-                '“The child demonstrated increased lexical diversity and longer utterances in the current spontaneous speech sample compared with previous sessions. Vocabulary variety showed an increasing trend, while speech rate remained relatively stable.”',
-                style: AppTextStyles.bodySmall,
+                '• A broader range of words was observed in this session compared to the previous one.\n'
+                '• Average utterance length was slightly higher than in the previous session.\n'
+                '• Speech rate remained relatively stable across the session.',
+                style: AppTextStyles.bodySmall.copyWith(height: 1.6),
               ),
               const SizedBox(height: 16),
               Container(
@@ -233,7 +408,7 @@ class CommunicationReportScreen extends StatelessWidget {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'These results describe observed speech and language patterns and are intended to support SLP review. They are not a clinical diagnosis.',
+                        'This observation is generated from the analyzed speech sample and should be reviewed by a qualified SLP.',
                         style: AppTextStyles.caption.copyWith(color: AppColors.warning),
                       ),
                     ),
@@ -247,23 +422,6 @@ class CommunicationReportScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusRow(String label, String status, Color color) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: AppTextStyles.caption),
-        const SizedBox(height: 4),
-        Row(
-          children: [
-            Icon(Icons.circle, size: 12, color: color),
-            const SizedBox(width: 6),
-            Text(status, style: AppTextStyles.label.copyWith(color: color)),
-          ],
-        ),
-      ],
-    );
-  }
-
   Widget _buildSessionComparison() {
     return Builder(
       builder: (context) => Column(
@@ -272,7 +430,7 @@ class CommunicationReportScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Language Development\nAcross Sessions', style: AppTextStyles.heading2),
+              Text('Language Journey\n(Session Progress)', style: AppTextStyles.heading2),
               TextButton.icon(
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -301,6 +459,82 @@ class CommunicationReportScreen extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(height: 12),
+          Text('Trend observed:', style: AppTextStyles.label),
+          const SizedBox(height: 4),
+          Text(
+            'Lexical diversity showed an increasing trend across the recorded sessions.',
+            style: AppTextStyles.bodySmall.copyWith(fontStyle: FontStyle.italic),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPersonalizedTaskSelection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Personalized Task Selection', style: AppTextStyles.heading2),
+        const SizedBox(height: 16),
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppColors.primaryLight, width: 2),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.primaryLight.withOpacity(0.3),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              )
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Previous Session Profile', style: AppTextStyles.heading3),
+              const SizedBox(height: 12),
+              _buildProfileListItem('Component 1: Stable stuttering frequency observed in reading tasks.'),
+              _buildProfileListItem('Component 2: No significant secondary behaviors detected.'),
+              _buildProfileListItem('Component 3: Completed structured breathing activity successfully.'),
+              _buildProfileListItem('Component 4 (Previous): High lexical diversity in picture description.'),
+              const SizedBox(height: 24),
+              const Divider(),
+              const SizedBox(height: 24),
+              Text('Recommended Speaking Task', style: AppTextStyles.label.copyWith(color: AppColors.textLight)),
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  const Text('🖼️', style: TextStyle(fontSize: 24)),
+                  const SizedBox(width: 12),
+                  Text('Picture Sequence Narrative', style: AppTextStyles.heading3.copyWith(color: AppColors.primaryDeep)),
+                ],
+              ),
+              const SizedBox(height: 24),
+              Text('Selection Rationale', style: AppTextStyles.label.copyWith(color: AppColors.textLight)),
+              const SizedBox(height: 4),
+              Text(
+                '“This task was selected to obtain spontaneous narrative speech while maintaining a structured speaking context.”',
+                style: AppTextStyles.bodySmall.copyWith(fontStyle: FontStyle.italic),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildProfileListItem(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(Icons.circle, size: 8, color: AppColors.primary),
+          const SizedBox(width: 12),
+          Expanded(child: Text(text, style: AppTextStyles.caption.copyWith(color: AppColors.text))),
         ],
       ),
     );
