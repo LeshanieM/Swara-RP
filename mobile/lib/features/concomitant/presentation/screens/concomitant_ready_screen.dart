@@ -31,7 +31,7 @@ class ConcomitantReadyScreen extends StatelessWidget {
                   color: Colors.black,
                   borderRadius: BorderRadius.circular(20),
                   image: const DecorationImage(
-                    image: AssetImage('assets/images/common/user_pic.jpg'), // Mock
+                    image: AssetImage('assets/images/videopic.png'), // Mock
                     fit: BoxFit.cover,
                     opacity: 0.8,
                   ),
