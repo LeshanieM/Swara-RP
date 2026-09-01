@@ -17,12 +17,12 @@ class _ConcomitantUploadScreenState extends State<ConcomitantUploadScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: const Color(0xFFF9F5FF), // Soft lavender
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.text),
+          icon: const Icon(Icons.arrow_back_rounded, color: Color(0xFF4C1D95)),
           onPressed: () => context.pop(),
         ),
       ),
@@ -34,34 +34,34 @@ class _ConcomitantUploadScreenState extends State<ConcomitantUploadScreen> {
             children: [
               // Header
               const Text(
-                'Physical Behavior Analysis',
+                'Upload a Video',
                 style: TextStyle(
                   fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primaryDeep,
+                  fontWeight: FontWeight.w800,
+                  color: Color(0xFF4C1D95),
                 ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 4),
               const Text(
-                'ශාරීරික හැසිරීම් විශ්ලේෂණය',
+                'වීඩියෝවක් එක් කරන්න',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.primary,
+                  color: Color(0xFF8B5CF6),
                 ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
               const Text(
-                'Upload a speech video to analyze physical behaviors during speaking.',
-                style: TextStyle(fontSize: 14, color: AppColors.text),
+                'Pick a video where you are speaking! 🌟',
+                style: TextStyle(fontSize: 15, color: Color(0xFF6B7280)),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 4),
               const Text(
-                'කථනය අතරතුර සිදුවන ශාරීරික හැසිරීම් විශ්ලේෂණය කිරීමට වීඩියෝවක් එක් කරන්න.',
-                style: TextStyle(fontSize: 12, color: AppColors.textLight),
+                'ඔබ කතා කරන වීඩියෝවක් තෝරන්න! 🌟',
+                style: TextStyle(fontSize: 13, color: Color(0xFF9CA3AF)),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 40),
@@ -132,22 +132,23 @@ class _ConcomitantUploadScreenState extends State<ConcomitantUploadScreen> {
                       context.push('/c2/ready');
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
+                      backgroundColor: const Color(0xFF8B5CF6), // Soft lavender primary
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 18),
+                      padding: const EdgeInsets.symmetric(vertical: 20),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(24),
                       ),
-                      elevation: 0,
+                      elevation: 2,
+                      shadowColor: const Color(0x408B5CF6),
                     ),
                     child: const Column(
                       children: [
                         Text(
-                          'Start Analysis',
+                          'Start Activity',
                           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          'විශ්ලේෂණය ආරම්භ කරන්න',
+                          'ක්‍රියාකාරකම ආරම්භ කරන්න',
                           style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
                         ),
                       ],

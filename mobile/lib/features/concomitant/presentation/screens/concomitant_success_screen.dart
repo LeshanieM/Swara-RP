@@ -18,7 +18,7 @@ class ConcomitantSuccessScreen extends StatelessWidget {
     final String formattedDuration = _formatTime(duration);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF4F6FB),
+      backgroundColor: const Color(0xFFF9F5FF), // Soft lavender
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -33,7 +33,7 @@ class ConcomitantSuccessScreen extends StatelessWidget {
                     width: 88,
                     height: 88,
                     decoration: const BoxDecoration(
-                      color: Color(0xFFE3F6EE),
+                      color: Color(0xFFF0FDF4),
                       shape: BoxShape.circle,
                     ),
                     margin: const EdgeInsets.only(bottom: 32),
@@ -42,7 +42,7 @@ class ConcomitantSuccessScreen extends StatelessWidget {
                         width: 56,
                         height: 56,
                         decoration: const BoxDecoration(
-                          color: Color(0xFF0F7A5C),
+                          color: Color(0xFF10B981), // Mint
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
@@ -58,7 +58,7 @@ class ConcomitantSuccessScreen extends StatelessWidget {
                   const Text(
                     'Great job!',
                     style: TextStyle(
-                      color: Color(0xFF2F5CF0),
+                      color: Color(0xFF4C1D95), // Deep purple
                       fontSize: 26,
                       fontWeight: FontWeight.w800,
                       height: 1.2,
@@ -73,7 +73,7 @@ class ConcomitantSuccessScreen extends StatelessWidget {
                     child: Text(
                       'Your speaking session has been recorded successfully.',
                       style: TextStyle(
-                        color: Color(0xFF3A3F4B),
+                        color: Color(0xFF6B7280),
                         fontSize: 16,
                         height: 1.5,
                       ),
@@ -88,12 +88,13 @@ class ConcomitantSuccessScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(color: const Color(0xFFF3F4F6), width: 2),
+                      boxShadow: const [
                         BoxShadow(
-                          color: const Color(0xFF141E3C).withOpacity(0.06),
-                          blurRadius: 12,
-                          offset: const Offset(0, 2),
+                          color: Color(0x05000000),
+                          blurRadius: 10,
+                          offset: Offset(0, 4),
                         ),
                       ],
                     ),
@@ -107,12 +108,12 @@ class ConcomitantSuccessScreen extends StatelessWidget {
                               width: 40,
                               height: 40,
                               decoration: BoxDecoration(
-                                color: const Color(0xFFE8EEFD),
-                                borderRadius: BorderRadius.circular(10),
+                                color: const Color(0xFFF5F3FF),
+                                borderRadius: BorderRadius.circular(12),
                               ),
                               child: const Icon(
                                 Icons.access_time_rounded,
-                                color: Color(0xFF2F5CF0),
+                                color: Color(0xFF8B5CF6),
                                 size: 20,
                               ),
                             ),
@@ -124,7 +125,7 @@ class ConcomitantSuccessScreen extends StatelessWidget {
                                   const Text(
                                     'SESSION DURATION',
                                     style: TextStyle(
-                                      color: Color(0xFF8A8F9C),
+                                      color: Color(0xFF9CA3AF),
                                       fontSize: 11,
                                       fontWeight: FontWeight.w700,
                                       letterSpacing: 0.4,
@@ -134,9 +135,9 @@ class ConcomitantSuccessScreen extends StatelessWidget {
                                   Text(
                                     formattedDuration,
                                     style: const TextStyle(
-                                      color: Color(0xFF1A1D29),
+                                      color: Color(0xFF4C1D95),
                                       fontSize: 16,
-                                      fontWeight: FontWeight.w700,
+                                      fontWeight: FontWeight.w800,
                                     ),
                                   ),
                                 ],
@@ -147,9 +148,9 @@ class ConcomitantSuccessScreen extends StatelessWidget {
 
                         // Divider
                         Container(
-                          margin: const EdgeInsets.symmetric(vertical: 14),
-                          height: 1,
-                          color: const Color(0xFFEDF0F5),
+                          margin: const EdgeInsets.symmetric(vertical: 16),
+                          height: 2,
+                          color: const Color(0xFFF3F4F6),
                         ),
 
                         // Row 2: Recording Type
@@ -159,12 +160,12 @@ class ConcomitantSuccessScreen extends StatelessWidget {
                               width: 40,
                               height: 40,
                               decoration: BoxDecoration(
-                                color: const Color(0xFFF2E9FB),
-                                borderRadius: BorderRadius.circular(10),
+                                color: const Color(0xFFF0FDF4),
+                                borderRadius: BorderRadius.circular(12),
                               ),
                               child: const Icon(
-                                Icons.videocam_outlined,
-                                color: Color(0xFF8B3FD6),
+                                Icons.videocam_rounded,
+                                color: Color(0xFF10B981),
                                 size: 22,
                               ),
                             ),
@@ -176,27 +177,27 @@ class ConcomitantSuccessScreen extends StatelessWidget {
                                   const Text(
                                     'RECORDING TYPE',
                                     style: TextStyle(
-                                      color: Color(0xFF8A8F9C),
+                                      color: Color(0xFF9CA3AF),
                                       fontSize: 11,
                                       fontWeight: FontWeight.w700,
                                       letterSpacing: 0.4,
                                     ),
                                   ),
                                   const SizedBox(height: 2),
-                                  Row(
+                                  const Row(
                                     children: [
-                                      const Text(
+                                      Text(
                                         'Audio + Video',
                                         style: TextStyle(
-                                          color: Color(0xFF1A1D29),
+                                          color: Color(0xFF4C1D95),
                                           fontSize: 16,
-                                          fontWeight: FontWeight.w700,
+                                          fontWeight: FontWeight.w800,
                                         ),
                                       ),
-                                      const SizedBox(width: 6),
-                                      const Icon(
+                                      SizedBox(width: 6),
+                                      Icon(
                                         Icons.check_rounded,
-                                        color: Color(0xFF0F7A5C),
+                                        color: Color(0xFF10B981),
                                         size: 18,
                                       ),
                                     ],
@@ -221,19 +222,20 @@ class ConcomitantSuccessScreen extends StatelessWidget {
                         context.pushReplacement('/c2/process', extra: assessmentData);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF2F5CF0),
+                        backgroundColor: const Color(0xFF8B5CF6), // Soft lavender primary
                         foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 17),
+                        padding: const EdgeInsets.symmetric(vertical: 20),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
+                          borderRadius: BorderRadius.circular(24),
                         ),
-                        elevation: 0,
+                        elevation: 2,
+                        shadowColor: const Color(0x408B5CF6),
                       ),
                       child: const Text(
                         'Continue',
                         style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w700,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
                         ),
                       ),
                     ),

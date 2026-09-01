@@ -21,7 +21,7 @@ class _ConcomitantDashboardScreenState extends ConsumerState<ConcomitantDashboar
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          gradient: AppColors.c2Gradient,
+          color: Color(0xFFF9F5FF), // Soft lavender background
         ),
         child: SafeArea(
           child: Column(
@@ -31,15 +31,15 @@ class _ConcomitantDashboardScreenState extends ConsumerState<ConcomitantDashboar
                 child: Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.arrow_back_rounded, color: Color(0xFF0F172A), size: 26),
+                      icon: const Icon(Icons.arrow_back_rounded, color: Color(0xFF4C1D95), size: 28),
                       onPressed: () => context.go('/'),
                     ),
                     const SizedBox(width: 8),
                     const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('🎥 Secondary Behavior Analysis', style: TextStyle(color: Color(0xFF0F172A), fontSize: 18, fontWeight: FontWeight.bold)),
-                        Text('Component 2 — Multimodal Video & Audio', style: TextStyle(color: Color(0xFF1D4ED8), fontSize: 12, fontWeight: FontWeight.w600)),
+                        Text('🎈 Let\'s Talk with Swara', style: TextStyle(color: Color(0xFF4C1D95), fontSize: 20, fontWeight: FontWeight.bold)),
+                        Text('Swara is listening and watching you talk', style: TextStyle(color: Color(0xFF8B5CF6), fontSize: 13, fontWeight: FontWeight.w600)),
                       ],
                     ),
                   ],
@@ -53,15 +53,15 @@ class _ConcomitantDashboardScreenState extends ConsumerState<ConcomitantDashboar
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'Select Video Input Source',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
+                        'How would you like to start? ✨',
+                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: Color(0xFF4C1D95)),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 8),
                       const Text(
-                        'Analyze facial tension, eye blinking, posture, and speech blocks.',
-                        style: TextStyle(fontSize: 13, color: Colors.blue),
+                        'You can use a video we just made, or pick a new one.',
+                        style: TextStyle(fontSize: 15, color: Color(0xFF7C3AED)),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 24),
 
                       // Input Selector Tabs
                       Row(
@@ -70,38 +70,44 @@ class _ConcomitantDashboardScreenState extends ConsumerState<ConcomitantDashboar
                             child: GestureDetector(
                               onTap: () => setState(() => _selectedOption = 0),
                               child: Container(
-                                padding: const EdgeInsets.all(14),
+                                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                                 decoration: BoxDecoration(
-                                  color: _selectedOption == 0 ? AppColors.cardCream : Colors.blue.withOpacity(0.15),
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(color: _selectedOption == 0 ? AppColors.ctaOrange : Colors.transparent, width: 2),
+                                  color: _selectedOption == 0 ? Colors.white : const Color(0xFFF3E8FF),
+                                  borderRadius: BorderRadius.circular(24),
+                                  border: Border.all(color: _selectedOption == 0 ? const Color(0xFF8B5CF6) : Colors.transparent, width: 3),
+                                  boxShadow: [
+                                    if (_selectedOption == 0) const BoxShadow(color: Color(0x1A8B5CF6), blurRadius: 12, offset: Offset(0, 4)),
+                                  ],
                                 ),
                                 child: Column(
                                   children: [
-                                    Text('🎤 Option B', style: TextStyle(fontWeight: FontWeight.bold, color: _selectedOption == 0 ? AppColors.text : Colors.white)),
-                                    const SizedBox(height: 2),
-                                    Text('Use Comp 1 Recording', style: TextStyle(fontSize: 11, color: _selectedOption == 0 ? AppColors.textLight : Colors.white70)),
+                                    Text('🌟', style: TextStyle(fontSize: _selectedOption == 0 ? 28 : 24)),
+                                    const SizedBox(height: 8),
+                                    Text('Use Last Video', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: _selectedOption == 0 ? const Color(0xFF4C1D95) : const Color(0xFF7C3AED))),
                                   ],
                                 ),
                               ),
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: 16),
                           Expanded(
                             child: GestureDetector(
                               onTap: () => setState(() => _selectedOption = 1),
                               child: Container(
-                                padding: const EdgeInsets.all(14),
+                                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                                 decoration: BoxDecoration(
-                                  color: _selectedOption == 1 ? AppColors.cardCream : Colors.blue.withOpacity(0.15),
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(color: _selectedOption == 1 ? AppColors.ctaOrange : Colors.transparent, width: 2),
+                                  color: _selectedOption == 1 ? Colors.white : const Color(0xFFF3E8FF),
+                                  borderRadius: BorderRadius.circular(24),
+                                  border: Border.all(color: _selectedOption == 1 ? const Color(0xFF8B5CF6) : Colors.transparent, width: 3),
+                                  boxShadow: [
+                                    if (_selectedOption == 1) const BoxShadow(color: Color(0x1A8B5CF6), blurRadius: 12, offset: Offset(0, 4)),
+                                  ],
                                 ),
                                 child: Column(
                                   children: [
-                                    Text('📁 Option A', style: TextStyle(fontWeight: FontWeight.bold, color: _selectedOption == 1 ? AppColors.text : Colors.white)),
-                                    const SizedBox(height: 2),
-                                    Text('Upload Video File', style: TextStyle(fontSize: 11, color: _selectedOption == 1 ? AppColors.textLight : Colors.white70)),
+                                    Text('✨', style: TextStyle(fontSize: _selectedOption == 1 ? 28 : 24)),
+                                    const SizedBox(height: 8),
+                                    Text('Pick New Video', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: _selectedOption == 1 ? const Color(0xFF4C1D95) : const Color(0xFF7C3AED))),
                                   ],
                                 ),
                               ),
@@ -120,16 +126,16 @@ class _ConcomitantDashboardScreenState extends ConsumerState<ConcomitantDashboar
                         child: ElevatedButton(
                           onPressed: () => context.push('/c2/process', extra: {'childId': widget.childId}),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.ctaOrange,
-                            padding: const EdgeInsets.symmetric(vertical: 18),
+                            backgroundColor: const Color(0xFF8B5CF6), // Primary purple
+                            padding: const EdgeInsets.symmetric(vertical: 20),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                            elevation: 4,
+                            shadowColor: const Color(0x408B5CF6),
                           ),
                           child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.auto_awesome, color: Colors.white),
-                              SizedBox(width: 8),
-                              Text('Analyze Video & Audio', style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold)),
+                              Text('Let\'s Go! 🚀', style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold)),
                             ],
                           ),
                         ),
@@ -147,40 +153,40 @@ class _ConcomitantDashboardScreenState extends ConsumerState<ConcomitantDashboar
 
   Widget _buildOptionB() {
     return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(color: AppColors.cardCream, borderRadius: BorderRadius.circular(28)),
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(32)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Row(
             children: [
-              Icon(Icons.video_library, color: AppColors.jewelNavy, size: 24),
-              SizedBox(width: 8),
-              Text('Previous Activity Recording', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.text)),
+              Text('📼', style: TextStyle(fontSize: 28)),
+              SizedBox(width: 12),
+              Text('Previous Adventure', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF4C1D95))),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
           Container(
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(color: AppColors.softYellow.withOpacity(0.3), borderRadius: BorderRadius.circular(20)),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(color: const Color(0xFFF0FDF4), borderRadius: BorderRadius.circular(24)),
             child: const Row(
               children: [
-                Icon(Icons.check_circle, color: AppColors.jewelEmerald),
-                SizedBox(width: 10),
+                Icon(Icons.check_circle_rounded, color: Color(0xFF10B981), size: 28),
+                SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Component 1: Picture Description Task', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.text, fontSize: 14)),
-                      Text('Recorded today • Duration: 1 min 30 sec', style: TextStyle(fontSize: 12, color: AppColors.textLight)),
+                      Text('Picture Description Task', style: TextStyle(fontWeight: FontWeight.w800, color: Color(0xFF065F46), fontSize: 15)),
+                      Text('Recorded today • 1 min 30 sec', style: TextStyle(fontSize: 13, color: Color(0xFF047857))),
                     ],
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 14),
-          const Text('This video recording will be automatically used for multimodal analysis.', style: TextStyle(fontSize: 12, color: AppColors.textLight)),
+          const SizedBox(height: 16),
+          const Text('Swara will quietly listen to this video and learn how you speak! 🌱', style: TextStyle(fontSize: 14, color: Color(0xFF6B7280), height: 1.4)),
         ],
       ),
     );
@@ -188,35 +194,35 @@ class _ConcomitantDashboardScreenState extends ConsumerState<ConcomitantDashboar
 
   Widget _buildOptionA() {
     return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(color: AppColors.cardCream, borderRadius: BorderRadius.circular(28)),
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(32)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Upload Video File', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.text)),
-          const SizedBox(height: 4),
-          const Text('Upload a speaking video for analysis (MP4, MOV up to 50MB).', style: TextStyle(fontSize: 12, color: AppColors.textLight)),
-          const SizedBox(height: 16),
+          const Text('Upload New Video', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF4C1D95))),
+          const SizedBox(height: 8),
+          const Text('Pick a fun video of you talking (MP4 or MOV).', style: TextStyle(fontSize: 14, color: Color(0xFF6B7280))),
+          const SizedBox(height: 20),
 
           GestureDetector(
             onTap: () => setState(() => _hasVideoSelected = !_hasVideoSelected),
             child: Container(
-              height: 140,
+              height: 160,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: AppColors.cardCream,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppColors.ctaOrange, width: 2, style: BorderStyle.solid),
+                color: _hasVideoSelected ? const Color(0xFFF0FDF4) : const Color(0xFFF9FAFB),
+                borderRadius: BorderRadius.circular(28),
+                border: Border.all(color: _hasVideoSelected ? const Color(0xFF34D399) : const Color(0xFFE5E7EB), width: 3, style: BorderStyle.solid),
               ),
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(_hasVideoSelected ? Icons.video_file : Icons.cloud_upload_outlined, size: 48, color: AppColors.ctaOrange),
-                    const SizedBox(height: 8),
+                    Icon(_hasVideoSelected ? Icons.video_file_rounded : Icons.cloud_upload_rounded, size: 56, color: _hasVideoSelected ? const Color(0xFF10B981) : const Color(0xFF9CA3AF)),
+                    const SizedBox(height: 12),
                     Text(
-                      _hasVideoSelected ? 'speaking_video_sample.mp4 selected' : 'Tap to select video from device',
-                      style: TextStyle(fontWeight: FontWeight.bold, color: _hasVideoSelected ? AppColors.jewelEmerald : AppColors.text),
+                      _hasVideoSelected ? 'speaking_video_sample.mp4 selected ✨' : 'Tap to select a video',
+                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15, color: _hasVideoSelected ? const Color(0xFF065F46) : const Color(0xFF6B7280)),
                     ),
                   ],
                 ),
