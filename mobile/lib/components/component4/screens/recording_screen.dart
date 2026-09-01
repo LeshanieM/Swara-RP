@@ -79,21 +79,12 @@ class _RecordingScreenState extends State<RecordingScreen> {
                         ],
                         border: Border.all(color: Colors.white, width: 6),
                       ),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Icon(Icons.image, size: 120, color: Colors.blue.shade700),
-                          Positioned(
-                            top: 20,
-                            right: 30,
-                            child: Icon(Icons.star, color: Colors.yellow.shade700, size: 40),
-                          ),
-                          Positioned(
-                            bottom: 30,
-                            left: 40,
-                            child: Icon(Icons.favorite, color: Colors.red.shade400, size: 35),
-                          ),
-                        ],
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(26),
+                        child: Image.asset(
+                          'assets/images/component4/c4_picture_story.png',
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 32),

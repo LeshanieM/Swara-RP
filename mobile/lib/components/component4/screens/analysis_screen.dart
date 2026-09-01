@@ -10,53 +10,63 @@ class AnalysisScreen extends StatefulWidget {
   State<AnalysisScreen> createState() => _AnalysisScreenState();
 }
 
-class _AnalysisScreenState extends State<AnalysisScreen> with SingleTickerProviderStateMixin {
+class _AnalysisScreenState extends State<AnalysisScreen>
+    with SingleTickerProviderStateMixin {
   int _currentStep = 0;
   late AnimationController _pulseController;
-  
+
   final List<Map<String, dynamic>> _pipeline = [
-    {
-      'icon': '🎙️', 
-      'titleEn': 'Speech Captured',
-      'titleSi': 'කතාව ලබාගත්තා',
-      'desc': 'Your talking sample is ready.',
-      'color': Colors.blue
-    },
-    {
-      'icon': '📝', 
-      'titleEn': 'Speech Transcribed',
-      'titleSi': 'කතාව වචන වලට හරවනවා',
-      'desc': 'Understanding the spoken words...',
-      'color': Colors.orange
-    },
-    {
-      'icon': '💬', 
-      'titleEn': 'Finding Words',
-      'titleSi': 'වචන හඳුනාගන්නවා',
-      'desc': 'Looking at the words you used...',
-      'color': Colors.purple
-    },
-    {
-      'icon': '🧩', 
-      'titleEn': 'Language Patterns',
-      'titleSi': 'භාෂා රටා බලනවා',
-      'desc': 'Exploring your language patterns...',
-      'color': Colors.indigo
-    },
-    {
-      'icon': '📊', 
-      'titleEn': 'Calculating Measures',
-      'titleSi': 'භාෂා මිනුම් ගණනය කරනවා',
-      'desc': 'Calculating language measurements...',
-      'color': Colors.teal
-    },
-    {
-      'icon': '🌱', 
-      'titleEn': 'Preparing Results',
-      'titleSi': 'ප්‍රතිඵල සකස් කරනවා',
-      'desc': 'Almost ready!',
-      'color': Colors.green
-    },
+ 
+  {
+    'icon': '🎙️',
+    'titleEn': 'Speech Captured',
+    'titleSi': 'කතාව ලබාගත්තා',
+    'desc': 'Your talking sample is ready.',
+    'color': Colors.blue
+  },
+  {
+    'icon': '📝',
+    'titleEn': 'Transcription',
+    'titleSi': 'කතාව වචන වලට හරවනවා',
+    'desc': 'Converting speech to text...',
+    'color': Colors.orange
+  },
+  {
+    'icon': '💬',
+    'titleEn': 'NDW Calculated',
+    'titleSi': 'NDW ගණනය කරනවා',
+    'desc': 'Counting unique words (Number of Different Words)...',
+    'color': Colors.purple
+  },
+  {
+    'icon': '🧩',
+    'titleEn': 'MLU Calculated',
+    'titleSi': 'MLU ගණනය කරනවා',
+    'desc': 'Measuring Mean Length of Utterance...',
+    'color': Colors.indigo
+  },
+  {
+    'icon': '📊',
+    'titleEn': 'Speech Flow Analysis',
+    'titleSi': 'කතා ප්‍රවාහ විශ්ලේෂණය',
+    'desc': 'Analyzing duration, rate, pauses, latency...',
+    'color': Colors.teal
+  },
+  {
+    'icon': '✨',
+    'titleEn': 'Fluency Check',
+    'titleSi': 'සුමට බව පරීක්ෂාව',
+    'desc': 'Detecting fluency events (repetitions, hesitations)...',
+    'color': Colors.pink
+  },
+  {
+    'icon': '🌱',
+    'titleEn': 'Preparing Results',
+    'titleSi': 'ප්‍රතිඵල සකස් කරනවා',
+    'desc': 'Almost ready!',
+    'color': Colors.green
+  },
+
   ];
 
   @override
@@ -66,14 +76,15 @@ class _AnalysisScreenState extends State<AnalysisScreen> with SingleTickerProvid
       vsync: this,
       duration: const Duration(milliseconds: 1500),
     )..repeat(reverse: true);
-    
+
     _startAnalysis();
   }
 
   void _startAnalysis() async {
     for (int i = 0; i < _pipeline.length; i++) {
       int delay = 2000;
-      if (i == 2 || i == 3 || i == 4) delay = 3500; // longer for calculation visuals
+      if (i == 2 || i == 3 || i == 4 || i == 5)
+        delay = 3500; // longer for calculation visuals
       await Future.delayed(Duration(milliseconds: delay));
       if (mounted) {
         setState(() {
@@ -81,9 +92,9 @@ class _AnalysisScreenState extends State<AnalysisScreen> with SingleTickerProvid
         });
       }
     }
-    
+
     await Future.delayed(const Duration(milliseconds: 2000));
-    
+
     if (mounted) {
       context.pushReplacement('/c4/child_result');
     }
@@ -98,7 +109,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> with SingleTickerProvid
   @override
   Widget build(BuildContext context) {
     bool isFinished = _currentStep >= _pipeline.length;
-    
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -111,7 +122,8 @@ class _AnalysisScreenState extends State<AnalysisScreen> with SingleTickerProvid
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -134,7 +146,8 @@ class _AnalysisScreenState extends State<AnalysisScreen> with SingleTickerProvid
                       const SizedBox(height: 16),
                       Text(
                         'ඔයාගේ කතා ගමන සූදානම්!',
-                        style: AppTextStyles.label.copyWith(color: AppColors.primaryDeep),
+                        style: AppTextStyles.label
+                            .copyWith(color: AppColors.primaryDeep),
                       ),
                       Text(
                         'All done!',
@@ -161,13 +174,14 @@ class _AnalysisScreenState extends State<AnalysisScreen> with SingleTickerProvid
                       Text(
                         'ඔයාගේ කතාව ගැන බලමු!',
                         textAlign: TextAlign.center,
-                        style: AppTextStyles.label.copyWith(color: AppColors.textLight),
+                        style: AppTextStyles.label
+                            .copyWith(color: AppColors.textLight),
                       ),
                     ],
                   ),
-                
+
                 const SizedBox(height: 32),
-                
+
                 // Pipeline visualization
                 Expanded(
                   child: ListView.builder(
@@ -176,7 +190,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> with SingleTickerProvid
                       final step = _pipeline[index];
                       final isCompleted = _currentStep > index;
                       final isCurrent = _currentStep == index;
-                      
+
                       return AnimatedOpacity(
                         duration: const Duration(milliseconds: 500),
                         opacity: (isCompleted || isCurrent) ? 1.0 : 0.3,
@@ -184,54 +198,79 @@ class _AnalysisScreenState extends State<AnalysisScreen> with SingleTickerProvid
                           margin: const EdgeInsets.only(bottom: 16),
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: isCurrent ? Colors.white : (isCompleted ? step['color'].withOpacity(0.05) : Colors.transparent),
+                            color: isCurrent
+                                ? Colors.white
+                                : (isCompleted
+                                    ? step['color'].withOpacity(0.05)
+                                    : Colors.transparent),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color: isCurrent ? step['color'] : (isCompleted ? step['color'].withOpacity(0.3) : Colors.transparent),
+                              color: isCurrent
+                                  ? step['color']
+                                  : (isCompleted
+                                      ? step['color'].withOpacity(0.3)
+                                      : Colors.transparent),
                               width: 2,
                             ),
-                            boxShadow: isCurrent ? [
-                              BoxShadow(color: step['color'].withOpacity(0.1), blurRadius: 10, offset: const Offset(0, 4))
-                            ] : [],
+                            boxShadow: isCurrent
+                                ? [
+                                    BoxShadow(
+                                        color: step['color'].withOpacity(0.1),
+                                        blurRadius: 10,
+                                        offset: const Offset(0, 4))
+                                  ]
+                                : [],
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 children: [
-                                  Text(step['icon'] as String, style: const TextStyle(fontSize: 32)),
+                                  Text(step['icon'] as String,
+                                      style: const TextStyle(fontSize: 32)),
                                   const SizedBox(width: 16),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           '0${index + 1} — ${step['titleEn']}',
-                                          style: AppTextStyles.heading3.copyWith(
-                                            color: isCurrent ? step['color'] : AppColors.text,
+                                          style:
+                                              AppTextStyles.heading3.copyWith(
+                                            color: isCurrent
+                                                ? step['color']
+                                                : AppColors.text,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                         Text(
                                           '${step['titleSi']} - ${step['desc']}',
-                                          style: AppTextStyles.caption.copyWith(color: AppColors.textLight),
+                                          style: AppTextStyles.caption.copyWith(
+                                              color: AppColors.textLight),
                                         ),
                                       ],
                                     ),
                                   ),
                                   if (isCompleted)
-                                    Icon(Icons.check_circle, color: step['color'], size: 28)
+                                    Icon(Icons.check_circle,
+                                        color: step['color'], size: 28)
                                   else if (isCurrent)
                                     SizedBox(
-                                      width: 24, height: 24,
-                                      child: CircularProgressIndicator(color: step['color'], strokeWidth: 3),
+                                      width: 24,
+                                      height: 24,
+                                      child: CircularProgressIndicator(
+                                          color: step['color'], strokeWidth: 3),
                                     ),
                                 ],
                               ),
-                              // Visual calculations for specific steps
+                              // Visual calculations for specific steps – now showing metrics
                               if (isCurrent && index == 2) _buildNDWVisual(),
                               if (isCurrent && index == 3) _buildMLUVisual(),
-                              if (isCurrent && index == 4) _buildSpeechFlowVisual(),
+                              if (isCurrent && index == 4)
+                                _buildSpeechFlowVisual(),
+                              if (isCurrent && index == 5)
+                                _buildFluencyVisual(),
                             ],
                           ),
                         ),
@@ -239,7 +278,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> with SingleTickerProvid
                     },
                   ),
                 ),
-                
+
                 if (isFinished)
                   Padding(
                     padding: const EdgeInsets.only(top: 24.0),
@@ -247,13 +286,18 @@ class _AnalysisScreenState extends State<AnalysisScreen> with SingleTickerProvid
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24)),
                         elevation: 4,
                       ),
                       onPressed: () {
                         context.pushReplacement('/c4/child_result');
                       },
-                      child: const Text('See My Results (මගේ ප්‍රතිඵල බලමු) →', style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold)),
+                      child: const Text('See My Results (මගේ ප්‍රතිඵල බලමු) →',
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold)),
                     ),
                   ),
               ],
@@ -264,44 +308,54 @@ class _AnalysisScreenState extends State<AnalysisScreen> with SingleTickerProvid
     );
   }
 
+  // Updated: now displays NDW metric instead of Sinhala word bubbles
   Widget _buildNDWVisual() {
     return Padding(
       padding: const EdgeInsets.only(top: 16.0, left: 48),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              _buildAnimatedWordBubble('බල්ලා', Colors.orange),
-              const SizedBox(width: 8),
-              _buildAnimatedWordBubble('පාසල', Colors.blue),
-              const SizedBox(width: 8),
-              _buildAnimatedWordBubble('මිතුරා', Colors.purple),
-            ],
+          Text('Number of Different Words (NDW)',
+              style: AppTextStyles.label.copyWith(color: Colors.purple)),
+          const SizedBox(height: 4),
+          Text('42',
+              style: AppTextStyles.heading1
+                  .copyWith(color: Colors.purple, fontSize: 32)),
+          const SizedBox(height: 8),
+          // Optionally show a small list of example words (in English)
+          Wrap(
+            spacing: 8,
+            children: ['apple', 'school', 'friend', 'play', 'big', 'small']
+                .map((w) => Chip(
+                    label: Text(w), backgroundColor: Colors.purple.shade50))
+                .toList(),
           ),
-          const SizedBox(height: 12),
-          Text('Different words found: 42', style: AppTextStyles.label.copyWith(color: Colors.purple)),
         ],
       ),
     );
   }
-  
+
+  // Updated: now displays MLU metric instead of Sinhala sentence examples
   Widget _buildMLUVisual() {
     return Padding(
       padding: const EdgeInsets.only(top: 16.0, left: 48),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('මම | පාසලට | ගියා (3 words)', style: AppTextStyles.caption.copyWith(color: Colors.indigo)),
+          Text('Mean Length of Utterance (MLU)',
+              style: AppTextStyles.label.copyWith(color: Colors.indigo)),
           const SizedBox(height: 4),
-          Text('මම | යාළුවා | එක්ක | සෙල්ලම් | කළා (5 words)', style: AppTextStyles.caption.copyWith(color: Colors.indigo)),
-          const SizedBox(height: 12),
-          Text('Average utterance length: 4.0 words', style: AppTextStyles.label.copyWith(color: Colors.indigo)),
+          Text('4.0 words',
+              style: AppTextStyles.heading1
+                  .copyWith(color: Colors.indigo, fontSize: 32)),
+          const SizedBox(height: 8),
+          Text('Utterance lengths: 3, 5, 4, 2, 6',
+              style: AppTextStyles.caption.copyWith(color: Colors.indigo)),
         ],
       ),
     );
   }
-  
+
   Widget _buildSpeechFlowVisual() {
     return Padding(
       padding: const EdgeInsets.only(top: 16.0, left: 48),
@@ -318,12 +372,37 @@ class _AnalysisScreenState extends State<AnalysisScreen> with SingleTickerProvid
             ],
           ),
           const SizedBox(height: 12),
-          Text('Speech rate: 2.8 w/s', style: AppTextStyles.label.copyWith(color: Colors.teal)),
+          Text('Duration: 01:12',
+              style: AppTextStyles.label.copyWith(color: Colors.teal)),
+          const SizedBox(height: 4),
+          Text('Speech Rate: 2.8 syllables/sec',
+              style: AppTextStyles.caption.copyWith(color: Colors.teal)),
+          const SizedBox(height: 4),
+          Text('Pauses: 7 (mean 1.1s)',
+              style: AppTextStyles.caption.copyWith(color: Colors.teal)),
+          const SizedBox(height: 4),
+          Text('Latency: 2.4s',
+              style: AppTextStyles.caption.copyWith(color: Colors.teal)),
         ],
       ),
     );
   }
 
+  Widget _buildFluencyVisual() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 16.0, left: 48),
+      child: Row(
+        children: [
+          const Icon(Icons.warning_amber_rounded, color: Colors.pink, size: 20),
+          const SizedBox(width: 8),
+          Text('Observed Fluency Events: 8',
+              style: AppTextStyles.label.copyWith(color: Colors.pink)),
+        ],
+      ),
+    );
+  }
+
+  // Helper (not used for metrics now, but kept for reference)
   Widget _buildAnimatedWordBubble(String word, MaterialColor color) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
