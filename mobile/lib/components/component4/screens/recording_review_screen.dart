@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../widgets/audio_player.dart';
+import 'package:swara/core/theme/app_theme.dart';
 
 class RecordingReviewScreen extends StatelessWidget {
   const RecordingReviewScreen({Key? key}) : super(key: key);
@@ -8,7 +9,7 @@ class RecordingReviewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
         title: const Text('Review'),
         backgroundColor: Colors.transparent,
@@ -21,7 +22,7 @@ class RecordingReviewScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.rocket_launch, size: 80, color: Colors.orange),
+              const Icon(Icons.rocket_launch, size: 80, color: AppColors.primary),
               const SizedBox(height: 24),
               const Text(
                 'Ready to Send? 🚀',
@@ -30,18 +31,18 @@ class RecordingReviewScreen extends StatelessWidget {
               const SizedBox(height: 8),
               const Text(
                 'යවන්න සූදානම්ද? 🚀',
-                style: TextStyle(fontSize: 22, color: Colors.orange, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 22, color: AppColors.primary, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 24),
               const Text(
                 'We\'ll look at how you communicated your story.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16, color: Colors.black87),
+                style: TextStyle(fontSize: 16, color: AppColors.text),
               ),
               const Text(
                 'ඔයාගේ කතාව ඔයා කොච්චර හොඳින් කියපුද කියලා අපි බලමු.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14, color: Colors.black54),
+                style: TextStyle(fontSize: 14, color: AppColors.textLight),
               ),
               const SizedBox(height: 48),
               const Text(
@@ -77,10 +78,10 @@ class RecordingReviewScreen extends StatelessWidget {
                       label: const Text(
                         '✓ Use This\nමේක භාවිතා කරන්න',
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: AppColors.white),
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
+                        backgroundColor: AppColors.success,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                       ),

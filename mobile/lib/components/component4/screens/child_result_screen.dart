@@ -1,141 +1,179 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:swara/core/theme/app_theme.dart';
 
 class ChildResultScreen extends StatelessWidget {
-  const ChildResultScreen({Key? key}) : super(key: key);
+  const ChildResultScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Result'),
+        title: const Text('Swara Speech'),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        foregroundColor: Colors.black,
+        foregroundColor: AppColors.primaryDeep,
         automaticallyImplyLeading: false,
+        actions: [
+          // Professional SLP View button
+          IconButton(
+            icon: const Icon(Icons.analytics, color: AppColors.textLight),
+            onPressed: () {
+              context.push('/c4/report');
+            },
+            tooltip: 'SLP / Professional Dashboard',
+          ),
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Icon(Icons.star, size: 80, color: Colors.orange),
-                const SizedBox(height: 16),
-                const Text(
-                  '🌟 Great Job!',
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-                ),
-                const Text(
-                  '🌟 නියමයි!',
-                  style: TextStyle(fontSize: 24, color: Colors.orange, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  'You completed your speaking challenge!\nඔයාගේ කථන අභියෝගය සම්පූර්ණ කළා!',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16, color: Colors.black87),
-                ),
-                const SizedBox(height: 32),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(32),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Colors.blueAccent, Colors.lightBlue],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Center(
+                child: Container(
+                  width: 120,
+                  height: 120,
+                  margin: const EdgeInsets.only(bottom: 24),
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  child: ClipOval(
+                    child: Image.asset(
+                      'assets/images/component4/c4_celebration.png',
+                      fit: BoxFit.cover,
                     ),
-                    borderRadius: BorderRadius.circular(24),
-                    boxShadow: [
-                      BoxShadow(color: Colors.blue.withOpacity(0.3), blurRadius: 10, offset: const Offset(0, 5)),
-                    ],
-                  ),
-                  child: const Column(
-                    children: [
-                      Text(
-                        '84 / 100',
-                        style: TextStyle(fontSize: 48, fontWeight: FontWeight.w900, color: Colors.white),
-                      ),
-                      Text(
-                        'Communication Performance',
-                        style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w600),
-                      ),
-                      Text(
-                        'කථන ක්රියාකාරීත්වය',
-                        style: TextStyle(fontSize: 16, color: Colors.white70),
-                      ),
-                      SizedBox(height: 16),
-                      Divider(color: Colors.white54),
-                      SizedBox(height: 8),
-                      Text('🎯 Challenge Completed', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                      SizedBox(height: 4),
-                      Text('⏱️ 01:12 speaking time', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                    ],
                   ),
                 ),
-                const SizedBox(height: 32),
-                _buildFeedbackCard('💬 You shared your ideas', 'ඔයාගේ අදහස් හොඳින් කිව්වා'),
-                const SizedBox(height: 12),
-                _buildFeedbackCard('🎯 You stayed with the topic', 'ඔයා මාතෘකාවට අදාළව කතා කළා'),
-                const SizedBox(height: 12),
-                _buildFeedbackCard('🌟 You completed the challenge', 'ඔයා අභියෝගය සම්පූර්ණ කළා'),
-                const SizedBox(height: 32),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      context.push('/c4/report');
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue.shade50,
-                      foregroundColor: Colors.blueAccent,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                      elevation: 0,
+              ),
+              Text(
+                'මගේ කතා ගමන 🌱',
+                textAlign: TextAlign.center,
+                style: AppTextStyles.heading1.copyWith(
+                  color: AppColors.primaryDeep,
+                  fontSize: 32,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'My Talking Journey',
+                textAlign: TextAlign.center,
+                style: AppTextStyles.heading3.copyWith(
+                  color: AppColors.textLight,
+                ),
+              ),
+              const SizedBox(height: 48),
+              
+              _buildJourneyCard(
+                '💬',
+                'අද මම කතා කළා',
+                'Activity completed',
+                AppColors.primary,
+              ),
+              const SizedBox(height: 16),
+              
+              _buildJourneyCard(
+                '📖',
+                'මගේ කතාව',
+                'You shared your ideas with Swara',
+                AppColors.primary,
+              ),
+              const SizedBox(height: 16),
+              
+              _buildJourneyCard(
+                '⭐',
+                'අදගේ තරුව',
+                'You completed today\'s talking activity',
+                AppColors.warning,
+              ),
+              const SizedBox(height: 16),
+              
+              _buildJourneyCard(
+                '🌱',
+                'දිගටම කතා කරමු',
+                'Every conversation is a chance to share your ideas.',
+                AppColors.success,
+              ),
+              
+              const SizedBox(height: 48),
+              
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                  elevation: 6,
+                  shadowColor: AppColors.primary.withOpacity(0.5),
+                ),
+                onPressed: () {
+                  context.go('/');
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('🏠', style: TextStyle(fontSize: 24)),
+                    const SizedBox(width: 12),
+                    Text(
+                      'ගෙදර යන්න (Go Home)',
+                      style: AppTextStyles.heading3.copyWith(color: AppColors.white, fontWeight: FontWeight.bold),
                     ),
-                    child: const Text('See Detailed Results\nමගේ ප්රතිඵල බලන්න', textAlign: TextAlign.center),
-                  ),
+                  ],
                 ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      context.go('/');
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                    ),
-                    child: const Text('Done\nඅවසන් කරන්න', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  Widget _buildFeedbackCard(String eng, String sin) {
+  Widget _buildJourneyCard(String emoji, String titleSi, String titleEn, Color color) {
     return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.green.shade50,
-        borderRadius: BorderRadius.circular(16),
+        color: color.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: color.withValues(alpha: 0.2), width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: color.withValues(alpha: 0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          )
+        ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Text(eng, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.green)),
-          const SizedBox(height: 4),
-          Text(sin, style: TextStyle(fontSize: 14, color: Colors.green.shade700)),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.white.withValues(alpha: 0.8),
+              shape: BoxShape.circle,
+            ),
+            child: Text(
+              emoji,
+              style: const TextStyle(fontSize: 32),
+            ),
+          ),
+          const SizedBox(width: 20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  titleSi,
+                  style: AppTextStyles.heading3.copyWith(color: color, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  titleEn,
+                  style: AppTextStyles.caption.copyWith(color: color.withValues(alpha: 0.8)),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

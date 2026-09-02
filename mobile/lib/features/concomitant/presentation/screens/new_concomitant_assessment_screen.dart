@@ -25,7 +25,7 @@ class _NewConcomitantAssessmentScreenState extends ConsumerState<NewConcomitantA
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          gradient: AppColors.c2Gradient,
+          color: AppColors.background, // Soft lavender background
         ),
         child: SafeArea(
           child: Column(
@@ -35,15 +35,15 @@ class _NewConcomitantAssessmentScreenState extends ConsumerState<NewConcomitantA
                 child: Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Colors.white, size: 28),
+                      icon: const Icon(Icons.arrow_back_rounded, color: AppColors.primaryDeep, size: 28),
                       onPressed: () => context.pop(),
                     ),
                     const SizedBox(width: 8),
                     const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('🎈 ක්‍රියාකාරකම තෝරන්න', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-                        Text('Choose Your Activity', style: TextStyle(color: AppColors.softYellow, fontSize: 12)),
+                        Text('🎈 ක්‍රියාකාරකම තෝරන්න', style: TextStyle(color: AppColors.primaryDeep, fontSize: 20, fontWeight: FontWeight.bold)),
+                        Text('Choose Your Activity', style: TextStyle(color: AppColors.primary, fontSize: 13, fontWeight: FontWeight.w600)),
                       ],
                     ),
                   ],
@@ -57,7 +57,7 @@ class _NewConcomitantAssessmentScreenState extends ConsumerState<NewConcomitantA
                     children: [
                       const Text(
                         'ඔයා අද මොනවා කරන්නද කැමති?\nWhich activity do you like today?',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: AppColors.primaryDeep),
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 24),
@@ -74,17 +74,18 @@ class _NewConcomitantAssessmentScreenState extends ConsumerState<NewConcomitantA
                             });
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.ctaOrange,
-                            padding: const EdgeInsets.symmetric(vertical: 18),
+                            backgroundColor: AppColors.primary, // Primary purple
+                            padding: const EdgeInsets.symmetric(vertical: 20),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                            elevation: 8,
+                            elevation: 4,
+                            shadowColor: AppColors.primary,
                           ),
                           child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('යමු!', style: TextStyle(fontSize: 22, color: Colors.white, fontWeight: FontWeight.bold)),
-                              SizedBox(width: 8),
-                              Icon(Icons.arrow_forward, color: Colors.white),
+                              Text('යමු! (Let\'s Go)', style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold)),
+                              SizedBox(width: 12),
+                              Icon(Icons.arrow_forward_rounded, color: Colors.white),
                             ],
                           ),
                         ),
@@ -109,29 +110,34 @@ class _NewConcomitantAssessmentScreenState extends ConsumerState<NewConcomitantA
         margin: const EdgeInsets.only(bottom: 14),
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.cardCream : AppColors.cardCream.withOpacity(0.85),
+          color: Colors.white,
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: isSelected ? AppColors.ctaOrange : Colors.transparent, width: 3),
+          border: Border.all(color: isSelected ? AppColors.primary : AppColors.divider, width: 3),
           boxShadow: [
-            if (isSelected) BoxShadow(color: AppColors.ctaOrange.withOpacity(0.4), blurRadius: 12)
+            if (isSelected) const BoxShadow(color: AppColors.primaryWash, blurRadius: 12, offset: Offset(0, 4))
+            else const BoxShadow(color: AppColors.divider, blurRadius: 8, offset: Offset(0, 2))
           ],
         ),
         child: Row(
           children: [
-            Text(task['emoji']!, style: const TextStyle(fontSize: 32)),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(color: AppColors.primaryWash, borderRadius: BorderRadius.circular(16)),
+              child: Text(task['emoji']!, style: const TextStyle(fontSize: 28)),
+            ),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(task['si']!, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.text)),
-                  Text(task['en']!, style: const TextStyle(fontSize: 13, color: AppColors.textLight)),
+                  Text(task['si']!, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.primaryDeep)),
+                  Text(task['en']!, style: const TextStyle(fontSize: 14, color: AppColors.primary, fontWeight: FontWeight.w600)),
                 ],
               ),
             ),
             Icon(
-              isSelected ? Icons.check_circle : Icons.radio_button_unchecked,
-              color: isSelected ? AppColors.ctaOrange : AppColors.divider,
+              isSelected ? Icons.check_circle_rounded : Icons.radio_button_unchecked_rounded,
+              color: isSelected ? AppColors.primary : AppColors.divider,
               size: 28,
             ),
           ],

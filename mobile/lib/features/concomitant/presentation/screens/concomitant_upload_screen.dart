@@ -17,12 +17,12 @@ class _ConcomitantUploadScreenState extends State<ConcomitantUploadScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.background, // Soft lavender
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.text),
+          icon: const Icon(Icons.arrow_back_rounded, color: AppColors.primaryDeep),
           onPressed: () => context.pop(),
         ),
       ),
@@ -34,17 +34,17 @@ class _ConcomitantUploadScreenState extends State<ConcomitantUploadScreen> {
             children: [
               // Header
               const Text(
-                'Physical Behavior Analysis',
+                'Upload a Video',
                 style: TextStyle(
                   fontSize: 24,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w800,
                   color: AppColors.primaryDeep,
                 ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 4),
               const Text(
-                'ශාරීරික හැසිරීම් විශ්ලේෂණය',
+                'වීඩියෝවක් එක් කරන්න',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -54,14 +54,14 @@ class _ConcomitantUploadScreenState extends State<ConcomitantUploadScreen> {
               ),
               const SizedBox(height: 16),
               const Text(
-                'Upload a speech video to analyze physical behaviors during speaking.',
-                style: TextStyle(fontSize: 14, color: AppColors.text),
+                'Pick a video where you are speaking! 🌟',
+                style: TextStyle(fontSize: 15, color: AppColors.textLight),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 4),
               const Text(
-                'කථනය අතරතුර සිදුවන ශාරීරික හැසිරීම් විශ්ලේෂණය කිරීමට වීඩියෝවක් එක් කරන්න.',
-                style: TextStyle(fontSize: 12, color: AppColors.textLight),
+                'ඔබ කතා කරන වීඩියෝවක් තෝරන්න! 🌟',
+                style: TextStyle(fontSize: 13, color: AppColors.mutedText),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 40),
@@ -132,22 +132,23 @@ class _ConcomitantUploadScreenState extends State<ConcomitantUploadScreen> {
                       context.push('/c2/ready');
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
+                      backgroundColor: AppColors.primary, // Soft lavender primary
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 18),
+                      padding: const EdgeInsets.symmetric(vertical: 20),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(24),
                       ),
-                      elevation: 0,
+                      elevation: 2,
+                      shadowColor: AppColors.primary,
                     ),
                     child: const Column(
                       children: [
                         Text(
-                          'Start Analysis',
+                          'Start Activity',
                           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          'විශ්ලේෂණය ආරම්භ කරන්න',
+                          'ක්‍රියාකාරකම ආරම්භ කරන්න',
                           style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
                         ),
                       ],

@@ -11,7 +11,7 @@ class MainScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: const Color(0xFF000080),
       body: child,
       bottomNavigationBar: _buildKidsBottomNav(context),
     );
