@@ -1,6 +1,6 @@
 # Swara: A Sinhala-Based Intelligent Framework for Supporting Children with Stuttering
 
-This repository contains the source code for the **Swara Research Prototype**, developed as a final-year IT research project. 
+This repository contains the source code for the **Swara Research Prototype**, developed as a final-year IT research project.
 
 > **⚠️ RESEARCH PROTOTYPE DISCLAIMER**
 > This application is a research prototype developed to demonstrate the feasibility and integration of the proposed Swara framework. The current prototype uses synthetic/sample data and preliminary AI/rule-based processing. It is not a clinically validated diagnostic or treatment system. Real participant data, therapist validation, ethical approval, model training, and empirical evaluation are required before any clinical use.
@@ -14,16 +14,20 @@ Swara is a comprehensive, multi-component research prototype designed to assist 
 The Swara framework is driven by four integrated pillars:
 
 ### Component 1: Speech Stuttering Detection & Assessment
+
 A multi-step, localized (Sinhala/English) assessment workflow that automatically adapts based on age demographics (4–7 years: Picture Description; 7–15 years: Reading Task). It features a robust recording interface, mock-driven AI processing animations, and an intuitive SLP dashboard to visualize stuttering severity and disfluency types.
 
 ### Component 2: Secondary Behaviors Associated with Stuttering
+
 A "gentle observation" module for analyzing physical stuttering characteristics (e.g., facial tension, eye blinking) via video upload or live recording. The workflow emphasizes supportive, non-clinical messaging to track physical behaviors without intimidating the child, utilizing a customized lavender/pastel component theme.
 
 ### Component 3: Adaptive Speech Therapy Activities
+
 An interactive and gamified speech therapy module featuring customized breathing exercises, storytelling sessions, and adaptive challenges. The interface is highly immersive, utilizing continuous visual feedback to motivate regular practice.
 
-### Component 4: Personalized Communication Challenge (Generalization)
-A research-driven, personalized speech elicitation framework designed to assess real-world communication progress. Instead of manual selection, it automatically assigns speech tasks based on the child's session history, ensuring longitudinal consistency for research metrics while keeping the child-facing interface positive and pressure-free.
+### Component 4: Personalized Spontaneous Speech & Linguistic Analysis
+
+A personalized speech elicitation framework that automatically selects personally relevant speaking tasks based on the child’s age, interests, familiarity, and previous session results. The child’s spontaneous speech is recorded and analyzed using ASR and NLP measures such as MLU and NDW to track communication changess, while maintaining a natural, pressure-free experience.
 
 ## Architecture & Technology Stack
 
@@ -34,9 +38,10 @@ The Swara framework consists of three main components:
 3.  **AI Service (Python/FastAPI):** A dedicated service intended to handle ML models, feature extraction (e.g., using LibROSA), and NLP tasks.
 
 **Tech Stack:**
-*   **Mobile App:** Flutter, Dart, Riverpod, GoRouter, Google Fonts (Nunito)
-*   **Backend:** Node.js, Express, MongoDB, Mongoose, JWT
-*   **AI Service:** Python, FastAPI, LibROSA, Scikit-learn (planned)
+
+- **Mobile App:** Flutter, Dart, Riverpod, GoRouter, Google Fonts (Nunito)
+- **Backend:** Node.js, Express, MongoDB, Mongoose, JWT
+- **AI Service:** Python, FastAPI, LibROSA, Scikit-learn (planned)
 
 ## Demo Mode
 
@@ -45,12 +50,14 @@ The Flutter application includes a fully functional **Demo Mode**, which can be 
 ## Setup Instructions
 
 ### 1. Prerequisites
-*   Flutter SDK (>=3.1.0)
-*   Node.js (v18+)
-*   Python (3.10+)
-*   MongoDB (running locally or via Atlas)
+
+- Flutter SDK (>=3.1.0)
+- Node.js (v18+)
+- Python (3.10+)
+- MongoDB (running locally or via Atlas)
 
 ### 2. Backend Setup
+
 ```bash
 cd backend
 npm install
@@ -64,6 +71,7 @@ npm run seed
 ```
 
 ### 3. AI Service Setup
+
 ```bash
 cd ai-service
 pip install -r requirements.txt
@@ -73,6 +81,7 @@ uvicorn app.main:app --reload
 ```
 
 ### 4. Flutter Mobile App Setup
+
 ```bash
 cd mobile
 flutter pub get
@@ -86,5 +95,6 @@ flutter run -d chrome
 ## Future ML Integration
 
 The architecture is designed to allow the research team to incrementally replace prototype logic with trained ML models:
-*   Replace mock endpoints in `ai-service/app/main.py` with actual model inference code.
-*   Integrate trained models for stutter detection (Component 1) and communication assessment (Component 4) seamlessly, without modifying the mobile app UI.
+
+- Replace mock endpoints in `ai-service/app/main.py` with actual model inference code.
+- Integrate trained models for stutter detection (Component 1) and communication assessment (Component 4) seamlessly, without modifying the mobile app UI.
