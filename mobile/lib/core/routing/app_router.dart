@@ -14,7 +14,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:swara/components/component4/screens/component4_home_screen.dart';
 import 'package:swara/components/component4/screens/personalization_screen.dart';
-import 'package:swara/components/component4/screens/topic_screen.dart';
 import 'package:swara/components/component4/screens/preparation_screen.dart';
 import 'package:swara/components/component4/screens/recording_screen.dart';
 import 'package:swara/components/component4/screens/recording_review_screen.dart';
@@ -24,7 +23,6 @@ import 'package:swara/components/component4/screens/communication_report_screen.
 import 'package:swara/components/component4/screens/speech_metrics_screen.dart';
 import 'package:swara/components/component4/screens/language_metrics_screen.dart';
 import 'package:swara/components/component4/screens/communication_metrics_screen.dart';
-import 'package:swara/components/component4/models/communication_topic.dart';
 
 import 'package:swara/components/component3/theme_selection_screen.dart';
 import 'package:swara/components/component3/personalized_plan_screen.dart';
@@ -184,13 +182,6 @@ final _appRouter = GoRouter(
         GoRoute(
           path: '/c4/personalization',
           builder: (context, state) => const PersonalizationScreen(),
-        ),
-        GoRoute(
-          path: '/c4/topic',
-          builder: (context, state) {
-            final topic = state.extra as CommunicationTopic;
-            return TopicScreen(topic: topic);
-          },
         ),
         GoRoute(
           path: '/c4/preparation',
