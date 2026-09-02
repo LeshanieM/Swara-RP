@@ -12,17 +12,20 @@ import 'package:swara/features/concomitant/presentation/screens/concomitant_resu
 import 'package:swara/features/progress/presentation/screens/progress_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:swara/components/component4/screens/component4_home_screen.dart';
-import 'package:swara/components/component4/screens/personalization_screen.dart';
-import 'package:swara/components/component4/screens/preparation_screen.dart';
-import 'package:swara/components/component4/screens/recording_screen.dart';
-import 'package:swara/components/component4/screens/recording_review_screen.dart';
-import 'package:swara/components/component4/screens/analysis_screen.dart';
-import 'package:swara/components/component4/screens/child_result_screen.dart';
-import 'package:swara/components/component4/screens/communication_report_screen.dart';
-import 'package:swara/components/component4/screens/speech_metrics_screen.dart';
-import 'package:swara/components/component4/screens/language_metrics_screen.dart';
-import 'package:swara/components/component4/screens/communication_metrics_screen.dart';
+import 'package:swara/components/component4/screens/component4_intro.dart';
+import 'package:swara/components/component4/screens/interest_selection.dart';
+import 'package:swara/components/component4/screens/familiarity_screen.dart';
+import 'package:swara/components/component4/screens/personalization_process_screen.dart';
+import 'package:swara/components/component4/screens/personalized_topic_screen.dart';
+import 'package:swara/components/component4/screens/personalized_question_screen.dart';
+import 'package:swara/components/component4/screens/speech_preparation_screen.dart';
+import 'package:swara/components/component4/screens/speech_recording_screen.dart';
+import 'package:swara/components/component4/screens/speech_processing_screen.dart';
+import 'package:swara/components/component4/screens/transcription_screen.dart';
+import 'package:swara/components/component4/screens/linguistic_analysis_screen.dart';
+import 'package:swara/components/component4/screens/results_screen.dart';
+import 'package:swara/components/component4/screens/session_comparison_screen.dart';
+import 'package:swara/components/component4/screens/next_session_screen.dart';
 
 import 'package:swara/components/component3/theme_selection_screen.dart';
 import 'package:swara/components/component3/personalized_plan_screen.dart';
@@ -177,47 +180,62 @@ final _appRouter = GoRouter(
         // Component 4 - Spontaneous Analysis
         GoRoute(
           path: '/c4',
-          builder: (context, state) => const Component4HomeScreen(),
+          builder: (context, state) => const Component4Intro(),
         ),
         GoRoute(
-          path: '/c4/personalization',
-          builder: (context, state) => const PersonalizationScreen(),
+          path: '/c4/interest',
+          builder: (context, state) => const InterestSelectionScreen(),
+        ),
+        GoRoute(
+          path: '/c4/familiarity',
+          builder: (context, state) {
+            final categories = state.extra as List<InterestCategory>? ?? [];
+            return FamiliarityScreen(selectedCategories: categories);
+          },
+        ),
+        GoRoute(
+          path: '/c4/personalization_processing',
+          builder: (context, state) => const PersonalizationProcessScreen(),
+        ),
+        GoRoute(
+          path: '/c4/topic',
+          builder: (context, state) => const PersonalizedTopicScreen(),
+        ),
+        GoRoute(
+          path: '/c4/question',
+          builder: (context, state) => const PersonalizedQuestionScreen(),
         ),
         GoRoute(
           path: '/c4/preparation',
-          builder: (context, state) => const PreparationScreen(),
+          builder: (context, state) => const SpeechPreparationScreen(),
         ),
         GoRoute(
           path: '/c4/record',
-          builder: (context, state) => const RecordingScreen(),
+          builder: (context, state) => const SpeechRecordingScreen(),
         ),
         GoRoute(
-          path: '/c4/review',
-          builder: (context, state) => const RecordingReviewScreen(),
+          path: '/c4/speech_processing',
+          builder: (context, state) => const SpeechProcessingScreen(),
+        ),
+        GoRoute(
+          path: '/c4/transcription',
+          builder: (context, state) => const TranscriptionScreen(),
         ),
         GoRoute(
           path: '/c4/analysis',
-          builder: (context, state) => const AnalysisScreen(),
+          builder: (context, state) => const LinguisticAnalysisScreen(),
         ),
         GoRoute(
-          path: '/c4/child_result',
-          builder: (context, state) => const ChildResultScreen(),
+          path: '/c4/results',
+          builder: (context, state) => const ResultsScreen(),
         ),
         GoRoute(
-          path: '/c4/report',
-          builder: (context, state) => const CommunicationReportScreen(),
+          path: '/c4/comparison',
+          builder: (context, state) => const SessionComparisonScreen(),
         ),
         GoRoute(
-          path: '/c4/metrics/speech',
-          builder: (context, state) => const SpeechMetricsScreen(),
-        ),
-        GoRoute(
-          path: '/c4/metrics/language',
-          builder: (context, state) => const LanguageMetricsScreen(),
-        ),
-        GoRoute(
-          path: '/c4/metrics/communication',
-          builder: (context, state) => const CommunicationMetricsScreen(),
+          path: '/c4/next_session',
+          builder: (context, state) => const NextSessionScreen(),
         ),
       ],
     ),

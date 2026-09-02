@@ -419,4 +419,6 @@ class AppTextStyles {
         color: AppColors.textLight,
       );
   static TextStyle get label => AppTheme._ui(size: 13, weight: FontWeight.w600);
+  static TextStyle get titleLarge => AppTheme._ui(size: 18, weight: FontWeight.w700, height: 1.3);
+  static TextStyle get titleMedium => AppTheme._ui(size: 16, weight: FontWeight.w600, height: 1.35);
 }
