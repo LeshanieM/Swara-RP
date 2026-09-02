@@ -267,16 +267,11 @@ class _SpeechTaskScreenState extends State<SpeechTaskScreen> with SingleTickerPr
               borderRadius: BorderRadius.circular(20),
               border: Border.all(color: AppColors.softYellow, width: 2),
             ),
-            child: const Center(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('🌳 👨‍👩‍👧‍👦 🐕 ⚽ 🌸 🛝', style: TextStyle(fontSize: 42)),
-                    SizedBox(height: 12),
-                    Text('Family playing in the park', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.text)),
-                  ],
-                ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(18),
+              child: Image.asset(
+                'assets/images/park_family.png',
+                fit: BoxFit.cover,
               ),
             ),
           ),

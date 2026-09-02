@@ -28,8 +28,8 @@ class ProgressScreen extends StatelessWidget {
                     const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('🏆 My Progress', style: TextStyle(color: AppColors.text, fontSize: 20, fontWeight: FontWeight.bold)),
-                        Text('My Speech Adventure Progress', style: TextStyle(color: AppColors.primary, fontSize: 12)),
+                        Text('🏆 මගේ ප්‍රගතිය (My Progress)', style: TextStyle(color: AppColors.text, fontSize: 20, fontWeight: FontWeight.bold)),
+                        Text('මගේ කතා ගමනේ ප්‍රගතිය (My Speech Adventure)', style: TextStyle(color: AppColors.primary, fontSize: 12)),
                       ],
                     ),
                   ],
@@ -58,7 +58,7 @@ class ProgressScreen extends StatelessWidget {
   ),
 ),
                 const SizedBox(height: 12),
-                const Text('My Journey 🌱', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.text)),
+                const Text('මගේ ගමන 🌱 (My Journey)', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.text)),
                 const SizedBox(height: 28),
 
                 Container(
@@ -77,11 +77,11 @@ class ProgressScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'You spoke longer today than last time!',
+                              'ඔයා අද වෙනදට වඩා ගොඩක් කතා කළා!',
                               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.text),
                             ),
                             Text(
-                              'Spoke longer today than last session!',
+                              'You spoke longer today than last time!',
                               style: TextStyle(fontSize: 12, color: AppColors.textLight),
                             ),
                           ],
@@ -93,26 +93,31 @@ class ProgressScreen extends StatelessWidget {
                 const SizedBox(height: 24),
 
                 _buildAchievement(
+                  'පළමු පියවර',
                   'First Steps',
-                  'First Steps',
-                  'You completed your first activity!',
+                  'ඔයා ඔයාගේ පළමු ක්‍රියාකාරකම අවසන් කළා!',
                   '🌟',
                   AppColors.softYellow,
                 ),
                 _buildAchievement(
+                  'දින 3 ක අඛණ්ඩ ගමන',
                   '3-Day Streak',
-                  '3-Day Streak',
-                  'You practiced 3 days in a row!',
+                  'ඔයා දින 3 ක් දිගටම පුහුණු වුණා!',
                   '🔥',
                   AppColors.coralRed,
                 ),
                 _buildAchievement(
+                  'කතා කරන යාළුවා',
                   'Speech Buddy',
-                  'Speech Buddy',
-                  'You completed 5 speech activities!',
+                  'ඔයා කථන ක්‍රියාකාරකම් 5 ක් අවසන් කළා!',
                   '🏆',
                   AppColors.ctaOrange,
                 ),
+
+                const SizedBox(height: 32),
+                const Text('සායනික ප්‍රගති සාරාංශය (Clinical Summary)', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.text)),
+                const SizedBox(height: 16),
+                _buildComponentsSummary(),
 
                 const SizedBox(height: 32),
                 SizedBox(
@@ -128,9 +133,9 @@ class ProgressScreen extends StatelessWidget {
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Let\'s Do More Activities', style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold)),
+                        Text('තවත් ක්‍රියාකාරකම් කරමු', style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold)),
                         SizedBox(width: 8),
-                        Text('/ Continue Quests', style: TextStyle(fontSize: 12, color: Colors.white70)),
+                        Text('(More Activities)', style: TextStyle(fontSize: 12, color: Colors.white70)),
                       ],
                     ),
                   ),
@@ -179,6 +184,51 @@ class ProgressScreen extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+
+  Widget _buildComponentsSummary() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppColors.cardCream,
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(color: AppColors.primaryLight, width: 2),
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 12)],
+      ),
+      child: Column(
+        children: [
+          _buildComponentRow('Component 1', 'Fluency / Stuttering', 'Moderate'),
+          const Divider(height: 24),
+          _buildComponentRow('Component 2', 'Secondary Behaviors', 'Mild–Moderate'),
+          const Divider(height: 24),
+          _buildComponentRow('Component 3', 'Therapy Activity', 'Storytelling'),
+          const Divider(height: 24),
+          _buildComponentRow('Component 4', 'Language Characteristics', 'Increasing lexical diversity'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildComponentRow(String comp, String label, String value) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 100,
+          child: Text(comp, style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.primaryDeep)),
+        ),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(label, style: const TextStyle(fontSize: 12, color: AppColors.textLight)),
+              const SizedBox(height: 2),
+              Text(value, style: const TextStyle(fontSize: 14, color: AppColors.text)),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

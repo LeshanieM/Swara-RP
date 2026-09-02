@@ -1,24 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:swara/core/theme/app_theme.dart';
 import 'dart:async';
 
 class RecordingScreen extends StatefulWidget {
-  const RecordingScreen({Key? key}) : super(key: key);
+  const RecordingScreen({super.key});
 
   @override
   State<RecordingScreen> createState() => _RecordingScreenState();
 }
 
 class _RecordingScreenState extends State<RecordingScreen> {
-  bool _isRecording = true;
+  bool _isRecording = false;
   int _seconds = 0;
   Timer? _timer;
-
-  @override
-  void initState() {
-    super.initState();
-    _startTimer();
-  }
 
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -28,9 +23,13 @@ class _RecordingScreenState extends State<RecordingScreen> {
     });
   }
 
+  void _stopTimer() {
+    _timer?.cancel();
+  }
+
   @override
   void dispose() {
-    _timer?.cancel();
+    _stopTimer();
     super.dispose();
   }
 
@@ -43,127 +42,238 @@ class _RecordingScreenState extends State<RecordingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('🎙️ Your Story\n🎙️ ඔයාගේ කතාව'),
-        centerTitle: true,
+        title: const Text('🌟 Your Activity 🌟'),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        foregroundColor: Colors.black,
-        automaticallyImplyLeading: false,
+        foregroundColor: AppColors.primaryDeep,
+        centerTitle: true,
+        titleTextStyle: AppTextStyles.heading2.copyWith(color: AppColors.primaryDeep),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Spacer(),
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    width: 200,
-                    height: 200,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: _isRecording ? Colors.red.withOpacity(0.1) : Colors.grey.withOpacity(0.1),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+                child: Column(
+                  children: [
+                    // Playful Image Container for Picture Story Task
+                    Container(
+                      height: 280,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [AppColors.primaryWash, AppColors.primaryLight],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(32),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.primaryWash,
+                            blurRadius: 15,
+                            offset: const Offset(0, 8),
+                          ),
+                        ],
+                        border: Border.all(color: AppColors.white, width: 6),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(26),
+                        child: Image.asset(
+                          'assets/images/component4/c4_picture_story.png',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
-                  ),
-                  Container(
-                    width: 150,
-                    height: 150,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: _isRecording ? Colors.red.withOpacity(0.2) : Colors.grey.withOpacity(0.2),
+                    const SizedBox(height: 32),
+                    
+                    // Child-friendly prompt
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(24),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.primaryDeep.withOpacity(0.05),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          )
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          Text(
+                            'ඔයාගේ කතාව මට කියන්න 💬',
+                            textAlign: TextAlign.center,
+                            style: AppTextStyles.heading2.copyWith(
+                              color: AppColors.primaryDeep,
+                              height: 1.4,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Tell me your story',
+                            textAlign: TextAlign.center,
+                            style: AppTextStyles.label.copyWith(color: AppColors.textLight),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'ඉක්මන් වෙන්න ඕනේ නැහැ. ඔයාට පහසු විදිහට කතා කරන්න.\n(Take your time. Speak comfortably.)',
+                            textAlign: TextAlign.center,
+                            style: AppTextStyles.label.copyWith(
+                              color: AppColors.textLight,
+                              height: 1.5,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Icon(
-                    Icons.mic,
-                    size: 80,
-                    color: _isRecording ? Colors.red : Colors.grey,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 32),
-              Text(
-                _formattedTime,
-                style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold, fontFeatures: [FontFeature.tabularFigures()]),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.circle, color: _isRecording ? Colors.red : Colors.grey, size: 16),
-                  const SizedBox(width: 8),
-                  Text(
-                    _isRecording ? '🔴 Recording...\n🔴 පටිගත වෙමින්...' : '⏸️ Paused',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: _isRecording ? Colors.red : Colors.grey,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-              const Text(
-                'Keep telling your story...',
-                style: TextStyle(fontSize: 16, color: Colors.black87),
-              ),
-              const Text(
-                'ඔයාගේ කතාව දිගටම කියන්න...',
-                style: TextStyle(fontSize: 14, color: Colors.black54),
-              ),
-              const Spacer(),
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () {
-                        setState(() {
-                          if (_isRecording) {
-                            _isRecording = false;
-                            _timer?.cancel();
-                          } else {
+                    
+                    const SizedBox(height: 48),
+                    
+                    if (!_isRecording && _seconds == 0) ...[
+                      // Big friendly start button
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
                             _isRecording = true;
                             _startTimer();
-                          }
-                        });
-                      },
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.success, // Playful Green
+                          foregroundColor: AppColors.white,
+                          padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 20),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
+                          elevation: 6,
+                          shadowColor: AppColors.success.withOpacity(0.5),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.mic, size: 32),
+                            const SizedBox(width: 12),
+                            Text('කතා කරන්න (Start)', style: AppTextStyles.heading3.copyWith(color: AppColors.white)),
+                          ],
+                        ),
                       ),
-                      child: Text(
-                        _isRecording ? 'Pause' : 'Resume',
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ] else ...[
+                      // Recording State
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                          borderRadius: BorderRadius.circular(32),
+                          border: Border.all(
+                            color: _isRecording ? AppColors.error : AppColors.divider,
+                            width: 2,
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            Text(
+                              _formattedTime,
+                              style: TextStyle(
+                                fontSize: 48,
+                                fontWeight: FontWeight.w800,
+                                fontFamily: 'Nunito', // Playful font
+                                fontFeatures: const [FontFeature.tabularFigures()],
+                                color: _isRecording ? AppColors.error : AppColors.textLight,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            // Playful waveform
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: List.generate(
+                                15,
+                                (index) => AnimatedContainer(
+                                  duration: const Duration(milliseconds: 300),
+                                  margin: const EdgeInsets.symmetric(horizontal: 3),
+                                  width: 8,
+                                  height: _isRecording ? (20.0 + (index % 3) * 15.0 + (index % 2) * 10.0) : 12.0,
+                                  decoration: BoxDecoration(
+                                    color: _isRecording 
+                                        ? AppColors.error 
+                                        : AppColors.divider,
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        _timer?.cancel();
-                        context.pushReplacement('/c4/review');
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueAccent,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                      ),
-                      child: const Text(
-                        'Finish',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ],
+                    ],
+                  ],
+                ),
               ),
-            ],
-          ),
+            ),
+            
+            // Bottom Controls
+            if (_seconds > 0)
+              Container(
+                padding: const EdgeInsets.all(24.0),
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.divider,
+                      blurRadius: 20,
+                      offset: const Offset(0, -5),
+                    )
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () {
+                          setState(() {
+                            if (_isRecording) {
+                              _isRecording = false;
+                              _stopTimer();
+                            } else {
+                              _isRecording = true;
+                              _startTimer();
+                            }
+                          });
+                        },
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          side: BorderSide(color: AppColors.primary, width: 2),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                        ),
+                        child: Text(
+                          _isRecording ? '⏸️ Pause' : '▶️ Resume',
+                          style: AppTextStyles.heading3.copyWith(color: AppColors.primaryDeep),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.error, // Playful Red
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                          elevation: 4,
+                        ),
+                        onPressed: () {
+                          _stopTimer();
+                          context.pushReplacement('/c4/analysis');
+                        },
+                        child: const Text('🛑 Stop & Finish', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.white)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+          ],
         ),
       ),
     );
