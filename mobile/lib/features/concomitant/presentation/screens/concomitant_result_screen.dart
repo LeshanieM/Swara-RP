@@ -9,18 +9,18 @@ class ConcomitantResultScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.background, // Very light lavender
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.text),
+          icon: const Icon(Icons.arrow_back_rounded, color: AppColors.text, size: 28),
           onPressed: () => context.go('/'),
         ),
         title: const Column(
           children: [
-            Text('Physical Behavior Analysis', style: TextStyle(color: AppColors.text, fontSize: 16, fontWeight: FontWeight.bold)),
-            Text('ශාරීරික හැසිරීම් විශ්ලේෂණය', style: TextStyle(color: AppColors.primary, fontSize: 12)),
+            Text('⭐ Swara\'s Observations', style: TextStyle(color: AppColors.text, fontSize: 18, fontWeight: FontWeight.bold)),
+            Text('ස්වරගේ නිරීක්ෂණ', style: TextStyle(color: AppColors.primary, fontSize: 13, fontWeight: FontWeight.w600)),
           ],
         ),
         centerTitle: true,
@@ -31,6 +31,8 @@ class ConcomitantResultScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              _buildHeroSection(),
+              const SizedBox(height: 32),
               _buildOverallScore(),
               const SizedBox(height: 24),
               _buildIndividualResults(),
@@ -38,22 +40,28 @@ class ConcomitantResultScreen extends StatelessWidget {
               _buildTimeline(),
               const SizedBox(height: 24),
               _buildScoreSummary(),
-              const SizedBox(height: 24),
-              _buildClinicianSummary(),
               const SizedBox(height: 32),
               
               // Finish Button
               ElevatedButton(
                 onPressed: () => context.go('/'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
+                  backgroundColor: AppColors.primary, // Soft lavender primary
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                  elevation: 2,
                 ),
-                child: const Text('Return to Home', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Back to Home', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    SizedBox(width: 8),
+                    Icon(Icons.home_rounded, color: Colors.white),
+                  ],
+                ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 32),
             ],
           ),
         ),
@@ -61,14 +69,44 @@ class ConcomitantResultScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildHeroSection() {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: const BoxDecoration(
+            color: AppColors.surfaceRaised,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(color: AppColors.primaryWash, blurRadius: 20, spreadRadius: 5),
+            ],
+          ),
+          child: const Text('👋', style: TextStyle(fontSize: 48)),
+        ),
+        const SizedBox(height: 16),
+        const Text(
+          'Great job talking!',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: AppColors.text),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 8),
+        const Text(
+          'Swara quietly observed your communication patterns.\nHere is what we noticed!',
+          style: TextStyle(fontSize: 15, color: AppColors.textLight, height: 1.4),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
+
   Widget _buildOverallScore() {
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(color: AppColors.primary.withOpacity(0.05), blurRadius: 15, offset: const Offset(0, 5)),
+        borderRadius: BorderRadius.circular(28),
+        boxShadow: const [
+          BoxShadow(color: AppColors.divider, blurRadius: 24, offset: Offset(0, 8)),
         ],
       ),
       child: Column(
@@ -77,44 +115,42 @@ class ConcomitantResultScreen extends StatelessWidget {
             alignment: Alignment.center,
             children: [
               SizedBox(
-                width: 140,
-                height: 140,
+                width: 150,
+                height: 150,
                 child: CircularProgressIndicator(
                   value: 0.72,
-                  strokeWidth: 12,
-                  backgroundColor: AppColors.primaryWash,
-                  valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+                  strokeWidth: 14,
+                  backgroundColor: AppColors.divider,
+                  valueColor: const AlwaysStoppedAnimation<Color>(AppColors.success), // Mint green
                   strokeCap: StrokeCap.round,
                 ),
               ),
               const Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('72', style: TextStyle(fontSize: 42, fontWeight: FontWeight.bold, color: AppColors.primaryDeep)),
-                  Text('/ 100', style: TextStyle(fontSize: 16, color: AppColors.textLight, fontWeight: FontWeight.bold)),
+                  Text('🌱', style: TextStyle(fontSize: 32)),
+                  SizedBox(height: 4),
+                  Text('72%', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: AppColors.text)),
                 ],
               ),
             ],
           ),
           const SizedBox(height: 24),
-          const Text('Physical Behavior Indicator', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.text)),
-          const Text('ශාරීරික හැසිරීම් දර්ශකය', style: TextStyle(fontSize: 14, color: AppColors.primary, fontWeight: FontWeight.w600)),
+          const Text('Gentle Observation Score', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.text)),
+          const Text('නිරීක්ෂණ ලකුණු', style: TextStyle(fontSize: 14, color: AppColors.primary, fontWeight: FontWeight.w600)),
           const SizedBox(height: 16),
           Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(color: AppColors.primaryWash.withOpacity(0.5), borderRadius: BorderRadius.circular(12)),
-            child: const Column(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(color: AppColors.primaryWash, borderRadius: BorderRadius.circular(16)), // Pale mint
+            child: const Row(
               children: [
-                Text(
-                  'This score summarizes the physical behavior indicators detected in the uploaded video.',
-                  style: TextStyle(fontSize: 12, color: AppColors.textLight),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 4),
-                Text(
-                  'මෙම ලකුණු වීඩියෝවේ හඳුනාගත් ශාරීරික හැසිරීම් දර්ශක සාරාංශ කරයි.',
-                  style: TextStyle(fontSize: 11, color: AppColors.textLight),
-                  textAlign: TextAlign.center,
+                Icon(Icons.auto_awesome, color: AppColors.success, size: 24),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    'You are doing wonderful! We are learning how you talk.',
+                    style: TextStyle(fontSize: 13, color: Color(0xFF065F46), fontWeight: FontWeight.w600),
+                  ),
                 ),
               ],
             ),
@@ -128,65 +164,76 @@ class ConcomitantResultScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Detected Behaviors', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.text)),
-        const SizedBox(height: 12),
+        const Text('What We Noticed ✨', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: AppColors.text)),
+        const SizedBox(height: 16),
         _buildDetectionCard(
-          icon: Icons.person,
-          titleEn: 'Head Movements',
-          titleSi: 'හිස චලනයන්',
-          mainValue: '18 detected',
-          details: ['Total occurrences: 18', 'Average movement intensity: 42%', 'Maximum movement intensity: 71%', 'Duration involved: 8.4 sec'],
-        ),
-        _buildDetectionCard(
-          icon: Icons.visibility,
-          titleEn: 'Eye Blinks',
+          emoji: '👀',
+          titleEn: 'Eye Blinking',
           titleSi: 'ඇස් පිළිසැරීම',
           mainValue: '27 detected',
-          details: ['Total blinks: 27', 'Blinks per minute: 15.9', 'Average blink interval: 3.8 sec'],
-          note: 'Detected eye-blink events / හඳුනාගත් ඇස් පිළිසැරීම්',
+          details: ['Gentle blinks observed: 27', 'Pace: 15.9/min'],
+          bgColor: const Color(0xFFEFF6FF),
+          iconColor: const Color(0xFF3B82F6),
         ),
         _buildDetectionCard(
-          icon: Icons.face,
+          emoji: '😊',
           titleEn: 'Facial Movement',
           titleSi: 'මුහුණේ චලනය',
-          mainValue: '12 events detected',
-          details: ['Detected events: 12', 'Average intensity: 36%', 'Maximum intensity: 68%'],
-          warning: 'Facial movement patterns may have multiple causes and should be interpreted by an SLP.\nමුහුණේ චලන රටාවන්ට විවිධ හේතු තිබිය හැකි බැවින් SLP වරයෙකු විසින් ඒවා අර්ථකථනය කළ යුතුය.',
+          mainValue: '12 moments',
+          details: ['Expression changes: 12', 'Smoothness: 84%'],
+          bgColor: const Color(0xFFFEF2F2),
+          iconColor: AppColors.error,
         ),
         _buildDetectionCard(
-          icon: Icons.back_hand,
+          emoji: '👄',
+          titleEn: 'Jaw/Lip Movements',
+          titleSi: 'හකු/තොල් චලනයන්',
+          mainValue: '15 moments',
+          details: ['Speaking articulations: 15', 'Average intensity: 42%'],
+          bgColor: const Color(0xFFFFFBEB),
+          iconColor: AppColors.warning,
+        ),
+        _buildDetectionCard(
+          emoji: '🙂',
+          titleEn: 'Head Movements',
+          titleSi: 'හිස චලනයන්',
+          mainValue: '18 noticed',
+          details: ['Soft nods: 18', 'Duration involved: 8.4 sec'],
+          bgColor: AppColors.primaryWash,
+          iconColor: AppColors.success,
+        ),
+        _buildDetectionCard(
+          emoji: '👋',
           titleEn: 'Hand Movements',
           titleSi: 'අත් චලනයන්',
-          mainValue: '9 events detected',
-          details: ['Total events: 9', 'Average duration: 1.2 sec', 'Average intensity: 31%'],
-        ),
-        _buildDetectionCard(
-          icon: Icons.accessibility_new,
-          titleEn: 'Body Movements',
-          titleSi: 'ශරීර චලනයන්',
-          mainValue: '6 events detected',
-          details: ['Total events: 6', 'Average duration: 2.1 sec', 'Movement intensity: 45%'],
+          mainValue: '9 moments',
+          details: ['Gestures made: 9', 'Average duration: 1.2 sec'],
+          bgColor: AppColors.primaryWash,
+          iconColor: AppColors.primary,
         ),
       ],
     );
   }
 
   Widget _buildDetectionCard({
-    required IconData icon,
+    required String emoji,
     required String titleEn,
     required String titleSi,
     required String mainValue,
     required List<String> details,
-    String? note,
-    String? warning,
+    required Color bgColor,
+    required Color iconColor,
   }) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.divider),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.divider, width: 2),
+        boxShadow: const [
+          BoxShadow(color: AppColors.divider, blurRadius: 10, offset: Offset(0, 4)),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -194,57 +241,38 @@ class ConcomitantResultScreen extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(color: AppColors.primaryWash, borderRadius: BorderRadius.circular(10)),
-                child: Icon(icon, color: AppColors.primary, size: 24),
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(16)),
+                child: Text(emoji, style: const TextStyle(fontSize: 24)),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(titleEn, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.text)),
-                    Text(titleSi, style: const TextStyle(fontSize: 12, color: AppColors.primary)),
+                    Text(titleEn, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: AppColors.text)),
+                    Text(titleSi, style: TextStyle(fontSize: 13, color: iconColor, fontWeight: FontWeight.w600)),
                   ],
                 ),
               ),
-              Text(mainValue, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.primaryDeep)),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(color: AppColors.divider, borderRadius: BorderRadius.circular(20)),
+                child: Text(mainValue, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.textLight)),
+              ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
           ...details.map((d) => Padding(
-            padding: const EdgeInsets.only(bottom: 4),
+            padding: const EdgeInsets.only(bottom: 6),
             child: Row(
               children: [
-                const Icon(Icons.circle, size: 6, color: AppColors.textLight),
-                const SizedBox(width: 8),
-                Text(d, style: const TextStyle(fontSize: 13, color: AppColors.textLight)),
+                Icon(Icons.star_rounded, size: 14, color: iconColor.withOpacity(0.5)),
+                const SizedBox(width: 10),
+                Text(d, style: const TextStyle(fontSize: 14, color: AppColors.textLight, fontWeight: FontWeight.w500)),
               ],
             ),
           )),
-          if (note != null) ...[
-            const SizedBox(height: 8),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(color: AppColors.mintGreen.withOpacity(0.1), borderRadius: BorderRadius.circular(4)),
-              child: Text(note, style: const TextStyle(fontSize: 11, color: AppColors.mintGreen, fontWeight: FontWeight.w600)),
-            ),
-          ],
-          if (warning != null) ...[
-            const SizedBox(height: 8),
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(color: Colors.orange.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Icon(Icons.info_outline, size: 16, color: Colors.orange),
-                  const SizedBox(width: 8),
-                  Expanded(child: Text(warning, style: const TextStyle(fontSize: 11, color: Colors.orange))),
-                ],
-              ),
-            ),
-          ],
         ],
       ),
     );
@@ -252,52 +280,52 @@ class ConcomitantResultScreen extends StatelessWidget {
 
   Widget _buildTimeline() {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.divider),
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(color: AppColors.divider, width: 2),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Behavior Timeline', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.text)),
-          const Text('හැසිරීම් කාලරේඛාව', style: TextStyle(fontSize: 12, color: AppColors.primary)),
-          const SizedBox(height: 16),
+          const Text('〰️ Sound Wave Timeline', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.text)),
+          const Text('හැසිරීම් කාලරේඛාව', style: TextStyle(fontSize: 13, color: AppColors.primary)),
+          const SizedBox(height: 24),
           const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('00:00', style: TextStyle(fontSize: 12, color: AppColors.textLight)),
-              Text('01:42', style: TextStyle(fontSize: 12, color: AppColors.textLight)),
+              Text('00:00', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.textLight)),
+              Text('01:42', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.textLight)),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
           Stack(
             alignment: Alignment.center,
             children: [
-              Container(height: 4, width: double.infinity, decoration: BoxDecoration(color: AppColors.divider, borderRadius: BorderRadius.circular(2))),
-              _buildTimelineMarker(0.14, Colors.blue), // 00:14 Head
-              _buildTimelineMarker(0.18, Colors.green), // 00:18 Blink
-              _buildTimelineMarker(0.30, Colors.orange), // 00:31 Facial
-              _buildTimelineMarker(0.46, Colors.blue), // 00:47 Head
-              _buildTimelineMarker(0.62, Colors.purple), // 01:03 Hand
+              Container(height: 8, width: double.infinity, decoration: BoxDecoration(color: AppColors.divider, borderRadius: BorderRadius.circular(4))),
+              _buildTimelineMarker(0.14, AppColors.success), // Head
+              _buildTimelineMarker(0.18, const Color(0xFF3B82F6)), // Blink
+              _buildTimelineMarker(0.30, AppColors.error), // Facial
+              _buildTimelineMarker(0.46, AppColors.warning), // Jaw/Lip
+              _buildTimelineMarker(0.62, AppColors.primary), // Hand
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
           // Selected point mock
           Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(color: AppColors.primaryWash, borderRadius: BorderRadius.circular(12)),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(color: AppColors.primaryWash, borderRadius: BorderRadius.circular(16)),
             child: const Row(
               children: [
-                Icon(Icons.person, color: AppColors.primary),
+                Text('👄', style: TextStyle(fontSize: 20)),
                 SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Head Movement / හිස චලනය', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.primaryDeep)),
-                      Text('Intensity: 61% (තීව්රතාව)', style: TextStyle(fontSize: 11, color: AppColors.primary)),
+                      Text('Jaw/Lip Movement', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Color(0xFF6D28D9))),
+                      Text('A moment you were talking', style: TextStyle(fontSize: 12, color: AppColors.primary)),
                     ],
                   ),
                 ),
@@ -323,23 +351,23 @@ class ConcomitantResultScreen extends StatelessWidget {
 
   Widget _buildScoreSummary() {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.divider),
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(color: AppColors.divider, width: 2),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Physical Behavior Summary', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.text)),
-          const Text('ශාරීරික හැසිරීම් සාරාංශය', style: TextStyle(fontSize: 12, color: AppColors.primary)),
-          const SizedBox(height: 16),
-          _buildSummaryBar('Head movement', 0.25, Colors.blue),
-          _buildSummaryBar('Eye-blink events', 0.20, Colors.green),
-          _buildSummaryBar('Facial movement', 0.25, Colors.orange),
-          _buildSummaryBar('Hand movement', 0.15, Colors.purple),
-          _buildSummaryBar('Body movement', 0.15, Colors.teal),
+          const Text('📊 Quick Summary', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.text)),
+          const Text('සාරාංශය', style: TextStyle(fontSize: 13, color: AppColors.primary)),
+          const SizedBox(height: 20),
+          _buildSummaryBar('Eye blinking', 0.35, const Color(0xFF3B82F6)),
+          _buildSummaryBar('Facial movement', 0.25, AppColors.error),
+          _buildSummaryBar('Jaw/Lip movements', 0.20, AppColors.warning),
+          _buildSummaryBar('Head movements', 0.10, AppColors.success),
+          _buildSummaryBar('Hand movements', 0.10, AppColors.primary),
         ],
       ),
     );
@@ -347,62 +375,25 @@ class ConcomitantResultScreen extends StatelessWidget {
 
   Widget _buildSummaryBar(String label, double percent, Color color) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 16),
       child: Row(
         children: [
-          SizedBox(width: 120, child: Text(label, style: const TextStyle(fontSize: 12, color: AppColors.text))),
+          SizedBox(width: 130, child: Text(label, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.text))),
           Expanded(
             child: Container(
-              height: 8,
-              decoration: BoxDecoration(color: AppColors.divider, borderRadius: BorderRadius.circular(4)),
+              height: 10,
+              decoration: BoxDecoration(color: AppColors.divider, borderRadius: BorderRadius.circular(5)),
               child: FractionallySizedBox(
                 alignment: Alignment.centerLeft,
                 widthFactor: percent,
                 child: Container(
-                  decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(4)),
+                  decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(5)),
                 ),
               ),
             ),
           ),
-          const SizedBox(width: 8),
-          Text('${(percent * 100).toInt()}%', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.textLight)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildClinicianSummary() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.cardCream,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.softYellow),
-      ),
-      child: const Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Analysis Summary', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.text)),
-          Text('විශ්ලේෂණ සාරාංශය', style: TextStyle(fontSize: 12, color: AppColors.primary)),
-          SizedBox(height: 12),
-          Text(
-            'The video analysis detected several physical movement events during speech. Head movements and eye-blink events were the most frequently detected behaviors.',
-            style: TextStyle(fontSize: 13, color: AppColors.text, height: 1.4),
-          ),
-          SizedBox(height: 8),
-          Text(
-            'වීඩියෝ විශ්ලේෂණයේදී කථනය අතරතුර ශාරීරික චලන සිදුවීම් කිහිපයක් හඳුනාගෙන ඇත. වැඩි වශයෙන් හඳුනාගත් හැසිරීම් ලෙස හිස චලනයන් සහ ඇස් පිළිසැරීම් දැක්විය හැක.',
-            style: TextStyle(fontSize: 12, color: AppColors.textLight, height: 1.4),
-          ),
-          SizedBox(height: 16),
-          Divider(),
-          SizedBox(height: 8),
-          Text('Clinical Note', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.text)),
-          SizedBox(height: 4),
-          Text(
-            'These results are intended to support clinician review and should not be used as a standalone diagnosis.\nමෙම ප්රතිඵල වෛද්ය/SLP ඇගයීම සඳහා සහායක් ලෙස පමණක් භාවිත කළ යුතු අතර ස්වාධීන රෝග විනිශ්චයක් ලෙස භාවිත නොකළ යුතුය.',
-            style: TextStyle(fontSize: 11, color: AppColors.textLight, fontStyle: FontStyle.italic),
-          ),
+          const SizedBox(width: 12),
+          Text('${(percent * 100).toInt()}%', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.textLight)),
         ],
       ),
     );

@@ -1,108 +1,104 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:swara/core/theme/app_theme.dart';
 
-class Component4HomeScreen extends StatelessWidget {
-  const Component4HomeScreen({Key? key}) : super(key: key);
+class Component4HomeScreen extends StatefulWidget {
+  const Component4HomeScreen({super.key});
+
+  @override
+  State<Component4HomeScreen> createState() => _Component4HomeScreenState();
+}
+
+class _Component4HomeScreenState extends State<Component4HomeScreen> {
+  String _statusMessage = 'Swara is getting ready! 🌱';
+  String _statusMessageSi = 'ස්වරා සූදානම් වෙනවා!';
+
+  @override
+  void initState() {
+    super.initState();
+    _startPreparationSequence();
+  }
+
+  Future<void> _startPreparationSequence() async {
+    // 01 - Previous Results (Simulated backend retrieval)
+    await Future.delayed(const Duration(seconds: 2));
+    if (mounted) {
+      setState(() {
+        _statusMessage = 'Finding today\'s activity... 🎁';
+        _statusMessageSi = 'අද කතාව තෝරමින්...';
+      });
+    }
+
+    // 02 - Personalized Task Preparation (Simulated backend processing)
+    await Future.delayed(const Duration(seconds: 2));
+    if (mounted) {
+      context.pushReplacement('/c4/personalization');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text('Spontaneous Communication'),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        foregroundColor: Colors.black,
-      ),
+      backgroundColor: AppColors.background,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.mic_none,
-                size: 100,
-                color: Colors.blueAccent,
-              ),
-              const SizedBox(height: 32),
-              const Text(
-                'Personalized Communication Challenge',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'පුද්ගලික කථන අභියෝගය',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20, color: Colors.blueAccent, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 24),
-              const Text(
-                'Let\'s see how you can tell your own story!',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16, color: Colors.black87),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'ඔයාගේම කතාව කොච්චර හොඳින් කියන්න පුළුවන්ද බලමු!',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16, color: Colors.black54),
-              ),
-              const SizedBox(height: 48),
-              SizedBox(
-                width: double.infinity,
-                height: 60,
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    context.push('/c4/personalization');
-                  },
-                  icon: const Icon(Icons.star, size: 28),
-                  label: const Text(
-                    '🎯 Start My Challenge\n🎯 මගේ අභියෝගය ආරම්භ කරමු',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Friendly Avatar
+                Container(
+                  width: 160,
+                  height: 160,
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryWash,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.primaryLight.withOpacity(0.5),
+                        blurRadius: 24,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
                   ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueAccent,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                  child: ClipOval(
+                    child: Image.asset(
+                      'assets/images/component4/c4_swara_bot.png',
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 32),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.green.shade50,
-                  borderRadius: BorderRadius.circular(12),
+                const SizedBox(height: 48),
+                const CircularProgressIndicator(
+                  color: AppColors.primaryDeep,
+                  strokeWidth: 4,
                 ),
-                child: const Column(
-                  children: [
-                    Text(
-                      'This is not a test you can fail.',
-                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      'මේක ඔයාට අසමත් වෙන්න තියෙන පරීක්ෂණයක් නෙවෙයි.',
-                      style: TextStyle(fontSize: 12, color: Colors.green),
-                    ),
-                    SizedBox(height: 12),
-                    Text(
-                      'Just tell your story in your own words.',
-                      style: TextStyle(color: Colors.black87),
-                    ),
-                    Text(
-                      'ඔයාගේම වචනවලින් ඔයාගේ කතාව කියන්න.',
-                      style: TextStyle(fontSize: 12, color: Colors.black54),
-                    ),
-                  ],
+                const SizedBox(height: 48),
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 500),
+                  child: Column(
+                    key: ValueKey<String>(_statusMessageSi),
+                    children: [
+                      Text(
+                        _statusMessageSi,
+                        style: AppTextStyles.heading1.copyWith(
+                          color: AppColors.primaryDeep,
+                          fontSize: 28,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        _statusMessage,
+                        style: AppTextStyles.heading3.copyWith(color: AppColors.textLight),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
                 ),
-              )
-            ],
+              ],
+            ),
           ),
         ),
       ),
