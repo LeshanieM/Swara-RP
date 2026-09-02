@@ -176,15 +176,6 @@ class ConcomitantResultScreen extends StatelessWidget {
           iconColor: const Color(0xFF3B82F6),
         ),
         _buildDetectionCard(
-          emoji: '😊',
-          titleEn: 'Facial Movement',
-          titleSi: 'මුහුණේ චලනය',
-          mainValue: '12 moments',
-          details: ['Expression changes: 12', 'Smoothness: 84%'],
-          bgColor: const Color(0xFFFEF2F2),
-          iconColor: AppColors.error,
-        ),
-        _buildDetectionCard(
           emoji: '👄',
           titleEn: 'Jaw/Lip Movements',
           titleSi: 'හකු/තොල් චලනයන්',
@@ -201,15 +192,6 @@ class ConcomitantResultScreen extends StatelessWidget {
           details: ['Soft nods: 18', 'Duration involved: 8.4 sec'],
           bgColor: AppColors.primaryWash,
           iconColor: AppColors.success,
-        ),
-        _buildDetectionCard(
-          emoji: '👋',
-          titleEn: 'Hand Movements',
-          titleSi: 'අත් චලනයන්',
-          mainValue: '9 moments',
-          details: ['Gestures made: 9', 'Average duration: 1.2 sec'],
-          bgColor: AppColors.primaryWash,
-          iconColor: AppColors.primary,
         ),
       ],
     );
@@ -306,9 +288,7 @@ class ConcomitantResultScreen extends StatelessWidget {
               Container(height: 8, width: double.infinity, decoration: BoxDecoration(color: AppColors.divider, borderRadius: BorderRadius.circular(4))),
               _buildTimelineMarker(0.14, AppColors.success), // Head
               _buildTimelineMarker(0.18, const Color(0xFF3B82F6)), // Blink
-              _buildTimelineMarker(0.30, AppColors.error), // Facial
               _buildTimelineMarker(0.46, AppColors.warning), // Jaw/Lip
-              _buildTimelineMarker(0.62, AppColors.primary), // Hand
             ],
           ),
           const SizedBox(height: 24),
@@ -363,11 +343,9 @@ class ConcomitantResultScreen extends StatelessWidget {
           const Text('📊 Quick Summary', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.text)),
           const Text('සාරාංශය', style: TextStyle(fontSize: 13, color: AppColors.primary)),
           const SizedBox(height: 20),
-          _buildSummaryBar('Eye blinking', 0.35, const Color(0xFF3B82F6)),
-          _buildSummaryBar('Facial movement', 0.25, AppColors.error),
-          _buildSummaryBar('Jaw/Lip movements', 0.20, AppColors.warning),
-          _buildSummaryBar('Head movements', 0.10, AppColors.success),
-          _buildSummaryBar('Hand movements', 0.10, AppColors.primary),
+          _buildSummaryBar('Eye blinking', 0.45, const Color(0xFF3B82F6)),
+          _buildSummaryBar('Jaw/Lip movements', 0.35, AppColors.warning),
+          _buildSummaryBar('Head movements', 0.20, AppColors.success),
         ],
       ),
     );
