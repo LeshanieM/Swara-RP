@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/metric_card.dart';
+import 'package:swara/core/theme/app_theme.dart';
 
 class SpeechMetricsScreen extends StatelessWidget {
   const SpeechMetricsScreen({Key? key}) : super(key: key);
@@ -21,7 +22,7 @@ class SpeechMetricsScreen extends StatelessWidget {
           SizedBox(height: 8),
           MetricCard(title: 'Response Latency', value: '2.4 sec', icon: Icons.pending_actions),
           SizedBox(height: 24),
-          Text('Observed Fluency Events', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+          Text('Observed Fluency Events', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textLight)),
           SizedBox(height: 8),
           MetricCard(title: 'Events', value: '8', icon: Icons.warning_amber_rounded),
         ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:swara/core/theme/app_theme.dart';
 
 class MetricCard extends StatelessWidget {
   final String title;
@@ -38,18 +39,18 @@ class MetricCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 14, color: AppColors.textLight, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     value,
-                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.black87),
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: AppColors.text),
                   ),
                   if (subtitle != null) ...[
                     const SizedBox(height: 4),
                     Text(
                       subtitle!,
-                      style: const TextStyle(fontSize: 12, color: Colors.grey),
+                      style: const TextStyle(fontSize: 12, color: AppColors.textLight),
                     ),
                   ],
                 ],

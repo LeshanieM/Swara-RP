@@ -16,12 +16,12 @@ class _ConcomitantProcessingScreenState extends State<ConcomitantProcessingScree
   int _currentStage = 0;
   
   final List<Map<String, String>> _stages = [
-    {'en': 'Detecting face', 'si': 'මුහුණ හඳුනාගනිමින්'},
-    {'en': 'Tracking head movement', 'si': 'හිස චලනය නිරීක්ෂණය කරමින්'},
-    {'en': 'Analyzing eye blinks', 'si': 'ඇස් පිළිසැරීම විශ්ලේෂණය කරමින්'},
-    {'en': 'Analyzing facial movement', 'si': 'මුහුණේ චලනය විශ්ලේෂණය කරමින්'},
-    {'en': 'Detecting hand/body movement', 'si': 'අත්/ශරීර චලනයන් හඳුනාගනිමින්'},
-    {'en': 'Calculating physical behavior score', 'si': 'ශාරීරික හැසිරීම් දර්ශකය ගණනය කරමින්'},
+    {'en': 'Noticing expressions ✨', 'si': 'මුහුණේ හැඟීම් බලමින්'},
+    {'en': 'Observing head movements 🙂', 'si': 'හිස චලනය නිරීක්ෂණය කරමින්'},
+    {'en': 'Counting gentle blinks 👀', 'si': 'ඇස් පිළිසැරීම බලමින්'},
+    {'en': 'Seeing jaw and lip movements 👄', 'si': 'කතා කිරීමේ රටා බලමින්'},
+    {'en': 'Noticing hand movements 👋', 'si': 'අත් චලනයන් බලමින්'},
+    {'en': 'Gathering Swara\'s observations 🌱', 'si': 'ස්වරගේ නිරීක්ෂණ සූදානම් කරමින්'},
   ];
 
   @override
@@ -57,7 +57,7 @@ class _ConcomitantProcessingScreenState extends State<ConcomitantProcessingScree
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.background, // Soft lavender
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
@@ -66,16 +66,16 @@ class _ConcomitantProcessingScreenState extends State<ConcomitantProcessingScree
             children: [
               // Header
               const Text(
-                'Analyzing Your Video',
+                'Swara is Thinking... 💭',
                 style: TextStyle(
                   fontSize: 24,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w800,
                   color: AppColors.primaryDeep,
                 ),
               ),
               const SizedBox(height: 4),
               const Text(
-                'ඔබගේ වීඩියෝව විශ්ලේෂණය කරමින් පවතී',
+                'ස්වර කල්පනා කරමින් පවතී',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -93,8 +93,8 @@ class _ConcomitantProcessingScreenState extends State<ConcomitantProcessingScree
                     height: 160,
                     child: CircularProgressIndicator(
                       value: _progress,
-                      strokeWidth: 12,
-                      backgroundColor: AppColors.divider,
+                      strokeWidth: 14,
+                      backgroundColor: const Color(0xFFF3E8FF),
                       valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
                       strokeCap: StrokeCap.round,
                     ),
@@ -106,15 +106,15 @@ class _ConcomitantProcessingScreenState extends State<ConcomitantProcessingScree
                         '${(_progress * 100).toInt()}%',
                         style: const TextStyle(
                           fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.text,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.primaryDeep,
                         ),
                       ),
                       const Text(
-                        'Analyzing...',
+                        'Wait a moment...',
                         style: TextStyle(
-                          fontSize: 12,
-                          color: AppColors.textLight,
+                          fontSize: 13,
+                          color: AppColors.primary,
                         ),
                       ),
                     ],
@@ -143,15 +143,15 @@ class _ConcomitantProcessingScreenState extends State<ConcomitantProcessingScree
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: isCompleted 
-                                  ? AppColors.mintGreen 
-                                  : (isActive ? AppColors.primaryWash : AppColors.surfaceRaised),
+                                  ? AppColors.success 
+                                  : (isActive ? const Color(0xFFF3E8FF) : Colors.white),
                               border: Border.all(
-                                color: isCompleted ? AppColors.mintGreen : (isActive ? AppColors.primary : AppColors.divider),
+                                color: isCompleted ? AppColors.success : (isActive ? AppColors.primary : const Color(0xFFE5E7EB)),
                                 width: 2,
                               ),
                             ),
                             child: isCompleted
-                                ? const Icon(Icons.check, size: 16, color: Colors.white)
+                                ? const Icon(Icons.check_rounded, size: 18, color: Colors.white)
                                 : (isActive 
                                     ? const Padding(
                                         padding: EdgeInsets.all(4.0),
@@ -170,15 +170,16 @@ class _ConcomitantProcessingScreenState extends State<ConcomitantProcessingScree
                                   _stages[index]['en']!,
                                   style: TextStyle(
                                     fontSize: 16,
-                                    fontWeight: isActive || isCompleted ? FontWeight.bold : FontWeight.normal,
-                                    color: isPending ? AppColors.textLight : AppColors.text,
+                                    fontWeight: isActive || isCompleted ? FontWeight.w800 : FontWeight.w600,
+                                    color: isPending ? AppColors.mutedText : AppColors.primaryDeep,
                                   ),
                                 ),
                                 Text(
                                   _stages[index]['si']!,
                                   style: TextStyle(
-                                    fontSize: 12,
-                                    color: isPending ? AppColors.textLight.withOpacity(0.5) : AppColors.primary,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                    color: isPending ? AppColors.mutedText.withOpacity(0.5) : AppColors.primary,
                                   ),
                                 ),
                               ],

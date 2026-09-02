@@ -77,6 +77,7 @@ flutter:
     - assets/images/
     - assets/images/common/
     - assets/images/component3/
+    - assets/images/component4/
     - assets/illustrations/
     - assets/icons/
     - assets/audio/
