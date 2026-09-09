@@ -146,19 +146,20 @@ class ChildHomeScreen extends ConsumerWidget {
             width: 46,
             height: 46,
             decoration: BoxDecoration(
-              color: AppColors.primaryDeep,
+              color: Colors.white,
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.primaryDeep.withValues(alpha: 0.35),
+                  color: AppColors.primaryDeep.withValues(alpha: 0.2),
                   blurRadius: 8,
                 ),
               ],
             ),
-            child: const Icon(
-              Icons.record_voice_over_rounded,
-              color: AppColors.onPrimary,
-              size: 24,
+            child: ClipOval(
+              child: Image.asset(
+                'assets/images/common/swara_logo.png',
+                fit: BoxFit.contain, // Changed to contain so it's fully visible
+              ),
             ),
           ),
           const SizedBox(width: 12),
@@ -181,7 +182,27 @@ class ChildHomeScreen extends ConsumerWidget {
                   ],
                 ),
                 const SizedBox(height: 2),
-                Text('ස්වර · Ready to practice?', style: AppTextStyles.caption),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    Text(
+                      'ස්වර',
+                      style: AppTextStyles.heading3.copyWith(
+                        color: AppColors.primaryDeep,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Flexible(
+                      child: Text(
+                        '· Ready to practice?',
+                        style: AppTextStyles.caption,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -191,18 +212,36 @@ class ChildHomeScreen extends ConsumerWidget {
             borderRadius: BorderRadius.circular(28),
             child: Padding(
               padding: const EdgeInsets.all(4),
-              child: CircleAvatar(
-                radius: 22,
-                backgroundColor: Colors.white,
-                child: CircleAvatar(
-                  radius: 20,
-                  backgroundColor: AppColors.primaryWash,
-                  foregroundImage:
-                      const AssetImage('assets/images/common/user_pic.jpg'),
-                  onForegroundImageError: (_, __) {},
-                  child: const Icon(Icons.face_rounded,
-                      color: AppColors.primaryDeep),
-                ),
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  CircleAvatar(
+                    radius: 22,
+                    backgroundColor: Colors.white,
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: AppColors.primaryWash,
+                      foregroundImage:
+                          const AssetImage('assets/images/common/user_pic.jpg'),
+                      onForegroundImageError: (_, __) {},
+                      child: const Icon(Icons.face_rounded,
+                          color: AppColors.primaryDeep),
+                    ),
+                  ),
+                  Positioned(
+                    right: 0,
+                    bottom: 0,
+                    child: Container(
+                      width: 14,
+                      height: 14,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF4CAF50), // Green dot
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
