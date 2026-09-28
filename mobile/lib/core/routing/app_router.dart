@@ -9,8 +9,18 @@ import 'package:swara/features/concomitant/presentation/screens/concomitant_uplo
 import 'package:swara/features/concomitant/presentation/screens/concomitant_ready_screen.dart';
 import 'package:swara/features/concomitant/presentation/screens/concomitant_processing_screen.dart';
 import 'package:swara/features/concomitant/presentation/screens/concomitant_result_screen.dart';
+import 'package:swara/features/concomitant/presentation/screens/video_analysis_upload_screen.dart';
+import 'package:swara/features/concomitant/presentation/screens/video_analysis_processing_screen.dart';
+import 'package:swara/features/concomitant/presentation/screens/video_analysis_results_screen.dart';
+import 'package:swara/features/concomitant/presentation/screens/video_technology_detail_screen.dart';
+import 'package:swara/features/concomitant/presentation/screens/video_comparison_screen.dart';
+import 'package:swara/features/concomitant/presentation/screens/video_timeline_screen.dart';
+import 'package:swara/features/concomitant/presentation/screens/video_overlay_screen.dart';
+import 'package:swara/features/concomitant/presentation/screens/video_evaluation_screen.dart';
 import 'package:swara/features/progress/presentation/screens/progress_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:swara/features/auth/presentation/screens/login_screen.dart';
+import 'package:swara/features/auth/presentation/screens/register_screen.dart';
 
 import 'package:swara/components/component4/screens/component4_intro.dart';
 import 'package:swara/components/component4/screens/interest_selection.dart';
@@ -46,6 +56,14 @@ final _appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
   initialLocation: '/',
   routes: [
+    GoRoute(
+      path: '/login',
+      builder: (context, state) => LoginScreen(redirectTo: state.uri.queryParameters['redirectTo']),
+    ),
+    GoRoute(
+      path: '/register',
+      builder: (context, state) => RegisterScreen(redirectTo: state.uri.queryParameters['redirectTo']),
+    ),
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
       builder: (context, state, child) {
@@ -105,6 +123,42 @@ final _appRouter = GoRouter(
             final data = state.extra as Map<String, dynamic>? ?? {};
             return ConcomitantResultScreen(resultData: data);
           },
+        ),
+        // Component 2 - research mode: multi-technology CV comparison on ONE video
+        GoRoute(
+          path: '/c2/video/upload',
+          builder: (context, state) => const VideoAnalysisUploadScreen(childId: 'child_1'),
+        ),
+        GoRoute(
+          path: '/c2/video/process/:id',
+          builder: (context, state) => VideoAnalysisProcessingScreen(analysisId: state.pathParameters['id']!),
+        ),
+        GoRoute(
+          path: '/c2/video/results/:id',
+          builder: (context, state) => VideoAnalysisResultsScreen(analysisId: state.pathParameters['id']!),
+        ),
+        GoRoute(
+          path: '/c2/video/results/:id/tech/:tech',
+          builder: (context, state) => VideoTechnologyDetailScreen(
+            analysisId: state.pathParameters['id']!,
+            techKey: state.pathParameters['tech']!,
+          ),
+        ),
+        GoRoute(
+          path: '/c2/video/results/:id/compare',
+          builder: (context, state) => VideoComparisonScreen(analysisId: state.pathParameters['id']!),
+        ),
+        GoRoute(
+          path: '/c2/video/results/:id/timeline',
+          builder: (context, state) => VideoTimelineScreen(analysisId: state.pathParameters['id']!),
+        ),
+        GoRoute(
+          path: '/c2/video/results/:id/overlay',
+          builder: (context, state) => VideoOverlayScreen(analysisId: state.pathParameters['id']!),
+        ),
+        GoRoute(
+          path: '/c2/video/results/:id/metrics',
+          builder: (context, state) => VideoEvaluationScreen(analysisId: state.pathParameters['id']!),
         ),
         GoRoute(
           path: '/c2/result/:id',

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/user_model.dart';
 import 'package:swara/core/network/api_client.dart';
@@ -121,6 +122,17 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   String _parseError(dynamic e) {
+    if (e is DioException) {
+      final responseData = e.response?.data;
+      if (responseData is Map<String, dynamic>) {
+        final message = responseData['message'] ?? responseData['error'];
+        if (message is String && message.isNotEmpty) return message;
+      }
+      if (e.response == null) {
+        return 'Could not reach Swara. Check that the server is running and try again.';
+      }
+      return 'Sign in failed. Check your details and try again.';
+    }
     if (e is Exception) {
       return e.toString().replaceAll('Exception: ', '');
     }

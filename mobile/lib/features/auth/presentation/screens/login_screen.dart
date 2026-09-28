@@ -8,7 +8,8 @@ import 'package:swara/core/storage/storage_service.dart';
 import 'package:swara/core/constants/app_constants.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
-  const LoginScreen({super.key});
+  final String? redirectTo;
+  const LoginScreen({super.key, this.redirectTo});
 
   @override
   ConsumerState<LoginScreen> createState() => _LoginScreenState();
@@ -47,6 +48,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           backgroundColor: AppColors.error,
         ),
       );
+    } else if (success && mounted) {
+      context.go(widget.redirectTo ?? '/');
     }
   }
 
@@ -209,8 +212,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         labelText: 'Email',
                         prefixIcon: Icon(Icons.email_outlined),
                       ),
-                      validator: (v) =>
-                          v == null || v.isEmpty ? 'Please enter your email' : null,
+                      validator: (v) {
+                        final email = v?.trim() ?? '';
+                        if (email.isEmpty) return 'Please enter your email';
+                        if (!RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(email)) {
+                          return 'Enter a valid email address';
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
@@ -242,7 +251,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       children: [
                         Text("Don't have an account? ", style: AppTextStyles.bodySmall),
                         GestureDetector(
-                          onTap: () => context.go('/register'),
+                          onTap: () => context.go(widget.redirectTo == null
+                              ? '/register'
+                              : '/register?redirectTo=${Uri.encodeComponent(widget.redirectTo!)}'),
                           child: const Text(
                             'Register',
                             style: TextStyle(
