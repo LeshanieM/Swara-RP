@@ -13,6 +13,7 @@ const communicationRoutes = require('./routes/communication');
 const progressRoutes = require('./routes/progress');
 const therapistRoutes = require('./routes/therapist');
 const concomitantRoutes = require('./routes/concomitant');
+const videoAnalysisRoutes = require('./routes/videoAnalysis');
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use('/api/therapy', therapyRoutes);
 app.use('/api/communication', communicationRoutes);
 app.use('/api/progress', progressRoutes);
 app.use('/api/therapist', therapistRoutes);
+app.use('/api/concomitant/video-analysis', videoAnalysisRoutes);
 app.use('/api/concomitant', concomitantRoutes);
 
 // Health check
