@@ -7,7 +7,8 @@ import 'package:swara/core/theme/app_theme.dart';
 import 'package:swara/core/constants/app_constants.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
-  const RegisterScreen({super.key});
+  final String? redirectTo;
+  const RegisterScreen({super.key, this.redirectTo});
 
   @override
   ConsumerState<RegisterScreen> createState() => _RegisterScreenState();
@@ -44,6 +45,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           backgroundColor: AppColors.error,
         ),
       );
+    } else if (success && mounted) {
+      context.go(widget.redirectTo ?? '/');
     }
   }
 
@@ -86,7 +89,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   labelText: 'Email',
                   prefixIcon: Icon(Icons.email_outlined),
                 ),
-                validator: (v) => v == null || v.isEmpty ? 'Please enter your email' : null,
+                validator: (v) {
+                  final email = v?.trim() ?? '';
+                  if (email.isEmpty) return 'Please enter your email';
+                  if (!RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(email)) {
+                    return 'Enter a valid email address';
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -142,7 +152,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 children: [
                   Text('Already have an account? ', style: AppTextStyles.bodySmall),
                   GestureDetector(
-                    onTap: () => context.go('/login'),
+                    onTap: () => context.go(widget.redirectTo == null
+                        ? '/login'
+                        : '/login?redirectTo=${Uri.encodeComponent(widget.redirectTo!)}'),
                     child: const Text(
                       'Sign In',
                       style: TextStyle(

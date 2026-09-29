@@ -55,11 +55,21 @@ class ApiClient {
     return _dio.delete(path);
   }
 
-  Future<Response> postMultipart(String path, FormData formData) {
+  Future<Response> postMultipart(
+    String path,
+    FormData formData, {
+    void Function(int sent, int total)? onSendProgress,
+  }) {
     return _dio.post(
       path,
       data: formData,
-      options: Options(contentType: 'multipart/form-data'),
+      options: Options(
+        contentType: 'multipart/form-data',
+        // Large videos can take several minutes to reach Node and FastAPI on a
+        // slower connection. Analysis itself is queued and polled separately.
+        receiveTimeout: const Duration(minutes: 15),
+      ),
+      onSendProgress: onSendProgress,
     );
   }
 }

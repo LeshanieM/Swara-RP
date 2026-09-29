@@ -5,3 +5,28 @@ numpy==1.26.4
 pandas==2.2.0
 scikit-learn==1.4.0
 python-multipart==0.0.9
+
+# --- Component 2: video-based CV secondary-behavior analysis ---
+
+# Required for the MediaPipe analyzer (always available if installed - no
+# external binaries/models needed beyond this package).
+opencv-contrib-python==4.11.0.86
+mediapipe==0.10.21
+
+# Required only if OpenFace/OpenSeeFace/3DDFA-V2/MMPose are configured
+# (see app/config/settings.py: OPENFACE_BIN, OPENSEEFACE_DIR, DDFA_V2_DIR,
+# MMPOSE_CONFIG/MMPOSE_CHECKPOINT). None of these are pip-installable as a
+# single package:
+#   - OpenFace: build from https://github.com/TadasBaltrusaitis/OpenFace
+#     and point OPENFACE_BIN at the built FeatureExtraction executable.
+#   - OpenSeeFace: clone https://github.com/emilianavt/OpenSeeFace and
+#     point OPENSEEFACE_DIR at the checkout (needs onnxruntime, numpy, opencv-python).
+#   - 3DDFA_V2: clone+build https://github.com/cleardusk/3DDFA_V2 (needs its
+#     compiled FaceBoxes/Sim3DR Cython extensions) and point DDFA_V2_DIR at it.
+#   - MMPose: pip install mmpose mmdet mmcv (via mim) per
+#     https://mmpose.readthedocs.io/en/latest/installation.html
+# Until configured, these four technologies simply report "unavailable"
+# with a reason (dependency_not_installed / executable_not_found /
+# model_unavailable) rather than failing the whole experiment.
+pyyaml==6.0.1
+

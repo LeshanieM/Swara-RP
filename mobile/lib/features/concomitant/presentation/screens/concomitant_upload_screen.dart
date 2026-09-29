@@ -122,6 +122,14 @@ class _ConcomitantUploadScreenState extends State<ConcomitantUploadScreen> {
 
               if (_selectedOption == 0) _buildComponent1VideoState() else _buildUploadVideoState(),
 
+              const SizedBox(height: 16),
+              Center(
+                child: TextButton.icon(
+                  onPressed: () => context.push('/c2/video/upload'),
+                  icon: const Icon(Icons.science_outlined, size: 18),
+                  label: const Text('Research mode: compare CV technologies on one video'),
+                ),
+              ),
               const SizedBox(height: 40),
 
               if (_selectedOption == 0 || (_selectedOption == 1 && _hasSelectedVideo))
