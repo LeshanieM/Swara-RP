@@ -37,12 +37,6 @@ import 'package:swara/components/component4/screens/results_screen.dart';
 import 'package:swara/components/component4/screens/session_comparison_screen.dart';
 import 'package:swara/components/component4/screens/next_session_screen.dart';
 
-import 'package:swara/components/component3/theme_selection_screen.dart';
-import 'package:swara/components/component3/personalized_plan_screen.dart';
-import 'package:swara/components/component3/activity_screen.dart';
-import 'package:swara/components/component3/final_score_screen.dart';
-import 'package:swara/components/component3/slp_summary_screen.dart';
-import 'package:swara/components/component3/models/activity_model.dart';
 import 'package:swara/features/therapy/therapy_ui.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -168,64 +162,6 @@ final _appRouter = GoRouter(
         ),
 
         // Component 3 - Guided Therapy
-        GoRoute(
-          path: '/c3/theme',
-          builder: (context, state) => const ThemeSelectionScreen(),
-        ),
-        GoRoute(
-          path: '/c3/plan',
-          builder: (context, state) {
-            final themeId = state.extra as String? ?? 'jungle';
-            return PersonalizedPlanScreen(themeId: themeId);
-          },
-        ),
-        GoRoute(
-          path: '/c3/activity/:index',
-          builder: (context, state) {
-            final index = int.tryParse(state.pathParameters['index'] ?? '0') ?? 0;
-            final extra = state.extra as Map<String, dynamic>? ?? {};
-            final activities = extra['activities'] as List<ActivityModel>? ?? [];
-            final themeId = extra['themeId'] as String? ?? 'jungle';
-            final results = extra['results'] as Map<String, int>? ?? {};
-            
-            return ActivityScreen(
-              activityIndex: index,
-              activities: activities,
-              themeId: themeId,
-              results: results,
-            );
-          },
-        ),
-        GoRoute(
-          path: '/c3/final',
-          builder: (context, state) {
-            final extra = state.extra as Map<String, dynamic>? ?? {};
-            final activities = extra['activities'] as List<ActivityModel>? ?? [];
-            final themeId = extra['themeId'] as String? ?? 'jungle';
-            final results = extra['results'] as Map<String, int>? ?? {};
-            
-            return FinalScoreScreen(
-              results: results,
-              activities: activities,
-              themeId: themeId,
-            );
-          },
-        ),
-        GoRoute(
-          path: '/c3/summary',
-          builder: (context, state) {
-            final extra = state.extra as Map<String, dynamic>? ?? {};
-            final activities = extra['activities'] as List<ActivityModel>? ?? [];
-            final themeId = extra['themeId'] as String? ?? 'jungle';
-            final results = extra['results'] as Map<String, int>? ?? {};
-            
-            return SlpSummaryScreen(
-              results: results,
-              activities: activities,
-              themeId: themeId,
-            );
-          },
-        ),
         GoRoute(
           path: '/c3/forest-therapy',
           builder: (context, state) => const SwaraTherapyUI(),

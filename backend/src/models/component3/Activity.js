@@ -17,4 +17,4 @@ const activitySchema = new mongoose.Schema({
   active: { type: Boolean, default: true }
 }, { timestamps: true });
 
-module.exports = mongoose.model('Component3Activity', activitySchema);
+module.exports = mongoose.model('Activity', activitySchema);
