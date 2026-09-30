@@ -6,17 +6,44 @@
 // ============================================================================
 
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:math';
 import 'dart:async';
-
-
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:record/record.dart';
+import 'package:path_provider/path_provider.dart';
+import 'therapy_api_service.dart';
 part 'therapy_state.dart';
 part 'therapy_widgets.dart';
-part 'screens/therapy_setup_screens.dart';
-part 'screens/therapy_session_screens.dart';
-part 'screens/therapy_activity_screens.dart';
-part 'screens/therapy_history_screens.dart';
+part 'screens/setup/welcome.dart';
+part 'screens/setup/home.dart';
+part 'screens/setup/theme_selection.dart';
+part 'screens/setup/state.dart';
+part 'screens/setup/adventure_plan.dart';
+part 'screens/session/journey_map.dart';
+part 'screens/activities/milestone_intro.dart';
+part 'screens/activities/activity.dart';
+part 'screens/activities/activity_state.dart';
+part 'screens/activities/feedback.dart';
+part 'screens/activities/adaptive_next.dart';
+part 'screens/activities/adaptive_next_state.dart';
+part 'screens/activities/guided_conv.dart';
+part 'screens/session/session_complete.dart';
+part 'screens/session/progress.dart';
+part 'screens/setup/character.dart';
+part 'screens/dashboard/therapist_dash.dart';
+part 'screens/activities/library.dart';
+part 'screens/activities/detail.dart';
+part 'screens/activities/syllable_practice.dart';
+part 'screens/activities/breathing.dart';
+
+part 'screens/dashboard/bandit_reasoning.dart';
+part 'screens/dashboard/therapist_k_b.dart';
+part 'screens/session/journey_complete_map.dart';
+part 'screens/dashboard/engagement.dart';
+part 'screens/dashboard/therapy_history.dart';
 
 class _TherapyJourneyShell extends StatefulWidget {
   const _TherapyJourneyShell();
@@ -29,25 +56,25 @@ class _TherapyJourneyShellState extends State<_TherapyJourneyShell> {
   _AppTheme _theme = _AppTheme.forest;
 
   static const List<Map<String, Object>> _screens = [
-    {'title': '1. Home',                       'w': _S2Home()},             // 0
-    {'title': '2. Theme Selection',            'w': _S3ThemeSelection()},   // 1
-    {'title': '3. Welcome',                    'w': _S1Welcome()},          // 2
-    {'title': '4. Character',                  'w': _S14Character()},       // 3
-    {'title': '5. Adventure Plan',             'w': _S4AdventurePlan()},    // 4
-    {'title': '6. Journey Map',                'w': _S5JourneyMap()},       // 5
-    {'title': '7. Breathing Activity',         'w': _S21Breathing()},       // 6
-    {'title': '8. New Challenge: Syllable',    'w': _S10AdaptiveNext(activityName: 'Syllable Practice', nextScreen: 8)}, // 7
-    {'title': '9. Syllable Activity',          'w': _S20SyllablePractice()},// 8
-    {'title': '10. New Challenge: Picture',    'w': _S10AdaptiveNext(activityName: 'Picture Description', nextScreen: 10)}, // 9
-    {'title': '11. Picture Description Intro', 'w': _S6MilestoneIntro()},   // 10
-    {'title': '12. Activity (Picture)',        'w': _S8Activity()},         // 11
-    {'title': '13. New Challenge: Conversation','w': _S10AdaptiveNext(activityName: 'Guided Conversation', nextScreen: 13)}, // 12
-    {'title': '14. Guided Conversation',       'w': _S11GuidedConv()},      // 13
-    {'title': '15. Journey Complete Map',      'w': _S5bJourneyCompleteMap()},// 14
-    {'title': '16. Session Complete',          'w': _S12SessionComplete()}, // 15
-    {'title': '17. Overview',                  'w': _S13Progress()},        // 16
-    {'title': '18. Therapy History',           'w': _S25TherapyHistory()},  // 17
-    {'title': '19. Engagement & Trend',        'w': _S24Engagement()},      // 18
+    {'title': '1. Home',                       'w': _Home()},             // 0
+    {'title': '2. Theme Selection',            'w': _ThemeSelection()},   // 1
+    {'title': '3. Welcome',                    'w': _Welcome()},          // 2
+    {'title': '4. Character',                  'w': _Character()},       // 3
+    {'title': '5. Adventure Plan',             'w': _AdventurePlan()},    // 4
+    {'title': '6. Journey Map',                'w': _JourneyMap()},       // 5
+    {'title': '7. Breathing Activity',         'w': _Breathing()},       // 6
+    {'title': '8. New Challenge: Syllable',    'w': _AdaptiveNext(activityName: 'Syllable Practice', nextScreen: 8)}, // 7
+    {'title': '9. Syllable Activity',          'w': _SyllablePractice()},// 8
+    {'title': '10. New Challenge: Picture',    'w': _AdaptiveNext(activityName: 'Picture Description', nextScreen: 10)}, // 9
+    {'title': '11. Picture Description Intro', 'w': _MilestoneIntro()},   // 10
+    {'title': '12. Activity (Picture)',        'w': _Activity()},         // 11
+    {'title': '13. New Challenge: Conversation','w': _AdaptiveNext(activityName: 'Guided Conversation', nextScreen: 13)}, // 12
+    {'title': '14. Guided Conversation',       'w': _GuidedConv()},      // 13
+    {'title': '15. Journey Complete Map',      'w': _JourneyCompleteMap()},// 14
+    {'title': '16. Session Complete',          'w': _SessionComplete()}, // 15
+    {'title': '17. Overview',                  'w': _Progress()},        // 16
+    {'title': '18. Therapy History',           'w': _TherapyHistory()},  // 17
+    {'title': '19. Engagement & Trend',        'w': _Engagement()},      // 18
   ];
 
   void _go(int i) {

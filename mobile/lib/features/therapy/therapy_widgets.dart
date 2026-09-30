@@ -240,31 +240,113 @@ class _TherapyRecordingSheet extends StatefulWidget {
   State<_TherapyRecordingSheet> createState() => _TherapyRecordingSheetState();
 }
 
-class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet> {
+enum _RecordState { idle, requesting, recording, paused, done, denied }
+
+class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet>
+    with SingleTickerProviderStateMixin {
+  _RecordState _state = _RecordState.idle;
   Timer? _timer;
   int _seconds = 0;
-  bool _isRecording = false;
+  final _audioRecorder = AudioRecorder();
+  String? _audioPath;
+
+  // Pulse animation for mic during recording
+  late AnimationController _pulse;
+  late Animation<double> _pulseAnim;
 
   @override
   void initState() {
     super.initState();
-    _startRecording();
+    _pulse = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 900))
+      ..repeat(reverse: true);
+    _pulseAnim = Tween<double>(begin: 1.0, end: 1.28).animate(
+        CurvedAnimation(parent: _pulse, curve: Curves.easeInOut));
+    _pulse.stop();
   }
 
   Future<void> _startRecording() async {
-    setState(() => _isRecording = true);
-    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      if (mounted) setState(() => _seconds++);
-    });
+    setState(() => _state = _RecordState.requesting);
+    try {
+      final hasPermission = await _audioRecorder.hasPermission();
+      if (!hasPermission) {
+        setState(() => _state = _RecordState.denied);
+        return;
+      }
+
+      // path_provider not available on web — pass empty string; record_web ignores it
+      String? path;
+      if (!kIsWeb) {
+        final dir = await getApplicationDocumentsDirectory();
+        path = '${dir.path}/therapy_rec_${DateTime.now().millisecondsSinceEpoch}.m4a';
+      }
+
+      await _audioRecorder.start(
+        const RecordConfig(encoder: AudioEncoder.aacLc),
+        path: path ?? '',
+      );
+
+      _seconds = 0;
+      _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+        if (mounted) setState(() => _seconds++);
+      });
+      _pulse.repeat(reverse: true);
+      setState(() => _state = _RecordState.recording);
+    } catch (e) {
+      debugPrint('Recording start error: $e');
+      setState(() => _state = _RecordState.idle);
+    }
   }
 
-  void _stopRecording() {
+  Future<void> _pauseRecording() async {
+    try {
+      await _audioRecorder.pause();
+      _timer?.cancel();
+      _pulse.stop();
+      _pulse.value = 0;
+      setState(() => _state = _RecordState.paused);
+    } catch (e) {
+      debugPrint('Pause error: $e');
+    }
+  }
+
+  Future<void> _resumeRecording() async {
+    try {
+      await _audioRecorder.resume();
+      _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+        if (mounted) setState(() => _seconds++);
+      });
+      _pulse.repeat(reverse: true);
+      setState(() => _state = _RecordState.recording);
+    } catch (e) {
+      debugPrint('Resume error: $e');
+    }
+  }
+
+  Future<void> _stopRecording() async {
     _timer?.cancel();
-    setState(() => _isRecording = false);
+    _pulse.stop();
+    _pulse.value = 0;
+    try {
+      _audioPath = await _audioRecorder.stop();
+    } catch (e) {
+      debugPrint('Stop error: $e');
+    }
+    setState(() => _state = _RecordState.done);
+
+    if (_audioPath != null) {
+      TherapyApiService.uploadAudio(_audioPath!, 'child_1');
+    }
     if (widget.onRecordingStopped != null) {
-      Navigator.of(context).pop();
       widget.onRecordingStopped!();
     }
+  }
+
+  Future<void> _reRecord() async {
+    _timer?.cancel();
+    try { await _audioRecorder.stop(); } catch (_) {}
+    setState(() { _state = _RecordState.idle; _seconds = 0; });
+    await _startRecording();
   }
 
   void _continue() {
@@ -282,57 +364,308 @@ class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet> {
   @override
   void dispose() {
     _timer?.cancel();
+    _pulse.dispose();
+    _audioRecorder.dispose();
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) => SafeArea(
-        top: false,
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(24, 14, 24, 30),
-          decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(28))),
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            Container(
-                width: 42,
-                height: 4,
-                decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
-                    borderRadius: BorderRadius.circular(4))),
-            const SizedBox(height: 22),
-            Icon(
-                _isRecording
-                    ? Icons.fiber_manual_record_rounded
-                    : Icons.check_circle_rounded,
-                color: _isRecording ? Colors.red : _C.green,
-                size: 46),
-            const SizedBox(height: 10),
-            Text(_isRecording ? 'පටිගත කරමින්...' : 'ඔබේ හඬ පටිගත විය',
-                style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: _C.darkText)),
-            const SizedBox(height: 8),
-            Text(_isRecording ? _time : 'කාලය: $_time',
+  Widget build(BuildContext context) {
+    return SafeArea(
+      top: false,
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(24, 14, 24, 30),
+        decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(28))),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          // Drag handle
+          Container(
+              width: 42,
+              height: 4,
+              decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(4))),
+          const SizedBox(height: 24),
+
+          // ── Central mic visualizer ──
+          _buildMicVisual(),
+          const SizedBox(height: 16),
+
+          // ── Status text ──
+          _buildStatusText(),
+          const SizedBox(height: 6),
+
+          // ── Timer ──
+          if (_state == _RecordState.recording ||
+              _state == _RecordState.paused ||
+              _state == _RecordState.done)
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: Text(
+                _state == _RecordState.done ? 'කාලය: $_time' : _time,
+                key: ValueKey(_time),
                 style: TextStyle(
-                    fontSize: 26,
+                    fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: _isRecording ? Colors.red : _C.blue)),
-            const SizedBox(height: 22),
-            if (_isRecording)
-              _Btn(text: 'පටිගත කිරීම නවත්වන්න', onTap: _stopRecording)
-            else ...[
-              const Text('පටිගත කිරීම සම්පූර්ණයි. ඉදිරියට යාමට සූදානම්!',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 14, color: Colors.black54)),
-              const SizedBox(height: 16),
-              _Btn(text: widget.nextButtonText, onTap: _continue),
+                    color: _state == _RecordState.recording
+                        ? Colors.red
+                        : _state == _RecordState.paused
+                            ? Colors.orange
+                            : _C.blue),
+              ),
+            ),
+
+          const SizedBox(height: 28),
+
+          // ── Action buttons ──
+          _buildActions(),
+        ]),
+      ),
+    );
+  }
+
+  Widget _buildMicVisual() {
+    switch (_state) {
+      case _RecordState.recording:
+        return AnimatedBuilder(
+          animation: _pulseAnim,
+          builder: (_, __) => Transform.scale(
+            scale: _pulseAnim.value,
+            child: Container(
+              width: 90,
+              height: 90,
+              decoration: BoxDecoration(
+                color: Colors.red,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.red.withValues(alpha: 0.45),
+                      blurRadius: 28,
+                      spreadRadius: 8)
+                ],
+              ),
+              child: const Icon(Icons.mic, color: Colors.white, size: 46),
+            ),
+          ),
+        );
+      case _RecordState.paused:
+        return Container(
+          width: 90,
+          height: 90,
+          decoration: BoxDecoration(
+            color: Colors.orange.shade600,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.orange.withValues(alpha: 0.35),
+                  blurRadius: 20,
+                  spreadRadius: 6)
             ],
-          ]),
-        ),
-      );
+          ),
+          child: const Icon(Icons.pause, color: Colors.white, size: 46),
+        );
+      case _RecordState.done:
+        return Container(
+          width: 90,
+          height: 90,
+          decoration: BoxDecoration(
+            color: _C.green,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                  color: _C.green.withValues(alpha: 0.35),
+                  blurRadius: 20,
+                  spreadRadius: 6)
+            ],
+          ),
+          child: const Icon(Icons.check, color: Colors.white, size: 50),
+        );
+      case _RecordState.denied:
+        return Container(
+          width: 90,
+          height: 90,
+          decoration: BoxDecoration(
+            color: Colors.red.shade100,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(Icons.mic_off, color: Colors.red.shade400, size: 46),
+        );
+      case _RecordState.requesting:
+        return const SizedBox(
+            width: 90,
+            height: 90,
+            child: Center(child: CircularProgressIndicator()));
+      case _RecordState.idle:
+      default:
+        return GestureDetector(
+          onTap: _startRecording,
+          child: Container(
+            width: 90,
+            height: 90,
+            decoration: BoxDecoration(
+              color: _C.blue,
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                    color: _C.blue.withValues(alpha: 0.4),
+                    blurRadius: 22,
+                    spreadRadius: 5)
+              ],
+            ),
+            child: const Icon(Icons.mic, color: Colors.white, size: 46),
+          ),
+        );
+    }
+  }
+
+  Widget _buildStatusText() {
+    String msg;
+    Color color;
+    switch (_state) {
+      case _RecordState.idle:
+        msg = '🎤 Mic ස්පර්ශ කර රෙකෝඩ් ආරම්භ කරන්න';
+        color = _C.darkText;
+        break;
+      case _RecordState.requesting:
+        msg = 'Mic අවසරය ඉල්ලමින්...';
+        color = Colors.grey;
+        break;
+      case _RecordState.recording:
+        msg = '🔴 පටිගත කරමින් ඇත — ඔබේ හඬ දෙන්න';
+        color = Colors.red;
+        break;
+      case _RecordState.paused:
+        msg = '⏸  රෙකෝඩිං නතර කර ඇත';
+        color = Colors.orange.shade700;
+        break;
+      case _RecordState.done:
+        msg = '✅ හඬ සාර්ථකව සුරකිනු ලැබීය!';
+        color = _C.green;
+        break;
+      case _RecordState.denied:
+        msg = '❌ Microphone permission denied.\nBrowser settings හරහා අවසරය දෙන්න.';
+        color = Colors.red;
+        break;
+    }
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 250),
+      child: Text(
+        msg,
+        key: ValueKey(_state),
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            fontSize: 15, fontWeight: FontWeight.w600, color: color),
+      ),
+    );
+  }
+
+  Widget _buildActions() {
+    switch (_state) {
+      case _RecordState.recording:
+        return Row(children: [
+          Expanded(
+            child: OutlinedButton.icon(
+              onPressed: _pauseRecording,
+              icon: const Icon(Icons.pause_rounded),
+              label: const Text('නතර'),
+              style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.orange.shade700,
+                  side: BorderSide(color: Colors.orange.shade700),
+                  padding: const EdgeInsets.symmetric(vertical: 13)),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: ElevatedButton.icon(
+              onPressed: _stopRecording,
+              icon: const Icon(Icons.stop_rounded),
+              label: const Text('සම්පූර්ණ'),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 13)),
+            ),
+          ),
+        ]);
+
+      case _RecordState.paused:
+        return Row(children: [
+          Expanded(
+            child: OutlinedButton.icon(
+              onPressed: _resumeRecording,
+              icon: const Icon(Icons.play_arrow_rounded),
+              label: const Text('ඉදිරියට'),
+              style: OutlinedButton.styleFrom(
+                  foregroundColor: _C.blue,
+                  side: const BorderSide(color: _C.blue),
+                  padding: const EdgeInsets.symmetric(vertical: 13)),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: ElevatedButton.icon(
+              onPressed: _stopRecording,
+              icon: const Icon(Icons.check_rounded),
+              label: const Text('සම්පූර්ණ'),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: _C.green,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 13)),
+            ),
+          ),
+        ]);
+
+      case _RecordState.done:
+        return Column(children: [
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed: _reRecord,
+              icon: const Icon(Icons.refresh_rounded),
+              label: const Text('නැවත රෙකෝඩ් කරන්න'),
+              style: OutlinedButton.styleFrom(
+                  foregroundColor: _C.blue,
+                  side: const BorderSide(color: _C.blue),
+                  padding: const EdgeInsets.symmetric(vertical: 13)),
+            ),
+          ),
+          const SizedBox(height: 10),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: _continue,
+              icon: const Icon(Icons.arrow_forward_rounded),
+              label: Text(widget.nextButtonText,
+                  overflow: TextOverflow.ellipsis),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: _C.green,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 13)),
+            ),
+          ),
+        ]);
+
+      case _RecordState.denied:
+        return SizedBox(
+          width: double.infinity,
+          child: ElevatedButton.icon(
+            onPressed: () => setState(() => _state = _RecordState.idle),
+            icon: const Icon(Icons.refresh_rounded),
+            label: const Text('නැවත උත්සාහ කරන්න'),
+            style: ElevatedButton.styleFrom(
+                backgroundColor: _C.blue,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 13)),
+          ),
+        );
+
+      default:
+        return const SizedBox.shrink();
+    }
+  }
 }
+
 
 class _BackHeader extends StatelessWidget {
   final String title;
@@ -919,4 +1252,11 @@ class _SugarBearPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter o) => false;
+}
+
+class _PathPainter extends CustomPainter {
+  final _AppTheme theme;
+  _PathPainter(this.theme);
+  @override void paint(Canvas canvas, Size size) {}
+  @override bool shouldRepaint(covariant CustomPainter o) => false;
 }
