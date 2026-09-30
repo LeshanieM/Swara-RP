@@ -20,19 +20,23 @@ const buildContext = async (childId, sessionId) => {
     const c2Assessment = await VideoAnalysis.findOne({ childId }).sort({ createdAt: -1 });
 
     // Initialize context features
-    let ageFeature = child.age || 0; // Or calculate from dob
-    let severityFeature = c1Assessment ? getSeverityScore(c1Assessment.severity) : 0;
-    let secondaryBehaviorFeature = c2Assessment && c2Assessment.hasSecondaryBehaviors ? 1 : 0;
+    let ageFeature = child.age || 0;
 
-    // Additional features could include previous history performance 
-    // (e.g., average TSS over last 5 sessions)
-    // For now, let's keep it simple: [age, severity, secondaryBehavior]
+    // C1 severity: prefer latest SpeechAssessment, fall back to child profile severity
+    let severityFeature = c1Assessment
+      ? getSeverityScore(c1Assessment.severity)
+      : getSeverityScore(child.severity);
 
+    // C2 secondary behavior: presence flag from VideoAnalysis results payload
+    let secondaryBehaviorFeature =
+      c2Assessment && c2Assessment.results && c2Assessment.results.hasSecondaryBehaviors ? 1 : 0;
+
+    // Context vector: [age, severity (1=Mild/2=Mod/3=Severe), secondaryBehavior (0/1)]
+    // Dimensions must match context_dim in linucb.py (currently 3)
     const contextVector = [
       ageFeature,
       severityFeature,
       secondaryBehaviorFeature,
-      // Add more dynamic fields here as needed
     ];
 
     return contextVector;

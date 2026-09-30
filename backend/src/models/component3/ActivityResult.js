@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const activityResultSchema = new mongoose.Schema({
-  sessionId: { type: mongoose.Schema.Types.ObjectId, ref: 'Component3TherapySession', required: true },
-  activityId: { type: mongoose.Schema.Types.ObjectId, ref: 'Component3Activity', required: true },
+  sessionId: { type: mongoose.Schema.Types.ObjectId, ref: 'TherapySession', required: true },
+  activityId: { type: mongoose.Schema.Types.ObjectId, ref: 'Activity', required: true },
   targetOpportunities: { type: Number, required: true },
   successfulOpportunities: { type: Number, required: true },
   performanceRate: { type: Number },
@@ -19,4 +19,4 @@ activityResultSchema.pre('save', function(next) {
   next();
 });
 
-module.exports = mongoose.model('Component3ActivityResult', activityResultSchema);
+module.exports = mongoose.model('ActivityResult', activityResultSchema);
