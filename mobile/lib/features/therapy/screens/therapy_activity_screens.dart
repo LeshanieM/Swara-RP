@@ -1,4 +1,4 @@
-part of '../swara_therapy_ui.dart';
+part of '../therapy_ui.dart';
 
 class _S16Library extends StatelessWidget {
   const _S16Library();
@@ -91,11 +91,6 @@ class _S17Detail extends StatelessWidget {
     ));
   }
 }
-
-
-// ============================================================================
-// ADDITIONAL SCREENS 19-24 — Component 3 pillars made visible
-// ============================================================================
 
 // ----------------------------------------------------------------------------
 // 20. SYLLABLE PRACTICE — one of the five bandit arms

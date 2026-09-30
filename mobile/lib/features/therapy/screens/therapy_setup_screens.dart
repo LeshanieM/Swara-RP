@@ -1,4 +1,4 @@
-part of '../swara_therapy_ui.dart';
+part of '../therapy_ui.dart';
 
 class _PathPainter extends CustomPainter {
   final _AppTheme theme;
@@ -22,10 +22,6 @@ class _PathPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _PathPainter o) => o.theme != theme;
 }
-
-// ============================================================================
-// SCREENS 1-18
-// ============================================================================
 
 // 1. WELCOME
 class _S1Welcome extends StatelessWidget {
@@ -571,7 +567,6 @@ class _OffPathLinePainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 3;
 
-    // Draw dashed lines to off-path activities
     _drawDashedLine(canvas, Offset(size.width * 0.35, size.height * 0.65),
         Offset(size.width * 0.6, size.height * 0.72), paint);
     _drawDashedLine(canvas, Offset(size.width * 0.4, size.height * 0.3),
@@ -760,5 +755,3 @@ class _MChip extends StatelessWidget {
         ]),
       );
 }
-
-// 6. MILESTONE INTRO

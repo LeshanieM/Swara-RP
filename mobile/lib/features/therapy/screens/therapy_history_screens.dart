@@ -1,4 +1,4 @@
-part of '../swara_therapy_ui.dart';
+part of '../therapy_ui.dart';
 
 class _S24Engagement extends StatelessWidget {
   const _S24Engagement();
