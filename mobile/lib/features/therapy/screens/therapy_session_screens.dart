@@ -1,4 +1,4 @@
-part of '../swara_therapy_ui.dart';
+part of '../therapy_ui.dart';
 
 class _S6MilestoneIntro extends StatelessWidget {
   const _S6MilestoneIntro();
@@ -387,5 +387,3 @@ class _ARow extends StatelessWidget {
     ]),
   );
 }
-
-// 16. LIBRARY

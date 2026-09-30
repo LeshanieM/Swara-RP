@@ -1,4 +1,4 @@
-part of 'swara_therapy_ui.dart';
+part of 'therapy_ui.dart';
 
 class _BgScaffold extends StatelessWidget {
   final Widget child;

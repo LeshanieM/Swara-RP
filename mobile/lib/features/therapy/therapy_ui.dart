@@ -13,9 +13,9 @@ import 'dart:async';
 
 part 'therapy_state.dart';
 part 'therapy_widgets.dart';
-part 'screens/therapy_screens_1.dart';
-part 'screens/therapy_screens_2.dart';
-part 'screens/therapy_screens_3.dart';
+part 'screens/therapy_setup_screens.dart';
+part 'screens/therapy_session_screens.dart';
+part 'screens/therapy_activity_screens.dart';
 part 'screens/therapy_history_screens.dart';
 
 class _TherapyJourneyShell extends StatefulWidget {

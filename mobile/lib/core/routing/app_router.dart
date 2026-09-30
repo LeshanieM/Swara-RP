@@ -43,7 +43,7 @@ import 'package:swara/components/component3/activity_screen.dart';
 import 'package:swara/components/component3/final_score_screen.dart';
 import 'package:swara/components/component3/slp_summary_screen.dart';
 import 'package:swara/components/component3/models/activity_model.dart';
-import 'package:swara/features/therapy_ui/swara_therapy_ui.dart';
+import 'package:swara/features/therapy/therapy_ui.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return _appRouter;
