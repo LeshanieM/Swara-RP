@@ -14,6 +14,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:record/record.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:swara/core/constants/app_constants.dart';
+import 'package:swara/core/storage/storage_service.dart';
 import 'therapy_api_service.dart';
 part 'therapy_state.dart';
 part 'therapy_widgets.dart';
@@ -54,6 +56,19 @@ class _TherapyJourneyShell extends StatefulWidget {
 class _TherapyJourneyShellState extends State<_TherapyJourneyShell> {
   int _idx = 0;
   _AppTheme _theme = _AppTheme.forest;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedTheme();
+  }
+
+  Future<void> _loadSavedTheme() async {
+    final saved = await StorageService.getString(AppConstants.c3PreferredThemeKey);
+    final theme = _AppThemeX.fromStorageId(saved);
+    if (!mounted || theme == _theme) return;
+    setState(() => _theme = theme);
+  }
 
   static const List<Map<String, Object>> _screens = [
     {'title': '1. Home',                       'w': _Home()},             // 0

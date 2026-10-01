@@ -34,6 +34,42 @@ extension _AppThemeX on _AppTheme {
     }
   }
 
+  /// Stable id used for persistence (not the display `name`).
+  String get storageId {
+    switch (this) {
+      case _AppTheme.forest:
+        return 'forest';
+      case _AppTheme.beach:
+        return 'beach';
+      case _AppTheme.space:
+        return 'space';
+      case _AppTheme.underwater:
+        return 'underwater';
+      case _AppTheme.safari:
+        return 'safari';
+      case _AppTheme.candyland:
+        return 'candyland';
+    }
+  }
+
+  static _AppTheme fromStorageId(String? id) {
+    switch (id) {
+      case 'beach':
+        return _AppTheme.beach;
+      case 'space':
+        return _AppTheme.space;
+      case 'underwater':
+        return _AppTheme.underwater;
+      case 'safari':
+        return _AppTheme.safari;
+      case 'candyland':
+        return _AppTheme.candyland;
+      case 'forest':
+      default:
+        return _AppTheme.forest;
+    }
+  }
+
   String get emoji {
     switch (this) {
       case _AppTheme.forest:

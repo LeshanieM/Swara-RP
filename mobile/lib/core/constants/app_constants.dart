@@ -25,6 +25,7 @@ class AppConstants {
   static const String tokenKey = 'auth_token';
   static const String userKey = 'user_data';
   static const String demoModeKey = 'demo_mode';
+  static const String c3PreferredThemeKey = 'c3_preferred_theme';
 
   // App
   static const String appName = 'Swara';

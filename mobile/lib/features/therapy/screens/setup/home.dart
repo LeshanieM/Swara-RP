@@ -65,7 +65,7 @@ class _Home extends StatelessWidget {
               const SizedBox(height: 16),
               _Btn(
                   text: 'අද දින ප්‍රතිකාර සැලැස්ම අරඹන්න',
-                  onTap: () => nav?.go(1)),
+                  onTap: () => nav?.go(2)),
             ]),
           ),
           const SizedBox(height: 20),

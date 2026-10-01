@@ -3,15 +3,37 @@ part of '../../therapy_ui.dart';
 class _ThemeSelectionState extends State<_ThemeSelection> {
   String _cat = 'All';
   final _cats = ['All', 'Nature', 'Ocean', 'Fantasy'];
+  _AppTheme? _picked;
+  bool _saving = false;
+
+  _AppTheme _current(BuildContext context) =>
+      _picked ?? _InheritedTheme.of(context)?.theme ?? _AppTheme.forest;
+
+  Future<void> _save(BuildContext context) async {
+    if (_saving) return;
+    final theme = _current(context);
+    final ts = _InheritedTheme.of(context);
+    setState(() => _saving = true);
+    ts?.onChanged(theme);
+    await StorageService.saveString(AppConstants.c3PreferredThemeKey, theme.storageId);
+    if (!mounted) return;
+    setState(() => _saving = false);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('${theme.emoji} ${theme.name} saved as your world'),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final nav = _InheritedNav.of(context);
-    final ts = _InheritedTheme.of(context);
-    final cur = ts?.theme ?? _AppTheme.forest;
+    final cur = _current(context);
     final list = _AppTheme.values
         .where((t) => _cat == 'All' || t.category == _cat)
         .toList();
+    final saved = _InheritedTheme.of(context)?.theme ?? _AppTheme.forest;
+    final hasUnsavedChange = cur != saved;
 
     return _BgScaffold(
         paintScene: false,
@@ -23,7 +45,7 @@ class _ThemeSelectionState extends State<_ThemeSelection> {
             const _BackHeader(title: ''),
             const _Plaque(text: 'ඔබේ ලෝකය තෝරන්න 🗺️', fontSize: 18),
             const SizedBox(height: 4),
-            const Text('ඔබ කැමති කතා පුහුණු ලෝකය සහ යාළුවා තෝරන්න!',
+            const Text('ඔබ කැමති කතා පුහුණු ලෝකය තෝරා Save කරන්න. මෙය පෙනුම පමණි — ක්‍රියාකාරකම් එලෙසම පවතී.',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.black54, fontSize: 13)),
             const SizedBox(height: 14),
@@ -63,7 +85,7 @@ class _ThemeSelectionState extends State<_ThemeSelection> {
               itemBuilder: (_, i) => _ThemeCard(
                   theme: list[i],
                   isSelected: cur == list[i],
-                  onTap: () => ts?.onChanged(list[i])),
+                  onTap: () => setState(() => _picked = list[i])),
             ),
             const SizedBox(height: 16),
             Container(
@@ -74,13 +96,17 @@ class _ThemeSelectionState extends State<_ThemeSelection> {
                   border: Border.all(color: cur.accentColor, width: 2)),
               child: Column(children: [
                 Row(children: [
-                  const _Mascot(size: 48),
+                  _InheritedTheme(
+                    theme: cur,
+                    onChanged: (_) {},
+                    child: const _Mascot(size: 48),
+                  ),
                   const SizedBox(width: 12),
                   Expanded(
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                        Text('${cur.emoji} ${cur.name} Selected!',
+                        Text('${cur.emoji} ${cur.name}',
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
@@ -92,8 +118,12 @@ class _ThemeSelectionState extends State<_ThemeSelection> {
                 ]),
                 const SizedBox(height: 12),
                 _Btn(
-                    text: '${cur.name} ත්‍රාසජනක ගමනට යමු',
-                    onTap: () => nav?.go(2)),
+                    text: _saving
+                        ? 'Saving...'
+                        : hasUnsavedChange
+                            ? 'Save ${cur.name}'
+                            : '${cur.name} Saved',
+                    onTap: _saving ? () {} : () => _save(context)),
               ]),
             ),
             const SizedBox(height: 20),
