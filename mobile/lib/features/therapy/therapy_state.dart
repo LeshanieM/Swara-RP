@@ -5,10 +5,11 @@ part of 'therapy_ui.dart';
 // ---------------------------------------------------------------------------
 /// Therapy journey shown inside the main Swara application.
 class SwaraTherapyUI extends StatelessWidget {
-  const SwaraTherapyUI({super.key});
+  final String screen;
+  const SwaraTherapyUI({super.key, this.screen = 'home'});
 
   @override
-  Widget build(BuildContext context) => const _TherapyJourneyShell();
+  Widget build(BuildContext context) => _TherapyJourneyShell(screen: screen);
 }
 
 // ============================================================================
@@ -451,14 +452,12 @@ class _InheritedTheme extends InheritedWidget {
 // INHERITED STATE: NAVIGATION
 // ============================================================================
 class _InheritedNav extends InheritedWidget {
-  final int index;
-  final void Function(int) go;
-  const _InheritedNav(
-      {required this.index, required this.go, required super.child});
+  final void Function(String) go;
+  const _InheritedNav({required this.go, required super.child});
 
   static _InheritedNav? of(BuildContext ctx) =>
       ctx.dependOnInheritedWidgetOfExactType<_InheritedNav>();
 
   @override
-  bool updateShouldNotify(_InheritedNav old) => old.index != index;
+  bool updateShouldNotify(_InheritedNav old) => false;
 }

@@ -38,7 +38,8 @@ class _AdventurePlan extends StatelessWidget {
           _GRow(text: 'Use Thoughtful Pauses'),
         ])),
         const SizedBox(height: 24),
-        _Btn(text: 'ගමන අරඹන්න', onTap: () => nav?.go(5)),
+        _Btn(
+            text: 'ගමන අරඹන්න', onTap: () => nav?.go(_TherapyRoute.journeyMap)),
         const SizedBox(height: 20),
       ]),
     ));

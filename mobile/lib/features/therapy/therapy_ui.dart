@@ -48,13 +48,13 @@ part 'screens/dashboard/engagement.dart';
 part 'screens/dashboard/therapy_history.dart';
 
 class _TherapyJourneyShell extends StatefulWidget {
-  const _TherapyJourneyShell();
+  final String screen;
+  const _TherapyJourneyShell({required this.screen});
   @override
   State<_TherapyJourneyShell> createState() => _TherapyJourneyShellState();
 }
 
 class _TherapyJourneyShellState extends State<_TherapyJourneyShell> {
-  int _idx = 0;
   _AppTheme _theme = _AppTheme.forest;
 
   @override
@@ -64,36 +64,77 @@ class _TherapyJourneyShellState extends State<_TherapyJourneyShell> {
   }
 
   Future<void> _loadSavedTheme() async {
-    final saved = await StorageService.getString(AppConstants.c3PreferredThemeKey);
+    final saved =
+        await StorageService.getString(AppConstants.c3PreferredThemeKey);
     final theme = _AppThemeX.fromStorageId(saved);
     if (!mounted || theme == _theme) return;
     setState(() => _theme = theme);
   }
 
-  static const List<Map<String, Object>> _screens = [
-    {'title': '1. Home',                       'w': _Home()},             // 0
-    {'title': '2. Theme Selection',            'w': _ThemeSelection()},   // 1
-    {'title': '3. Welcome',                    'w': _Welcome()},          // 2
-    {'title': '4. Character',                  'w': _Character()},       // 3
-    {'title': '5. Adventure Plan',             'w': _AdventurePlan()},    // 4
-    {'title': '6. Journey Map',                'w': _JourneyMap()},       // 5
-    {'title': '7. Breathing Activity',         'w': _Breathing()},       // 6
-    {'title': '8. New Challenge: Syllable',    'w': _AdaptiveNext(activityName: 'Syllable Practice', nextScreen: 8)}, // 7
-    {'title': '9. Syllable Activity',          'w': _SyllablePractice()},// 8
-    {'title': '10. New Challenge: Picture',    'w': _AdaptiveNext(activityName: 'Picture Description', nextScreen: 10)}, // 9
-    {'title': '11. Picture Description Intro', 'w': _MilestoneIntro()},   // 10
-    {'title': '12. Activity (Picture)',        'w': _Activity()},         // 11
-    {'title': '13. New Challenge: Conversation','w': _AdaptiveNext(activityName: 'Guided Conversation', nextScreen: 13)}, // 12
-    {'title': '14. Guided Conversation',       'w': _GuidedConv()},      // 13
-    {'title': '15. Journey Complete Map',      'w': _JourneyCompleteMap()},// 14
-    {'title': '16. Session Complete',          'w': _SessionComplete()}, // 15
-    {'title': '17. Overview',                  'w': _Progress()},        // 16
-    {'title': '18. Therapy History',           'w': _TherapyHistory()},  // 17
-    {'title': '19. Engagement & Trend',        'w': _Engagement()},      // 18
-  ];
-
-  void _go(int i) {
-    if (i >= 0 && i < _screens.length) setState(() => _idx = i);
+  Widget _screenForRoute() {
+    switch (widget.screen) {
+      case _TherapyRoute.home:
+        return const _Home();
+      case _TherapyRoute.themeSelection:
+        return const _ThemeSelection();
+      case _TherapyRoute.welcome:
+        return const _Welcome();
+      case _TherapyRoute.character:
+        return const _Character();
+      case _TherapyRoute.adventurePlan:
+        return const _AdventurePlan();
+      case _TherapyRoute.journeyMap:
+        return const _JourneyMap();
+      case _TherapyRoute.breathing:
+        return const _Breathing();
+      case _TherapyRoute.adaptiveSyllable:
+        return const _AdaptiveNext(
+          activityName: 'Syllable Practice',
+          nextScreen: _TherapyRoute.syllablePractice,
+        );
+      case _TherapyRoute.syllablePractice:
+        return const _SyllablePractice();
+      case _TherapyRoute.adaptivePicture:
+        return const _AdaptiveNext(
+          activityName: 'Picture Description',
+          nextScreen: _TherapyRoute.pictureIntro,
+        );
+      case _TherapyRoute.pictureIntro:
+        return const _MilestoneIntro();
+      case _TherapyRoute.pictureActivity:
+        return const _Activity();
+      case _TherapyRoute.adaptiveConversation:
+        return const _AdaptiveNext(
+          activityName: 'Guided Conversation',
+          nextScreen: _TherapyRoute.guidedConversation,
+        );
+      case _TherapyRoute.guidedConversation:
+        return const _GuidedConv();
+      case _TherapyRoute.journeyComplete:
+        return const _JourneyCompleteMap();
+      case _TherapyRoute.sessionComplete:
+        return const _SessionComplete();
+      case _TherapyRoute.progress:
+        return const _Progress();
+      case _TherapyRoute.history:
+        return const _TherapyHistory();
+      case _TherapyRoute.engagement:
+        return const _Engagement();
+      case _TherapyRoute.activityLibrary:
+        return const _Library();
+      case _TherapyRoute.activityDetail:
+        return const _Detail();
+      case _TherapyRoute.feedback:
+        return const _Feedback();
+      case _TherapyRoute.banditReasoning:
+        return const _BanditReasoning();
+      case _TherapyRoute.therapistDashboard:
+        return const _TherapistDash();
+      case _TherapyRoute.therapistKnowledgeBase:
+        return const _TherapistKB();
+      default:
+        return const _Home();
+    }
   }
 
   @override
@@ -102,10 +143,37 @@ class _TherapyJourneyShellState extends State<_TherapyJourneyShell> {
       theme: _theme,
       onChanged: (t) => setState(() => _theme = t),
       child: _InheritedNav(
-        index: _idx,
-        go: _go,
-        child: _screens[_idx]['w'] as Widget,
+        go: (route) => context.push('/c3/therapy/$route'),
+        child: _screenForRoute(),
       ),
     );
   }
+}
+
+class _TherapyRoute {
+  static const home = 'home';
+  static const themeSelection = 'theme-selection';
+  static const welcome = 'welcome';
+  static const character = 'character';
+  static const adventurePlan = 'adventure-plan';
+  static const journeyMap = 'journey-map';
+  static const breathing = 'breathing';
+  static const adaptiveSyllable = 'adaptive-syllable';
+  static const syllablePractice = 'syllable-practice';
+  static const adaptivePicture = 'adaptive-picture';
+  static const pictureIntro = 'picture-intro';
+  static const pictureActivity = 'picture-activity';
+  static const adaptiveConversation = 'adaptive-conversation';
+  static const guidedConversation = 'guided-conversation';
+  static const journeyComplete = 'journey-complete';
+  static const sessionComplete = 'session-complete';
+  static const progress = 'progress';
+  static const history = 'history';
+  static const engagement = 'engagement';
+  static const activityLibrary = 'activity-library';
+  static const activityDetail = 'activity-detail';
+  static const feedback = 'feedback';
+  static const banditReasoning = 'bandit-reasoning';
+  static const therapistDashboard = 'therapist-dashboard';
+  static const therapistKnowledgeBase = 'therapist-knowledge-base';
 }

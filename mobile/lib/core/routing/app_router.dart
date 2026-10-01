@@ -44,7 +44,8 @@ final routerProvider = Provider<GoRouter>((ref) {
 });
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
-final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> _shellNavigatorKey =
+    GlobalKey<NavigatorState>();
 
 final _appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
@@ -52,11 +53,13 @@ final _appRouter = GoRouter(
   routes: [
     GoRoute(
       path: '/login',
-      builder: (context, state) => LoginScreen(redirectTo: state.uri.queryParameters['redirectTo']),
+      builder: (context, state) =>
+          LoginScreen(redirectTo: state.uri.queryParameters['redirectTo']),
     ),
     GoRoute(
       path: '/register',
-      builder: (context, state) => RegisterScreen(redirectTo: state.uri.queryParameters['redirectTo']),
+      builder: (context, state) =>
+          RegisterScreen(redirectTo: state.uri.queryParameters['redirectTo']),
     ),
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
@@ -75,30 +78,29 @@ final _appRouter = GoRouter(
           path: '/profile',
           builder: (context, state) => const ProgressScreen(childId: 'child_1'),
         ),
-        
+
         GoRoute(
           path: '/c1/record',
           builder: (context, state) => const SpeechTaskScreen(),
         ),
         GoRoute(
-          path: '/c1/complete',
-          builder: (context, state) {
-            final duration = state.extra as int? ?? 0;
-            return SpeechCompletionScreen(durationSeconds: duration);
-          }
-        ),
+            path: '/c1/complete',
+            builder: (context, state) {
+              final duration = state.extra as int? ?? 0;
+              return SpeechCompletionScreen(durationSeconds: duration);
+            }),
         GoRoute(
-          path: '/c1/result',
-          builder: (context, state) {
-            final duration = state.extra as int? ?? 0;
-            return SpeechResultScreen(durationSeconds: duration);
-          }
-        ),
-        
+            path: '/c1/result',
+            builder: (context, state) {
+              final duration = state.extra as int? ?? 0;
+              return SpeechResultScreen(durationSeconds: duration);
+            }),
+
         // Component 2 - Secondary Behaviour
         GoRoute(
           path: '/c2/upload',
-          builder: (context, state) => const ConcomitantUploadScreen(childId: 'child_1'),
+          builder: (context, state) =>
+              const ConcomitantUploadScreen(childId: 'child_1'),
         ),
         GoRoute(
           path: '/c2/ready',
@@ -121,15 +123,18 @@ final _appRouter = GoRouter(
         // Component 2 - research mode: multi-technology CV comparison on ONE video
         GoRoute(
           path: '/c2/video/upload',
-          builder: (context, state) => const VideoAnalysisUploadScreen(childId: 'child_1'),
+          builder: (context, state) =>
+              const VideoAnalysisUploadScreen(childId: 'child_1'),
         ),
         GoRoute(
           path: '/c2/video/process/:id',
-          builder: (context, state) => VideoAnalysisProcessingScreen(analysisId: state.pathParameters['id']!),
+          builder: (context, state) => VideoAnalysisProcessingScreen(
+              analysisId: state.pathParameters['id']!),
         ),
         GoRoute(
           path: '/c2/video/results/:id',
-          builder: (context, state) => VideoAnalysisResultsScreen(analysisId: state.pathParameters['id']!),
+          builder: (context, state) => VideoAnalysisResultsScreen(
+              analysisId: state.pathParameters['id']!),
         ),
         GoRoute(
           path: '/c2/video/results/:id/tech/:tech',
@@ -140,19 +145,23 @@ final _appRouter = GoRouter(
         ),
         GoRoute(
           path: '/c2/video/results/:id/compare',
-          builder: (context, state) => VideoComparisonScreen(analysisId: state.pathParameters['id']!),
+          builder: (context, state) =>
+              VideoComparisonScreen(analysisId: state.pathParameters['id']!),
         ),
         GoRoute(
           path: '/c2/video/results/:id/timeline',
-          builder: (context, state) => VideoTimelineScreen(analysisId: state.pathParameters['id']!),
+          builder: (context, state) =>
+              VideoTimelineScreen(analysisId: state.pathParameters['id']!),
         ),
         GoRoute(
           path: '/c2/video/results/:id/overlay',
-          builder: (context, state) => VideoOverlayScreen(analysisId: state.pathParameters['id']!),
+          builder: (context, state) =>
+              VideoOverlayScreen(analysisId: state.pathParameters['id']!),
         ),
         GoRoute(
           path: '/c2/video/results/:id/metrics',
-          builder: (context, state) => VideoEvaluationScreen(analysisId: state.pathParameters['id']!),
+          builder: (context, state) =>
+              VideoEvaluationScreen(analysisId: state.pathParameters['id']!),
         ),
         GoRoute(
           path: '/c2/result/:id',
@@ -164,7 +173,127 @@ final _appRouter = GoRouter(
         // Component 3 - Guided Therapy
         GoRoute(
           path: '/c3/forest-therapy',
-          builder: (context, state) => const SwaraTherapyUI(),
+          redirect: (context, state) => '/c3/therapy/home',
+        ),
+        GoRoute(
+          path: '/c3/therapy/home',
+          builder: (context, state) => const SwaraTherapyUI(screen: 'home'),
+        ),
+        GoRoute(
+          path: '/c3/therapy/theme-selection',
+          builder: (context, state) =>
+              const SwaraTherapyUI(screen: 'theme-selection'),
+        ),
+        GoRoute(
+          path: '/c3/therapy/welcome',
+          builder: (context, state) => const SwaraTherapyUI(screen: 'welcome'),
+        ),
+        GoRoute(
+          path: '/c3/therapy/character',
+          builder: (context, state) =>
+              const SwaraTherapyUI(screen: 'character'),
+        ),
+        GoRoute(
+          path: '/c3/therapy/adventure-plan',
+          builder: (context, state) =>
+              const SwaraTherapyUI(screen: 'adventure-plan'),
+        ),
+        GoRoute(
+          path: '/c3/therapy/journey-map',
+          builder: (context, state) =>
+              const SwaraTherapyUI(screen: 'journey-map'),
+        ),
+        GoRoute(
+          path: '/c3/therapy/breathing',
+          builder: (context, state) =>
+              const SwaraTherapyUI(screen: 'breathing'),
+        ),
+        GoRoute(
+          path: '/c3/therapy/adaptive-syllable',
+          builder: (context, state) =>
+              const SwaraTherapyUI(screen: 'adaptive-syllable'),
+        ),
+        GoRoute(
+          path: '/c3/therapy/syllable-practice',
+          builder: (context, state) =>
+              const SwaraTherapyUI(screen: 'syllable-practice'),
+        ),
+        GoRoute(
+          path: '/c3/therapy/adaptive-picture',
+          builder: (context, state) =>
+              const SwaraTherapyUI(screen: 'adaptive-picture'),
+        ),
+        GoRoute(
+          path: '/c3/therapy/picture-intro',
+          builder: (context, state) =>
+              const SwaraTherapyUI(screen: 'picture-intro'),
+        ),
+        GoRoute(
+          path: '/c3/therapy/picture-activity',
+          builder: (context, state) =>
+              const SwaraTherapyUI(screen: 'picture-activity'),
+        ),
+        GoRoute(
+          path: '/c3/therapy/adaptive-conversation',
+          builder: (context, state) =>
+              const SwaraTherapyUI(screen: 'adaptive-conversation'),
+        ),
+        GoRoute(
+          path: '/c3/therapy/guided-conversation',
+          builder: (context, state) =>
+              const SwaraTherapyUI(screen: 'guided-conversation'),
+        ),
+        GoRoute(
+          path: '/c3/therapy/journey-complete',
+          builder: (context, state) =>
+              const SwaraTherapyUI(screen: 'journey-complete'),
+        ),
+        GoRoute(
+          path: '/c3/therapy/session-complete',
+          builder: (context, state) =>
+              const SwaraTherapyUI(screen: 'session-complete'),
+        ),
+        GoRoute(
+          path: '/c3/therapy/progress',
+          builder: (context, state) => const SwaraTherapyUI(screen: 'progress'),
+        ),
+        GoRoute(
+          path: '/c3/therapy/history',
+          builder: (context, state) => const SwaraTherapyUI(screen: 'history'),
+        ),
+        GoRoute(
+          path: '/c3/therapy/engagement',
+          builder: (context, state) =>
+              const SwaraTherapyUI(screen: 'engagement'),
+        ),
+        GoRoute(
+          path: '/c3/therapy/activity-library',
+          builder: (context, state) =>
+              const SwaraTherapyUI(screen: 'activity-library'),
+        ),
+        GoRoute(
+          path: '/c3/therapy/activity-detail',
+          builder: (context, state) =>
+              const SwaraTherapyUI(screen: 'activity-detail'),
+        ),
+        GoRoute(
+          path: '/c3/therapy/feedback',
+          builder: (context, state) => const SwaraTherapyUI(screen: 'feedback'),
+        ),
+        GoRoute(
+          path: '/c3/therapy/bandit-reasoning',
+          builder: (context, state) =>
+              const SwaraTherapyUI(screen: 'bandit-reasoning'),
+        ),
+        GoRoute(
+          path: '/c3/therapy/therapist-dashboard',
+          builder: (context, state) =>
+              const SwaraTherapyUI(screen: 'therapist-dashboard'),
+        ),
+        GoRoute(
+          path: '/c3/therapy/therapist-knowledge-base',
+          builder: (context, state) =>
+              const SwaraTherapyUI(screen: 'therapist-knowledge-base'),
         ),
 
         // Component 4 - Spontaneous Analysis
