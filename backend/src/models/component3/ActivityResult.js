@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const activityResultSchema = new mongoose.Schema({
-  sessionId: { type: mongoose.Schema.Types.ObjectId, ref: 'TherapySession', required: true },
+  sessionId: { type: mongoose.Schema.Types.ObjectId, ref: 'C3TherapySession', required: true },
   activityId: { type: mongoose.Schema.Types.ObjectId, ref: 'Activity', required: true },
   targetOpportunities: { type: Number, required: true },
   successfulOpportunities: { type: Number, required: true },

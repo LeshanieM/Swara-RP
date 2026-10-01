@@ -8,7 +8,8 @@ class _BgScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = _InheritedTheme.themeOf(context);
-    final overlayOpacity = theme == _AppTheme.space ? 0.48 : (paintScene ? 0.35 : 0.15);
+    final overlayOpacity =
+        theme == _AppTheme.space ? 0.48 : (paintScene ? 0.35 : 0.15);
     return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -184,7 +185,7 @@ class _Btn extends StatelessWidget {
 }
 
 class _TherapyMicButton extends StatelessWidget {
-  final int nextScreen;
+  final String nextScreen;
   final String prompt;
   final String nextButtonText;
   final double radius;
@@ -226,7 +227,7 @@ class _TherapyMicButton extends StatelessWidget {
 }
 
 class _TherapyRecordingSheet extends StatefulWidget {
-  final int nextScreen;
+  final String nextScreen;
   final String nextButtonText;
   final VoidCallback? onComplete;
   final VoidCallback? onRecordingStopped;
@@ -260,8 +261,8 @@ class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet>
     _pulse = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 900))
       ..repeat(reverse: true);
-    _pulseAnim = Tween<double>(begin: 1.0, end: 1.28).animate(
-        CurvedAnimation(parent: _pulse, curve: Curves.easeInOut));
+    _pulseAnim = Tween<double>(begin: 1.0, end: 1.28)
+        .animate(CurvedAnimation(parent: _pulse, curve: Curves.easeInOut));
     _pulse.stop();
   }
 
@@ -278,7 +279,8 @@ class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet>
       String? path;
       if (!kIsWeb) {
         final dir = await getApplicationDocumentsDirectory();
-        path = '${dir.path}/therapy_rec_${DateTime.now().millisecondsSinceEpoch}.m4a';
+        path =
+            '${dir.path}/therapy_rec_${DateTime.now().millisecondsSinceEpoch}.m4a';
       }
 
       await _audioRecorder.start(
@@ -335,7 +337,7 @@ class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet>
     setState(() => _state = _RecordState.done);
 
     if (_audioPath != null) {
-      TherapyApiService.uploadAudio(_audioPath!, 'child_1');
+      TherapyApiService.uploadAudio(_audioPath!);
     }
     if (widget.onRecordingStopped != null) {
       widget.onRecordingStopped!();
@@ -344,17 +346,23 @@ class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet>
 
   Future<void> _reRecord() async {
     _timer?.cancel();
-    try { await _audioRecorder.stop(); } catch (_) {}
-    setState(() { _state = _RecordState.idle; _seconds = 0; });
+    try {
+      await _audioRecorder.stop();
+    } catch (_) {}
+    setState(() {
+      _state = _RecordState.idle;
+      _seconds = 0;
+    });
     await _startRecording();
   }
 
   void _continue() {
+    final nav = _InheritedNav.of(context);
     Navigator.of(context).pop();
     if (widget.onComplete != null) {
       widget.onComplete!();
     } else {
-      _InheritedNav.of(context)?.go(widget.nextScreen);
+      nav?.go(widget.nextScreen);
     }
   }
 
@@ -544,7 +552,8 @@ class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet>
         color = _C.green;
         break;
       case _RecordState.denied:
-        msg = '❌ Microphone permission denied.\nBrowser settings හරහා අවසරය දෙන්න.';
+        msg =
+            '❌ Microphone permission denied.\nBrowser settings හරහා අවසරය දෙන්න.';
         color = Colors.red;
         break;
     }
@@ -554,8 +563,8 @@ class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet>
         msg,
         key: ValueKey(_state),
         textAlign: TextAlign.center,
-        style: TextStyle(
-            fontSize: 15, fontWeight: FontWeight.w600, color: color),
+        style:
+            TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: color),
       ),
     );
   }
@@ -636,8 +645,8 @@ class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet>
             child: ElevatedButton.icon(
               onPressed: _continue,
               icon: const Icon(Icons.arrow_forward_rounded),
-              label: Text(widget.nextButtonText,
-                  overflow: TextOverflow.ellipsis),
+              label:
+                  Text(widget.nextButtonText, overflow: TextOverflow.ellipsis),
               style: ElevatedButton.styleFrom(
                   backgroundColor: _C.green,
                   foregroundColor: Colors.white,
@@ -666,7 +675,6 @@ class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet>
   }
 }
 
-
 class _BackHeader extends StatelessWidget {
   final String title;
   const _BackHeader({required this.title});
@@ -678,9 +686,10 @@ class _BackHeader extends StatelessWidget {
       child: Row(children: [
         GestureDetector(
           onTap: () {
-            final nav = _InheritedNav.of(context);
-            if (nav != null && nav.index > 0) {
-              nav.go(nav.index - 1);
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/c3/therapy/home');
             }
           },
           child: Container(
@@ -1257,6 +1266,8 @@ class _SugarBearPainter extends CustomPainter {
 class _PathPainter extends CustomPainter {
   final _AppTheme theme;
   _PathPainter(this.theme);
-  @override void paint(Canvas canvas, Size size) {}
-  @override bool shouldRepaint(covariant CustomPainter o) => false;
+  @override
+  void paint(Canvas canvas, Size size) {}
+  @override
+  bool shouldRepaint(covariant CustomPainter o) => false;
 }

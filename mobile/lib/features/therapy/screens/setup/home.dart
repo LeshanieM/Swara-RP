@@ -2,10 +2,10 @@ part of '../../therapy_ui.dart';
 
 class _Home extends StatelessWidget {
   const _Home();
+
   @override
   Widget build(BuildContext context) {
     final nav = _InheritedNav.of(context);
-    final theme = _InheritedTheme.themeOf(context);
     return _BgScaffold(
       paintScene: false,
       child: SingleChildScrollView(
@@ -65,15 +65,30 @@ class _Home extends StatelessWidget {
               const SizedBox(height: 16),
               _Btn(
                   text: 'අද දින ප්‍රතිකාර සැලැස්ම අරඹන්න',
-                  onTap: () => nav?.go(1)),
+                  onTap: () async {
+                    final started = await TherapyApiService.startSession();
+                    if (!context.mounted) return;
+                    if (!started) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Could not start a therapy session.'),
+                        ),
+                      );
+                      return;
+                    }
+                    nav?.go(_TherapyRoute.welcome);
+                  }),
             ]),
           ),
           const SizedBox(height: 20),
-          _item(context, '🎨', 'ත්‍රාසජනක ලෝක තෝරන්න', () => nav?.go(1)),
+          _item(context, '🎨', 'ත්‍රාසජනක ලෝක තෝරන්න',
+              () => nav?.go(_TherapyRoute.themeSelection)),
           const SizedBox(height: 10),
-          _item(context, '🏆', 'මගේ ජයග්‍රහණ', () => nav?.go(16)),
+          _item(context, '🏆', 'මගේ ජයග්‍රහණ',
+              () => nav?.go(_TherapyRoute.progress)),
           const SizedBox(height: 10),
-          _item(context, '📋', 'ප්‍රතිකාර ඉතිහාසය', () => nav?.go(17)),
+          _item(context, '📋', 'ප්‍රතිකාර ඉතිහාසය',
+              () => nav?.go(_TherapyRoute.history)),
           const SizedBox(height: 10),
           Row(
             children: [
@@ -171,7 +186,9 @@ class _Home extends StatelessWidget {
           leading: Text(em, style: const TextStyle(fontSize: 22)),
           title: Text(title,
               style: const TextStyle(
-                  fontWeight: FontWeight.bold, fontSize: 14, color: _C.darkText)),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  color: _C.darkText)),
           trailing: const Icon(Icons.arrow_forward_ios_rounded,
               size: 16, color: _C.blue),
           onTap: onTap,

@@ -14,6 +14,9 @@ router.post('/:sessionId/activity-result', therapySessionController.recordActivi
 // POST /api/c3/therapy-sessions/:sessionId/complete
 router.post('/:sessionId/complete', therapySessionController.completeSession);
 
+// GET /api/c3/therapy-sessions/history/account
+router.get('/history/account', therapySessionController.getAccountTherapyHistory);
+
 // GET /api/c3/therapy-sessions/history/:childId
 router.get('/history/:childId', therapySessionController.getTherapyHistory);
 

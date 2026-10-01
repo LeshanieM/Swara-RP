@@ -5,10 +5,11 @@ part of 'therapy_ui.dart';
 // ---------------------------------------------------------------------------
 /// Therapy journey shown inside the main Swara application.
 class SwaraTherapyUI extends StatelessWidget {
-  const SwaraTherapyUI({super.key});
+  final String screen;
+  const SwaraTherapyUI({super.key, this.screen = 'home'});
 
   @override
-  Widget build(BuildContext context) => const _TherapyJourneyShell();
+  Widget build(BuildContext context) => _TherapyJourneyShell(screen: screen);
 }
 
 // ============================================================================
@@ -31,6 +32,42 @@ extension _AppThemeX on _AppTheme {
         return 'Safari';
       case _AppTheme.candyland:
         return 'Candy Land';
+    }
+  }
+
+  /// Stable id used for persistence (not the display `name`).
+  String get storageId {
+    switch (this) {
+      case _AppTheme.forest:
+        return 'forest';
+      case _AppTheme.beach:
+        return 'beach';
+      case _AppTheme.space:
+        return 'space';
+      case _AppTheme.underwater:
+        return 'underwater';
+      case _AppTheme.safari:
+        return 'safari';
+      case _AppTheme.candyland:
+        return 'candyland';
+    }
+  }
+
+  static _AppTheme fromStorageId(String? id) {
+    switch (id) {
+      case 'beach':
+        return _AppTheme.beach;
+      case 'space':
+        return _AppTheme.space;
+      case 'underwater':
+        return _AppTheme.underwater;
+      case 'safari':
+        return _AppTheme.safari;
+      case 'candyland':
+        return _AppTheme.candyland;
+      case 'forest':
+      default:
+        return _AppTheme.forest;
     }
   }
 
@@ -415,14 +452,12 @@ class _InheritedTheme extends InheritedWidget {
 // INHERITED STATE: NAVIGATION
 // ============================================================================
 class _InheritedNav extends InheritedWidget {
-  final int index;
-  final void Function(int) go;
-  const _InheritedNav(
-      {required this.index, required this.go, required super.child});
+  final void Function(String) go;
+  const _InheritedNav({required this.go, required super.child});
 
   static _InheritedNav? of(BuildContext ctx) =>
       ctx.dependOnInheritedWidgetOfExactType<_InheritedNav>();
 
   @override
-  bool updateShouldNotify(_InheritedNav old) => old.index != index;
+  bool updateShouldNotify(_InheritedNav old) => false;
 }

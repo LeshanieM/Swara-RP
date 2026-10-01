@@ -35,7 +35,9 @@ class _Welcome extends StatelessWidget {
                     color: _C.darkText,
                     height: 1.3)),
             const SizedBox(height: 16),
-            _Btn(text: 'ඉදිරියට යමු!', onTap: () => nav?.go(3)),
+            _Btn(
+                text: 'ඉදිරියට යමු!',
+                onTap: () => nav?.go(_TherapyRoute.character)),
           ]),
         ),
         const SizedBox(height: 20),

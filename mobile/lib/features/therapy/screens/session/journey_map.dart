@@ -22,7 +22,7 @@ class _JourneyMap extends StatelessWidget {
             bottom: 20,
             left: 30,
             child: GestureDetector(
-                onTap: () => nav?.go(6),
+                onTap: () => nav?.go(_TherapyRoute.breathing),
                 child: Column(children: [
                   const _Mascot(size: 56),
                   Container(
