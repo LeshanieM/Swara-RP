@@ -27,17 +27,29 @@ final _demoUsers = {
 class AuthState {
   final UserModel? user;
   final bool isLoading;
+  final bool isInitialized;
   final String? error;
 
-  const AuthState({this.user, this.isLoading = false, this.error});
+  const AuthState({
+    this.user,
+    this.isLoading = false,
+    this.isInitialized = false,
+    this.error,
+  });
 
   bool get isAuthenticated => user != null;
   String get role => user?.role ?? '';
 
-  AuthState copyWith({UserModel? user, bool? isLoading, String? error}) {
+  AuthState copyWith({
+    UserModel? user,
+    bool? isLoading,
+    bool? isInitialized,
+    String? error,
+  }) {
     return AuthState(
       user: user ?? this.user,
       isLoading: isLoading ?? this.isLoading,
+      isInitialized: isInitialized ?? this.isInitialized,
       error: error,
     );
   }
@@ -46,19 +58,21 @@ class AuthState {
 class AuthNotifier extends StateNotifier<AuthState> {
   final ApiClient _apiClient;
 
-  AuthNotifier(this._apiClient) : super(const AuthState()) {
+  AuthNotifier(this._apiClient) : super(const AuthState(isInitialized: false)) {
     _loadSavedSession();
   }
 
   Future<void> _loadSavedSession() async {
-    final token = await StorageService.getToken();
-    final userData = await StorageService.getString(AppConstants.userKey);
-    if (token != null && userData != null) {
-      try {
+    try {
+      final token = await StorageService.getToken();
+      final userData = await StorageService.getString(AppConstants.userKey);
+      if (token != null && token.isNotEmpty && userData != null) {
         final user = UserModel.fromJson(jsonDecode(userData));
-        state = AuthState(user: user);
-      } catch (_) {}
-    }
+        state = AuthState(user: user, isInitialized: true);
+        return;
+      }
+    } catch (_) {}
+    state = const AuthState(isInitialized: true);
   }
 
   Future<bool> login(String email, String password) async {
@@ -69,11 +83,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
       final demoUser = _demoUsers[email];
       if (demoUser != null) {
         await StorageService.saveToken('demo_token');
-        await StorageService.saveString(AppConstants.userKey, jsonEncode(demoUser.toJson()));
-        state = AuthState(user: demoUser);
+        await StorageService.saveString(
+            AppConstants.userKey, jsonEncode(demoUser.toJson()));
+        state = AuthState(user: demoUser, isInitialized: true);
         return true;
       }
-      state = state.copyWith(isLoading: false, error: 'Invalid demo credentials');
+      state =
+          state.copyWith(isLoading: false, error: 'Invalid demo credentials');
       return false;
     }
 
@@ -85,8 +101,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
       final data = response.data;
       final user = UserModel.fromJson(data);
       await StorageService.saveToken(user.token ?? '');
-      await StorageService.saveString(AppConstants.userKey, jsonEncode(user.toJson()));
-      state = AuthState(user: user);
+      await StorageService.saveString(
+          AppConstants.userKey, jsonEncode(user.toJson()));
+      state = AuthState(user: user, isInitialized: true);
       return true;
     } catch (e) {
       state = state.copyWith(isLoading: false, error: _parseError(e));
@@ -94,7 +111,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  Future<bool> register(String name, String email, String password, String role) async {
+  Future<bool> register(
+      String name, String email, String password, String role) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
       final response = await _apiClient.post('/api/auth/register', data: {
@@ -106,8 +124,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
       final data = response.data;
       final user = UserModel.fromJson(data);
       await StorageService.saveToken(user.token ?? '');
-      await StorageService.saveString(AppConstants.userKey, jsonEncode(user.toJson()));
-      state = AuthState(user: user);
+      await StorageService.saveString(
+          AppConstants.userKey, jsonEncode(user.toJson()));
+      state = AuthState(user: user, isInitialized: true);
       return true;
     } catch (e) {
       state = state.copyWith(isLoading: false, error: _parseError(e));
@@ -118,7 +137,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> logout() async {
     await StorageService.removeToken();
     await StorageService.remove(AppConstants.userKey);
-    state = const AuthState();
+    state = const AuthState(isInitialized: true);
   }
 
   String _parseError(dynamic e) {

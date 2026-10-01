@@ -55,20 +55,21 @@ class _TherapyJourneyShell extends StatefulWidget {
 }
 
 class _TherapyJourneyShellState extends State<_TherapyJourneyShell> {
-  _AppTheme _theme = _AppTheme.forest;
+  static bool _hasLoadedSavedTheme = false;
 
   @override
   void initState() {
     super.initState();
-    _loadSavedTheme();
+    if (!_hasLoadedSavedTheme) {
+      _hasLoadedSavedTheme = true;
+      _loadSavedTheme();
+    }
   }
 
   Future<void> _loadSavedTheme() async {
     final saved =
         await StorageService.getString(AppConstants.c3PreferredThemeKey);
-    final theme = _AppThemeX.fromStorageId(saved);
-    if (!mounted || theme == _theme) return;
-    setState(() => _theme = theme);
+    _therapyTheme.value = _AppThemeX.fromStorageId(saved);
   }
 
   Widget _screenForRoute() {
@@ -139,16 +140,22 @@ class _TherapyJourneyShellState extends State<_TherapyJourneyShell> {
 
   @override
   Widget build(BuildContext context) {
-    return _InheritedTheme(
-      theme: _theme,
-      onChanged: (t) => setState(() => _theme = t),
-      child: _InheritedNav(
-        go: (route) => context.push('/c3/therapy/$route'),
-        child: _screenForRoute(),
+    return ValueListenableBuilder<_AppTheme>(
+      valueListenable: _therapyTheme,
+      builder: (context, theme, _) => _InheritedTheme(
+        theme: theme,
+        onChanged: (theme) => _therapyTheme.value = theme,
+        child: _InheritedNav(
+          go: (route) => context.push('/c3/therapy/$route'),
+          child: _screenForRoute(),
+        ),
       ),
     );
   }
 }
+
+final ValueNotifier<_AppTheme> _therapyTheme =
+    ValueNotifier<_AppTheme>(_AppTheme.forest);
 
 class _TherapyRoute {
   static const home = 'home';

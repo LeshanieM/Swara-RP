@@ -6,7 +6,8 @@ import 'package:swara/core/constants/app_constants.dart';
 import 'package:swara/core/theme/app_theme.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
-  const SplashScreen({super.key});
+  final String? redirectTo;
+  const SplashScreen({super.key, this.redirectTo});
 
   @override
   ConsumerState<SplashScreen> createState() => _SplashScreenState();
@@ -16,6 +17,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnim;
+  bool _didNavigate = false;
 
   @override
   void initState() {
@@ -24,19 +26,30 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       vsync: this,
       duration: AppMotion.entrance,
     );
-    _fadeAnim = CurvedAnimation(parent: _controller, curve: AppMotion.entranceCurve);
+    _fadeAnim =
+        CurvedAnimation(parent: _controller, curve: AppMotion.entranceCurve);
     _controller.forward();
-    _navigate();
   }
 
-  Future<void> _navigate() async {
-    await Future.delayed(const Duration(milliseconds: 1600));
-    if (!mounted) return;
-    final authState = ref.read(authProvider);
+  void _navigate(AuthState authState) {
+    if (_didNavigate || !authState.isInitialized) return;
+    _didNavigate = true;
+    final redirectTo = widget.redirectTo;
+    if (redirectTo != null &&
+        (!redirectTo.startsWith('/') || redirectTo.startsWith('//'))) {
+      context.go('/');
+      return;
+    }
     if (authState.isAuthenticated) {
-      _goHome(authState.role);
+      if (redirectTo != null) {
+        context.go(redirectTo);
+      } else {
+        _goHome(authState.role);
+      }
+    } else if (redirectTo != null) {
+      context.go('/register?redirectTo=${Uri.encodeComponent(redirectTo)}');
     } else {
-      context.go('/login');
+      context.go('/register');
     }
   }
 
@@ -64,6 +77,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authProvider);
+    if (authState.isInitialized && !_didNavigate) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _navigate(authState);
+      });
+    }
+
     return Scaffold(
       backgroundColor: AppColors.primaryDeep,
       body: FadeTransition(
@@ -92,7 +112,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
               const SizedBox(height: AppSpacing.xl),
               Text(
                 'Swara',
-                style: AppTextStyles.heading1.copyWith(color: AppColors.onPrimary),
+                style:
+                    AppTextStyles.heading1.copyWith(color: AppColors.onPrimary),
               ),
               const SizedBox(height: AppSpacing.sm),
               Text(

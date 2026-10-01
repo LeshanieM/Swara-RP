@@ -27,7 +27,28 @@ class _SessionComplete extends StatelessWidget {
         const SizedBox(height: 24),
         _Btn(
             text: 'සාරාංශය බලන්න',
-            onTap: () => nav?.go(_TherapyRoute.progress)),
+            onTap: () async {
+              final saved = await TherapyApiService.completeActiveSession(
+                resultSummary: const {
+                  'activitiesCompleted': 4,
+                  'activitiesTotal': 4,
+                  'score': 8,
+                  'scoreOutOf': 10,
+                  'durationMinutes': 25,
+                },
+              );
+              if (!context.mounted) return;
+              if (!saved) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content:
+                        Text('Could not save this therapy result. Try again.'),
+                  ),
+                );
+                return;
+              }
+              nav?.go(_TherapyRoute.progress);
+            }),
         const SizedBox(height: 20),
       ]),
     ));

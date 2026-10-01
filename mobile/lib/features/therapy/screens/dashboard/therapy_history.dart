@@ -17,8 +17,7 @@ class _TherapyHistoryState extends State<_TherapyHistory> {
   }
 
   Future<void> _loadHistory() async {
-    // Ideally we get childId from Riverpod authProvider, here we mock 'child_1' or use a fixed ID for now.
-    final history = await TherapyApiService.getTherapyHistory('child_1');
+    final history = await TherapyApiService.getTherapyHistory();
     if (mounted) {
       setState(() {
         _history = history;
@@ -87,7 +86,7 @@ class _TherapyHistoryState extends State<_TherapyHistory> {
                           OutlinedButton.icon(
                             onPressed: () => nav?.go(_TherapyRoute.engagement),
                             icon: const Icon(Icons.insights_rounded),
-                            label: const Text('දරුවාගේ සහභාගීත්වය බලන්න'),
+                            label: const Text('සහභාගීත්වය බලන්න'),
                             style: OutlinedButton.styleFrom(
                                 foregroundColor: _C.blue,
                                 side: const BorderSide(color: _C.blue),
@@ -112,17 +111,29 @@ class _TherapyHistoryState extends State<_TherapyHistory> {
                                     .toString()
                                     .substring(0, 16)
                                 : 'Unknown Date';
+                            final summary = session['resultSummary']
+                                as Map<String, dynamic>?;
+                            final score = summary == null
+                                ? session['status']?.toString() ?? 'Unknown'
+                                : 'Score ${summary['score']}/${summary['scoreOutOf']}';
+                            final details = summary == null
+                                ? <String>[
+                                    session['status'] == 'Completed'
+                                        ? 'Session completed'
+                                        : 'Session in progress',
+                                  ]
+                                : <String>[
+                                    '${summary['activitiesCompleted']} of ${summary['activitiesTotal']} activities completed',
+                                    if (summary['durationMinutes'] != null)
+                                      '${summary['durationMinutes']} min',
+                                  ];
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 16),
                               child: _HistoryCard(
                                   date: date,
-                                  theme: 'Session ${session['sessionId']}',
-                                  score: session['status'] ?? 'Unknown',
-                                  activities: (session['selectedActivities']
-                                              as List<dynamic>?)
-                                          ?.map((e) => e.toString())
-                                          .toList() ??
-                                      ['Unknown Activity']),
+                                  theme: 'Therapy session',
+                                  score: score,
+                                  activities: details),
                             );
                           }).toList(),
                           const SizedBox(height: 30),
@@ -228,7 +239,7 @@ class _HistoryCard extends StatelessWidget {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                    Text('Adventure: $theme',
+                    Text(theme,
                         style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 14,

@@ -2,10 +2,10 @@ part of '../../therapy_ui.dart';
 
 class _Home extends StatelessWidget {
   const _Home();
+
   @override
   Widget build(BuildContext context) {
     final nav = _InheritedNav.of(context);
-    final theme = _InheritedTheme.themeOf(context);
     return _BgScaffold(
       paintScene: false,
       child: SingleChildScrollView(
@@ -65,7 +65,19 @@ class _Home extends StatelessWidget {
               const SizedBox(height: 16),
               _Btn(
                   text: 'අද දින ප්‍රතිකාර සැලැස්ම අරඹන්න',
-                  onTap: () => nav?.go(_TherapyRoute.welcome)),
+                  onTap: () async {
+                    final started = await TherapyApiService.startSession();
+                    if (!context.mounted) return;
+                    if (!started) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Could not start a therapy session.'),
+                        ),
+                      );
+                      return;
+                    }
+                    nav?.go(_TherapyRoute.welcome);
+                  }),
             ]),
           ),
           const SizedBox(height: 20),

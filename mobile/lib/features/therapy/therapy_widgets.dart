@@ -337,7 +337,7 @@ class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet>
     setState(() => _state = _RecordState.done);
 
     if (_audioPath != null) {
-      TherapyApiService.uploadAudio(_audioPath!, 'child_1');
+      TherapyApiService.uploadAudio(_audioPath!);
     }
     if (widget.onRecordingStopped != null) {
       widget.onRecordingStopped!();
