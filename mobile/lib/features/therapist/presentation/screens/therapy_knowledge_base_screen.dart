@@ -1,9 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:dio/dio.dart';
 import 'package:go_router/go_router.dart';
-import '../../../therapy/data/providers/therapy_provider.dart';
 import 'package:swara/core/widgets/shared_widgets.dart';
 import 'package:swara/core/theme/app_theme.dart';
+import 'package:swara/core/constants/app_constants.dart';
+import 'package:swara/core/storage/storage_service.dart';
+
+final therapyKnowledgeBaseProvider =
+    FutureProvider<List<Map<String, dynamic>>>((_) async {
+  final token = await StorageService.getToken();
+  final response = await Dio().get<List<dynamic>>(
+    '${AppConstants.baseUrl}/api/therapy/activities',
+    options: Options(
+      headers: {
+        if (token != null && token.isNotEmpty)
+          'Authorization': 'Bearer $token',
+      },
+    ),
+  );
+  return (response.data ?? const <dynamic>[])
+      .map((activity) => Map<String, dynamic>.from(activity as Map))
+      .toList();
+});
 
 class TherapyKnowledgeBaseScreen extends ConsumerWidget {
   const TherapyKnowledgeBaseScreen({super.key});
@@ -158,7 +177,7 @@ class _ActivityCard extends StatelessWidget {
   Widget _tag(String label, Color color) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
+          color: color.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Text(label, style: TextStyle(fontSize: 11, color: color, fontWeight: FontWeight.w500)),

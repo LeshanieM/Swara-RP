@@ -35,15 +35,10 @@ part 'screens/activities/guided_conv.dart';
 part 'screens/session/session_complete.dart';
 part 'screens/session/progress.dart';
 part 'screens/setup/character.dart';
-part 'screens/dashboard/therapist_dash.dart';
 part 'screens/activities/library.dart';
 part 'screens/activities/detail.dart';
 part 'screens/activities/syllable_practice.dart';
 part 'screens/activities/breathing.dart';
-
-part 'screens/dashboard/bandit_reasoning.dart';
-part 'screens/dashboard/therapist_k_b.dart';
-part 'screens/session/journey_complete_map.dart';
 part 'screens/dashboard/engagement.dart';
 part 'screens/dashboard/therapy_history.dart';
 
@@ -111,8 +106,6 @@ class _TherapyJourneyShellState extends State<_TherapyJourneyShell> {
         );
       case _TherapyRoute.guidedConversation:
         return const _GuidedConv();
-      case _TherapyRoute.journeyComplete:
-        return const _JourneyCompleteMap();
       case _TherapyRoute.sessionComplete:
         return const _SessionComplete();
       case _TherapyRoute.progress:
@@ -127,12 +120,6 @@ class _TherapyJourneyShellState extends State<_TherapyJourneyShell> {
         return const _Detail();
       case _TherapyRoute.feedback:
         return const _Feedback();
-      case _TherapyRoute.banditReasoning:
-        return const _BanditReasoning();
-      case _TherapyRoute.therapistDashboard:
-        return const _TherapistDash();
-      case _TherapyRoute.therapistKnowledgeBase:
-        return const _TherapistKB();
       default:
         return const _Home();
     }

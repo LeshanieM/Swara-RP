@@ -86,7 +86,7 @@ class _TherapyHistoryState extends State<_TherapyHistory> {
                           OutlinedButton.icon(
                             onPressed: () => nav?.go(_TherapyRoute.engagement),
                             icon: const Icon(Icons.insights_rounded),
-                            label: const Text('සහභාගීත්වය බලන්න'),
+                            label: const Text('ප්‍රතිකාර ප්‍රගතිය බලන්න'),
                             style: OutlinedButton.styleFrom(
                                 foregroundColor: _C.blue,
                                 side: const BorderSide(color: _C.blue),
