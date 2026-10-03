@@ -332,6 +332,12 @@ final List<RouteBase> _therapyRoutes = [
   _therapyRoute('/c3/therapy/engagement', 'engagement'),
   _therapyRoute('/c3/therapy/activity-library', 'activity-library'),
   _therapyRoute('/c3/therapy/activity-detail', 'activity-detail'),
+  GoRoute(
+    path: '/c3/therapy/activity/:activityType',
+    builder: (context, state) => SwaraTherapyUI(
+      screen: 'practice:${state.pathParameters['activityType']}',
+    ),
+  ),
   _therapyRoute('/c3/therapy/feedback', 'feedback'),
   _therapyRoute('/c3/therapy/bandit-reasoning', 'bandit-reasoning'),
   _therapyRoute('/c3/therapy/therapist-dashboard', 'therapist-dashboard'),
