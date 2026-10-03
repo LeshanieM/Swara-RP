@@ -45,8 +45,8 @@ class _Home extends StatelessWidget {
               const Text("Today's Plan",
                   style: TextStyle(fontSize: 12, color: Colors.grey)),
               const SizedBox(height: 4),
-              Row(children: [
-                const Expanded(
+              const Row(children: [
+                Expanded(
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -59,8 +59,8 @@ class _Home extends StatelessWidget {
                       Text('අද දින පුහුණුව ආරම්භ කිරීමට සූදානම්ද?',
                           style: TextStyle(fontSize: 11, color: Colors.grey)),
                     ])),
-                const SizedBox(width: 8),
-                const _Mascot(size: 74),
+                SizedBox(width: 8),
+                _Mascot(size: 74),
               ]),
               const SizedBox(height: 16),
               _Btn(
@@ -90,6 +90,9 @@ class _Home extends StatelessWidget {
           _item(context, '📋', 'ප්‍රතිකාර ඉතිහාසය',
               () => nav?.go(_TherapyRoute.history)),
           const SizedBox(height: 10),
+          _item(context, '🗣️', 'Therapy Activity Library',
+              () => nav?.go(_TherapyRoute.activityLibrary)),
+          const SizedBox(height: 10),
           Row(
             children: [
               Expanded(
@@ -98,9 +101,9 @@ class _Home extends StatelessWidget {
                   decoration: BoxDecoration(
                       color: Colors.orange.shade50,
                       borderRadius: BorderRadius.circular(18)),
-                  child: Column(
+                  child: const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text('🔥', style: TextStyle(fontSize: 24)),
                       SizedBox(height: 8),
                       Text('Current Streak',
@@ -122,9 +125,9 @@ class _Home extends StatelessWidget {
                   decoration: BoxDecoration(
                       color: Colors.green.shade50,
                       borderRadius: BorderRadius.circular(18)),
-                  child: Column(
+                  child: const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text('⭐', style: TextStyle(fontSize: 24)),
                       SizedBox(height: 8),
                       Text('Total Stars',
@@ -147,10 +150,10 @@ class _Home extends StatelessWidget {
             decoration: BoxDecoration(
                 color: Colors.blue.shade50,
                 borderRadius: BorderRadius.circular(18)),
-            child: Row(children: [
-              const Text('💡', style: TextStyle(fontSize: 24)),
-              const SizedBox(width: 12),
-              const Expanded(
+            child: const Row(children: [
+              Text('💡', style: TextStyle(fontSize: 24)),
+              SizedBox(width: 12),
+              Expanded(
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

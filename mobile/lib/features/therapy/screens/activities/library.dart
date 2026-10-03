@@ -18,64 +18,26 @@ class _Library extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     color: _C.darkText))),
         const SizedBox(height: 16),
-        const SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            physics: BouncingScrollPhysics(),
-            child: Row(children: [
-              _CTab(title: 'All', sel: true),
-              _CTab(title: 'Speaking', sel: false),
-              _CTab(title: 'Breathing', sel: false),
-              _CTab(title: 'Reading', sel: false),
-            ])),
-        const SizedBox(height: 16),
-        _LItem(
-            icon: '🖼️',
-            title: 'Picture Description',
-            sub: 'Focus: Fluency & Expression',
-            onTap: () => nav?.go(_TherapyRoute.pictureIntro)),
-        const SizedBox(height: 10),
-        _LItem(
-            icon: '🎙️',
-            title: 'Guided Conversation',
-            sub: 'Focus: Pausing & Phrasing',
-            onTap: () => nav?.go(_TherapyRoute.guidedConversation)),
-        const SizedBox(height: 10),
-        _LItem(
-            icon: '🔤',
-            title: 'Syllable Practice',
-            sub: 'Focus: Easy Onset',
-            onTap: () => nav?.go(_TherapyRoute.syllablePractice)),
-        const SizedBox(height: 10),
-        _LItem(
-            icon: '🫁',
-            title: 'Breathing Exercise',
-            sub: 'Focus: Relaxation',
-            onTap: () => nav?.go(_TherapyRoute.breathing)),
-        const SizedBox(height: 20),
-        _Btn(text: '+ Add Activity', onTap: () {}),
+        Text(
+          '${_therapyActivities.length} activities',
+          style: const TextStyle(fontSize: 13, color: Colors.black54),
+        ),
+        const SizedBox(height: 12),
+        ..._therapyActivities.map(
+          (activity) => Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: _LItem(
+              icon: activity.emoji,
+              title: activity.title,
+              sub: activity.focus,
+              onTap: () => nav?.go(activity.route),
+            ),
+          ),
+        ),
         const SizedBox(height: 20),
       ]),
     ));
   }
-}
-
-class _CTab extends StatelessWidget {
-  final String title;
-  final bool sel;
-  const _CTab({required this.title, required this.sel});
-  @override
-  Widget build(BuildContext context) => Container(
-        margin: const EdgeInsets.only(right: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-            color: sel ? _C.blue : Colors.white,
-            borderRadius: BorderRadius.circular(20)),
-        child: Text(title,
-            style: TextStyle(
-                color: sel ? Colors.white : Colors.black87,
-                fontWeight: FontWeight.bold,
-                fontSize: 13)),
-      );
 }
 
 class _LItem extends StatelessWidget {

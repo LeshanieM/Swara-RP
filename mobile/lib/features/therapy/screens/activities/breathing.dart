@@ -8,6 +8,7 @@ class _Breathing extends StatefulWidget {
 
 class _BreathingState extends State<_Breathing>
     with SingleTickerProviderStateMixin {
+  final Set<int> _relaxedAreas = {};
   late final AnimationController _c =
       AnimationController(vsync: this, duration: const Duration(seconds: 4))
         ..repeat(reverse: true);
@@ -30,6 +31,8 @@ class _BreathingState extends State<_Breathing>
         const Text('හුස්ම ගැනීමේ විවේකය',
             style: TextStyle(
                 fontSize: 20, fontWeight: FontWeight.bold, color: _C.darkText)),
+        const Text('Breathing and body awareness',
+            style: TextStyle(fontSize: 13, color: Colors.black54)),
         const SizedBox(height: 30),
         AnimatedBuilder(
             animation: _c,
@@ -66,6 +69,52 @@ class _BreathingState extends State<_Breathing>
                 'වටය අනුගමනය කරන්න. එය විශාල වන විට හුස්ම ගන්න; කුඩා වන විට හුස්ම පිට කරන්න.',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 13, color: _C.darkText))),
+        const SizedBox(height: 20),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(18),
+            boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Body check-in',
+                style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: _C.darkText),
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'Notice each area, then let it soften as you breathe out.',
+                style: TextStyle(fontSize: 12, color: Colors.black54),
+              ),
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 8,
+                children: ['Shoulders', 'Jaw', 'Hands', 'Belly']
+                    .asMap()
+                    .entries
+                    .map((entry) => FilterChip(
+                          label: Text(entry.value),
+                          selected: _relaxedAreas.contains(entry.key),
+                          onSelected: (selected) => setState(() {
+                            if (selected) {
+                              _relaxedAreas.add(entry.key);
+                            } else {
+                              _relaxedAreas.remove(entry.key);
+                            }
+                          }),
+                        ))
+                    .toList(),
+              ),
+            ],
+          ),
+        ),
         const SizedBox(height: 24),
         _Btn(
             text: 'මම සූදානම්',

@@ -8,10 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
-import 'dart:math';
 import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:record/record.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:swara/core/constants/app_constants.dart';
@@ -39,6 +36,7 @@ part 'screens/activities/library.dart';
 part 'screens/activities/detail.dart';
 part 'screens/activities/syllable_practice.dart';
 part 'screens/activities/breathing.dart';
+part 'screens/activities/practice_activities.dart';
 part 'screens/dashboard/engagement.dart';
 part 'screens/dashboard/therapy_history.dart';
 
@@ -68,6 +66,13 @@ class _TherapyJourneyShellState extends State<_TherapyJourneyShell> {
   }
 
   Widget _screenForRoute() {
+    if (widget.screen.startsWith('practice:')) {
+      final activityId = widget.screen.substring('practice:'.length);
+      final activity =
+          _therapyActivities.where((item) => item.id == activityId).firstOrNull;
+      if (activity != null) return _PracticeActivity(activity: activity);
+    }
+
     switch (widget.screen) {
       case _TherapyRoute.home:
         return const _Home();
@@ -166,8 +171,6 @@ class _TherapyRoute {
   static const engagement = 'engagement';
   static const activityLibrary = 'activity-library';
   static const activityDetail = 'activity-detail';
+  static const practiceActivity = 'activity';
   static const feedback = 'feedback';
-  static const banditReasoning = 'bandit-reasoning';
-  static const therapistDashboard = 'therapist-dashboard';
-  static const therapistKnowledgeBase = 'therapist-knowledge-base';
 }
