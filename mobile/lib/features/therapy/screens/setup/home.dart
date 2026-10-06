@@ -66,6 +66,20 @@ class _Home extends StatelessWidget {
               _Btn(
                   text: 'අද දින ප්‍රතිකාර සැලැස්ම අරඹන්න',
                   onTap: () async {
+                    try {
+                      await _LinUcbModel.clearPendingForCurrentUser();
+                    } catch (error, stackTrace) {
+                      debugPrint('Could not prepare adaptive activity plan: '
+                          '$error\n$stackTrace');
+                      if (!context.mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              'Could not prepare the adaptive activity plan: $error'),
+                        ),
+                      );
+                      return;
+                    }
                     final started = await TherapyApiService.startSession();
                     if (!context.mounted) return;
                     if (!started) {
