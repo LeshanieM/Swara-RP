@@ -9,11 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:async';
+import 'dart:convert';
+import 'dart:math' as math;
 import 'package:record/record.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:swara/core/constants/app_constants.dart';
 import 'package:swara/core/storage/storage_service.dart';
 import 'therapy_api_service.dart';
+part 'linucb_activity_selector.dart';
 part 'therapy_state.dart';
 part 'therapy_widgets.dart';
 part 'screens/setup/welcome.dart';
@@ -89,26 +92,17 @@ class _TherapyJourneyShellState extends State<_TherapyJourneyShell> {
       case _TherapyRoute.breathing:
         return const _Breathing();
       case _TherapyRoute.adaptiveSyllable:
-        return const _AdaptiveNext(
-          activityName: 'Syllable Practice',
-          nextScreen: _TherapyRoute.syllablePractice,
-        );
+        return const _AdaptiveNext();
       case _TherapyRoute.syllablePractice:
         return const _SyllablePractice();
       case _TherapyRoute.adaptivePicture:
-        return const _AdaptiveNext(
-          activityName: 'Picture Description',
-          nextScreen: _TherapyRoute.pictureIntro,
-        );
+        return const _AdaptiveNext();
       case _TherapyRoute.pictureIntro:
         return const _MilestoneIntro();
       case _TherapyRoute.pictureActivity:
         return const _Activity();
       case _TherapyRoute.adaptiveConversation:
-        return const _AdaptiveNext(
-          activityName: 'Guided Conversation',
-          nextScreen: _TherapyRoute.guidedConversation,
-        );
+        return const _AdaptiveNext();
       case _TherapyRoute.guidedConversation:
         return const _GuidedConv();
       case _TherapyRoute.sessionComplete:
@@ -164,7 +158,6 @@ class _TherapyRoute {
   static const pictureActivity = 'picture-activity';
   static const adaptiveConversation = 'adaptive-conversation';
   static const guidedConversation = 'guided-conversation';
-  static const journeyComplete = 'journey-complete';
   static const sessionComplete = 'session-complete';
   static const progress = 'progress';
   static const history = 'history';
