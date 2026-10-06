@@ -1,10 +1,80 @@
 part of '../../therapy_ui.dart';
 
-class _SessionComplete extends StatelessWidget {
+class _SessionComplete extends StatefulWidget {
   const _SessionComplete();
+
+  @override
+  State<_SessionComplete> createState() => _SessionCompleteState();
+}
+
+class _SessionCompleteState extends State<_SessionComplete> {
+  _LinUcbModel? _model;
+  String? _error;
+  bool _isSaving = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSessionSummary();
+  }
+
+  Future<void> _loadSessionSummary() async {
+    try {
+      final model = await _LinUcbModel.load();
+      if (!mounted) return;
+      setState(() {
+        _model = model;
+        _error = null;
+      });
+    } catch (error, stackTrace) {
+      debugPrint('Could not load therapy session summary: $error\n$stackTrace');
+      if (!mounted) return;
+      setState(() => _error = 'Could not load this session summary: $error');
+    }
+  }
+
+  Future<void> _saveAndContinue() async {
+    final model = _model;
+    if (model == null || _isSaving) return;
+    setState(() => _isSaving = true);
+    try {
+      await model.clearPendingWithoutReward();
+    } catch (error, stackTrace) {
+      debugPrint('Could not clear unfinished activity: $error\n$stackTrace');
+      if (!mounted) return;
+      setState(() => _isSaving = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not save the session summary: $error')),
+      );
+      return;
+    }
+
+    final completed = model.sessionActivitiesCompleted;
+    final saved = await TherapyApiService.completeActiveSession(
+      resultSummary: {
+        'activitiesCompleted': completed,
+        'activitiesTotal': completed,
+        'score': model.sessionScoreOutOfTen,
+        'scoreOutOf': 10,
+        'durationMinutes': model.sessionDurationMinutes,
+      },
+    );
+    if (!mounted) return;
+    if (!saved) {
+      setState(() => _isSaving = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Could not save this therapy result. Try again.'),
+        ),
+      );
+      return;
+    }
+    _InheritedNav.of(context)?.go(_TherapyRoute.progress);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final nav = _InheritedNav.of(context);
+    final model = _model;
     return _BgScaffold(
         child: SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
@@ -19,36 +89,48 @@ class _SessionComplete extends StatelessWidget {
             style: TextStyle(
                 fontSize: 16, fontWeight: FontWeight.bold, color: _C.darkText)),
         const SizedBox(height: 16),
-        const Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          _StCard(label: 'Activities', value: '4 / 4', emoji: '🧩'),
-          _StCard(label: 'Score', value: '8 / 10', emoji: '⭐️'),
-          _StCard(label: 'Time', value: '25 min', emoji: '⏱️'),
-        ]),
+        if (_error != null)
+          Column(
+            children: [
+              Text(_error!, textAlign: TextAlign.center),
+              TextButton(
+                onPressed: _loadSessionSummary,
+                child: const Text('Try again'),
+              ),
+            ],
+          )
+        else if (model == null)
+          const Padding(
+            padding: EdgeInsets.all(16),
+            child: CircularProgressIndicator(),
+          )
+        else
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _StCard(
+                label: 'Activities',
+                value: '${model.sessionActivitiesCompleted}',
+                emoji: '🧩',
+              ),
+              _StCard(
+                label: 'Feedback',
+                value: '${model.sessionScoreOutOfTen.toStringAsFixed(1)} / 10',
+                emoji: '⭐️',
+              ),
+              _StCard(
+                label: 'Time',
+                value: '${model.sessionDurationMinutes} min',
+                emoji: '⏱️',
+              ),
+            ],
+          ),
         const SizedBox(height: 24),
         _Btn(
-            text: 'සාරාංශය බලන්න',
-            onTap: () async {
-              final saved = await TherapyApiService.completeActiveSession(
-                resultSummary: const {
-                  'activitiesCompleted': 4,
-                  'activitiesTotal': 4,
-                  'score': 8,
-                  'scoreOutOf': 10,
-                  'durationMinutes': 25,
-                },
-              );
-              if (!context.mounted) return;
-              if (!saved) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content:
-                        Text('Could not save this therapy result. Try again.'),
-                  ),
-                );
-                return;
-              }
-              nav?.go(_TherapyRoute.progress);
-            }),
+            text: _isSaving ? 'Saving...' : 'සාරාංශය බලන්න',
+            onTap: _isSaving || model == null || _error != null
+                ? () {}
+                : _saveAndContinue),
         const SizedBox(height: 20),
       ]),
     ));

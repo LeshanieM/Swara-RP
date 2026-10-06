@@ -40,7 +40,7 @@ class _GuidedConv extends StatelessWidget {
         ]),
         const SizedBox(height: 30),
         const _TherapyMicButton(
-            nextScreen: _TherapyRoute.journeyComplete, radius: 36),
+            nextScreen: _TherapyRoute.adaptiveSyllable, radius: 36),
         const SizedBox(height: 16),
         TextButton(
             onPressed: () => nav?.go(_TherapyRoute.sessionComplete),

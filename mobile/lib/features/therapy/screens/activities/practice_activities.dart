@@ -164,7 +164,7 @@ class _PracticeActivityState extends State<_PracticeActivity> {
   void _advancePrompt() {
     final nav = _InheritedNav.of(context);
     if (_promptIndex == widget.activity.prompts.length - 1) {
-      nav?.go(_TherapyRoute.sessionComplete);
+      nav?.go(_TherapyRoute.adaptiveSyllable);
       return;
     }
     setState(() {
