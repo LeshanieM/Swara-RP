@@ -252,7 +252,7 @@ class ProgressScreen extends ConsumerWidget {
           _buildComponentRow('Component 1', 'Fluency / Stuttering', 'Moderate'),
           const Divider(height: 24),
           _buildComponentRow(
-              'Component 2', 'Secondary Behaviors', 'Mild–Moderate'),
+              'Component 2', 'Temporal movement features', 'Research analysis'),
           const Divider(height: 24),
           _buildComponentRow('Component 3', 'Therapy Activity', 'Storytelling'),
           const Divider(height: 24),

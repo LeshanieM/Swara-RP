@@ -36,9 +36,58 @@ from app.config.settings import (
 from app.jobs.store import append_result, create_job, get_job, update_job, write_reproducibility_log
 from app.processing.comparison import build_comparison
 from app.processing.evaluation import evaluate_results
+from app.processing.tmmf import (
+    extract_windows, label_windows, label_casa_windows, speaker_independent_evaluation,
+)
 from app.visualization.timeline import build_timeline_data
 
 router = APIRouter()
+
+
+@router.post("/tmmf/windows")
+async def tmmf_windows(payload: dict):
+    """Create research windows from per-frame analyzer features.
+
+    Payload: {frames:[{timestamp,eye?,lip?,jaw?,head?}], annotations?:[],
+    window_s?:2, overlap?:0.5, label_overlap_fraction?:0.5}. Features should
+    be normalized using face scale by the upstream analyzer.
+    """
+    try:
+        windows = extract_windows(payload.get("frames", []),
+                                  float(payload.get("window_s", 2.0)),
+                                  float(payload.get("overlap", 0.5)))
+        annotations = payload.get("annotations", [])
+        if annotations:
+            windows = label_windows(windows, annotations,
+                                    float(payload.get("label_overlap_fraction", 0.5)))
+        return {"method": "TMMF", "window_count": len(windows), "windows": windows}
+    except (TypeError, ValueError, KeyError) as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+
+@router.post("/tmmf/evaluate")
+async def tmmf_evaluate(payload: dict):
+    """Speaker-independent comparison over expert-labeled TMMF windows."""
+    try:
+        return speaker_independent_evaluation(payload.get("records", []),
+                                              int(payload.get("n_splits", 5)))
+    except (TypeError, ValueError, KeyError) as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+
+@router.post("/tmmf/casa-labels")
+async def tmmf_casa_labels(payload: dict):
+    """Apply normalized CASA annotations only to covered video feature windows."""
+    try:
+        labelled = label_casa_windows(payload.get("windows", []),
+                                      payload.get("annotations", []),
+                                      float(payload.get("positive_fraction", 0.5)),
+                                      float(payload.get("annotation_coverage", 0.5)))
+        return {"label_source": "CASA", "labelled_window_count": len(labelled),
+                "unlabelled_windows_omitted": True, "windows": labelled,
+                "scope_note": "CASA FG includes behaviors outside Swara's selected FG subset."}
+    except (TypeError, ValueError, KeyError) as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
 
 
 def _parse_technologies(technologies: Optional[str]) -> List[str]:

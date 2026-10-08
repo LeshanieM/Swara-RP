@@ -39,7 +39,7 @@ class _ProcessingState extends ConsumerState<VideoAnalysisProcessingScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(title: const Text('Analyzing Video')),
+      appBar: AppBar(title: const Text('Movement analysis')),
       body: SafeArea(
         child: ResponsiveBody(
           child: Builder(builder: (_) {
@@ -74,7 +74,7 @@ class _ProcessingState extends ConsumerState<VideoAnalysisProcessingScreen> {
           Text(
             failedJob
                 ? 'Analysis failed'
-                : (s.status == 'queued' ? 'Analysis queued...' : 'Analysis in progress...'),
+                : (s.status == 'queued' ? 'TMMF analysis queued...' : 'TMMF analysis in progress...'),
             style: AppTextStyles.heading3.copyWith(color: failedJob ? AppColors.error : null),
           ),
           const SizedBox(height: AppSpacing.md),
@@ -86,10 +86,13 @@ class _ProcessingState extends ConsumerState<VideoAnalysisProcessingScreen> {
             backgroundColor: AppColors.divider,
           ),
           const SizedBox(height: AppSpacing.sm),
-          Text('$finished / $total technologies finished', style: AppTextStyles.titleMedium),
+          Text(failedJob
+              ? 'Movement feature extraction stopped'
+              : (finished == 0 ? 'Preparing movement features' : 'Face tracking complete'),
+              style: AppTextStyles.titleMedium),
           if (s.requested.isNotEmpty)
             Text(
-              '${s.countOf(TechStatus.completed)} completed - '
+              '${s.countOf(TechStatus.completed)} complete - '
               '${s.countOf(TechStatus.unavailable)} unavailable - '
               '${s.countOf(TechStatus.failed)} failed',
               style: AppTextStyles.caption,
@@ -122,7 +125,8 @@ class _ProcessingState extends ConsumerState<VideoAnalysisProcessingScreen> {
         child: Row(children: [
           TechStatusIcon(st),
           const SizedBox(width: AppSpacing.md),
-          Expanded(child: Text(name, style: AppTextStyles.titleMedium)),
+          Expanded(child: Text(name == 'MediaPipe' ? 'Face and movement feature extraction' : name,
+              style: AppTextStyles.titleMedium)),
           Text(st.label, style: AppTextStyles.label.copyWith(color: st.color)),
         ]),
       ),

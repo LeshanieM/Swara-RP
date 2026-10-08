@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
@@ -116,9 +115,6 @@ class VideoAnalysisService {
   Future<String> start({
     required String childId,
     required SelectedVideo video,
-    String technologies = 'all',
-    bool generateOverlay = false,
-    String? groundTruthJson,
     void Function(int sent, int total)? onProgress,
   }) async {
     try {
@@ -135,9 +131,8 @@ class VideoAnalysisService {
       }
       final form = FormData.fromMap({
         'childId': childId,
-        'technologies': technologies,
-        'generateOverlay': generateOverlay.toString(),
-        if (groundTruthJson != null) 'groundTruth': groundTruthJson,
+        'technologies': 'mediapipe',
+        'generateOverlay': 'false',
         'video': file,
       });
       final res = await _api.postMultipart(_base, form, onSendProgress: onProgress);
@@ -181,16 +176,6 @@ class VideoAnalysisService {
     }
   }
 
-  /// URL + headers for the annotated video of one technology. Browsers cannot
-  /// send headers from a <video> element, so on web the token is a query param.
-  Future<({String url, Map<String, String> headers})> overlaySource(String id, String techKey) async {
-    final token = await StorageService.getToken();
-    final url = '${AppConstants.baseUrl}$_base/$id/overlay/$techKey';
-    if (kIsWeb) {
-      return (url: token == null ? url : '$url?access_token=${Uri.encodeQueryComponent(token)}', headers: <String, String>{});
-    }
-    return (url: url, headers: <String, String>{if (token != null) 'Authorization': 'Bearer $token'});
-  }
 }
 
 final videoAnalysisServiceProvider = Provider<VideoAnalysisService>(
@@ -256,50 +241,6 @@ class SelectedVideoNotifier extends StateNotifier<SelectedVideoState> {
 final selectedVideoProvider =
     StateNotifierProvider<SelectedVideoNotifier, SelectedVideoState>((ref) => SelectedVideoNotifier());
 
-/// Whether to ask the backend for annotated (overlay) videos.
-final generateOverlayProvider = StateProvider<bool>((ref) => false);
-
-/// Optional ground-truth annotations attached by a researcher.
-class GroundTruthNotifier extends StateNotifier<GroundTruthAttachment?> {
-  GroundTruthNotifier() : super(null);
-
-  /// Returns an error message, or null on success / cancel.
-  Future<String?> pick() async {
-    try {
-      final res = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: const ['json'],
-        withData: true,
-      );
-      if (res == null || res.files.isEmpty) return null;
-      final f = res.files.first;
-      final bytes = f.bytes;
-      if (bytes == null) return 'Could not read the annotation file.';
-      final text = utf8.decode(bytes);
-      final decoded = jsonDecode(text);
-      final annotations = decoded is Map ? decoded['annotations'] : null;
-      if (annotations is! List || annotations.isEmpty) {
-        return 'The JSON must contain a non-empty "annotations" list.';
-      }
-      state = GroundTruthAttachment(fileName: f.name, json: text, annotationCount: annotations.length);
-      return null;
-    } on FormatException {
-      return 'The selected file is not valid JSON.';
-    } catch (_) {
-      return 'Could not read the annotation file.';
-    }
-  }
-
-  void clear() => state = null;
-}
-
-final groundTruthProvider =
-    StateNotifierProvider<GroundTruthNotifier, GroundTruthAttachment?>((ref) => GroundTruthNotifier());
-
-/// analysisId -> the local video used for it (lets the overlay screen show the
-/// original next to the annotated video; the backend never keeps raw video).
-final localVideoByAnalysisProvider = StateProvider<Map<String, SelectedVideo>>((ref) => const {});
-
 // ---------------------------------------------------------------------------
 // Analysis creation ("VideoAnalysisProvider")
 // ---------------------------------------------------------------------------
@@ -329,14 +270,11 @@ class VideoAnalysisController extends StateNotifier<VideoAnalysisStartState> {
       final id = await _ref.read(videoAnalysisServiceProvider).start(
             childId: childId,
             video: video,
-            generateOverlay: _ref.read(generateOverlayProvider),
-            groundTruthJson: _ref.read(groundTruthProvider)?.json,
             onProgress: (sent, total) {
               if (!mounted || total <= 0) return;
               state = VideoAnalysisStartState(isUploading: true, progress: sent / total);
             },
           );
-      _ref.read(localVideoByAnalysisProvider.notifier).update((m) => {...m, id: video});
       if (mounted) state = const VideoAnalysisStartState();
       return id;
     } catch (e) {
@@ -440,15 +378,3 @@ final videoAnalysisHistoryProvider =
   return ref.watch(videoAnalysisServiceProvider).history(childId);
 });
 
-/// Technology key chosen on the timeline / overlay screens (per analysis).
-final selectedTechnologyProvider = StateProvider.family<String?, String>((ref, analysisId) => null);
-
-/// Behaviors visible on the timeline (per analysis). null = all behaviors.
-final selectedBehaviorsProvider = StateProvider.family<Set<String>?, String>((ref, analysisId) => null);
-
-/// analysisId|techKey -> annotated-video URL + auth headers.
-final overlaySourceProvider = FutureProvider.autoDispose
-    .family<({String url, Map<String, String> headers}), String>((ref, arg) {
-  final parts = arg.split('|');
-  return ref.watch(videoAnalysisServiceProvider).overlaySource(parts[0], parts[1]);
-});
