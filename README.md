@@ -1,100 +1,76 @@
-# Swara: A Sinhala-Based Intelligent Framework for Supporting Children with Stuttering
+# Swara
 
-This repository contains the source code for the **Swara Research Prototype**, developed as a final-year IT research project.
+Swara is a research prototype exploring digital tools to support children who stutter, their families, and speech-language professionals. It includes a Flutter mobile app, a Node.js API, and a Python service for speech and video analysis.
 
-> **⚠️ RESEARCH PROTOTYPE DISCLAIMER**
-> This application is a research prototype developed to demonstrate the feasibility and integration of the proposed Swara framework. The current prototype uses synthetic/sample data and preliminary AI/rule-based processing. It is not a clinically validated diagnostic or treatment system. Real participant data, therapist validation, ethical approval, model training, and empirical evaluation are required before any clinical use.
+This is a prototype, not a clinically validated assessment or treatment system. Some analysis and demo flows use sample or simulated results.
 
-## Project Overview
+## What’s in the repository
 
-Swara is a comprehensive, multi-component research prototype designed to assist children with stuttering, their parents, and Speech and Language Pathologists (SLPs). The application is built entirely using the **Impilo Design System**—a gentle, non-clinical design language featuring a core Navy Blue (`#000080`) scaffold, warm linen backgrounds (`#F4F0E8`), and targeted pastel accent tokens. This aesthetic ensures a child-friendly, highly engaging, and anxiety-reducing user experience, moving away from traditional "clinical" applications.
+- `mobile/` — Flutter app
+- `backend/` — Express API (default port `5000`)
+- `ai-service/` — FastAPI service (default port `8000`)
 
-## The Four Research Components
+The app can also be explored in Demo Mode without starting the backend or AI service.
 
-The Swara framework is driven by four integrated pillars:
+## Requirements
 
-### Component 1: Speech Stuttering Detection & Assessment
+- Flutter SDK (3.1 or newer) and a device, emulator, or Chrome
+- Node.js 18 or newer
+- Python 3.10 or newer
+- MongoDB, if you need backend features that use the database
 
-A multi-step, localized (Sinhala/English) assessment workflow that automatically adapts based on age demographics (4–7 years: Picture Description; 7–15 years: Reading Task). It features a robust recording interface, mock-driven AI processing animations, and an intuitive SLP dashboard to visualize stuttering severity and disfluency types.
+## Run the project
 
-### Component 2: Secondary Behaviors Associated with Stuttering
+Open a separate terminal for each service. Run commands from the repository folder unless a `cd` command is shown.
 
-A "gentle observation" module for analyzing physical stuttering characteristics (e.g., facial tension, eye blinking) via video upload or live recording. The workflow emphasizes supportive, non-clinical messaging to track physical behaviors without intimidating the child, utilizing a customized lavender/pastel component theme.
+### AI service
 
-### Component 3: Adaptive Speech Therapy Activities
+On Windows PowerShell:
 
-An interactive and gamified speech therapy module featuring customized breathing exercises, storytelling sessions, and adaptive challenges. The interface is highly immersive, utilizing continuous visual feedback to motivate regular practice.
+```powershell
+cd ai-service
+py -3 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python -m uvicorn app.main:app --reload --port 8000
+```
 
-### Component 4: Personalized Spontaneous Speech & Linguistic Analysis
+On macOS or Linux:
 
-A personalized speech elicitation framework that automatically selects personally relevant speaking tasks based on the child’s age, interests, familiarity, and previous session results. The child’s spontaneous speech is recorded and analyzed using ASR and NLP measures such as MLU and NDW to track communication changess, while maintaining a natural, pressure-free experience.
+```bash
+cd ai-service
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python -m uvicorn app.main:app --reload --port 8000
+```
 
-## Architecture & Technology Stack
+The API is available at `http://localhost:8000`; its interactive docs are at `http://localhost:8000/docs`.
 
-The Swara framework consists of three main components:
+If you already have a `venv` folder, you can activate it instead of creating `.venv`. Python virtual environments should be recreated if the project folder has been moved, since their launchers can retain the old path.
 
-1.  **Mobile Frontend (Flutter):** A child-friendly mobile application. It relies on `AppTheme` for unified tokens, `GoRouter` for shell navigation, and `Riverpod` for state management.
-2.  **Backend API (Node.js/Express):** REST API handling business logic, authentication, database interaction (MongoDB), and proxying AI requests.
-3.  **AI Service (Python/FastAPI):** A dedicated service intended to handle ML models, feature extraction (e.g., using LibROSA), and NLP tasks.
-
-**Tech Stack:**
-
-- **Mobile App:** Flutter, Dart, Riverpod, GoRouter, Google Fonts (Nunito)
-- **Backend:** Node.js, Express, MongoDB, Mongoose, JWT
-- **AI Service:** Python, FastAPI, LibROSA, Scikit-learn (planned)
-
-## Demo Mode
-
-The Flutter application includes a fully functional **Demo Mode**, which can be toggled on the login screen. When Demo Mode is active, the app uses localized synthetic data (avoiding network calls) and seamlessly demonstrates the UI, animations, and user flows without requiring the backend or AI service to be running.
-
-## Setup Instructions
-
-### 1. Prerequisites
-
-- Flutter SDK (>=3.1.0)
-- Node.js (v18+)
-- Python (3.10+)
-- MongoDB (running locally or via Atlas)
-
-### 2. Backend Setup
+### Backend
 
 ```bash
 cd backend
 npm install
-
-# Create a .env file based on the provided .env defaults
-# Start the server (runs on port 5000)
 npm run dev
-
-# (Optional) Seed the database with demo users/children
-npm run seed
 ```
 
-### 3. AI Service Setup
+The API uses port `5000` by default. It connects to `mongodb://localhost:27017/swara_db` when MongoDB is available. Set `MONGODB_URI` in your local environment to use a different database. Do not commit credentials or private environment files.
 
-```bash
-cd ai-service
-pip install -r requirements.txt
-
-# Run the FastAPI server (runs on port 8000)
-uvicorn app.main:app --reload
-```
-
-### 4. Flutter Mobile App Setup
+### Mobile app
 
 ```bash
 cd mobile
 flutter pub get
-
-# Run the application (connect an emulator or physical device)
 flutter run
-# Or test locally in the browser
-flutter run -d chrome
 ```
 
-## Future ML Integration
+To run in Chrome, use `flutter run -d chrome`. For a connected phone or emulator, choose that device in Flutter.
 
-The architecture is designed to allow the research team to incrementally replace prototype logic with trained ML models:
+## Notes
 
-- Replace mock endpoints in `ai-service/app/main.py` with actual model inference code.
-- Integrate trained models for stutter detection (Component 1) and communication assessment (Component 4) seamlessly, without modifying the mobile app UI.
+- The backend can start without MongoDB, but database-backed features will not be available.
+- The AI service includes prototype analysis endpoints; results should not be treated as clinical findings.
+- See `ai-service/VISION_README.md` for details on the video-analysis setup.
