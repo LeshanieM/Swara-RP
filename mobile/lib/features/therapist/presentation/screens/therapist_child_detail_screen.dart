@@ -83,8 +83,10 @@ class TherapistChildDetailScreen extends ConsumerWidget {
               ),
               _ActionTile(
                 icon: Icons.face_retouching_natural,
-                label: 'Component 2 (Secondary Behaviors)',
-                onTap: () => context.push('/concomitant/dashboard/${child.childId}'),
+                label: 'Component 2 Movement Analysis',
+                onTap: () => context.push(
+                  '/c2/video/upload?childId=${Uri.encodeComponent(child.childId)}',
+                ),
               ),
               _ActionTile(
                 icon: Icons.auto_awesome,
