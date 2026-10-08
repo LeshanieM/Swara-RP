@@ -33,6 +33,7 @@ from app.analyzers.base_analyzer import BehaviorEvent, BehaviorResult, Unavailab
 from app.config.settings import MEDIAPIPE_FACE_MODEL_PATH, RESULTS_DIR, THRESHOLDS
 from app.processing import feature_extraction as fx
 from app.processing.temporal_detection import angular_velocity_deg, detect_events_above_threshold
+from app.processing.tmmf import extract_windows
 from app.visualization.overlays import OverlayWriter
 
 RIGHT_EYE_EAR_IDX = [33, 160, 158, 133, 153, 144]
@@ -77,6 +78,7 @@ class MediaPipeAnalyzer(VisionAnalyzer):
         video_path: str,
         generate_overlay: bool = False,
         preprocessing_notes: Optional[List[str]] = None,
+        target_fps: Optional[float] = None,
     ) -> Dict[str, Any]:
         video_meta = _probe_video(video_path)
         available, reason = self.is_available()
@@ -90,6 +92,8 @@ class MediaPipeAnalyzer(VisionAnalyzer):
             "FaceLandmarker run in VIDEO mode (single face) with blendshapes and facial "
             "transformation matrices enabled."
         )
+        if target_fps and target_fps > 0:
+            notes.append(f"Research sampling target: {target_fps:g} frames/s.")
 
         try:
             import cv2
@@ -102,6 +106,7 @@ class MediaPipeAnalyzer(VisionAnalyzer):
                 return self.error_result(video_meta, "runtime_error: could not open video file")
 
             fps = video_meta.get("fps") or 30.0
+            frame_stride = max(1, round(fps / target_fps)) if target_fps and target_fps > 0 else 1
             width, height = video_meta.get("width") or 0, video_meta.get("height") or 0
 
             options = vision.FaceLandmarkerOptions(
@@ -128,10 +133,15 @@ class MediaPipeAnalyzer(VisionAnalyzer):
                 if not ok:
                     break
                 t = frame_idx / fps
+                current_frame = frame_idx
+                frame_idx += 1
+                if current_frame % frame_stride:
+                    if overlay is not None and overlay.enabled:
+                        overlay.write(frame)
+                    continue
                 rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb)
                 res = landmarker.detect_for_video(mp_image, int(t * 1000))
-                frame_idx += 1
 
                 if not res.face_landmarks:
                     missing += 1
@@ -239,6 +249,21 @@ class MediaPipeAnalyzer(VisionAnalyzer):
             )
             if overlay_path:
                 result["overlay_video_path"] = overlay_path
+            # Preserve existing event results while exposing the shared,
+            # technology-neutral temporal representation for research/training.
+            # EAR/lip/jaw signals are normalized by inter-ocular distance above.
+            frames = [{"timestamp": t,
+                       "eye": abs(ear[i] - ear[i - 1]) if i else 0.0,
+                       "lip": abs(lip[i] - lip[i - 1]) if i else 0.0,
+                       "jaw": abs(jaw[i] - jaw[i - 1]) if i else 0.0,
+                       "head": vel[i]}
+                      for i, t in enumerate(ts)]
+            result["tmmf"] = {"status": "features_only",
+                              "method": "Temporal Multimodal Movement Fusion",
+                              "window_s": 2.0, "overlap": 0.5,
+                              "target_fps": round(fps / frame_stride, 3),
+                              "windows": extract_windows(frames),
+                              "note": "Predictions require speaker-labeled expert training data; no labels are inferred here."}
             return result
         except Exception as exc:  # one technology failing must not stop the experiment
             return self.error_result(video_meta, f"runtime_error: {exc}", time.time() - start)

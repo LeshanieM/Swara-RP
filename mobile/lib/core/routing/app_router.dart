@@ -29,11 +29,6 @@ import 'package:swara/features/concomitant/presentation/screens/concomitant_uplo
 import 'package:swara/features/concomitant/presentation/screens/video_analysis_results_screen.dart';
 import 'package:swara/features/concomitant/presentation/screens/video_analysis_processing_screen.dart';
 import 'package:swara/features/concomitant/presentation/screens/video_analysis_upload_screen.dart';
-import 'package:swara/features/concomitant/presentation/screens/video_comparison_screen.dart';
-import 'package:swara/features/concomitant/presentation/screens/video_evaluation_screen.dart';
-import 'package:swara/features/concomitant/presentation/screens/video_overlay_screen.dart';
-import 'package:swara/features/concomitant/presentation/screens/video_technology_detail_screen.dart';
-import 'package:swara/features/concomitant/presentation/screens/video_timeline_screen.dart';
 import 'package:swara/features/progress/presentation/screens/progress_screen.dart';
 import 'package:swara/features/speech/presentation/screens/speech_completion_screen.dart';
 import 'package:swara/features/speech/presentation/screens/speech_result_screen.dart';
@@ -187,37 +182,6 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/c2/video/results/:id',
             builder: (context, state) => VideoAnalysisResultsScreen(
-              analysisId: state.pathParameters['id']!,
-            ),
-          ),
-          GoRoute(
-            path: '/c2/video/results/:id/tech/:tech',
-            builder: (context, state) => VideoTechnologyDetailScreen(
-              analysisId: state.pathParameters['id']!,
-              techKey: state.pathParameters['tech']!,
-            ),
-          ),
-          GoRoute(
-            path: '/c2/video/results/:id/compare',
-            builder: (context, state) => VideoComparisonScreen(
-              analysisId: state.pathParameters['id']!,
-            ),
-          ),
-          GoRoute(
-            path: '/c2/video/results/:id/timeline',
-            builder: (context, state) => VideoTimelineScreen(
-              analysisId: state.pathParameters['id']!,
-            ),
-          ),
-          GoRoute(
-            path: '/c2/video/results/:id/overlay',
-            builder: (context, state) => VideoOverlayScreen(
-              analysisId: state.pathParameters['id']!,
-            ),
-          ),
-          GoRoute(
-            path: '/c2/video/results/:id/metrics',
-            builder: (context, state) => VideoEvaluationScreen(
               analysisId: state.pathParameters['id']!,
             ),
           ),
