@@ -7,8 +7,8 @@ import 'package:swara/features/concomitant/data/models/video_analysis_models.dar
 import 'package:swara/features/concomitant/data/providers/video_analysis_provider.dart';
 import 'package:swara/features/concomitant/presentation/widgets/video_analysis_ui.dart';
 
-/// Step 4: technology results hub. Detail, comparison, timeline, annotated
-/// video and evaluation metrics each have their own screen.
+/// Results for the TMMF feature-extraction workflow. This screen deliberately
+/// does not present movement signals as validated FG/HM predictions.
 class VideoAnalysisResultsScreen extends ConsumerWidget {
   final String analysisId;
   const VideoAnalysisResultsScreen({super.key, required this.analysisId});
@@ -19,7 +19,7 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Computer Vision Analysis'),
+        title: const Text('Movement feature results'),
         actions: [
           IconButton(
             tooltip: 'Refresh',
@@ -31,7 +31,7 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
       body: SafeArea(
         child: ResponsiveBody(
           child: async.when(
-            loading: () => const SwaraLoadingWidget(message: 'Loading analysis results...'),
+            loading: () => const SwaraLoadingWidget(message: 'Loading movement features...'),
             error: (e, _) => SwaraErrorWidget(
               message: VideoAnalysisException.from(e).message,
               onRetry: () => ref.invalidate(videoAnalysisResultsProvider(analysisId)),
@@ -44,134 +44,175 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
   }
 
   Widget _content(BuildContext context, VideoAnalysisResults data) {
-    if (!data.hasResults) {
-      if (data.isFailed) {
-        return SwaraErrorWidget(
-          message: 'The analysis failed.\n${humanizeReason(data.error)}',
-          onRetry: () => context.pushReplacement('/c2/video/upload'),
-        );
-      }
+    final analysis = data.byKey('mediapipe');
+    if (analysis == null || !analysis.isCompleted) {
+      return SwaraErrorWidget(
+        message: analysis == null
+            ? 'No MediaPipe movement analysis was returned.'
+            : 'Movement feature extraction did not complete. ${humanizeReason(analysis.reason)}',
+        onRetry: () => context.pushReplacement('/c2/video/upload'),
+      );
+    }
+
+    final tmmf = analysis.tmmf;
+    if (tmmf == null || !tmmf.hasWindows) {
       return const SwaraEmptyState(
-        title: 'No results are available.',
-        subtitle: 'The analysis returned no technology results.',
-        icon: Icons.inbox_outlined,
+        title: 'No temporal features were returned.',
+        subtitle: 'Try another video with a clearly visible face.',
+        icon: Icons.face_retouching_off_outlined,
       );
     }
 
     final meta = data.videoMeta;
-    final base = '/c2/video/results/$analysisId';
-    return ListView(padding: const EdgeInsets.all(AppSpacing.lg), children: [
-      SwaraCard(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Row(children: [
-            const Icon(Icons.videocam_outlined, color: AppColors.primary),
-            const SizedBox(width: AppSpacing.sm),
-            Expanded(
-              child: Text(data.videoFilename ?? 'Analyzed video',
-                  maxLines: 2, overflow: TextOverflow.ellipsis, style: AppTextStyles.titleMedium),
-            ),
-          ]),
-          const SizedBox(height: AppSpacing.sm),
-          Wrap(spacing: AppSpacing.sm, runSpacing: AppSpacing.xs, children: [
-            if (meta.hasDuration)
-              StatusPill(label: fmtSeconds(meta.duration, digits: 1), color: AppColors.primaryDeep, icon: Icons.timer_outlined),
-            if (meta.fps != null && meta.fps! > 0)
-              StatusPill(label: '${meta.fps!.toStringAsFixed(0)} fps', color: AppColors.primaryDeep),
-            if (meta.resolution != null) StatusPill(label: meta.resolution!, color: AppColors.primaryDeep),
-          ]),
-          const SizedBox(height: AppSpacing.sm),
-          Wrap(spacing: AppSpacing.sm, runSpacing: AppSpacing.xs, children: [
-            StatusPill(
-                label: '${data.countWhere(TechStatus.completed)} completed',
-                color: TechStatus.completed.color,
-                icon: TechStatus.completed.icon),
-            if (data.countWhere(TechStatus.unavailable) > 0)
-              StatusPill(
-                  label: '${data.countWhere(TechStatus.unavailable)} unavailable',
-                  color: TechStatus.unavailable.color,
-                  icon: TechStatus.unavailable.icon),
-            if (data.countWhere(TechStatus.failed) > 0)
-              StatusPill(
-                  label: '${data.countWhere(TechStatus.failed)} failed',
-                  color: TechStatus.failed.color,
-                  icon: TechStatus.failed.icon),
-          ]),
-        ]),
-      ),
-      const SizedBox(height: AppSpacing.md),
-      ResearchNote(data.comparisonNote ??
-          'Research output: visual-feature movement events from each technology. '
-              'Not a diagnosis. No technology is ranked or scored.'),
-      const SectionTitle('Explore'),
-      LayoutBuilder(builder: (context, c) {
-        final w = (c.maxWidth - AppSpacing.md) / 2;
-        Widget tile(IconData icon, String label, String route) => SizedBox(
-              width: w,
-              child: SwaraCard(
-                onTap: () => context.push('$base/$route'),
-                padding: const EdgeInsets.all(AppSpacing.md),
-                child: Row(children: [
-                  Icon(icon, color: AppColors.primaryDeep),
-                  const SizedBox(width: AppSpacing.sm),
-                  Expanded(child: Text(label, style: AppTextStyles.label)),
-                ]),
+    return ListView(
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      children: [
+        SwaraCard(
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Row(children: [
+              const Icon(Icons.videocam_outlined, color: AppColors.primary),
+              const SizedBox(width: AppSpacing.sm),
+              Expanded(
+                child: Text(data.videoFilename ?? 'Analyzed video',
+                    maxLines: 2, overflow: TextOverflow.ellipsis, style: AppTextStyles.titleMedium),
               ),
-            );
-        return Wrap(spacing: AppSpacing.md, runSpacing: AppSpacing.md, children: [
-          tile(Icons.compare_arrows_rounded, 'Comparison', 'compare'),
-          tile(Icons.timeline_rounded, 'Event timeline', 'timeline'),
-          tile(Icons.movie_filter_outlined, 'Annotated video', 'overlay'),
-          tile(Icons.fact_check_outlined, 'Research metrics', 'metrics'),
-        ]);
-      }),
-      const SectionTitle('Technologies'),
-      for (final t in data.technologies) _techCard(context, t, base),
-      const SizedBox(height: AppSpacing.xl),
-    ]);
+            ]),
+            const SizedBox(height: AppSpacing.md),
+            Wrap(spacing: AppSpacing.sm, runSpacing: AppSpacing.xs, children: [
+              StatusPill(label: '${tmmf.windows.length} windows', color: AppColors.primaryDeep,
+                  icon: Icons.view_week_outlined),
+              if (tmmf.windowSeconds != null)
+                StatusPill(label: '${tmmf.windowSeconds!.toStringAsFixed(0)} s windows',
+                    color: AppColors.primaryDeep),
+              if (tmmf.overlap != null)
+                StatusPill(label: '${(tmmf.overlap! * 100).round()}% overlap', color: AppColors.primaryDeep),
+              if (tmmf.targetFps != null)
+                StatusPill(label: '${tmmf.targetFps!.toStringAsFixed(0)} sampled fps', color: AppColors.primaryDeep),
+              if (meta.resolution != null)
+                StatusPill(label: meta.resolution!, color: AppColors.primaryDeep),
+            ]),
+          ]),
+        ),
+        const SizedBox(height: AppSpacing.md),
+        const ResearchNote(
+          'These are eye, lip, jaw, and head movement features over time. '
+          'This workflow does not yet produce validated Facial Grimace (FG) or Head Movement (HM) predictions.',
+          icon: Icons.science_outlined,
+        ),
+        const SectionTitle('Movement feature summary'),
+        _channelGrid(tmmf),
+        const SizedBox(height: AppSpacing.md),
+        _windowPreview(tmmf),
+        const SizedBox(height: AppSpacing.md),
+        SwaraCard(
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text('Tracking', style: AppTextStyles.titleMedium),
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              '${analysis.tracking.processedFrames ?? 0} frames analyzed'
+              '${analysis.tracking.missingFrames == null ? '' : ' · ${analysis.tracking.missingFrames} frames without a face'}',
+              style: AppTextStyles.bodySmall,
+            ),
+            if (analysis.processingTime != null)
+              Padding(
+                padding: const EdgeInsets.only(top: AppSpacing.xs),
+                child: Text('Processing time: ${fmtSeconds(analysis.processingTime)}',
+                    style: AppTextStyles.caption),
+              ),
+          ]),
+        ),
+        const SizedBox(height: AppSpacing.md),
+        TextButton.icon(
+          onPressed: () => context.pushReplacement('/c2/video/upload'),
+          icon: const Icon(Icons.add),
+          label: const Text('Analyze another video'),
+        ),
+        const SizedBox(height: AppSpacing.xl),
+      ],
+    );
   }
 
-  Widget _techCard(BuildContext context, TechnologyResult t, String base) {
-    final supported = t.behaviors.entries.where((e) => e.value.isSupported).toList();
-    return Padding(
-      padding: const EdgeInsets.only(bottom: AppSpacing.md),
-      child: SwaraCard(
-        onTap: () => context.push('$base/tech/${t.key}'),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Row(children: [
-            TechStatusIcon(t.status),
-            const SizedBox(width: AppSpacing.sm),
-            Expanded(child: Text(t.name, style: AppTextStyles.heading3)),
-            const Icon(Icons.chevron_right, color: AppColors.textLight),
-          ]),
-          const SizedBox(height: AppSpacing.xs),
-          Text(
-            t.isCompleted
-                ? 'Completed${t.processingTime != null ? ' - ${fmtSeconds(t.processingTime)}' : ''}'
-                : t.status.label,
-            style: AppTextStyles.label.copyWith(color: t.status.color),
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          if (t.isCompleted) ...[
-            if (supported.isEmpty)
-              Text('No supported behaviors were reported.', style: AppTextStyles.bodySmall)
-            else
-              for (final e in supported)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 2),
-                  child: Row(children: [
-                    Container(
-                      width: 8,
-                      height: 8,
-                      decoration: BoxDecoration(color: behaviorColor(e.key), shape: BoxShape.circle),
-                    ),
-                    const SizedBox(width: AppSpacing.sm),
-                    Text(behaviorEventsText(e.key, e.value.eventCount), style: AppTextStyles.bodySmall.copyWith(color: AppColors.text)),
-                  ]),
-                ),
-          ] else
-            Text('Reason: ${humanizeReason(t.reason)}', style: AppTextStyles.bodySmall),
+  Widget _channelGrid(TmmfResult tmmf) {
+    final channels = const [
+      ('eye', 'Eye movement', Icons.remove_red_eye_outlined),
+      ('lip', 'Lip movement', Icons.sentiment_satisfied_alt_outlined),
+      ('jaw', 'Jaw movement', Icons.face_outlined),
+      ('head', 'Head movement', Icons.accessibility_new_outlined),
+    ];
+    return LayoutBuilder(builder: (context, constraints) {
+      final wide = constraints.maxWidth >= 560;
+      final width = wide ? (constraints.maxWidth - AppSpacing.md) / 2 : constraints.maxWidth;
+      return Wrap(
+        spacing: AppSpacing.md,
+        runSpacing: AppSpacing.md,
+        children: [
+          for (final (key, label, icon) in channels)
+            SizedBox(
+              width: width,
+              child: _channelCard(tmmf, key, label, icon),
+            ),
+        ],
+      );
+    });
+  }
+
+  Widget _channelCard(TmmfResult tmmf, String key, String label, IconData icon) {
+    final meanKey = '${key}_mean';
+    final velocityKey = '${key}_max_velocity';
+    final means = tmmf.windows.map((w) => w.features[meanKey]).whereType<double>().toList();
+    final velocities = tmmf.windows.map((w) => w.features[velocityKey]).whereType<double>().toList();
+    final average = means.isEmpty ? null : means.reduce((a, b) => a + b) / means.length;
+    final peak = velocities.isEmpty ? null : velocities.reduce((a, b) => a > b ? a : b);
+    return SwaraCard(
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(children: [
+          Icon(icon, color: AppColors.primaryDeep),
+          const SizedBox(width: AppSpacing.sm),
+          Expanded(child: Text(label, style: AppTextStyles.titleMedium)),
         ]),
+        const SizedBox(height: AppSpacing.md),
+        _metricLine('Average window signal', average),
+        const SizedBox(height: AppSpacing.xs),
+        _metricLine('Peak window velocity', peak),
+      ]),
+    );
+  }
+
+  Widget _metricLine(String label, double? value) => Row(
+        children: [
+          Expanded(child: Text(label, style: AppTextStyles.caption)),
+          Text(value == null ? '—' : value.toStringAsFixed(4), style: AppTextStyles.label),
+        ],
+      );
+
+  Widget _windowPreview(TmmfResult tmmf) {
+    final preview = tmmf.windows.take(8).toList(growable: false);
+    return SwaraCard(
+      padding: EdgeInsets.zero,
+      child: ExpansionTile(
+        leading: const Icon(Icons.view_timeline_outlined, color: AppColors.primaryDeep),
+        title: Text('Window preview', style: AppTextStyles.titleMedium),
+        subtitle: Text('Showing ${preview.length} of ${tmmf.windows.length} windows', style: AppTextStyles.caption),
+        childrenPadding: const EdgeInsets.fromLTRB(AppSpacing.md, 0, AppSpacing.md, AppSpacing.md),
+        children: [
+          for (var i = 0; i < preview.length; i++)
+            ListTile(
+              dense: true,
+              contentPadding: EdgeInsets.zero,
+              title: Text('Window ${i + 1}', style: AppTextStyles.label),
+              subtitle: Text(
+                '${preview[i].startTime.toStringAsFixed(1)}–${preview[i].endTime.toStringAsFixed(1)} s\n'
+                'Eye ${_short(preview[i].features['eye_mean'])} · '
+                'Lip ${_short(preview[i].features['lip_mean'])} · '
+                'Jaw ${_short(preview[i].features['jaw_mean'])} · '
+                'Head ${_short(preview[i].features['head_mean'])}',
+                style: AppTextStyles.caption,
+              ),
+            ),
+        ],
       ),
     );
   }
+
+  String _short(double? value) => value == null ? '—' : value.toStringAsFixed(2);
 }

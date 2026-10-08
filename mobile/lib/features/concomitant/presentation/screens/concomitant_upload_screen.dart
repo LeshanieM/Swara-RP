@@ -127,7 +127,7 @@ class _ConcomitantUploadScreenState extends State<ConcomitantUploadScreen> {
                 child: TextButton.icon(
                   onPressed: () => context.push('/c2/video/upload'),
                   icon: const Icon(Icons.science_outlined, size: 18),
-                  label: const Text('Research mode: compare CV technologies on one video'),
+                  label: const Text('Research mode: temporal movement features'),
                 ),
               ),
               const SizedBox(height: 40),
