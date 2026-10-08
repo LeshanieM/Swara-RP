@@ -1,0 +1,169 @@
+// ============================================================================
+// SWARA THERAPY UI - Forest Adventure Speech Therapy Journey
+// ============================================================================
+// This journey is mounted by the app router at /c3/forest-therapy and is
+// displayed inside the main app scaffold.
+// ============================================================================
+
+import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:go_router/go_router.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'dart:math' as math;
+import 'package:record/record.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:swara/core/constants/app_constants.dart';
+import 'package:swara/core/storage/storage_service.dart';
+import 'therapy_api_service.dart';
+part 'linucb_activity_selector.dart';
+part 'therapy_state.dart';
+part 'therapy_widgets.dart';
+part 'screens/setup/welcome.dart';
+part 'screens/setup/home.dart';
+part 'screens/setup/theme_selection.dart';
+part 'screens/setup/state.dart';
+part 'screens/setup/adventure_plan.dart';
+part 'screens/session/journey_map.dart';
+part 'screens/activities/milestone_intro.dart';
+part 'screens/activities/activity.dart';
+part 'screens/activities/activity_state.dart';
+part 'screens/activities/feedback.dart';
+part 'screens/activities/adaptive_next.dart';
+part 'screens/activities/adaptive_next_state.dart';
+part 'screens/activities/guided_conv.dart';
+part 'screens/session/session_complete.dart';
+part 'screens/session/progress.dart';
+part 'screens/setup/character.dart';
+part 'screens/activities/library.dart';
+part 'screens/activities/detail.dart';
+part 'screens/activities/syllable_practice.dart';
+part 'screens/activities/breathing.dart';
+part 'screens/activities/practice_activities.dart';
+part 'screens/dashboard/engagement.dart';
+part 'screens/dashboard/therapy_history.dart';
+
+class _TherapyJourneyShell extends StatefulWidget {
+  final String screen;
+  const _TherapyJourneyShell({required this.screen});
+  @override
+  State<_TherapyJourneyShell> createState() => _TherapyJourneyShellState();
+}
+
+class _TherapyJourneyShellState extends State<_TherapyJourneyShell> {
+  static bool _hasLoadedSavedTheme = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (!_hasLoadedSavedTheme) {
+      _hasLoadedSavedTheme = true;
+      _loadSavedTheme();
+    }
+  }
+
+  Future<void> _loadSavedTheme() async {
+    final saved =
+        await StorageService.getString(AppConstants.c3PreferredThemeKey);
+    _therapyTheme.value = _AppThemeX.fromStorageId(saved);
+  }
+
+  Widget _screenForRoute() {
+    if (widget.screen.startsWith('practice:')) {
+      final activityId = widget.screen.substring('practice:'.length);
+      final activity =
+          _therapyActivities.where((item) => item.id == activityId).firstOrNull;
+      if (activity != null) return _PracticeActivity(activity: activity);
+    }
+
+    switch (widget.screen) {
+      case _TherapyRoute.home:
+        return const _Home();
+      case _TherapyRoute.themeSelection:
+        return const _ThemeSelection();
+      case _TherapyRoute.welcome:
+        return const _Welcome();
+      case _TherapyRoute.character:
+        return const _Character();
+      case _TherapyRoute.adventurePlan:
+        return const _AdventurePlan();
+      case _TherapyRoute.journeyMap:
+        return const _JourneyMap();
+      case _TherapyRoute.breathing:
+        return const _Breathing();
+      case _TherapyRoute.adaptiveSyllable:
+        return const _AdaptiveNext();
+      case _TherapyRoute.syllablePractice:
+        return const _SyllablePractice();
+      case _TherapyRoute.adaptivePicture:
+        return const _AdaptiveNext();
+      case _TherapyRoute.pictureIntro:
+        return const _MilestoneIntro();
+      case _TherapyRoute.pictureActivity:
+        return const _Activity();
+      case _TherapyRoute.adaptiveConversation:
+        return const _AdaptiveNext();
+      case _TherapyRoute.guidedConversation:
+        return const _GuidedConv();
+      case _TherapyRoute.sessionComplete:
+        return const _SessionComplete();
+      case _TherapyRoute.progress:
+        return const _Progress();
+      case _TherapyRoute.history:
+        return const _TherapyHistory();
+      case _TherapyRoute.engagement:
+        return const _Engagement();
+      case _TherapyRoute.activityLibrary:
+        return const _Library();
+      case _TherapyRoute.activityDetail:
+        return const _Detail();
+      case _TherapyRoute.feedback:
+        return const _Feedback();
+      default:
+        return const _Home();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<_AppTheme>(
+      valueListenable: _therapyTheme,
+      builder: (context, theme, _) => _InheritedTheme(
+        theme: theme,
+        onChanged: (theme) => _therapyTheme.value = theme,
+        child: _InheritedNav(
+          go: (route) => context.push('/c3/therapy/$route'),
+          child: _screenForRoute(),
+        ),
+      ),
+    );
+  }
+}
+
+final ValueNotifier<_AppTheme> _therapyTheme =
+    ValueNotifier<_AppTheme>(_AppTheme.forest);
+
+class _TherapyRoute {
+  static const home = 'home';
+  static const themeSelection = 'theme-selection';
+  static const welcome = 'welcome';
+  static const character = 'character';
+  static const adventurePlan = 'adventure-plan';
+  static const journeyMap = 'journey-map';
+  static const breathing = 'breathing';
+  static const adaptiveSyllable = 'adaptive-syllable';
+  static const syllablePractice = 'syllable-practice';
+  static const adaptivePicture = 'adaptive-picture';
+  static const pictureIntro = 'picture-intro';
+  static const pictureActivity = 'picture-activity';
+  static const adaptiveConversation = 'adaptive-conversation';
+  static const guidedConversation = 'guided-conversation';
+  static const sessionComplete = 'session-complete';
+  static const progress = 'progress';
+  static const history = 'history';
+  static const engagement = 'engagement';
+  static const activityLibrary = 'activity-library';
+  static const activityDetail = 'activity-detail';
+  static const practiceActivity = 'activity';
+  static const feedback = 'feedback';
+}

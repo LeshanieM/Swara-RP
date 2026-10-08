@@ -41,14 +41,16 @@ class SwaraButton extends StatelessWidget {
             ],
           );
 
+       final c = color;
+
     if (outlined) {
       return OutlinedButton(
         onPressed: isLoading ? null : onPressed,
-        style: color == null
+        style: c == null
             ? null
             : OutlinedButton.styleFrom(
-                foregroundColor: color,
-                side: BorderSide(color: color, width: 1.5),
+                foregroundColor: c,
+                side: BorderSide(color: c, width: 1.5),
               ),
         child: child,
       );
@@ -56,9 +58,9 @@ class SwaraButton extends StatelessWidget {
 
     return ElevatedButton(
       onPressed: isLoading ? null : onPressed,
-      style: color == null
+      style: c == null
           ? null
-          : ElevatedButton.styleFrom(backgroundColor: color),
+          : ElevatedButton.styleFrom(backgroundColor: c),
       child: child,
     );
   }
