@@ -14,7 +14,7 @@ Swara is a comprehensive, multi-component research prototype designed to assist 
 The Swara framework is driven by four integrated pillars:
 
 ### Component 1: Speech Stuttering Detection & Assessment
-A multi-step, localized (Sinhala/English) assessment workflow that automatically adapts based on age demographics (4–7 years: Picture Description; 7–15 years: Reading Task). It features a robust recording interface, mock-driven AI processing animations, and an intuitive SLP dashboard to visualize stuttering severity and disfluency types.
+A multi-step, localized (Sinhala/English) assessment workflow that automatically adapts based on age demographics (5–10 years: Picture Description; 11–14 years: Reading Task). It features a robust recording interface, mock-driven AI processing animations, and an intuitive SLP dashboard to visualize stuttering severity and disfluency types.
 
 ### Component 2: Secondary Behaviors Associated with Stuttering
 A "gentle observation" module for analyzing physical stuttering characteristics (e.g., facial tension, eye blinking) via video upload or live recording. The workflow emphasizes supportive, non-clinical messaging to track physical behaviors without intimidating the child, utilizing a customized lavender/pastel component theme.
