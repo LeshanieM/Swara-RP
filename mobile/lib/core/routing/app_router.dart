@@ -22,18 +22,9 @@ import 'package:swara/features/auth/presentation/screens/login_screen.dart';
 import 'package:swara/features/auth/presentation/screens/register_screen.dart';
 import 'package:swara/features/auth/presentation/screens/splash_screen.dart';
 import 'package:swara/features/child/presentation/screens/child_home_screen.dart';
-import 'package:swara/features/concomitant/presentation/screens/concomitant_processing_screen.dart';
-import 'package:swara/features/concomitant/presentation/screens/concomitant_ready_screen.dart';
-import 'package:swara/features/concomitant/presentation/screens/concomitant_result_screen.dart';
-import 'package:swara/features/concomitant/presentation/screens/concomitant_upload_screen.dart';
 import 'package:swara/features/concomitant/presentation/screens/video_analysis_results_screen.dart';
 import 'package:swara/features/concomitant/presentation/screens/video_analysis_processing_screen.dart';
 import 'package:swara/features/concomitant/presentation/screens/video_analysis_upload_screen.dart';
-import 'package:swara/features/concomitant/presentation/screens/video_comparison_screen.dart';
-import 'package:swara/features/concomitant/presentation/screens/video_evaluation_screen.dart';
-import 'package:swara/features/concomitant/presentation/screens/video_overlay_screen.dart';
-import 'package:swara/features/concomitant/presentation/screens/video_technology_detail_screen.dart';
-import 'package:swara/features/concomitant/presentation/screens/video_timeline_screen.dart';
 import 'package:swara/features/progress/presentation/screens/progress_screen.dart';
 import 'package:swara/features/speech/presentation/screens/speech_completion_screen.dart';
 import 'package:swara/features/speech/presentation/screens/speech_result_screen.dart';
@@ -151,32 +142,17 @@ final routerProvider = Provider<GoRouter>((ref) {
             ),
           ),
 
-          // Component 2 routes are intentionally preserved.
+          // Component 2 uses the temporal movement feature workflow.
           GoRoute(
             path: '/c2/upload',
-            builder: (context, state) =>
-                const ConcomitantUploadScreen(childId: 'child_1'),
-          ),
-          GoRoute(
-            path: '/c2/ready',
-            builder: (context, state) => const ConcomitantReadyScreen(),
-          ),
-          GoRoute(
-            path: '/c2/process',
-            builder: (context, state) => ConcomitantProcessingScreen(
-              assessmentData: state.extra as Map<String, dynamic>? ?? {},
-            ),
-          ),
-          GoRoute(
-            path: '/c2/result',
-            builder: (context, state) => ConcomitantResultScreen(
-              resultData: state.extra as Map<String, dynamic>? ?? {},
-            ),
+            redirect: (context, state) => '/c2/video/upload',
           ),
           GoRoute(
             path: '/c2/video/upload',
             builder: (context, state) =>
-                const VideoAnalysisUploadScreen(childId: 'child_1'),
+                VideoAnalysisUploadScreen(
+                  childId: state.uri.queryParameters['childId'] ?? 'child_1',
+                ),
           ),
           GoRoute(
             path: '/c2/video/process/:id',
@@ -190,44 +166,6 @@ final routerProvider = Provider<GoRouter>((ref) {
               analysisId: state.pathParameters['id']!,
             ),
           ),
-          GoRoute(
-            path: '/c2/video/results/:id/tech/:tech',
-            builder: (context, state) => VideoTechnologyDetailScreen(
-              analysisId: state.pathParameters['id']!,
-              techKey: state.pathParameters['tech']!,
-            ),
-          ),
-          GoRoute(
-            path: '/c2/video/results/:id/compare',
-            builder: (context, state) => VideoComparisonScreen(
-              analysisId: state.pathParameters['id']!,
-            ),
-          ),
-          GoRoute(
-            path: '/c2/video/results/:id/timeline',
-            builder: (context, state) => VideoTimelineScreen(
-              analysisId: state.pathParameters['id']!,
-            ),
-          ),
-          GoRoute(
-            path: '/c2/video/results/:id/overlay',
-            builder: (context, state) => VideoOverlayScreen(
-              analysisId: state.pathParameters['id']!,
-            ),
-          ),
-          GoRoute(
-            path: '/c2/video/results/:id/metrics',
-            builder: (context, state) => VideoEvaluationScreen(
-              analysisId: state.pathParameters['id']!,
-            ),
-          ),
-          GoRoute(
-            path: '/c2/result/:id',
-            builder: (context, state) => ConcomitantResultScreen(
-              resultData: {'id': state.pathParameters['id'] ?? 'mock_c2'},
-            ),
-          ),
-
           // Component 3 - Guided Therapy
           GoRoute(
             path: '/c3/forest-therapy',

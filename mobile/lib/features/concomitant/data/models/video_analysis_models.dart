@@ -259,6 +259,67 @@ class TrackingMetrics {
 }
 
 // ---------------------------------------------------------------------------
+// TMMF window features
+// ---------------------------------------------------------------------------
+
+class TmmfWindow {
+  final double startTime;
+  final double endTime;
+  final Map<String, double> features;
+
+  const TmmfWindow({required this.startTime, required this.endTime, required this.features});
+
+  factory TmmfWindow.fromJson(dynamic json) {
+    final m = _map(json);
+    final features = <String, double>{};
+    _map(m['features']).forEach((key, value) {
+      final number = _double(value);
+      if (number != null) features[key] = number;
+    });
+    return TmmfWindow(
+      startTime: _double(m['start_time']) ?? 0,
+      endTime: _double(m['end_time']) ?? 0,
+      features: features,
+    );
+  }
+}
+
+class TmmfResult {
+  final String status;
+  final String? method;
+  final double? windowSeconds;
+  final double? overlap;
+  final double? targetFps;
+  final List<TmmfWindow> windows;
+  final String? note;
+
+  const TmmfResult({
+    required this.status,
+    this.method,
+    this.windowSeconds,
+    this.overlap,
+    this.targetFps,
+    this.windows = const [],
+    this.note,
+  });
+
+  bool get hasWindows => windows.isNotEmpty;
+
+  factory TmmfResult.fromJson(dynamic json) {
+    final m = _map(json);
+    return TmmfResult(
+      status: _string(m['status']) ?? 'unknown',
+      method: _string(m['method']),
+      windowSeconds: _double(m['window_s']),
+      overlap: _double(m['overlap']),
+      targetFps: _double(m['target_fps']),
+      windows: _list(m['windows']).map(TmmfWindow.fromJson).toList(growable: false),
+      note: _string(m['note']),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Technology result
 // ---------------------------------------------------------------------------
 
@@ -276,6 +337,7 @@ class TechnologyResult {
   final bool overlayAvailable;
   final Map<String, dynamic> thresholdsUsed;
   final List<String> preprocessingNotes;
+  final TmmfResult? tmmf;
 
   const TechnologyResult({
     required this.key,
@@ -291,6 +353,7 @@ class TechnologyResult {
     this.overlayAvailable = false,
     this.thresholdsUsed = const {},
     this.preprocessingNotes = const [],
+    this.tmmf,
   });
 
   bool get isCompleted => status == TechStatus.completed;
@@ -327,6 +390,7 @@ class TechnologyResult {
       overlayAvailable: m['overlay_available'] == true || _string(m['overlay_video_path']) != null,
       thresholdsUsed: _map(m['thresholds_used']),
       preprocessingNotes: _list(m['preprocessing_notes']).map((e) => e.toString()).toList(growable: false),
+      tmmf: m['tmmf'] is Map ? TmmfResult.fromJson(m['tmmf']) : null,
     );
   }
 }
@@ -626,15 +690,3 @@ class SelectedVideo {
       );
 }
 
-/// Optional researcher-supplied ground-truth annotations (JSON file).
-class GroundTruthAttachment {
-  final String fileName;
-  final String json; // raw JSON text, forwarded unchanged
-  final int annotationCount;
-
-  const GroundTruthAttachment({
-    required this.fileName,
-    required this.json,
-    required this.annotationCount,
-  });
-}
