@@ -124,6 +124,7 @@ ENV/
 env/
 ai-service/venv/
 ai-service/.venv/
+ai-service/data/casa/
 *.venv
 
 # Downloaded MediaPipe face landmark model

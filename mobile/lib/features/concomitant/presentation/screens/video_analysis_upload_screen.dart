@@ -20,8 +20,6 @@ class VideoAnalysisUploadScreen extends ConsumerStatefulWidget {
 }
 
 class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadScreen> {
-  String? _groundTruthError;
-
   Future<void> _start() async {
     if (!ref.read(authProvider).isAuthenticated) {
       context.push('/login?redirectTo=${Uri.encodeComponent('/c2/video/upload')}');
@@ -29,11 +27,6 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
     }
     final id = await ref.read(videoAnalysisProvider.notifier).start(childId: widget.childId);
     if (id != null && mounted) context.pushReplacement('/c2/video/process/$id');
-  }
-
-  Future<void> _pickGroundTruth() async {
-    final err = await ref.read(groundTruthProvider.notifier).pick();
-    if (mounted) setState(() => _groundTruthError = err);
   }
 
   @override
@@ -53,9 +46,9 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
             padding: const EdgeInsets.all(AppSpacing.lg),
             children: [
               const ResearchNote(
-                'One video will be analyzed using all available computer-vision approaches.\n'
-                'Results are visual movement events for research comparison - not a diagnosis.',
-                icon: Icons.science_outlined,
+                'Temporal movement analysis extracts eye, lip, jaw, and head features from one video.\n'
+                'It reports research features, not a diagnosis or FG/HM classification.',
+                icon: Icons.timeline_rounded,
               ),
               const SizedBox(height: AppSpacing.lg),
               if (video == null) _emptyPicker(busy) else _selectedCard(video, busy),
@@ -76,7 +69,6 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
                 ),
               ],
               const SizedBox(height: AppSpacing.md),
-              _researchOptions(busy),
               const SizedBox(height: AppSpacing.lg),
               if (busy) ...[
                 LinearProgressIndicator(
@@ -190,71 +182,6 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
           ),
         ]),
       ]),
-    );
-  }
-
-  Widget _researchOptions(bool busy) {
-    final overlay = ref.watch(generateOverlayProvider);
-    final gt = ref.watch(groundTruthProvider);
-    return Theme(
-      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.cardBg,
-          borderRadius: AppRadii.mdAll,
-          border: Border.all(color: AppColors.divider),
-        ),
-        child: ExpansionTile(
-          leading: const Icon(Icons.tune, color: AppColors.primaryDeep),
-          title: Text('Research options', style: AppTextStyles.titleMedium),
-          childrenPadding: const EdgeInsets.fromLTRB(AppSpacing.lg, 0, AppSpacing.lg, AppSpacing.md),
-          expandedCrossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SwitchListTile(
-              contentPadding: EdgeInsets.zero,
-              value: overlay,
-              onChanged: busy ? null : (v) => ref.read(generateOverlayProvider.notifier).state = v,
-              title: const Text('Generate annotated video'),
-              subtitle: const Text('Only technologies that support it (currently MediaPipe). Slower.'),
-            ),
-            const Divider(),
-            Text('Ground-truth annotations (optional)', style: AppTextStyles.label),
-            const SizedBox(height: AppSpacing.xs),
-            Text(
-              'JSON with an "annotations" list of {behavior, start_time, end_time}. '
-              'Enables precision / recall / F1 on the metrics screen.',
-              style: AppTextStyles.caption,
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            if (gt == null)
-              Align(
-                alignment: Alignment.centerLeft,
-                child: SwaraButton(
-                  label: 'Attach JSON',
-                  icon: Icons.attach_file,
-                  outlined: true,
-                  onPressed: busy ? null : _pickGroundTruth,
-                ),
-              )
-            else
-              Row(children: [
-                const Icon(Icons.rule, color: AppColors.success, size: 20),
-                const SizedBox(width: AppSpacing.sm),
-                Expanded(child: Text('${gt.fileName} - ${gt.annotationCount} annotations')),
-                IconButton(
-                  tooltip: 'Remove annotations',
-                  icon: const Icon(Icons.close),
-                  onPressed: busy ? null : () => ref.read(groundTruthProvider.notifier).clear(),
-                ),
-              ]),
-            if (_groundTruthError != null)
-              Padding(
-                padding: const EdgeInsets.only(top: AppSpacing.xs),
-                child: Text(_groundTruthError!, style: AppTextStyles.caption.copyWith(color: AppColors.error)),
-              ),
-          ],
-        ),
-      ),
     );
   }
 
