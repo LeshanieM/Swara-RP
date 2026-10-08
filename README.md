@@ -18,7 +18,7 @@ A multi-step, localized (Sinhala/English) assessment workflow that automatically
 
 ### Component 2: Secondary Behaviors Associated with Stuttering
 
-A "gentle observation" module for analyzing physical stuttering characteristics (e.g., facial tension, eye blinking) via video upload or live recording. The workflow emphasizes supportive, non-clinical messaging to track physical behaviors without intimidating the child, utilizing a customized lavender/pastel component theme.
+A "gentle observation" module for analyzing physical stuttering characteristics (e.g: facial tension, eye blinking) via video upload or live recording. The workflow emphasizes supportive, non-clinical messaging to track physical behaviors without intimidating the child, utilizing a customized lavender/pastel component theme.
 
 ### Component 3: Adaptive Speech Therapy Activities
 
