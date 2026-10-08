@@ -19,8 +19,8 @@ class _ConcomitantProcessingScreenState extends State<ConcomitantProcessingScree
     {'en': 'Noticing expressions ✨', 'si': 'මුහුණේ හැඟීම් බලමින්'},
     {'en': 'Observing head movements 🙂', 'si': 'හිස චලනය නිරීක්ෂණය කරමින්'},
     {'en': 'Counting gentle blinks 👀', 'si': 'ඇස් පිළිසැරීම බලමින්'},
-    {'en': 'Seeing jaw and lip movements 👄', 'si': 'කතා කිරීමේ රටා බලමින්'},
-    {'en': 'Noticing hand movements 👋', 'si': 'අත් චලනයන් බලමින්'},
+    {'en': 'Seeing lip movements 👄', 'si': 'කතා කිරීමේ රටා බලමින්'},
+    {'en': 'Noticing jaw movements 👋', 'si': 'කතා කිරීමේ බලමින්'},
     {'en': 'Gathering Swara\'s observations 🌱', 'si': 'ස්වරගේ නිරීක්ෂණ සූදානම් කරමින්'},
   ];
 

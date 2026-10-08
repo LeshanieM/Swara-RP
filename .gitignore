@@ -124,7 +124,11 @@ ENV/
 env/
 ai-service/venv/
 ai-service/.venv/
+ai-service/data/casa/
 *.venv
+
+# Downloaded MediaPipe face landmark model
+ai-service/models/face_landmarker.task
 
 # Python Testing & Code Quality Cache
 .pytest_cache/
@@ -144,6 +148,10 @@ backend/uploads/*
 ai-service/uploads/*
 !ai-service/uploads/.gitkeep
 uploads/
+
+# Generated AI analysis results (per-run JSON, media, and logs)
+ai-service/results/*
+!ai-service/results/.gitkeep
 
 
 # ==========================================

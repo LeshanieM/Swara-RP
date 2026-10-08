@@ -2,7 +2,10 @@ from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import time
 
-app = FastAPI(title="Swara AI Service", version="1.0.0")
+from app.api.vision_routes import router as vision_router
+from app.api.recommendation_routes import router as recommendation_router
+
+app = FastAPI(title="Swara AI Service", version="1.1.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -11,6 +14,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Component 2: video-based secondary/concomitant-behavior CV analysis.
+# Adds POST/GET /analyze-video... alongside the existing /analyze-speech
+# endpoint below, which is left untouched.
+app.include_router(vision_router)
+
+# Component 3: LinUCB Recommendation Engine API
+app.include_router(recommendation_router)
+
 
 @app.get("/")
 def read_root():

@@ -24,7 +24,11 @@ class MainScaffold extends StatelessWidget {
         location = GoRouterState.of(context).uri.toString();
       } catch (_) {
         try {
-          location = GoRouter.of(context).routeInformationProvider.value.uri.toString();
+          location = GoRouter.of(context)
+              .routeInformationProvider
+              .value
+              .uri
+              .toString();
         } catch (_) {}
       }
     }
@@ -34,7 +38,9 @@ class MainScaffold extends StatelessWidget {
       currentIndex = 2;
     } else if (location.startsWith('/profile')) {
       currentIndex = 3;
-    } else if (location.startsWith('/c1') || location.startsWith('/c2') || location.startsWith('/c4')) {
+    } else if (location.startsWith('/c1') ||
+        location.startsWith('/c2') ||
+        location.startsWith('/c4')) {
       currentIndex = 1;
     } else {
       currentIndex = 0;
@@ -56,10 +62,26 @@ class MainScaffold extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildNavItem(context, icon: Icons.home_rounded, label: 'Home', isActive: currentIndex == 0, route: '/'),
-                _buildNavItem(context, icon: Icons.mic_rounded, label: 'Speech', isActive: currentIndex == 1, route: '/c1/record'),
-                _buildNavItem(context, icon: Icons.psychology_rounded, label: 'Therapy', isActive: currentIndex == 2, route: '/c3/forest-therapy'),
-                _buildNavItem(context, icon: Icons.person_rounded, label: 'Profile', isActive: currentIndex == 3, route: '/profile'),
+                _buildNavItem(context,
+                    icon: Icons.home_rounded,
+                    label: 'Home',
+                    isActive: currentIndex == 0,
+                    route: '/'),
+                _buildNavItem(context,
+                    icon: Icons.mic_rounded,
+                    label: 'Speech',
+                    isActive: currentIndex == 1,
+                    route: '/c1/record'),
+                _buildNavItem(context,
+                    icon: Icons.psychology_rounded,
+                    label: 'Therapy',
+                    isActive: currentIndex == 2,
+                    route: '/c3/forest-therapy'),
+                _buildNavItem(context,
+                    icon: Icons.person_rounded,
+                    label: 'Profile',
+                    isActive: currentIndex == 3,
+                    route: '/profile'),
               ],
             ),
           ),
@@ -93,7 +115,8 @@ class MainScaffold extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 label,
-                style: AppTextStyles.label.copyWith(color: AppColors.primaryDeep),
+                style:
+                    AppTextStyles.label.copyWith(color: AppColors.primaryDeep),
               ),
             ],
           ],

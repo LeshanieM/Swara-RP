@@ -14,7 +14,8 @@ final childrenProvider = FutureProvider<List<ChildModel>>((ref) async {
   return (response.data as List).map((j) => ChildModel.fromJson(j)).toList();
 });
 
-final childProvider = FutureProvider.family<ChildModel, String>((ref, childId) async {
+final childProvider =
+    FutureProvider.family<ChildModel, String>((ref, childId) async {
   if (StorageService.isDemoMode()) {
     await Future.delayed(const Duration(milliseconds: 400));
     return DemoData.children.firstWhere(
@@ -37,17 +38,22 @@ class ChildNotifier extends StateNotifier<AsyncValue<List<ChildModel>>> {
   }
 
   Future<void> loadChildren() async {
+    if (!mounted) return;
     state = const AsyncValue.loading();
     try {
       if (StorageService.isDemoMode()) {
         await Future.delayed(const Duration(milliseconds: 600));
+        if (!mounted) return;
         state = AsyncValue.data(DemoData.children);
         return;
       }
       final response = await _api.get('/api/children');
-      final children = (response.data as List).map((j) => ChildModel.fromJson(j)).toList();
+      if (!mounted) return;
+      final children =
+          (response.data as List).map((j) => ChildModel.fromJson(j)).toList();
       state = AsyncValue.data(children);
     } catch (e, st) {
+      if (!mounted) return;
       state = AsyncValue.error(e, st);
     }
   }
@@ -67,6 +73,7 @@ class ChildNotifier extends StateNotifier<AsyncValue<List<ChildModel>>> {
   }
 }
 
-final childNotifierProvider = StateNotifierProvider<ChildNotifier, AsyncValue<List<ChildModel>>>((ref) {
+final childNotifierProvider =
+    StateNotifierProvider<ChildNotifier, AsyncValue<List<ChildModel>>>((ref) {
   return ChildNotifier(ref.read(apiClientProvider));
 });
