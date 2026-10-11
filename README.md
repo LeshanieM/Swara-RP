@@ -1,6 +1,6 @@
 # Swara
 
-Swara is a research prototype exploring digital tools to support children who stutter, their families, and speech-language professionals. It includes a Flutter mobile app, a Node.js API, and a Python service for speech and video analysis.
+Swara is a research prototype exploring digital tools to support children who stutter, their families, and speech-language professionals. It includes a Flutter Mobile app, a Node.js API, and a Python service for speech and video analysis.
 
 This is a prototype, not a clinically validated assessment or treatment system. Some analysis and demo flows use sample or simulated results.
 
