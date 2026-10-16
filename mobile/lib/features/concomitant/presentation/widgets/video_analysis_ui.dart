@@ -89,12 +89,12 @@ String humanizeReason(String? reason) {
 
 extension TechStatusUi on TechStatus {
   String get label => switch (this) {
-        TechStatus.waiting => 'Waiting',
-        TechStatus.processing => 'Processing',
-        TechStatus.completed => 'Completed',
-        TechStatus.unavailable => 'Unavailable',
-        TechStatus.failed => 'Failed',
-        TechStatus.unknown => 'Unknown',
+        TechStatus.waiting => 'Waiting · පෝලිමේ',
+        TechStatus.processing => 'In progress · සිදුවෙමින්',
+        TechStatus.completed => 'Done · අවසන්',
+        TechStatus.unavailable => 'Unavailable · නොමැත',
+        TechStatus.failed => 'Failed · අසාර්ථකයි',
+        TechStatus.unknown => 'Unknown · නොදනී',
       };
 
   IconData get icon => switch (this) {
@@ -238,3 +238,7 @@ class ResponsiveBody extends StatelessWidget {
     );
   }
 }
+
+EdgeInsets videoPagePadding(BuildContext context) => EdgeInsets.all(
+      MediaQuery.sizeOf(context).width < 360 ? 16 : 24,
+    );

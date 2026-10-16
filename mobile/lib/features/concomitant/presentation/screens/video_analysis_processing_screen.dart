@@ -39,7 +39,7 @@ class _ProcessingState extends ConsumerState<VideoAnalysisProcessingScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(title: const Text('Movement analysis')),
+      appBar: AppBar(title: const Text('Movement · චලන')),
       body: SafeArea(
         child: ResponsiveBody(
           child: Builder(builder: (_) {
@@ -47,16 +47,16 @@ class _ProcessingState extends ConsumerState<VideoAnalysisProcessingScreen> {
             if (s == null) {
               // Nothing received yet.
               if (err != null) return _connectionError(err);
-              return const SwaraLoadingWidget(message: 'Contacting the analysis service...');
+              return const SwaraLoadingWidget(message: 'Connecting · සම්බන්ධ වෙමින්');
             }
-            return _body(s, poll);
+            return _body(context, s, poll);
           }),
         ),
       ),
     );
   }
 
-  Widget _body(AnalysisStatus s, StatusPollState poll) {
+  Widget _body(BuildContext context, AnalysisStatus s, StatusPollState poll) {
     final total = s.total > 0 ? s.total : s.requested.length;
     final finished = s.requested.isEmpty
         ? s.completed
@@ -64,7 +64,7 @@ class _ProcessingState extends ConsumerState<VideoAnalysisProcessingScreen> {
             .contains(s.statusOf(k))).length;
     final failedJob = s.isFailed;
 
-    return ListView(padding: const EdgeInsets.all(AppSpacing.lg), children: [
+    return ListView(padding: videoPagePadding(context), children: [
       if (poll.error != null) ...[
         _connectionBanner(poll.error!),
         const SizedBox(height: AppSpacing.md),
@@ -75,8 +75,8 @@ class _ProcessingState extends ConsumerState<VideoAnalysisProcessingScreen> {
             failedJob
                 ? 'Analysis failed · විශ්ලේෂණය අසාර්ථකයි'
                 : (s.status == 'queued'
-                    ? 'TMMF analysis queued... · විශ්ලේෂණය පෝලිමේ...'
-                    : 'TMMF analysis in progress... · විශ්ලේෂණය සිදුවෙමින් පවතී...'),
+                    ? 'Analysis queued · විශ්ලේෂණය පෝලිමේ'
+                    : 'Analysis in progress · විශ්ලේෂණය සිදුවෙමින්'),
             style: AppTextStyles.heading3.copyWith(color: failedJob ? AppColors.error : null),
           ),
           const SizedBox(height: AppSpacing.md),
@@ -89,14 +89,12 @@ class _ProcessingState extends ConsumerState<VideoAnalysisProcessingScreen> {
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(failedJob
-              ? 'Movement feature extraction stopped'
-              : (finished == 0 ? 'Preparing movement features' : 'Face tracking complete'),
+              ? 'Analysis stopped · විශ්ලේෂණය නතර විය'
+              : (finished == 0 ? 'Preparing · සූදානම් කරමින්' : 'Face tracking complete · මුහුණු හඳුනාගැනීම අවසන්'),
               style: AppTextStyles.titleMedium),
           if (s.requested.isNotEmpty)
             Text(
-              '${s.countOf(TechStatus.completed)} complete - '
-              '${s.countOf(TechStatus.unavailable)} unavailable - '
-              '${s.countOf(TechStatus.failed)} failed',
+              '${s.countOf(TechStatus.completed)} complete · ${s.countOf(TechStatus.unavailable)} unavailable · ${s.countOf(TechStatus.failed)} failed',
               style: AppTextStyles.caption,
             ),
         ]),
@@ -106,15 +104,6 @@ class _ProcessingState extends ConsumerState<VideoAnalysisProcessingScreen> {
       if (failedJob) ...[
         const SizedBox(height: AppSpacing.lg),
         _failedActions(),
-      ] else ...[
-        const SizedBox(height: AppSpacing.md),
-        Text(
-          'The analysis keeps running on the server if you leave this screen. '
-          'Reopen it from "Previous analyses".\n'
-          'මෙම තිරයෙන් පිටවුවත් විශ්ලේෂණය දිගටම සිදුවේ. පසුව "Previous analyses" වෙතින් එය නැවත විවෘත කරන්න.',
-          style: AppTextStyles.caption,
-          textAlign: TextAlign.center,
-        ),
       ],
     ]);
   }
@@ -125,13 +114,30 @@ class _ProcessingState extends ConsumerState<VideoAnalysisProcessingScreen> {
       padding: const EdgeInsets.only(bottom: AppSpacing.sm),
       child: SwaraCard(
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
-        child: Row(children: [
-          TechStatusIcon(st),
-          const SizedBox(width: AppSpacing.md),
-          Expanded(child: Text(name == 'MediaPipe' ? 'Face and movement feature extraction' : name,
-              style: AppTextStyles.titleMedium)),
-          Text(st.label, style: AppTextStyles.label.copyWith(color: st.color)),
-        ]),
+        child: LayoutBuilder(builder: (context, constraints) {
+          final featureName = name == 'MediaPipe'
+              ? 'Face & movement features · මුහුණු සහ චලන ලක්ෂණ'
+              : name;
+          if (constraints.maxWidth < 440) {
+            return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Row(children: [
+                TechStatusIcon(st),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(child: Text(featureName, style: AppTextStyles.titleMedium)),
+              ]),
+              Padding(
+                padding: const EdgeInsets.only(left: 40, top: AppSpacing.sm),
+                child: Text(st.label, style: AppTextStyles.label.copyWith(color: st.color)),
+              ),
+            ]);
+          }
+          return Row(children: [
+            TechStatusIcon(st),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(child: Text(featureName, style: AppTextStyles.titleMedium)),
+            Text(st.label, style: AppTextStyles.label.copyWith(color: st.color)),
+          ]);
+        }),
       ),
     );
   }
@@ -149,7 +155,7 @@ class _ProcessingState extends ConsumerState<VideoAnalysisProcessingScreen> {
       SizedBox(
         width: double.infinity,
         child: SwaraButton(
-          label: 'Try again',
+          label: 'Try again · නැවත',
           icon: Icons.refresh,
           // The selected video is still kept, so the user only has to press Start.
           onPressed: () => context.pushReplacement('/c2/video/upload'),
@@ -160,7 +166,7 @@ class _ProcessingState extends ConsumerState<VideoAnalysisProcessingScreen> {
         SizedBox(
           width: double.infinity,
           child: SwaraButton(
-            label: 'View available results',
+            label: 'View results · ප්‍රතිඵල',
             outlined: true,
             onPressed: () => context.pushReplacement('/c2/video/results/${widget.analysisId}'),
           ),
@@ -180,7 +186,7 @@ class _ProcessingState extends ConsumerState<VideoAnalysisProcessingScreen> {
       child: Row(children: [
         const Icon(Icons.wifi_off_rounded, color: AppColors.warning),
         const SizedBox(width: AppSpacing.sm),
-        Expanded(child: Text('${e.message}\nStill retrying...', style: AppTextStyles.bodySmall.copyWith(color: AppColors.text))),
+        Expanded(child: Text('${e.message}\nRetrying · නැවත උත්සාහ කරමින්', style: AppTextStyles.bodySmall.copyWith(color: AppColors.text))),
       ]),
     );
   }
@@ -202,7 +208,7 @@ class _ProcessingState extends ConsumerState<VideoAnalysisProcessingScreen> {
           Text(e.message, style: AppTextStyles.body, textAlign: TextAlign.center),
           const SizedBox(height: AppSpacing.lg),
           SwaraButton(
-            label: 'Start a new analysis',
+            label: 'New analysis · අලුත් විශ්ලේෂණය',
             icon: Icons.refresh,
             onPressed: () => context.pushReplacement('/c2/video/upload'),
           ),
