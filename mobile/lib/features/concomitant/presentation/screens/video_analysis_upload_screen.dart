@@ -47,7 +47,8 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
             children: [
               const ResearchNote(
                 'Temporal movement analysis extracts eye, lip, jaw, and head features from one video.\n'
-                'It reports research features, not a diagnosis or FG/HM classification.',
+                'It reports research features, not a diagnosis or FG/HM classification.\n'
+                'මෙම වීඩියෝවෙන් ඇස්, තොල්, හකු සහ හිස චලන විශ්ලේෂණය කරයි. මෙය රෝග නිර්ණයක් නොවේ.',
                 icon: Icons.timeline_rounded,
               ),
               const SizedBox(height: AppSpacing.lg),
@@ -115,7 +116,7 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
           child: Icon(Icons.video_library_outlined, size: 30, color: AppColors.primaryDeep),
         ),
         const SizedBox(height: AppSpacing.md),
-        Text('Select video', style: AppTextStyles.heading3),
+        Text('Select video · වීඩියෝව තෝරන්න', style: AppTextStyles.heading3),
         const SizedBox(height: AppSpacing.xs),
         Text('Tap to choose one video from this device\n(${kAllowedVideoExtensions.join(', ')})',
             style: AppTextStyles.bodySmall, textAlign: TextAlign.center),
