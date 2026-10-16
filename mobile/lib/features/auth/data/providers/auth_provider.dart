@@ -6,24 +6,6 @@ import 'package:swara/core/network/api_client.dart';
 import 'package:swara/core/storage/storage_service.dart';
 import 'package:swara/core/constants/app_constants.dart';
 
-// Demo users for demo mode
-final _demoUsers = {
-  'parent@demo.com': UserModel(
-    id: 'demo_parent_1',
-    name: 'Demo Parent',
-    email: 'parent@demo.com',
-    role: AppConstants.roleParent,
-    token: 'demo_token',
-  ),
-  'therapist@demo.com': UserModel(
-    id: 'demo_therapist_1',
-    name: 'Dr. Demo Therapist',
-    email: 'therapist@demo.com',
-    role: AppConstants.roleTherapist,
-    token: 'demo_token',
-  ),
-};
-
 class AuthState {
   final UserModel? user;
   final bool isLoading;
@@ -77,21 +59,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<bool> login(String email, String password) async {
     state = state.copyWith(isLoading: true, error: null);
-
-    // Demo Mode check
-    if (StorageService.isDemoMode()) {
-      final demoUser = _demoUsers[email];
-      if (demoUser != null) {
-        await StorageService.saveToken('demo_token');
-        await StorageService.saveString(
-            AppConstants.userKey, jsonEncode(demoUser.toJson()));
-        state = AuthState(user: demoUser, isInitialized: true);
-        return true;
-      }
-      state =
-          state.copyWith(isLoading: false, error: 'Invalid demo credentials');
-      return false;
-    }
 
     try {
       final response = await _apiClient.post('/api/auth/login', data: {
