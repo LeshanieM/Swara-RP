@@ -106,15 +106,6 @@ class _ProcessingState extends ConsumerState<VideoAnalysisProcessingScreen> {
       if (failedJob) ...[
         const SizedBox(height: AppSpacing.lg),
         _failedActions(),
-      ] else ...[
-        const SizedBox(height: AppSpacing.md),
-        Text(
-          'The analysis keeps running on the server if you leave this screen. '
-          'Reopen it from "Previous analyses".\n'
-          'මෙම තිරයෙන් පිටවුවත් විශ්ලේෂණය දිගටම සිදුවේ. පසුව "Previous analyses" වෙතින් එය නැවත විවෘත කරන්න.',
-          style: AppTextStyles.caption,
-          textAlign: TextAlign.center,
-        ),
       ],
     ]);
   }

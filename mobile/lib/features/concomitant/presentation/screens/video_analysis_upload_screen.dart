@@ -45,13 +45,6 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
           child: ListView(
             padding: const EdgeInsets.all(AppSpacing.lg),
             children: [
-              const ResearchNote(
-                'Temporal movement analysis extracts eye, lip, jaw, and head features from one video.\n'
-                'It reports research features, not a diagnosis or FG/HM classification.\n'
-                'මෙම වීඩියෝවෙන් ඇස්, තොල්, හකු සහ හිස චලන විශ්ලේෂණය කරයි. මෙය රෝග නිර්ණයක් නොවේ.',
-                icon: Icons.timeline_rounded,
-              ),
-              const SizedBox(height: AppSpacing.lg),
               if (video == null) _emptyPicker(busy) else _selectedCard(video, busy),
               if (error != null) ...[
                 const SizedBox(height: AppSpacing.md),
@@ -69,7 +62,6 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
                   ]),
                 ),
               ],
-              const SizedBox(height: AppSpacing.md),
               const SizedBox(height: AppSpacing.lg),
               if (busy) ...[
                 LinearProgressIndicator(
@@ -118,7 +110,7 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
         const SizedBox(height: AppSpacing.md),
         Text('Select video · වීඩියෝව තෝරන්න', style: AppTextStyles.heading3),
         const SizedBox(height: AppSpacing.xs),
-        Text('Tap to choose one video from this device\n(${kAllowedVideoExtensions.join(', ')})',
+        Text('Choose from this device · ${kAllowedVideoExtensions.join(', ')}',
             style: AppTextStyles.bodySmall, textAlign: TextAlign.center),
       ]),
     );
@@ -156,7 +148,7 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
             padding: const EdgeInsets.all(AppSpacing.lg),
             decoration: BoxDecoration(color: AppColors.surface, borderRadius: AppRadii.mdAll),
             child: Text(
-              'Video preview is not available in the browser. The file will still be analyzed.',
+              'Preview unavailable',
               style: AppTextStyles.bodySmall,
               textAlign: TextAlign.center,
             ),

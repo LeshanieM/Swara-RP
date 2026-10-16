@@ -58,7 +58,7 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
     if (tmmf == null || !tmmf.hasWindows) {
       return const SwaraEmptyState(
         title: 'No temporal features were returned.',
-        subtitle: 'Try another video with a clearly visible face.',
+        subtitle: 'Try another video.',
         icon: Icons.face_retouching_off_outlined,
       );
     }
@@ -95,9 +95,7 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
         ),
         const SizedBox(height: AppSpacing.md),
         const ResearchNote(
-          'These are eye, lip, jaw, and head movement features over time. '
-          'This workflow does not yet produce validated Facial Grimace (FG) or Head Movement (HM) predictions.\n'
-          'මෙහි දැක්වෙන්නේ කාලයත් සමඟ ඇස්, තොල්, හකු සහ හිස චලන ලක්ෂණයි. මේවා තහවුරු කළ FG/HM අනාවැකි නොවේ.',
+          'Research features only · පර්යේෂණ දත්ත පමණි',
           icon: Icons.science_outlined,
         ),
         const SectionTitle('Movement feature summary'),
