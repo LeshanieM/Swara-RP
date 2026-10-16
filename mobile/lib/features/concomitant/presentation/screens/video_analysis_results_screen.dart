@@ -19,10 +19,10 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Movement feature results'),
+        title: const Text('Results · ප්‍රතිඵල'),
         actions: [
           IconButton(
-            tooltip: 'Refresh',
+            tooltip: 'Refresh · යාවත්කාලීන කරන්න',
             icon: const Icon(Icons.refresh),
             onPressed: () => ref.invalidate(videoAnalysisResultsProvider(analysisId)),
           ),
@@ -31,7 +31,7 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
       body: SafeArea(
         child: ResponsiveBody(
           child: async.when(
-            loading: () => const SwaraLoadingWidget(message: 'Loading movement features...'),
+            loading: () => const SwaraLoadingWidget(message: 'Loading results · ප්‍රතිඵල පූරණය කරමින්'),
             error: (e, _) => SwaraErrorWidget(
               message: VideoAnalysisException.from(e).message,
               onRetry: () => ref.invalidate(videoAnalysisResultsProvider(analysisId)),
@@ -57,15 +57,15 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
     final tmmf = analysis.tmmf;
     if (tmmf == null || !tmmf.hasWindows) {
       return const SwaraEmptyState(
-        title: 'No temporal features were returned.',
-        subtitle: 'Try another video.',
+        title: 'No results · ප්‍රතිඵල නැත',
+        subtitle: 'Try another video · වෙනත් වීඩියෝවක් උත්සාහ කරන්න',
         icon: Icons.face_retouching_off_outlined,
       );
     }
 
     final meta = data.videoMeta;
     return ListView(
-      padding: const EdgeInsets.all(AppSpacing.lg),
+      padding: videoPagePadding(context),
       children: [
         SwaraCard(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -98,14 +98,14 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
           'Research features only · පර්යේෂණ දත්ත පමණි',
           icon: Icons.science_outlined,
         ),
-        const SectionTitle('Movement feature summary'),
+        const SectionTitle('Movement summary · චලන සාරාංශය'),
         _channelGrid(tmmf),
         const SizedBox(height: AppSpacing.md),
         _windowPreview(tmmf),
         const SizedBox(height: AppSpacing.md),
         SwaraCard(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('Tracking', style: AppTextStyles.titleMedium),
+            Text('Face tracking · මුහුණු හඳුනාගැනීම', style: AppTextStyles.titleMedium),
             const SizedBox(height: AppSpacing.sm),
             Text(
               '${analysis.tracking.processedFrames ?? 0} frames analyzed'
@@ -124,7 +124,7 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
         TextButton.icon(
           onPressed: () => context.pushReplacement('/c2/video/upload'),
           icon: const Icon(Icons.add),
-          label: const Text('Analyze another video'),
+          label: const Text('Another video · තවත් වීඩියෝවක්'),
         ),
         const SizedBox(height: AppSpacing.xl),
       ],
@@ -133,10 +133,10 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
 
   Widget _channelGrid(TmmfResult tmmf) {
     const channels = [
-      ('eye', 'Eye movement', Icons.remove_red_eye_outlined),
-      ('lip', 'Lip movement', Icons.sentiment_satisfied_alt_outlined),
-      ('jaw', 'Jaw movement', Icons.face_outlined),
-      ('head', 'Head movement', Icons.accessibility_new_outlined),
+      ('eye', 'Eye · ඇස්', Icons.remove_red_eye_outlined),
+      ('lip', 'Lip · තොල්', Icons.sentiment_satisfied_alt_outlined),
+      ('jaw', 'Jaw · හකු', Icons.face_outlined),
+      ('head', 'Head · හිස', Icons.accessibility_new_outlined),
     ];
     return LayoutBuilder(builder: (context, constraints) {
       final wide = constraints.maxWidth >= 560;
@@ -190,8 +190,8 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
       padding: EdgeInsets.zero,
       child: ExpansionTile(
         leading: const Icon(Icons.view_timeline_outlined, color: AppColors.primaryDeep),
-        title: Text('Window preview', style: AppTextStyles.titleMedium),
-        subtitle: Text('Showing ${preview.length} of ${tmmf.windows.length} windows', style: AppTextStyles.caption),
+        title: Text('Windows · කාල පරාස', style: AppTextStyles.titleMedium),
+        subtitle: Text('${preview.length} of ${tmmf.windows.length}', style: AppTextStyles.caption),
         childrenPadding: const EdgeInsets.fromLTRB(AppSpacing.md, 0, AppSpacing.md, AppSpacing.md),
         children: [
           for (var i = 0; i < preview.length; i++)
