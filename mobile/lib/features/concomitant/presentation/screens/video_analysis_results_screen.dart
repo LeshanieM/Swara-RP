@@ -96,7 +96,8 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
         const SizedBox(height: AppSpacing.md),
         const ResearchNote(
           'These are eye, lip, jaw, and head movement features over time. '
-          'This workflow does not yet produce validated Facial Grimace (FG) or Head Movement (HM) predictions.',
+          'This workflow does not yet produce validated Facial Grimace (FG) or Head Movement (HM) predictions.\n'
+          'මෙහි දැක්වෙන්නේ කාලයත් සමඟ ඇස්, තොල්, හකු සහ හිස චලන ලක්ෂණයි. මේවා තහවුරු කළ FG/HM අනාවැකි නොවේ.',
           icon: Icons.science_outlined,
         ),
         const SectionTitle('Movement feature summary'),
@@ -133,7 +134,7 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
   }
 
   Widget _channelGrid(TmmfResult tmmf) {
-    final channels = const [
+    const channels = [
       ('eye', 'Eye movement', Icons.remove_red_eye_outlined),
       ('lip', 'Lip movement', Icons.sentiment_satisfied_alt_outlined),
       ('jaw', 'Jaw movement', Icons.face_outlined),

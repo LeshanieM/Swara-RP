@@ -73,8 +73,10 @@ class _ProcessingState extends ConsumerState<VideoAnalysisProcessingScreen> {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
             failedJob
-                ? 'Analysis failed'
-                : (s.status == 'queued' ? 'TMMF analysis queued...' : 'TMMF analysis in progress...'),
+                ? 'Analysis failed · විශ්ලේෂණය අසාර්ථකයි'
+                : (s.status == 'queued'
+                    ? 'TMMF analysis queued... · විශ්ලේෂණය පෝලිමේ...'
+                    : 'TMMF analysis in progress... · විශ්ලේෂණය සිදුවෙමින් පවතී...'),
             style: AppTextStyles.heading3.copyWith(color: failedJob ? AppColors.error : null),
           ),
           const SizedBox(height: AppSpacing.md),
@@ -108,7 +110,8 @@ class _ProcessingState extends ConsumerState<VideoAnalysisProcessingScreen> {
         const SizedBox(height: AppSpacing.md),
         Text(
           'The analysis keeps running on the server if you leave this screen. '
-          'Reopen it from "Previous analyses".',
+          'Reopen it from "Previous analyses".\n'
+          'මෙම තිරයෙන් පිටවුවත් විශ්ලේෂණය දිගටම සිදුවේ. පසුව "Previous analyses" වෙතින් එය නැවත විවෘත කරන්න.',
           style: AppTextStyles.caption,
           textAlign: TextAlign.center,
         ),
