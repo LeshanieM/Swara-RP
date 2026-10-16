@@ -8,11 +8,17 @@ router.use(auth);
 // POST /api/c3/therapy-sessions
 router.post('/', therapySessionController.createSession);
 
+// GET /api/c3/therapy-sessions/:sessionId
+router.get('/:sessionId', therapySessionController.getSession);
+
 // POST /api/c3/therapy-sessions/:sessionId/activity-result
 router.post('/:sessionId/activity-result', therapySessionController.recordActivityResult);
 
 // POST /api/c3/therapy-sessions/:sessionId/complete
 router.post('/:sessionId/complete', therapySessionController.completeSession);
+
+// POST /api/c3/therapy-sessions/:sessionId/questionnaire
+router.post('/:sessionId/questionnaire', therapySessionController.submitQuestionnaire);
 
 // GET /api/c3/therapy-sessions/history/account
 router.get('/history/account', therapySessionController.getAccountTherapyHistory);
