@@ -103,14 +103,58 @@ async function runTests() {
     console.log(`✅ Recommender returned: ${rec.activity?.name} (${rec.activity?.linucbActionId})`);
   }
 
+  // 7. Test 12-Dimensional Clinical Context Builder
+  console.log('\n7. Testing 12-Dimensional Clinical Context Builder...');
+  const { buildContext, CONTEXT_DIM } = require('../../src/services/component3/contextBuilder');
+  if (mockChild) {
+    const ctx = await buildContext(mockChild._id.toString(), testSession.sessionId, {
+      cameraOn: false,
+      parentHelpLevel: 0.33,
+    });
+    console.log(`✅ Context vector built with length: ${ctx.vector.length} (Expected: ${CONTEXT_DIM})`);
+    if (ctx.vector.length !== 12) {
+      throw new Error(`Expected context length 12, got ${ctx.vector.length}`);
+    }
+    console.log(`   - Bias: ${ctx.vector[0]}`);
+    console.log(`   - Age 5-10: ${ctx.vector[1]}, Age 11-14: ${ctx.vector[2]}`);
+    console.log(`   - C1 Mild/Mod/Sev: [${ctx.vector[3]}, ${ctx.vector[4]}, ${ctx.vector[5]}]`);
+    console.log(`   - C2 Secondary: ${ctx.vector[6]}`);
+    console.log(`   - Camera On: ${ctx.vector[7]}`);
+    console.log(`   - Recent Engagement: ${ctx.vector[8]}`);
+    console.log(`   - Recent Perf: ${ctx.vector[9]}`);
+    console.log(`   - Session Count Norm: ${ctx.vector[10]}`);
+    console.log(`   - Parent Help Level: ${ctx.vector[11]}`);
+  }
+
+  // 8. Test Hybrid LinUCB State Synchronization
+  console.log('\n8. Testing Hybrid LinUCB State Storage...');
+  const LinUCBState = require('../../src/models/component3/LinUCBState');
+  const dummyA = Array.from({ length: 12 }, (_, r) =>
+    Array.from({ length: 12 }, (_, c) => (r === c ? 1.0 : 0.0))
+  );
+  const dummyB = new Array(12).fill(0.5);
+  await LinUCBState.findOneAndUpdate(
+    { scope: 'test_child_001', actionId: 'syllable-practice:easy:5-10' },
+    {
+      contextDim: 12,
+      A: dummyA,
+      b: dummyB,
+      lastUpdated: new Date(),
+    },
+    { upsert: true, new: true }
+  );
+  const savedState = await LinUCBState.findOne({ scope: 'test_child_001', actionId: 'syllable-practice:easy:5-10' });
+  console.log(`✅ LinUCB State upserted: ActionId=${savedState?.actionId}, ContextDim=${savedState?.contextDim}`);
+
   // Cleanup test data
   await ActivityResult.deleteMany({ sessionId: testSession._id });
   await ParentQuestionnaire.deleteMany({ sessionId: testSession._id });
   await TherapyOutcome.deleteMany({ sessionId: testSession._id });
   await TherapySession.deleteOne({ _id: testSession._id });
+  await LinUCBState.deleteMany({ scope: 'test_child_001' });
   console.log('\n🧹 Cleaned up temporary test data.');
 
-  console.log('\n🎉 ALL 6 COMPONENT 3 TESTS PASSED PERFECTLY!\n');
+  console.log('\n🎉 ALL 8 COMPONENT 3 TESTS PASSED PERFECTLY!\n');
   process.exit(0);
 }
 

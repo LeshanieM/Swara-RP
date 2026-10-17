@@ -5,6 +5,15 @@ const { auth } = require('../../middleware/auth');
 
 router.use(auth);
 
+// GET /api/c3/recommendations/context
+router.get('/context', recommendationController.getContext);
+
+// GET /api/c3/recommendations/shared-state
+router.get('/shared-state', recommendationController.getSharedState);
+
+// POST /api/c3/recommendations/sync
+router.post('/sync', recommendationController.syncState);
+
 // POST /api/c3/recommendations/next-activity
 router.post('/next-activity', recommendationController.getNextActivity);
 
