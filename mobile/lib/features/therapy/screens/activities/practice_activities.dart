@@ -138,6 +138,17 @@ class _PracticeActivityState extends State<_PracticeActivity> {
     final totalPrompts = widget.activity.prompts.length;
     final successful = _recordedPrompts.length;
     final completion = totalPrompts > 0 ? successful / totalPrompts : 1.0;
+    final performance = _LinUcbModel.calculatePerformanceScore(
+      successes: successful,
+      targets: totalPrompts,
+      completionFraction: completion,
+    );
+    final engagement = _LinUcbModel.estimateLogsOnlyEngagement(
+      completionFraction: completion,
+      targetOpportunities: totalPrompts,
+      attempts: successful,
+      durationSeconds: durationSeconds,
+    );
 
     // 1. Record to backend session
     await TherapyApiService.recordActivityResult(
@@ -148,14 +159,17 @@ class _PracticeActivityState extends State<_PracticeActivity> {
       durationSeconds: durationSeconds,
       completed: true,
       engagementMode: 'logs_only',
-      engagementScore: 0.85,
+      engagementScore: engagement,
     );
 
     // 2. Update local LinUCB pending reward if active
     try {
       final model = await _LinUcbModel.load();
       if (model.pendingActivityId == widget.activity.id) {
-        await model.recordPendingReward(0.6 * completion + 0.4 * 0.85);
+        await model.recordPendingReward(
+          performance: performance,
+          engagement: engagement,
+        );
       }
     } catch (_) {}
 

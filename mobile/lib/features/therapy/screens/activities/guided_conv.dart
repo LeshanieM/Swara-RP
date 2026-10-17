@@ -31,26 +31,38 @@ class _GuidedConvState extends State<_GuidedConv> {
     setState(() => _isSaving = true);
 
     final durationSeconds = DateTime.now().difference(_startTime).inSeconds;
+    const completion = 1.0;
+    final performance = _LinUcbModel.calculatePerformanceScore(
+      successes: 1,
+      targets: 1,
+      completionFraction: completion,
+    );
+    final engagement = _LinUcbModel.estimateLogsOnlyEngagement(
+      completionFraction: completion,
+      targetOpportunities: 1,
+      attempts: 1,
+      durationSeconds: durationSeconds,
+    );
 
     await TherapyApiService.recordActivityResult(
       activityId: 'guided-conversation',
       targetOpportunities: 1,
       successfulOpportunities: 1,
-      completionFraction: 1.0,
+      completionFraction: completion,
       durationSeconds: durationSeconds,
       parentDifficultyFeedback: _difficultyFeedback,
       completed: true,
       engagementMode: 'logs_only',
-      engagementScore: 0.95,
+      engagementScore: engagement,
     );
 
     try {
       final model = await _LinUcbModel.load();
       if (model.pendingActivityId == 'guided-conversation') {
-        final reward = _difficultyFeedback == 'just_right'
-            ? 1.0
-            : (_difficultyFeedback == 'too_easy' ? 0.6 : 0.4);
-        await model.recordPendingReward(0.6 * 1.0 + 0.4 * reward);
+        await model.recordPendingReward(
+          performance: performance,
+          engagement: engagement,
+        );
       }
     } catch (_) {}
 

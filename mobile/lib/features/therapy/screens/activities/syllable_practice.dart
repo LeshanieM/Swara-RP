@@ -71,6 +71,17 @@ class _SyllablePracticeState extends State<_SyllablePractice> {
     final successes = _completedWordIndices.isEmpty ? 1 : _completedWordIndices.length;
     final total = _practiceWords.length;
     final completion = (successes / total).clamp(0.2, 1.0);
+    final performance = _LinUcbModel.calculatePerformanceScore(
+      successes: successes,
+      targets: total,
+      completionFraction: completion,
+    );
+    final engagement = _LinUcbModel.estimateLogsOnlyEngagement(
+      completionFraction: completion,
+      targetOpportunities: total,
+      attempts: successes,
+      durationSeconds: durationSeconds,
+    );
 
     await TherapyApiService.recordActivityResult(
       activityId: 'syllable-practice',
@@ -80,13 +91,16 @@ class _SyllablePracticeState extends State<_SyllablePractice> {
       durationSeconds: durationSeconds,
       completed: true,
       engagementMode: 'logs_only',
-      engagementScore: 0.88,
+      engagementScore: engagement,
     );
 
     try {
       final model = await _LinUcbModel.load();
       if (model.pendingActivityId == 'syllable-practice') {
-        await model.recordPendingReward(0.6 * completion + 0.4 * 0.88);
+        await model.recordPendingReward(
+          performance: performance,
+          engagement: engagement,
+        );
       }
     } catch (_) {}
 

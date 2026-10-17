@@ -17,31 +17,29 @@ const mongoose = require('mongoose');
  * Per-child arms are stored separately with scope = 'child'.
  * The shared aggregate is stored as a single document with scope = 'shared'.
  *
- * contextDim must match linucb_activity_selector.dart → _LinUcbModel.contextSize (currently 9).
+ * contextDim matches linucb_activity_selector.dart → _LinUcbModel.contextSize (12).
  */
 const linUCBStateSchema = new mongoose.Schema({
   // 'shared' for the global shared component; childId (string) for per-child state
   scope:      { type: String, required: true },
-  // linucbActionId — the stable arm identifier matching Dart's _TherapyActivityDefinition.id
+  // linucbActionId — the stable arm identifier matching Dart's Level 1 arm id (e.g. 'syllable-practice:easy')
   actionId:   { type: String, required: true },
-  contextDim: { type: Number, required: true, default: 9 },
+  contextDim: { type: Number, required: true, default: 12 },
 
-  // Per-arm matrices (stored as row-major flat arrays for compactness, or nested arrays)
+  // Per-arm matrices
   A:      { type: [[Number]], required: true }, // d×d design matrix (identity initialised)
   b:      { type: [Number], required: true },   // d×1 reward vector (zeros initialised)
+  B:      { type: [[Number]] },                 // d×k cross-term matrix
 
-  // Shared component fields (only populated for scope = 'shared')
-  // A₀: shared feature design matrix (d_shared × d_shared)
-  // B:  cross-term matrix (d_arm × d_shared)
+  // Shared component fields (populated for scope = 'shared')
   A0:     { type: [[Number]] },
-  B:      { type: [[Number]] },
   b0:     { type: [Number] },
 
   // Metadata
   totalUpdates: { type: Number, default: 0 },
   totalReward:  { type: Number, default: 0 },
-  alpha:        { type: Number, default: 0.8 }, // matches Dart _exploration constant
-  modelVersion: { type: String, default: 'linucb_v3' },
+  alpha:        { type: Number, default: 0.8 }, // exploration constant
+  modelVersion: { type: String, default: 'hybrid_linucb_v1' },
   lastUpdated:  { type: Date, default: Date.now },
 }, { timestamps: true });
 

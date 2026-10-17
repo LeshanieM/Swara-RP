@@ -32,7 +32,11 @@ class _FeedbackState extends State<_Feedback> {
     try {
       final model = await _LinUcbModel.load();
       if (model.pendingActivityId != null) {
-        await model.recordPendingReward(0.6 * (_rating / 5.0) + 0.4 * reward);
+        await model.recordPendingReward(
+          performance: (_rating / 5.0),
+          engagement: reward,
+          parentHelpRating: _helpLevel,
+        );
       }
     } catch (_) {}
 

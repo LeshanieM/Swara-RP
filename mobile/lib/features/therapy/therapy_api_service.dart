@@ -220,4 +220,66 @@ class TherapyApiService {
       return false;
     }
   }
+
+  static Future<Map<String, dynamic>?> fetchClinicalContext({
+    bool cameraOn = false,
+    String? activityType,
+    double? parentHelpLevel,
+  }) async {
+    try {
+      final queryParams = <String, String>{
+        'cameraOn': cameraOn.toString(),
+        if (activityType != null) 'activityType': activityType,
+        if (parentHelpLevel != null) 'parentHelpLevel': parentHelpLevel.toString(),
+      };
+      final uri = Uri.parse('$baseUrl/recommendations/context')
+          .replace(queryParameters: queryParams);
+
+      final response = await http.get(uri, headers: await _authHeaders());
+      if (response.statusCode == 200) {
+        final decoded = jsonDecode(response.body) as Map<String, dynamic>;
+        return decoded['data'] as Map<String, dynamic>?;
+      }
+    } catch (e) {
+      debugPrint('TherapyApiService fetchClinicalContext Error: $e');
+    }
+    return null;
+  }
+
+  static Future<Map<String, dynamic>?> fetchSharedLinUcbState() async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/recommendations/shared-state'),
+        headers: await _authHeaders(),
+      );
+      if (response.statusCode == 200) {
+        final decoded = jsonDecode(response.body) as Map<String, dynamic>;
+        return decoded['data'] as Map<String, dynamic>?;
+      }
+    } catch (e) {
+      debugPrint('TherapyApiService fetchSharedLinUcbState Error: $e');
+    }
+    return null;
+  }
+
+  static Future<bool> syncLinUcbState({
+    required List<Map<String, dynamic>> armUpdates,
+    Map<String, dynamic>? sharedDelta,
+  }) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/recommendations/sync'),
+        headers: await _authHeaders(),
+        body: jsonEncode({
+          'armUpdates': armUpdates,
+          'sharedDelta': sharedDelta,
+        }),
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      debugPrint('TherapyApiService syncLinUcbState Error: $e');
+      return false;
+    }
+  }
 }
+
