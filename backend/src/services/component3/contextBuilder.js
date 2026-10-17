@@ -7,10 +7,7 @@ const ActivityResult = require('../../models/component3/ActivityResult');
 /**
  * Context vector builder for LinUCB (Hybrid, on-device Dart implementation).
  *
- * CRITICAL: The context vector MUST match the Dart implementation in
- * linucb_activity_selector.dart → _LinUcbModel.contextSize = 9.
- *
- * Feature index mapping (MUST remain stable across updates):
+ * Feature index mapping (MUST remain stable across Dart and Node):
  *   [0]  bias term                         always 1.0
  *   [1]  age band 5–10                    1.0 if child age 5–10, else 0.0
  *   [2]  age band 11–14                   1.0 if child age 11–14, else 0.0
@@ -18,26 +15,22 @@ const ActivityResult = require('../../models/component3/ActivityResult');
  *   [4]  severity moderate                1.0 if C1 severity = Moderate, else 0.0
  *   [5]  severity severe                  1.0 if C1 severity = Severe, else 0.0
  *   [6]  C2 secondary behaviours present  1.0 if present, 0.0 if absent, 0.5 if unknown
- *   [7]  recent engagement trend          mean engagement over last 3 completed sessions (0–1); 0.5 if unknown
- *   [8]  session count normalised         min(completedSessions / 20, 1.0)
- *
- * Missing-data policy:
- *   - Missing C1 severity: all severity features [3–5] = 0.333... (uniform distribution)
- *     This is NOT interpreted as "no severity" — it signals uncertainty.
- *   - Missing C2: feature [6] = 0.5 (neutral/unknown), NOT 0 (not absent).
- *   - Missing engagement trend: feature [7] = 0.5 (neutral/unknown).
- *   - Missing age: features [1–2] = [0.5, 0.5] (unknown band).
- *
- * IMPORTANT: Missing C1/C2 results must never be encoded as if the child has
- * no severity or no secondary behaviours. This encoding uses the midpoint 0.5
- * or uniform 0.333 to represent genuine uncertainty.
+ *   [7]  camera active flag               1.0 if camera active, 0.0 if logs-only
+ *   [8]  recent engagement trend          mean engagement over last 3 completed sessions (0–1); 0.5 if unknown
+ *   [9]  recent performance for type      mean performance/TSS for this activity type (0–1); 0.5 if unknown
+ *   [10] session count normalised         min(completedSessions / 20, 1.0)
+ *   [11] parent help level                0.0 (none) to 1.0 (full assistance)
  *
  * @param {string} childId  MongoDB ObjectId string for the child.
  * @param {string} sessionId  String session identifier (e.g. 'sess_…').
- * @returns {{ vector: number[], metadata: object }}  Context vector and provenance info.
+ * @param {object} [options]
+ * @param {boolean} [options.cameraOn]
+ * @param {string} [options.activityType]
+ * @param {number} [options.parentHelpLevel]
+ * @returns {{ vector: number[], metadata: object }} Context vector and provenance info.
  */
-const buildContext = async (childId, sessionId) => {
-  const CONTEXT_DIM = 9;
+const buildContext = async (childId, sessionId, options = {}) => {
+  const CONTEXT_DIM = 12;
   const context = new Array(CONTEXT_DIM).fill(0);
   const metadata = {
     childAge: null,
@@ -46,8 +39,11 @@ const buildContext = async (childId, sessionId) => {
     c1Source: null,
     c2SecondaryBehaviours: null,
     c2Source: null,
+    cameraOn: Boolean(options.cameraOn),
     recentEngagement: null,
+    recentPerformanceForType: null,
     completedSessions: null,
+    parentHelpLevel: options.parentHelpLevel ?? 0.0,
     missingFields: [],
   };
 
@@ -105,10 +101,6 @@ const buildContext = async (childId, sessionId) => {
   }
 
   // [6] C2 secondary behaviours.
-  // VideoAnalysis stores results as a nested object. We check the 'results' field.
-  // Bug fix: original code checked results.hasSecondaryBehaviors which does not exist.
-  // The actual field path in the C2 analysis is results.behavior.hasSecondaryBehaviors
-  // or a top-level summary flag. We check both with safe fallback.
   const c2Assessment = await VideoAnalysis.findOne({ childId }).sort({ createdAt: -1 }).lean();
   if (c2Assessment) {
     const results = c2Assessment.results || c2Assessment.analysis || {};
@@ -125,20 +117,21 @@ const buildContext = async (childId, sessionId) => {
       context[6] = 0.0;
       metadata.c2SecondaryBehaviours = false;
     } else {
-      // Field exists but result indeterminate — encode as unknown.
       context[6] = 0.5;
       metadata.c2SecondaryBehaviours = null;
       metadata.missingFields.push('c2SecondaryBehaviours');
     }
     metadata.c2Source = 'VideoAnalysis';
   } else {
-    // No C2 assessment — encode as unknown, NOT as absent.
     context[6] = 0.5;
     metadata.c2Source = null;
     metadata.missingFields.push('c2Assessment');
   }
 
-  // [7] Recent engagement trend — mean engagementScore over last 3 completed sessions.
+  // [7] Camera active flag (0.0 = logs only, 1.0 = camera on)
+  context[7] = options.cameraOn ? 1.0 : 0.0;
+
+  // [8] Recent engagement trend — mean engagementScore over last 3 completed sessions.
   try {
     const recentSessions = await TherapySession
       .find({ childId, status: 'Completed' })
@@ -157,31 +150,85 @@ const buildContext = async (childId, sessionId) => {
       if (recentResults.length > 0) {
         const meanEngagement =
           recentResults.reduce((sum, r) => sum + r.engagementScore, 0) / recentResults.length;
-        context[7] = Math.max(0, Math.min(1, meanEngagement));
-        metadata.recentEngagement = context[7];
+        context[8] = Math.max(0, Math.min(1, meanEngagement));
+        metadata.recentEngagement = context[8];
       } else {
-        context[7] = 0.5; // No engagement data yet — neutral
+        context[8] = 0.5;
         metadata.missingFields.push('recentEngagement');
       }
     } else {
-      context[7] = 0.5; // First session — neutral
+      context[8] = 0.5;
       metadata.missingFields.push('recentEngagement');
     }
   } catch (err) {
-    context[7] = 0.5;
+    context[8] = 0.5;
     metadata.missingFields.push('recentEngagement');
   }
 
-  // [8] Number of completed sessions (normalised).
+  // [9] Recent performance / TSS for this activity type
+  try {
+    const activityQuery = { childId };
+    if (options.activityType) {
+      activityQuery.activityId = new RegExp(options.activityType, 'i');
+    }
+    const pastResults = await ActivityResult
+      .find(activityQuery)
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .select('performanceScore completionFraction')
+      .lean();
+
+    if (pastResults.length > 0) {
+      const avgPerf = pastResults.reduce((sum, r) => {
+        const perf = r.performanceScore ?? r.completionFraction ?? 0.5;
+        return sum + perf;
+      }, 0) / pastResults.length;
+      context[9] = Math.max(0, Math.min(1, avgPerf));
+      metadata.recentPerformanceForType = context[9];
+    } else {
+      context[9] = 0.5; // neutral prior
+      metadata.missingFields.push('recentPerformanceForType');
+    }
+  } catch (err) {
+    context[9] = 0.5;
+    metadata.missingFields.push('recentPerformanceForType');
+  }
+
+  // [10] Number of completed sessions (normalised).
   try {
     const completedSessions = await TherapySession
       .countDocuments({ childId, status: 'Completed' });
-    context[8] = Math.min(completedSessions / 20, 1.0);
+    context[10] = Math.min(completedSessions / 20, 1.0);
     metadata.completedSessions = completedSessions;
   } catch (err) {
-    context[8] = 0;
+    context[10] = 0;
     metadata.missingFields.push('sessionCount');
   }
+
+  // [11] Parent help level (0.0 = none, 0.33 = minimal, 0.67 = moderate, 1.0 = full)
+  if (options.parentHelpLevel != null) {
+    const rawHelp = Number(options.parentHelpLevel);
+    // Support both 0-3 scale and normalized 0.0-1.0 scale
+    const normHelp = rawHelp > 1.0 ? rawHelp / 3.0 : rawHelp;
+    context[11] = Math.max(0, Math.min(1, normHelp));
+  } else {
+    // Check if the most recent activity result had a parentHelpLevel recorded
+    try {
+      const lastResult = await ActivityResult
+        .findOne({ childId, parentHelpLevel: { $ne: null } })
+        .sort({ createdAt: -1 })
+        .select('parentHelpLevel')
+        .lean();
+      if (lastResult && lastResult.parentHelpLevel != null) {
+        context[11] = Math.max(0, Math.min(1, lastResult.parentHelpLevel / 3.0));
+      } else {
+        context[11] = 0.0;
+      }
+    } catch (_) {
+      context[11] = 0.0;
+    }
+  }
+  metadata.parentHelpLevel = context[11];
 
   // Validate dimension.
   if (context.length !== CONTEXT_DIM) {
@@ -193,4 +240,4 @@ const buildContext = async (childId, sessionId) => {
   return { vector: context, metadata };
 };
 
-module.exports = { buildContext };
+module.exports = { buildContext, CONTEXT_DIM: 12 };

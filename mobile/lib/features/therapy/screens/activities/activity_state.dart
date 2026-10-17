@@ -33,23 +33,40 @@ class _ActivityState extends State<_Activity> {
     setState(() => _isSaving = true);
 
     final durationSeconds = DateTime.now().difference(_startTime).inSeconds;
+    final totalCues = _cues.length;
+    const completion = 1.0;
+    final performance = _LinUcbModel.calculatePerformanceScore(
+      successes: totalCues,
+      targets: totalCues,
+      completionFraction: completion,
+    );
+    final engagement = _LinUcbModel.estimateLogsOnlyEngagement(
+      completionFraction: completion,
+      targetOpportunities: totalCues,
+      attempts: totalCues,
+      durationSeconds: durationSeconds,
+    );
 
     await TherapyApiService.recordActivityResult(
       activityId: 'picture-description',
-      targetOpportunities: _cues.length,
-      successfulOpportunities: _cues.length,
-      completionFraction: 1.0,
+      targetOpportunities: totalCues,
+      successfulOpportunities: totalCues,
+      completionFraction: completion,
       durationSeconds: durationSeconds,
       parentHelpLevel: _parentHelpLevel,
       completed: true,
       engagementMode: 'logs_only',
-      engagementScore: 0.92,
+      engagementScore: engagement,
     );
 
     try {
       final model = await _LinUcbModel.load();
       if (model.pendingActivityId == 'picture-description') {
-        await model.recordPendingReward(0.6 * 1.0 + 0.4 * 0.92);
+        await model.recordPendingReward(
+          performance: performance,
+          engagement: engagement,
+          parentHelpRating: _parentHelpLevel,
+        );
       }
     } catch (_) {}
 
