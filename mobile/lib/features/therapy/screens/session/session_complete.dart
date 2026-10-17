@@ -11,6 +11,8 @@ class _SessionCompleteState extends State<_SessionComplete> {
   _LinUcbModel? _model;
   String? _error;
   bool _isSaving = false;
+  bool _questionnaireSubmitted = false;
+  bool _isSubmittingQuestionnaire = false;
 
   // Parent questionnaire ratings (1-5 Likert scale, default 5)
   int _q1Engagement = 5;
@@ -41,6 +43,36 @@ class _SessionCompleteState extends State<_SessionComplete> {
     }
   }
 
+  Future<void> _submitOnlyQuestionnaire() async {
+    if (_isSubmittingQuestionnaire) return;
+    setState(() => _isSubmittingQuestionnaire = true);
+
+    final success = await TherapyApiService.submitParentQuestionnaire(
+      responses: {
+        'Q1': _q1Engagement,
+        'Q2': _q2Difficulty,
+        'Q3': _q3Willingness,
+        'Q4': _q4Support,
+        'Q5': _q5Overall,
+      },
+    );
+
+    if (!mounted) return;
+    setState(() {
+      _isSubmittingQuestionnaire = false;
+      _questionnaireSubmitted = success;
+    });
+
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('දෙමාපිය ඇගයීම සාර්ථකව සටහන් විය! (Parent feedback saved)'),
+          backgroundColor: _C.green,
+        ),
+      );
+    }
+  }
+
   Future<void> _saveAndContinue() async {
     final model = _model;
     if (model == null || _isSaving) return;
@@ -58,19 +90,21 @@ class _SessionCompleteState extends State<_SessionComplete> {
       return;
     }
 
-    // 1. Submit parent questionnaire if filled
-    try {
-      await TherapyApiService.submitParentQuestionnaire(
-        responses: {
-          'Q1': _q1Engagement,
-          'Q2': _q2Difficulty,
-          'Q3': _q3Willingness,
-          'Q4': _q4Support,
-          'Q5': _q5Overall,
-        },
-      );
-    } catch (e) {
-      debugPrint('Questionnaire submission error: $e');
+    // 1. Submit parent questionnaire if not submitted yet
+    if (!_questionnaireSubmitted) {
+      try {
+        await TherapyApiService.submitParentQuestionnaire(
+          responses: {
+            'Q1': _q1Engagement,
+            'Q2': _q2Difficulty,
+            'Q3': _q3Willingness,
+            'Q4': _q4Support,
+            'Q5': _q5Overall,
+          },
+        );
+      } catch (e) {
+        debugPrint('Questionnaire submission error: $e');
+      }
     }
 
     // 2. Complete session with backend
@@ -100,12 +134,26 @@ class _SessionCompleteState extends State<_SessionComplete> {
 
   Widget _buildQuestionnaireRow(String label, int value, ValueChanged<int> onChanged) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: _C.darkText)),
-          const SizedBox(height: 4),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  label,
+                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: _C.darkText),
+                ),
+              ),
+              Text(
+                '$value / 5',
+                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: _C.blue),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
           Row(
             children: List.generate(5, (index) {
               final star = index + 1;
@@ -116,7 +164,7 @@ class _SessionCompleteState extends State<_SessionComplete> {
                   child: Icon(
                     star <= value ? Icons.star_rounded : Icons.star_outline_rounded,
                     color: Colors.amber,
-                    size: 24,
+                    size: 28,
                   ),
                 ),
               );
@@ -139,7 +187,7 @@ class _SessionCompleteState extends State<_SessionComplete> {
             const _BackHeader(title: ''),
             const _Plaque(text: 'ගමන සම්පූර්ණයි!', fontSize: 18),
             const SizedBox(height: 16),
-            const _Mascot(size: 140, pose: 'trophy'),
+            const _Mascot(size: 130, pose: 'trophy'),
             const SizedBox(height: 12),
             const Text(
               'අද ඔබ ඉතා හොඳින් කළා!',
@@ -194,6 +242,10 @@ class _SessionCompleteState extends State<_SessionComplete> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: _questionnaireSubmitted ? _C.green : Colors.transparent,
+                  width: _questionnaireSubmitted ? 2 : 0,
+                ),
                 boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)],
               ),
               child: Column(
@@ -202,9 +254,19 @@ class _SessionCompleteState extends State<_SessionComplete> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'දෙමාපිය ඇගයීම (Parent Feedback)',
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: _C.darkText),
+                      Row(
+                        children: [
+                          Icon(
+                            _questionnaireSubmitted ? Icons.check_circle_rounded : Icons.rate_review_rounded,
+                            color: _questionnaireSubmitted ? _C.green : _C.blue,
+                            size: 20,
+                          ),
+                          const SizedBox(width: 8),
+                          const Text(
+                            'දෙමාපිය ඇගයීම (Parent Rating)',
+                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: _C.darkText),
+                          ),
+                        ],
                       ),
                       IconButton(
                         icon: Icon(_showQuestionnaire ? Icons.expand_less : Icons.expand_more),
@@ -214,8 +276,28 @@ class _SessionCompleteState extends State<_SessionComplete> {
                       ),
                     ],
                   ),
+                  if (_questionnaireSubmitted) ...[
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.green.shade50,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Row(
+                        children: [
+                          Icon(Icons.check, color: _C.green, size: 16),
+                          SizedBox(width: 6),
+                          Text(
+                            'ඇගයීම සුරැකිණි (Questionnaire recorded)',
+                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: _C.green),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                   if (_showQuestionnaire) ...[
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 12),
                     _buildQuestionnaireRow(
                       '1. දරුවා සතුටින් සහභාගී වූවාද? (Engagement)',
                       _q1Engagement,
@@ -240,6 +322,21 @@ class _SessionCompleteState extends State<_SessionComplete> {
                       '5. සමස්ත සැසිය සාර්ථකද? (Overall Session)',
                       _q5Overall,
                       (val) => setState(() => _q5Overall = val),
+                    ),
+                    const SizedBox(height: 8),
+                    Center(
+                      child: OutlinedButton.icon(
+                        onPressed: _isSubmittingQuestionnaire ? null : _submitOnlyQuestionnaire,
+                        icon: _isSubmittingQuestionnaire
+                            ? const SizedBox(width: 14, height: 14, child: CircularProgressIndicator(strokeWidth: 2))
+                            : const Icon(Icons.save_rounded, size: 16),
+                        label: Text(_questionnaireSubmitted ? 'ඇගයීම යාවත්කාලීන කරන්න' : 'ඇගයීම සටහන් කරන්න'),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: _C.blue,
+                          side: const BorderSide(color: _C.blue),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        ),
+                      ),
                     ),
                   ],
                 ],

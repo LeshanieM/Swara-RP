@@ -256,34 +256,36 @@ const submitQuestionnaire = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Session not found' });
     }
 
-    // Check for duplicate submission.
-    const existing = await ParentQuestionnaire.findOne({ sessionId: session._id });
-    if (existing) {
-      return res.status(409).json({
-        success: false,
-        message: 'Questionnaire already submitted for this session',
-      });
-    }
-
     // Convert responses object to Map for mongoose.
     const responseMap = new Map(Object.entries(responses).map(([k, v]) => [k, Number(v)]));
 
-    const questionnaire = new ParentQuestionnaire({
-      sessionId: session._id,
-      ownerId: req.user.id,
-      version,
-      responses: responseMap,
-      completedAt: new Date(),
-    });
-    await questionnaire.save(); // validates and computes scaledScore
+    // Upsert questionnaire to allow parent to adjust rating without errors.
+    let questionnaire = await ParentQuestionnaire.findOne({ sessionId: session._id });
+    if (questionnaire) {
+      questionnaire.responses = responseMap;
+      questionnaire.version = version;
+      questionnaire.completedAt = new Date();
+      await questionnaire.save();
+    } else {
+      questionnaire = new ParentQuestionnaire({
+        sessionId: session._id,
+        ownerId: req.user.id,
+        version,
+        responses: responseMap,
+        completedAt: new Date(),
+      });
+      await questionnaire.save();
+    }
 
-    // Update session with questionnaire result and recalculate TSS.
+    // Update session with questionnaire result (full object to avoid dot-notation on null).
     await TherapySession.findByIdAndUpdate(session._id, {
-      'parentQuestionnaire.version': questionnaire.version,
-      'parentQuestionnaire.responses': Object.fromEntries(responseMap),
-      'parentQuestionnaire.rawScore': questionnaire.rawScore,
-      'parentQuestionnaire.scaledScore': questionnaire.scaledScore,
-      'parentQuestionnaire.completedAt': questionnaire.completedAt,
+      parentQuestionnaire: {
+        version: questionnaire.version,
+        responses: Object.fromEntries(responseMap),
+        rawScore: questionnaire.rawScore,
+        scaledScore: questionnaire.scaledScore,
+        completedAt: questionnaire.completedAt,
+      },
     });
 
     // Recalculate TSS with questionnaire included (if session is completed).
@@ -308,7 +310,8 @@ const submitQuestionnaire = async (req, res) => {
       },
     });
   } catch (error) {
-    if (error.name === 'ValidationError') {
+    console.error('[C3] submitQuestionnaire error:', error);
+    if (error.name === 'ValidationError' || error.message.includes('Questionnaire version')) {
       return res.status(400).json({ success: false, message: error.message });
     }
     res.status(500).json({ success: false, message: error.message });
