@@ -40,6 +40,17 @@ class _BreathingState extends State<_Breathing>
     final durationSeconds = DateTime.now().difference(_startTime).inSeconds;
     final successes = _relaxedAreas.isEmpty ? 1 : _relaxedAreas.length;
     final completion = (successes / 4.0).clamp(0.25, 1.0);
+    final performance = _LinUcbModel.calculatePerformanceScore(
+      successes: successes,
+      targets: 4,
+      completionFraction: completion,
+    );
+    final engagement = _LinUcbModel.estimateLogsOnlyEngagement(
+      completionFraction: completion,
+      targetOpportunities: 4,
+      attempts: successes,
+      durationSeconds: durationSeconds,
+    );
 
     await TherapyApiService.recordActivityResult(
       activityId: 'breathing-body-awareness',
@@ -49,13 +60,16 @@ class _BreathingState extends State<_Breathing>
       durationSeconds: durationSeconds,
       completed: true,
       engagementMode: 'logs_only',
-      engagementScore: 0.9,
+      engagementScore: engagement,
     );
 
     try {
       final model = await _LinUcbModel.load();
       if (model.pendingActivityId == 'breathing-body-awareness') {
-        await model.recordPendingReward(0.6 * completion + 0.4 * 0.9);
+        await model.recordPendingReward(
+          performance: performance,
+          engagement: engagement,
+        );
       }
     } catch (_) {}
 
