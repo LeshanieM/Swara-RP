@@ -16,6 +16,7 @@ const concomitantRoutes = require('./routes/concomitant');
 const videoAnalysisRoutes = require('./routes/videoAnalysis');
 const c3RecommendationRoutes = require('./routes/component3/recommendationRoutes');
 const c3TherapySessionRoutes = require('./routes/component3/therapySessionRoutes');
+const c3ActivityRoutes = require('./routes/component3/activityRoutes');
 const app = express();
 
 // Middleware
@@ -37,6 +38,7 @@ app.use('/api/concomitant/video-analysis', videoAnalysisRoutes);
 app.use('/api/concomitant', concomitantRoutes);
 app.use('/api/c3/recommendations', c3RecommendationRoutes);
 app.use('/api/c3/therapy-sessions', c3TherapySessionRoutes);
+app.use('/api/c3/activities', c3ActivityRoutes);
 
 // Health check
 app.get('/health', (req, res) => res.json({ status: 'ok', service: 'swara-backend', version: '1.0.0' }));
