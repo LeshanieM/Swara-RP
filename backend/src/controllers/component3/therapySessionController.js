@@ -30,19 +30,34 @@ const createSession = async (req, res) => {
   try {
     const { childId, planId, selectedActivities, contextSnapshot, modelVersion } = req.body;
 
-    if (childId && !await canAccessChild(childId, req.user)) {
-      return res.status(404).json({ success: false, message: 'Child profile not found' });
+    let effectiveChildId = childId;
+    if (effectiveChildId) {
+      if (!await canAccessChild(effectiveChildId, req.user)) {
+        return res.status(404).json({ success: false, message: 'Child profile not found' });
+      }
+    } else {
+      const child = await Child.findOne({ parentId: req.user.id }).select('_id').lean();
+      if (child) effectiveChildId = child._id;
+    }
+
+    const sessionId = `sess_${crypto.randomUUID()}`;
+    let snapshot = contextSnapshot || null;
+    if (!snapshot && effectiveChildId) {
+      try {
+        const { vector } = await require('../../services/component3/contextBuilder').buildContext(effectiveChildId, sessionId);
+        snapshot = vector; // store only the numeric array — schema type is [Number]
+      } catch (_) {}
     }
 
     const newSession = new TherapySession({
-      sessionId: `sess_${crypto.randomUUID()}`,
+      sessionId,
       ownerId: req.user.id,
-      childId,
+      childId: effectiveChildId,
       planId,
       selectedActivities: selectedActivities || [],
       status: 'In Progress',
-      contextSnapshot: contextSnapshot || null,
-      modelVersion: modelVersion || null,
+      contextSnapshot: snapshot,
+      modelVersion: modelVersion || 'hybrid_linucb_v1',
     });
 
     await newSession.save();
