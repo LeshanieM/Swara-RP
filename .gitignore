@@ -153,6 +153,18 @@ uploads/
 ai-service/results/*
 !ai-service/results/.gitkeep
 
+# DAiSEE engagement-model training: licensed videos, extracted features,
+# manifests containing local paths, and generated model/evaluation artifacts.
+# Keep these private; only source code under ai-service/engagement_training is tracked.
+ai-service/engagement_training/data/
+ai-service/engagement_training/manifests/
+ai-service/engagement_training/features/
+ai-service/engagement_training/artifacts/
+ai-service/c3_engagement_training/data/
+ai-service/c3_engagement_training/manifests/
+ai-service/c3_engagement_training/features/
+ai-service/c3_engagement_training/artifacts/
+
 
 # ==========================================
 # IDE / Editors
