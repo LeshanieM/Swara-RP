@@ -9,6 +9,8 @@ class _SessionComplete extends StatefulWidget {
 
 class _SessionCompleteState extends State<_SessionComplete> {
   _LinUcbModel? _model;
+  CameraEngagementSnapshot? _cameraSnapshot;
+  String? _cameraSnapshotError;
   String? _error;
   bool _isSaving = false;
   bool _questionnaireSubmitted = false;
@@ -31,9 +33,26 @@ class _SessionCompleteState extends State<_SessionComplete> {
   Future<void> _loadSessionSummary() async {
     try {
       final model = await _LinUcbModel.load();
+      CameraEngagementSnapshot? cameraSnapshot;
+      String? cameraSnapshotError;
+      try {
+        cameraSnapshot = await CameraEngagementSnapshot.loadLatest();
+      } catch (error, stackTrace) {
+        debugPrint(
+          'Could not load camera engagement summary: $error\n$stackTrace',
+        );
+        cameraSnapshotError = 'Could not load camera engagement data: $error';
+      }
+      final sessionStart = model.sessionStartedAtMilliseconds;
       if (!mounted) return;
       setState(() {
         _model = model;
+        _cameraSnapshotError = cameraSnapshotError;
+        _cameraSnapshot = cameraSnapshot != null &&
+                sessionStart != null &&
+                cameraSnapshot.recordedAt.millisecondsSinceEpoch >= sessionStart
+            ? cameraSnapshot
+            : null;
         _error = null;
       });
     } catch (error, stackTrace) {
@@ -66,7 +85,8 @@ class _SessionCompleteState extends State<_SessionComplete> {
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('දෙමාපිය ඇගයීම සාර්ථකව සටහන් විය! (Parent feedback saved)'),
+          content:
+              Text('දෙමාපිය ඇගයීම සාර්ථකව සටහන් විය! (Parent feedback saved)'),
           backgroundColor: _C.green,
         ),
       );
@@ -108,14 +128,18 @@ class _SessionCompleteState extends State<_SessionComplete> {
     }
 
     // 2. Complete session with backend
-    final completed = model.sessionActivitiesCompleted > 0 ? model.sessionActivitiesCompleted : 1;
+    final completed = model.sessionActivitiesCompleted > 0
+        ? model.sessionActivitiesCompleted
+        : 1;
     final saved = await TherapyApiService.completeActiveSession(
       resultSummary: {
         'activitiesCompleted': completed,
         'activitiesTotal': 5,
-        'score': model.sessionScoreOutOfTen > 0 ? model.sessionScoreOutOfTen : 8.5,
+        'score':
+            model.sessionScoreOutOfTen > 0 ? model.sessionScoreOutOfTen : 8.5,
         'scoreOutOf': 10,
-        'durationMinutes': model.sessionDurationMinutes > 0 ? model.sessionDurationMinutes : 5,
+        'durationMinutes':
+            model.sessionDurationMinutes > 0 ? model.sessionDurationMinutes : 5,
       },
     );
 
@@ -132,7 +156,8 @@ class _SessionCompleteState extends State<_SessionComplete> {
     _InheritedNav.of(context)?.go(_TherapyRoute.progress);
   }
 
-  Widget _buildQuestionnaireRow(String label, int value, ValueChanged<int> onChanged) {
+  Widget _buildQuestionnaireRow(
+      String label, int value, ValueChanged<int> onChanged) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Column(
@@ -144,12 +169,16 @@ class _SessionCompleteState extends State<_SessionComplete> {
               Expanded(
                 child: Text(
                   label,
-                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: _C.darkText),
+                  style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: _C.darkText),
                 ),
               ),
               Text(
                 '$value / 5',
-                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: _C.blue),
+                style: const TextStyle(
+                    fontSize: 12, fontWeight: FontWeight.bold, color: _C.blue),
               ),
             ],
           ),
@@ -162,7 +191,9 @@ class _SessionCompleteState extends State<_SessionComplete> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: Icon(
-                    star <= value ? Icons.star_rounded : Icons.star_outline_rounded,
+                    star <= value
+                        ? Icons.star_rounded
+                        : Icons.star_outline_rounded,
                     color: Colors.amber,
                     size: 28,
                   ),
@@ -219,21 +250,29 @@ class _SessionCompleteState extends State<_SessionComplete> {
                 children: [
                   _StCard(
                     label: 'Activities',
-                    value: '${model.sessionActivitiesCompleted > 0 ? model.sessionActivitiesCompleted : 1}',
+                    value:
+                        '${model.sessionActivitiesCompleted > 0 ? model.sessionActivitiesCompleted : 1}',
                     emoji: '🧩',
                   ),
                   _StCard(
                     label: 'Feedback',
-                    value: '${(model.sessionScoreOutOfTen > 0 ? model.sessionScoreOutOfTen : 8.5).toStringAsFixed(1)} / 10',
+                    value:
+                        '${(model.sessionScoreOutOfTen > 0 ? model.sessionScoreOutOfTen : 8.5).toStringAsFixed(1)} / 10',
                     emoji: '⭐️',
                   ),
                   _StCard(
                     label: 'Time',
-                    value: '${model.sessionDurationMinutes > 0 ? model.sessionDurationMinutes : 5} min',
+                    value:
+                        '${model.sessionDurationMinutes > 0 ? model.sessionDurationMinutes : 5} min',
                     emoji: '⏱️',
                   ),
                 ],
               ),
+            const SizedBox(height: 20),
+            _CameraEngagementSummary(
+              snapshot: _cameraSnapshot,
+              error: _cameraSnapshotError,
+            ),
             const SizedBox(height: 20),
 
             // Parent Questionnaire Box
@@ -243,10 +282,13 @@ class _SessionCompleteState extends State<_SessionComplete> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: _questionnaireSubmitted ? _C.green : Colors.transparent,
+                  color:
+                      _questionnaireSubmitted ? _C.green : Colors.transparent,
                   width: _questionnaireSubmitted ? 2 : 0,
                 ),
-                boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)],
+                boxShadow: const [
+                  BoxShadow(color: Colors.black12, blurRadius: 6)
+                ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -257,20 +299,28 @@ class _SessionCompleteState extends State<_SessionComplete> {
                       Row(
                         children: [
                           Icon(
-                            _questionnaireSubmitted ? Icons.check_circle_rounded : Icons.rate_review_rounded,
+                            _questionnaireSubmitted
+                                ? Icons.check_circle_rounded
+                                : Icons.rate_review_rounded,
                             color: _questionnaireSubmitted ? _C.green : _C.blue,
                             size: 20,
                           ),
                           const SizedBox(width: 8),
                           const Text(
                             'දෙමාපිය ඇගයීම (Parent Rating)',
-                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: _C.darkText),
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: _C.darkText),
                           ),
                         ],
                       ),
                       IconButton(
-                        icon: Icon(_showQuestionnaire ? Icons.expand_less : Icons.expand_more),
-                        onPressed: () => setState(() => _showQuestionnaire = !_showQuestionnaire),
+                        icon: Icon(_showQuestionnaire
+                            ? Icons.expand_less
+                            : Icons.expand_more),
+                        onPressed: () => setState(
+                            () => _showQuestionnaire = !_showQuestionnaire),
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
                       ),
@@ -279,7 +329,8 @@ class _SessionCompleteState extends State<_SessionComplete> {
                   if (_questionnaireSubmitted) ...[
                     const SizedBox(height: 8),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
                         color: Colors.green.shade50,
                         borderRadius: BorderRadius.circular(10),
@@ -290,7 +341,10 @@ class _SessionCompleteState extends State<_SessionComplete> {
                           SizedBox(width: 6),
                           Text(
                             'ඇගයීම සුරැකිණි (Questionnaire recorded)',
-                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: _C.green),
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: _C.green),
                           ),
                         ],
                       ),
@@ -326,15 +380,24 @@ class _SessionCompleteState extends State<_SessionComplete> {
                     const SizedBox(height: 8),
                     Center(
                       child: OutlinedButton.icon(
-                        onPressed: _isSubmittingQuestionnaire ? null : _submitOnlyQuestionnaire,
+                        onPressed: _isSubmittingQuestionnaire
+                            ? null
+                            : _submitOnlyQuestionnaire,
                         icon: _isSubmittingQuestionnaire
-                            ? const SizedBox(width: 14, height: 14, child: CircularProgressIndicator(strokeWidth: 2))
+                            ? const SizedBox(
+                                width: 14,
+                                height: 14,
+                                child:
+                                    CircularProgressIndicator(strokeWidth: 2))
                             : const Icon(Icons.save_rounded, size: 16),
-                        label: Text(_questionnaireSubmitted ? 'ඇගයීම යාවත්කාලීන කරන්න' : 'ඇගයීම සටහන් කරන්න'),
+                        label: Text(_questionnaireSubmitted
+                            ? 'ඇගයීම යාවත්කාලීන කරන්න'
+                            : 'ඇගයීම සටහන් කරන්න'),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: _C.blue,
                           side: const BorderSide(color: _C.blue),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12)),
                         ),
                       ),
                     ),
@@ -346,7 +409,9 @@ class _SessionCompleteState extends State<_SessionComplete> {
 
             _Btn(
               text: _isSaving ? 'සුරකිමින්...' : 'සාරාංශය බලන්න (View Summary)',
-              onTap: _isSaving || model == null || _error != null ? () {} : _saveAndContinue,
+              onTap: _isSaving || model == null || _error != null
+                  ? () {}
+                  : _saveAndContinue,
             ),
             const SizedBox(height: 20),
           ],
@@ -356,9 +421,106 @@ class _SessionCompleteState extends State<_SessionComplete> {
   }
 }
 
+class _CameraEngagementSummary extends StatelessWidget {
+  final CameraEngagementSnapshot? snapshot;
+  final String? error;
+
+  const _CameraEngagementSummary({required this.snapshot, required this.error});
+
+  @override
+  Widget build(BuildContext context) {
+    final snapshot = this.snapshot;
+    final score = snapshot?.engagementScore;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            children: [
+              Icon(Icons.visibility_rounded, color: _C.blue, size: 20),
+              SizedBox(width: 8),
+              Text(
+                'Camera engagement check',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: _C.darkText,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          if (error != null)
+            Text(error!,
+                style: const TextStyle(fontSize: 13, color: Colors.red))
+          else if (snapshot == null)
+            const Text(
+              'Not measured in this session. Camera use is optional.',
+              style: TextStyle(fontSize: 13, color: Colors.black54),
+            )
+          else if (score == null)
+            const Text(
+              'Unable to assess from camera data. No usable face signal was '
+              'available; this is missing data, not a low engagement score.',
+              style: TextStyle(fontSize: 13, color: Colors.black54),
+            )
+          else ...[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Pilot engagement estimate',
+                  style: TextStyle(fontSize: 13, color: Colors.black54),
+                ),
+                Text(
+                  '${(score * 100).round()}%',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: _C.blue,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: LinearProgressIndicator(
+                value: score,
+                minHeight: 10,
+                backgroundColor: _C.chipBg,
+                color: score < 0.4 ? Colors.orange : _C.green,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Face visible ${(snapshot.faceVisibility * 100).round()}% of '
+              'sampled frames · ${snapshot.durationSeconds ~/ 60} min block',
+              style: const TextStyle(fontSize: 11, color: Colors.black54),
+            ),
+            const SizedBox(height: 6),
+            const Text(
+              'Research baseline only; not a clinical assessment.',
+              style: TextStyle(fontSize: 11, color: Colors.black45),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
 class _StCard extends StatelessWidget {
   final String label, value, emoji;
-  const _StCard({required this.label, required this.value, required this.emoji});
+  const _StCard(
+      {required this.label, required this.value, required this.emoji});
 
   @override
   Widget build(BuildContext context) => Container(
@@ -374,7 +536,8 @@ class _StCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             value,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: _C.darkText),
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 13, color: _C.darkText),
           ),
           const SizedBox(height: 2),
           Text(

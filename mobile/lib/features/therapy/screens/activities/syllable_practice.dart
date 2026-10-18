@@ -13,7 +13,8 @@ class _SyllablePracticeState extends State<_SyllablePractice> {
       'word': 'අම්-මා',
       'meaning': 'අම්මා / Mother',
       'syllables': ['අම්', 'මා'],
-      'hint': 'Begin with gentle onset on "අම්", then smooth transition to "මා"',
+      'hint':
+          'Begin with gentle onset on "අම්", then smooth transition to "මා"',
     },
     {
       'word': 'ම-ල',
@@ -46,11 +47,19 @@ class _SyllablePracticeState extends State<_SyllablePractice> {
   int _highlightedSyllable = 0;
   bool _isSaving = false;
   late final DateTime _startTime;
+  final CameraEngagementActivityTracker _engagementTracker =
+      CameraEngagementActivityTracker();
 
   @override
   void initState() {
     super.initState();
     _startTime = DateTime.now();
+  }
+
+  @override
+  void dispose() {
+    _engagementTracker.dispose();
+    super.dispose();
   }
 
   void _onWordRecorded() {
@@ -68,7 +77,8 @@ class _SyllablePracticeState extends State<_SyllablePractice> {
     setState(() => _isSaving = true);
 
     final durationSeconds = DateTime.now().difference(_startTime).inSeconds;
-    final successes = _completedWordIndices.isEmpty ? 1 : _completedWordIndices.length;
+    final successes =
+        _completedWordIndices.isEmpty ? 1 : _completedWordIndices.length;
     final total = _practiceWords.length;
     final completion = (successes / total).clamp(0.2, 1.0);
     final performance = _LinUcbModel.calculatePerformanceScore(
@@ -76,12 +86,21 @@ class _SyllablePracticeState extends State<_SyllablePractice> {
       targets: total,
       completionFraction: completion,
     );
-    final engagement = _LinUcbModel.estimateLogsOnlyEngagement(
+    final logsEngagement = _LinUcbModel.estimateLogsOnlyEngagement(
       completionFraction: completion,
       targetOpportunities: total,
       attempts: successes,
       durationSeconds: durationSeconds,
     );
+    final cameraSnapshot = await _engagementTracker.completeActivity(
+      durationSeconds: durationSeconds,
+      responseCount: successes,
+      targetCount: total,
+      completionFraction: completion,
+    );
+    final engagement = cameraSnapshot?.engagementScore ?? logsEngagement;
+    final engagementMode =
+        cameraSnapshot?.engagementScore == null ? 'logs_only' : 'camera_logs';
 
     await TherapyApiService.recordActivityResult(
       activityId: 'syllable-practice',
@@ -90,7 +109,7 @@ class _SyllablePracticeState extends State<_SyllablePractice> {
       completionFraction: completion,
       durationSeconds: durationSeconds,
       completed: true,
-      engagementMode: 'logs_only',
+      engagementMode: engagementMode,
       engagementScore: engagement,
     );
 
@@ -156,7 +175,8 @@ class _SyllablePracticeState extends State<_SyllablePractice> {
               },
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 44),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14)),
               ),
               child: const Text('ක්‍රියාකාරකම් එකතුවට (Activity Library)'),
             ),
@@ -193,6 +213,7 @@ class _SyllablePracticeState extends State<_SyllablePractice> {
               style: TextStyle(fontSize: 13, color: Colors.black54),
             ),
             const SizedBox(height: 16),
+            CameraEngagementActivityPanel(tracker: _engagementTracker),
 
             // Active Word Highlight Box
             Container(
@@ -201,7 +222,9 @@ class _SyllablePracticeState extends State<_SyllablePractice> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(22),
-                boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 8)],
+                boxShadow: const [
+                  BoxShadow(color: Colors.black12, blurRadius: 8)
+                ],
               ),
               child: Column(
                 children: [
@@ -215,9 +238,12 @@ class _SyllablePracticeState extends State<_SyllablePractice> {
                         onTap: () => setState(() => _highlightedSyllable = idx),
                         child: Container(
                           margin: const EdgeInsets.symmetric(horizontal: 6),
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 12),
                           decoration: BoxDecoration(
-                            color: isSelected ? _C.blue : _C.blue.withValues(alpha: 0.1),
+                            color: isSelected
+                                ? _C.blue
+                                : _C.blue.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(color: _C.blue, width: 2),
                           ),
@@ -236,13 +262,19 @@ class _SyllablePracticeState extends State<_SyllablePractice> {
                   const SizedBox(height: 12),
                   Text(
                     activeWord['meaning'] as String,
-                    style: const TextStyle(fontSize: 14, color: Colors.black54, fontWeight: FontWeight.w600),
+                    style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     activeWord['hint'] as String,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 12, color: Colors.black45, fontStyle: FontStyle.italic),
+                    style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.black45,
+                        fontStyle: FontStyle.italic),
                   ),
                 ],
               ),
@@ -254,7 +286,10 @@ class _SyllablePracticeState extends State<_SyllablePractice> {
               alignment: Alignment.centerLeft,
               child: Text(
                 'පුහුණු වචන තෝරන්න (Select Word):',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: _C.darkText),
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: _C.darkText),
               ),
             ),
             const SizedBox(height: 10),
@@ -271,21 +306,28 @@ class _SyllablePracticeState extends State<_SyllablePractice> {
                     _highlightedSyllable = 0;
                   }),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 10),
                     decoration: BoxDecoration(
                       color: isSelected ? _C.blue : Colors.white,
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: isSelected ? _C.blue : (isDone ? _C.green : Colors.grey.shade300),
+                        color: isSelected
+                            ? _C.blue
+                            : (isDone ? _C.green : Colors.grey.shade300),
                         width: isSelected || isDone ? 2 : 1,
                       ),
-                      boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
+                      boxShadow: const [
+                        BoxShadow(color: Colors.black12, blurRadius: 4)
+                      ],
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         if (isDone) ...[
-                          Icon(Icons.check_circle_rounded, color: isSelected ? Colors.white : _C.green, size: 16),
+                          Icon(Icons.check_circle_rounded,
+                              color: isSelected ? Colors.white : _C.green,
+                              size: 16),
                           const SizedBox(width: 4),
                         ],
                         Text(
@@ -314,7 +356,8 @@ class _SyllablePracticeState extends State<_SyllablePractice> {
             const SizedBox(height: 12),
             Text(
               '${_completedWordIndices.length} of ${_practiceWords.length} words completed',
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: _C.green),
+              style: const TextStyle(
+                  fontSize: 12, fontWeight: FontWeight.bold, color: _C.green),
             ),
             const SizedBox(height: 18),
 

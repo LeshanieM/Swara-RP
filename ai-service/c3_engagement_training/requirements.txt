@@ -1,0 +1,8 @@
+# Kept separate from the API requirements so training dependencies do not affect
+# the FastAPI runtime image. These versions provide pre-built Windows wheels
+# for the project's Python 3.13 environment.
+numpy==2.3.4
+pandas==2.3.3
+scikit-learn==1.7.2
+opencv-contrib-python==4.11.0.86
+joblib==1.5.2

@@ -100,11 +100,19 @@ class _PracticeActivityState extends State<_PracticeActivity> {
   late final DateTime _startTime;
   bool _isSaving = false;
   bool _isCompleted = false;
+  final CameraEngagementActivityTracker _engagementTracker =
+      CameraEngagementActivityTracker();
 
   @override
   void initState() {
     super.initState();
     _startTime = DateTime.now();
+  }
+
+  @override
+  void dispose() {
+    _engagementTracker.dispose();
+    super.dispose();
   }
 
   Future<void> _recordCurrentPrompt() async {
@@ -143,12 +151,22 @@ class _PracticeActivityState extends State<_PracticeActivity> {
       targets: totalPrompts,
       completionFraction: completion,
     );
-    final engagement = _LinUcbModel.estimateLogsOnlyEngagement(
+    final logsEngagement = _LinUcbModel.estimateLogsOnlyEngagement(
       completionFraction: completion,
       targetOpportunities: totalPrompts,
       attempts: successful,
       durationSeconds: durationSeconds,
     );
+    final cameraSnapshot = await _engagementTracker.completeActivity(
+      durationSeconds: durationSeconds,
+      responseCount: successful,
+      targetCount: totalPrompts,
+      completionFraction: completion,
+    );
+    final engagement = cameraSnapshot?.engagementScore ?? logsEngagement;
+    final engagementMode = cameraSnapshot?.engagementScore == null
+        ? 'logs_only'
+        : 'camera_logs';
 
     // 1. Record to backend session
     await TherapyApiService.recordActivityResult(
@@ -158,7 +176,7 @@ class _PracticeActivityState extends State<_PracticeActivity> {
       completionFraction: completion,
       durationSeconds: durationSeconds,
       completed: true,
-      engagementMode: 'logs_only',
+      engagementMode: engagementMode,
       engagementScore: engagement,
     );
 
@@ -299,6 +317,8 @@ class _PracticeActivityState extends State<_PracticeActivity> {
                 ],
               ),
             ),
+            const SizedBox(height: 14),
+            CameraEngagementActivityPanel(tracker: _engagementTracker),
             const SizedBox(height: 18),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
