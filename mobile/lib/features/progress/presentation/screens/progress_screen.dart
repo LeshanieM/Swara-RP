@@ -62,7 +62,7 @@ class ProgressScreen extends ConsumerWidget {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.softYellow.withOpacity(0.5),
+                        color: AppColors.softYellow.withValues(alpha: 0.5),
                         blurRadius: 15,
                       ),
                     ],
@@ -90,7 +90,7 @@ class ProgressScreen extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(28),
                     boxShadow: [
                       BoxShadow(
-                          color: Colors.black.withOpacity(0.2), blurRadius: 12)
+                          color: Colors.black.withValues(alpha: 0.2), blurRadius: 12)
                     ],
                   ),
                   child: const Row(
@@ -195,7 +195,7 @@ class ProgressScreen extends ConsumerWidget {
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: color, width: 2.5),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.15), blurRadius: 8)
+          BoxShadow(color: Colors.black.withValues(alpha: 0.15), blurRadius: 8)
         ],
       ),
       child: Row(
@@ -203,7 +203,7 @@ class ProgressScreen extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-                color: color.withOpacity(0.2), shape: BoxShape.circle),
+                color: color.withValues(alpha: 0.2), shape: BoxShape.circle),
             child: Text(emoji, style: const TextStyle(fontSize: 28)),
           ),
           const SizedBox(width: 16),
@@ -244,7 +244,7 @@ class ProgressScreen extends ConsumerWidget {
         borderRadius: BorderRadius.circular(28),
         border: Border.all(color: AppColors.primaryLight, width: 2),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 12)
+          BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 12)
         ],
       ),
       child: Column(

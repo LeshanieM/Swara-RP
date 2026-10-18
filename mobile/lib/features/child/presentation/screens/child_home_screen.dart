@@ -422,8 +422,7 @@ class _CompactAdventureCard extends StatefulWidget {
     required this.accentColor,
     required this.onAccentColor,
     required this.onTap,
-    this.emphasized = false,
-  });
+  }) : emphasized = false;
 
   @override
   State<_CompactAdventureCard> createState() => _CompactAdventureCardState();
