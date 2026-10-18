@@ -16,7 +16,7 @@ class _ThemeSelectionState extends State<_ThemeSelection> {
     setState(() => _saving = true);
     ts?.onChanged(theme);
     await StorageService.saveString(AppConstants.c3PreferredThemeKey, theme.storageId);
-    if (!mounted) return;
+    if (!context.mounted) return;
     setState(() => _saving = false);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

@@ -362,15 +362,18 @@ extension _AppThemeX on _AppTheme {
   String mascotImage(String pose) {
     switch (this) {
       case _AppTheme.forest:
-        if (pose == 'magnifier')
+        if (pose == 'magnifier') {
           return 'assets/images/component3/milo_magnifier.jpg';
+        }
         if (pose == 'trophy') return 'assets/images/component3/milo_trophy.jpg';
         return 'assets/images/component3/milo_mascot.jpg';
       case _AppTheme.beach:
-        if (pose == 'magnifier')
+        if (pose == 'magnifier') {
           return 'assets/images/component3/turtle_magnifier.jpg';
-        if (pose == 'trophy')
+        }
+        if (pose == 'trophy') {
           return 'assets/images/component3/turtle_trophy.jpg';
+        }
         return 'assets/images/component3/turtle_mascot.jpg';
       case _AppTheme.space:
         return 'assets/images/component3/cosmo_mascot.jpg';

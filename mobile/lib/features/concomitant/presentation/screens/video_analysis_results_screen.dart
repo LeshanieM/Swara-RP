@@ -133,7 +133,7 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
   }
 
   Widget _channelGrid(TmmfResult tmmf) {
-    final channels = const [
+    const channels = [
       ('eye', 'Eye movement', Icons.remove_red_eye_outlined),
       ('lip', 'Lip movement', Icons.sentiment_satisfied_alt_outlined),
       ('jaw', 'Jaw movement', Icons.face_outlined),
