@@ -1,32 +1,27 @@
 const express = require('express');
 const { auth } = require('../middleware/auth');
+const Child = require('../models/Child');
+const C4Session = require('../models/component4/Session');
 
 const router = express.Router();
 
 router.use(auth);
 
+router.use('/c4', require('./component4'));
+
 router.post('/analyze', async (req, res) => {
-  try {
-    const mockResult = {
-        childId: req.body.childId,
-        scores: {
-          keywordRelevance: 8.0,
-          responseLength: 7.0,
-          speechFluency: 6.0,
-          responseOrganization: 8.0,
-        },
-        overallScore: 7.25,
-        status: 'Improving',
-        isPrototype: true,
-      };
-    res.json(mockResult);
-  } catch (err) {
-    res.status(500).json({ message: 'Failed to analyze communication' });
-  }
+  res.status(410).json({ message: 'This legacy mock endpoint is retired. Create a C4 session and submit its recording through /api/communication/c4/sessions/:sessionId/analyze.' });
 });
 
-router.get('/:childId', async (req, res) => {
-    res.json([]);
+router.get('/:childId', async (req, res, next) => {
+  try {
+    const ownership = req.user.role === 'therapist' ? { therapistId: req.user.id } : { parentId: req.user.id };
+    const query = /^[a-f\d]{24}$/i.test(req.params.childId) ? { _id: req.params.childId } : { childId: req.params.childId };
+    const child = await Child.findOne({ ...query, ...ownership });
+    if (!child) return res.status(404).json({ message: 'Child profile not found' });
+    const sessions = await C4Session.find({ childId: child._id }).sort({ createdAt: -1 }).lean();
+    res.json(sessions);
+  } catch (error) { next(error); }
 });
 
 module.exports = router;
