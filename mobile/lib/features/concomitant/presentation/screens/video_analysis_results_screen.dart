@@ -24,17 +24,20 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
           IconButton(
             tooltip: 'Refresh · යාවත්කාලීන කරන්න',
             icon: const Icon(Icons.refresh),
-            onPressed: () => ref.invalidate(videoAnalysisResultsProvider(analysisId)),
+            onPressed: () =>
+                ref.invalidate(videoAnalysisResultsProvider(analysisId)),
           ),
         ],
       ),
       body: SafeArea(
         child: ResponsiveBody(
           child: async.when(
-            loading: () => const SwaraLoadingWidget(message: 'Loading results · ප්‍රතිඵල පූරණය කරමින්'),
+            loading: () => const SwaraLoadingWidget(
+                message: 'Loading results · ප්‍රතිඵල පූරණය කරමින්'),
             error: (e, _) => SwaraErrorWidget(
               message: VideoAnalysisException.from(e).message,
-              onRetry: () => ref.invalidate(videoAnalysisResultsProvider(analysisId)),
+              onRetry: () =>
+                  ref.invalidate(videoAnalysisResultsProvider(analysisId)),
             ),
             data: (data) => _content(context, data),
           ),
@@ -55,7 +58,7 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
     }
 
     final tmmf = analysis.tmmf;
-    if (tmmf == null || !tmmf.hasWindows) {
+    if ((tmmf == null || !tmmf.hasWindows) && analysis.c2Predictions == null) {
       return const SwaraEmptyState(
         title: 'No results · ප්‍රතිඵල නැත',
         subtitle: 'Try another video · වෙනත් වීඩියෝවක් උත්සාහ කරන්න',
@@ -68,28 +71,41 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
       padding: videoPagePadding(context),
       children: [
         SwaraCard(
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Row(children: [
               const Icon(Icons.videocam_outlined, color: AppColors.primary),
               const SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: Text(data.videoFilename ?? 'Analyzed video',
-                    maxLines: 2, overflow: TextOverflow.ellipsis, style: AppTextStyles.titleMedium),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.titleMedium),
               ),
             ]),
             const SizedBox(height: AppSpacing.md),
             Wrap(spacing: AppSpacing.sm, runSpacing: AppSpacing.xs, children: [
-              StatusPill(label: '${tmmf.windows.length} windows', color: AppColors.primaryDeep,
-                  icon: Icons.view_week_outlined),
-              if (tmmf.windowSeconds != null)
-                StatusPill(label: '${tmmf.windowSeconds!.toStringAsFixed(0)} s windows',
+              if (tmmf != null)
+                StatusPill(
+                    label: '${tmmf.windows.length} windows',
+                    color: AppColors.primaryDeep,
+                    icon: Icons.view_week_outlined),
+              if (tmmf?.windowSeconds != null)
+                StatusPill(
+                    label:
+                        '${tmmf!.windowSeconds!.toStringAsFixed(0)} s windows',
                     color: AppColors.primaryDeep),
-              if (tmmf.overlap != null)
-                StatusPill(label: '${(tmmf.overlap! * 100).round()}% overlap', color: AppColors.primaryDeep),
-              if (tmmf.targetFps != null)
-                StatusPill(label: '${tmmf.targetFps!.toStringAsFixed(0)} sampled fps', color: AppColors.primaryDeep),
+              if (tmmf?.overlap != null)
+                StatusPill(
+                    label: '${(tmmf!.overlap! * 100).round()}% overlap',
+                    color: AppColors.primaryDeep),
+              if (tmmf?.targetFps != null)
+                StatusPill(
+                    label: '${tmmf!.targetFps!.toStringAsFixed(0)} sampled fps',
+                    color: AppColors.primaryDeep),
               if (meta.resolution != null)
-                StatusPill(label: meta.resolution!, color: AppColors.primaryDeep),
+                StatusPill(
+                    label: meta.resolution!, color: AppColors.primaryDeep),
             ]),
           ]),
         ),
@@ -98,14 +114,22 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
           'Research features only · පර්යේෂණ දත්ත පමණි',
           icon: Icons.science_outlined,
         ),
-        const SectionTitle('Movement summary · චලන සාරාංශය'),
-        _channelGrid(tmmf),
-        const SizedBox(height: AppSpacing.md),
-        _windowPreview(tmmf),
-        const SizedBox(height: AppSpacing.md),
+        if (analysis.c2Predictions != null) ...[
+          const SizedBox(height: AppSpacing.md),
+          _c2PredictionsSection(analysis.c2Predictions!),
+        ],
+        if (tmmf != null && tmmf.hasWindows) ...[
+          const SectionTitle('Movement summary · චලන සාරාංශය'),
+          _channelGrid(tmmf),
+          const SizedBox(height: AppSpacing.md),
+          _windowPreview(tmmf),
+          const SizedBox(height: AppSpacing.md),
+        ],
         SwaraCard(
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('Face tracking · මුහුණු හඳුනාගැනීම', style: AppTextStyles.titleMedium),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text('Face tracking · මුහුණු හඳුනාගැනීම',
+                style: AppTextStyles.titleMedium),
             const SizedBox(height: AppSpacing.sm),
             Text(
               '${analysis.tracking.processedFrames ?? 0} frames analyzed'
@@ -115,7 +139,8 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
             if (analysis.processingTime != null)
               Padding(
                 padding: const EdgeInsets.only(top: AppSpacing.xs),
-                child: Text('Processing time: ${fmtSeconds(analysis.processingTime)}',
+                child: Text(
+                    'Processing time: ${fmtSeconds(analysis.processingTime)}',
                     style: AppTextStyles.caption),
               ),
           ]),
@@ -131,6 +156,85 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
     );
   }
 
+  Widget _c2PredictionsSection(C2Predictions predictions) {
+    final fg = predictions.behaviours['FG'];
+    final events = fg?.events ?? const <C2PredictionEvent>[];
+    final flaggedMs = _totalFlaggedMilliseconds(events);
+
+    return SwaraCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Detected Behaviours (Research Model)',
+              style: AppTextStyles.titleMedium),
+          const SizedBox(height: AppSpacing.sm),
+          if (predictions.hasSecondaryBehaviors == null)
+            const ResearchNote(
+              'Secondary behaviours: assessment incomplete — HM not assessed by the model',
+              icon: Icons.info_outline,
+            ),
+          const SizedBox(height: AppSpacing.sm),
+          Text(
+            'FG — assessed: ${events.length} facial grimacing intervals detected · '
+            '${(flaggedMs / 1000).toStringAsFixed(1)} s total time flagged',
+            style: AppTextStyles.bodySmall,
+          ),
+          if (events.isEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: AppSpacing.xs),
+              child: Text('No FG intervals met the model’s event rule.',
+                  style: AppTextStyles.caption),
+            )
+          else
+            ...events.map((event) => ListTile(
+                  dense: true,
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.schedule,
+                      size: 18, color: AppColors.primaryDeep),
+                  title: Text(
+                    '${_formatC2Time(event.startMs)}–${_formatC2Time(event.endMs)}',
+                    style: AppTextStyles.label,
+                  ),
+                )),
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+              'Head movement detection: not assessed by this model (see limitations)',
+              style: AppTextStyles.bodySmall),
+          const SizedBox(height: AppSpacing.md),
+          const ResearchNote(
+            'FG detection is trained on adult CASA interview/reading videos. It is not validated on children, does not diagnose stuttering, and should not replace clinical assessment.',
+            icon: Icons.warning_amber_rounded,
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _formatC2Time(int milliseconds) {
+    final seconds = (milliseconds / 1000).floor();
+    final minutesPart = (seconds ~/ 60).toString().padLeft(2, '0');
+    final secondsPart = (seconds % 60).toString().padLeft(2, '0');
+    return '$minutesPart:$secondsPart';
+  }
+
+  int _totalFlaggedMilliseconds(List<C2PredictionEvent> events) {
+    if (events.isEmpty) return 0;
+    final ordered = [...events]..sort((a, b) => a.startMs.compareTo(b.startMs));
+    var start = ordered.first.startMs;
+    var end = ordered.first.endMs;
+    var total = 0;
+    for (final event in ordered.skip(1)) {
+      if (event.startMs <= end) {
+        if (event.endMs > end) end = event.endMs;
+      } else {
+        total += end - start;
+        start = event.startMs;
+        end = event.endMs;
+      }
+    }
+    return total + (end - start);
+  }
+
   Widget _channelGrid(TmmfResult tmmf) {
     const channels = [
       ('eye', 'Eye · ඇස්', Icons.remove_red_eye_outlined),
@@ -140,7 +244,9 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
     ];
     return LayoutBuilder(builder: (context, constraints) {
       final wide = constraints.maxWidth >= 560;
-      final width = wide ? (constraints.maxWidth - AppSpacing.md) / 2 : constraints.maxWidth;
+      final width = wide
+          ? (constraints.maxWidth - AppSpacing.md) / 2
+          : constraints.maxWidth;
       return Wrap(
         spacing: AppSpacing.md,
         runSpacing: AppSpacing.md,
@@ -155,13 +261,22 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
     });
   }
 
-  Widget _channelCard(TmmfResult tmmf, String key, String label, IconData icon) {
+  Widget _channelCard(
+      TmmfResult tmmf, String key, String label, IconData icon) {
     final meanKey = '${key}_mean';
     final velocityKey = '${key}_max_velocity';
-    final means = tmmf.windows.map((w) => w.features[meanKey]).whereType<double>().toList();
-    final velocities = tmmf.windows.map((w) => w.features[velocityKey]).whereType<double>().toList();
-    final average = means.isEmpty ? null : means.reduce((a, b) => a + b) / means.length;
-    final peak = velocities.isEmpty ? null : velocities.reduce((a, b) => a > b ? a : b);
+    final means = tmmf.windows
+        .map((w) => w.features[meanKey])
+        .whereType<double>()
+        .toList();
+    final velocities = tmmf.windows
+        .map((w) => w.features[velocityKey])
+        .whereType<double>()
+        .toList();
+    final average =
+        means.isEmpty ? null : means.reduce((a, b) => a + b) / means.length;
+    final peak =
+        velocities.isEmpty ? null : velocities.reduce((a, b) => a > b ? a : b);
     return SwaraCard(
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(children: [
@@ -180,7 +295,8 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
   Widget _metricLine(String label, double? value) => Row(
         children: [
           Expanded(child: Text(label, style: AppTextStyles.caption)),
-          Text(value == null ? '—' : value.toStringAsFixed(4), style: AppTextStyles.label),
+          Text(value == null ? '—' : value.toStringAsFixed(4),
+              style: AppTextStyles.label),
         ],
       );
 
@@ -189,10 +305,13 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
     return SwaraCard(
       padding: EdgeInsets.zero,
       child: ExpansionTile(
-        leading: const Icon(Icons.view_timeline_outlined, color: AppColors.primaryDeep),
+        leading: const Icon(Icons.view_timeline_outlined,
+            color: AppColors.primaryDeep),
         title: Text('Windows · කාල පරාස', style: AppTextStyles.titleMedium),
-        subtitle: Text('${preview.length} of ${tmmf.windows.length}', style: AppTextStyles.caption),
-        childrenPadding: const EdgeInsets.fromLTRB(AppSpacing.md, 0, AppSpacing.md, AppSpacing.md),
+        subtitle: Text('${preview.length} of ${tmmf.windows.length}',
+            style: AppTextStyles.caption),
+        childrenPadding: const EdgeInsets.fromLTRB(
+            AppSpacing.md, 0, AppSpacing.md, AppSpacing.md),
         children: [
           for (var i = 0; i < preview.length; i++)
             ListTile(
@@ -213,5 +332,6 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
     );
   }
 
-  String _short(double? value) => value == null ? '—' : value.toStringAsFixed(2);
+  String _short(double? value) =>
+      value == null ? '—' : value.toStringAsFixed(2);
 }

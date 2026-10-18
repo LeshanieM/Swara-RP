@@ -1,0 +1,29 @@
+{
+  "selected_mode": "ordinary",
+  "selected_by": "validation threshold-0.5 macro-F1",
+  "test_evaluated_once_per_mode": true,
+  "seed": 42,
+  "FG": {
+    "assessment_status": "assessed",
+    "threshold": 0.05
+  },
+  "HM": {
+    "assessment_status": "not_assessed",
+    "threshold_f1_max": 0.35,
+    "reason": "no threshold achieves precision >= 0.5 on validation"
+  },
+  "SRCD_vs_ordinary": {
+    "improved": false,
+    "note": "SRCD did not improve FG F1, FG PR-AUC, or validation threshold-0.5 macro-F1"
+  },
+  "mode_configs": {
+    "ordinary": "config_ordinary.json",
+    "srcd": "config_srcd.json"
+  },
+  "checkpoint_selection_metric": "validation macro-F1 at threshold 0.5 on usable windows only",
+  "threshold_selection": "validation only; precision >= 0.5 constrained threshold when feasible, otherwise F1-max threshold",
+  "ordinary_validation_macro_f1_threshold_0_5": 0.5908320301504772,
+  "srcd_validation_macro_f1_threshold_0_5": 0.492470934862239,
+  "ordinary_checkpoint": "best_ordinary.pt",
+  "srcd_checkpoint": "best_srcd.pt"
+}
