@@ -70,9 +70,7 @@ class _SpeechProcessingScreenState extends State<SpeechProcessingScreen> {
                     const SizedBox(height: 48),
                     if (isComplete)
                       ElevatedButton(
-                        onPressed: () {
-                          Future.microtask(() => context.push('/c4/transcription'));
-                        },
+                        onPressed: () => context.push('/c4/transcription'),
                         child: const Text('View Transcript'),
                       ),
                   ],
@@ -97,12 +95,12 @@ class _SpeechProcessingScreenState extends State<SpeechProcessingScreen> {
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: isCompleted ? AppColors.success.withOpacity(0.1) : (isCurrent ? AppColors.primaryWash : AppColors.surfaceRaised),
+              color: isCompleted ? AppColors.success.withValues(alpha: 0.1) : (isCurrent ? AppColors.primaryWash : AppColors.surfaceRaised),
               shape: BoxShape.circle,
             ),
             child: Icon(
               isCompleted ? Icons.check : icon,
-              color: isCompleted ? AppColors.success : (isCurrent ? AppColors.primary : AppColors.textLight.withOpacity(0.5)),
+              color: isCompleted ? AppColors.success : (isCurrent ? AppColors.primary : AppColors.textLight.withValues(alpha: 0.5)),
             ),
           ),
           const SizedBox(width: 16),
@@ -113,7 +111,7 @@ class _SpeechProcessingScreenState extends State<SpeechProcessingScreen> {
                 Text(
                   title,
                   style: AppTextStyles.titleMedium.copyWith(
-                    color: isCompleted ? AppColors.text : (isCurrent ? AppColors.primaryDeep : AppColors.textLight.withOpacity(0.5)),
+                    color: isCompleted ? AppColors.text : (isCurrent ? AppColors.primaryDeep : AppColors.textLight.withValues(alpha: 0.5)),
                   ),
                 ),
                 Text(

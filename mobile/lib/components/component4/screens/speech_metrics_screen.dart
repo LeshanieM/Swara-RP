@@ -3,7 +3,7 @@ import '../widgets/metric_card.dart';
 import 'package:swara/core/theme/app_theme.dart';
 
 class SpeechMetricsScreen extends StatelessWidget {
-  const SpeechMetricsScreen({Key? key}) : super(key: key);
+  const SpeechMetricsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
