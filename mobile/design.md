@@ -614,3 +614,37 @@ Screens that still reference `AppColors`, `AppTextStyles`, `AppSpacing`, `AppRad
 ---
 
 **Source of truth:** This document describes Swara's dark-blue Calm Cub design variant, including the documented splash, login, register, and child home patterns. When implementing new screens, follow these tokens and patterns to maintain a consistent experience across the app.
+
+---
+
+## 14. C3 camera engagement research flow
+
+- Camera measurement is an optional control inside each therapy activity, not
+  a separate pre-session check-in screen. It requires parent/guardian consent
+  and confirmation that the required research ethics approval is in place.
+- Camera frames are processed on-device with ML Kit and are never written to
+  storage or sent to the server. The app stores only numeric feature summaries
+  locally; camera permission can be declined without blocking therapy.
+- When enabled, measurement runs while the child performs the selected
+  activity. The inline activity card shows that the camera is on and reports
+  face visibility. At activity completion, the local summary combines face
+  visibility, head orientation, eye openness, smile probability, response
+  count, and completion; parent help is included where that activity collects
+  it.
+- Android/iOS continue using Google ML Kit. Chrome uses a browser-compatible
+  MediaPipe/LiteRT detector because the ML Kit Flutter plugin has no web
+  implementation. The browser detector's runtime is loaded from jsDelivr and
+  inference is local; video frames are not sent to that CDN or to Swara servers.
+  Browser camera access requires user permission and HTTPS or localhost.
+- The native and browser detectors are separate research implementations;
+  their engagement estimates are not validated or assumed to be directly
+  comparable.
+- If no usable face features are available, the camera engagement score is
+  missing rather than zero; the activity can still use its existing
+  app-activity-only score.
+- The current Flutter estimate is an explicitly labelled research baseline,
+  not the DAiSEE-trained classifier and not a clinical measure. Do not describe
+  it as validated for children or use it to make treatment decisions. A
+  deployable trained model and child/pilot validation remain required.
+- Low engagement may offer a break or parent-led activity; the recommendation
+  is advisory and must not pressure the child.
