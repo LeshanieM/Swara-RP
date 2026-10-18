@@ -13,6 +13,10 @@ python-multipart==0.0.9
 opencv-contrib-python==4.11.0.86
 mediapipe==0.10.21
 
+# Required for CPU inference with the trained C2 GRU checkpoint.
+torch>=2.0,<3.0
+
+
 # Required only if OpenFace/OpenSeeFace/3DDFA-V2/MMPose are configured
 # (see app/config/settings.py: OPENFACE_BIN, OPENSEEFACE_DIR, DDFA_V2_DIR,
 # MMPOSE_CONFIG/MMPOSE_CHECKPOINT). None of these are pip-installable as a

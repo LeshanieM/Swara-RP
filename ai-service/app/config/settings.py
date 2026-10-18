@@ -150,12 +150,22 @@ THRESHOLDS = {
 # recent mediapipe builds no longer include the older `mp.solutions`
 # module at all) requires a downloaded `.task` model bundle. It is not
 # fetched automatically by this project (no implicit network access at
-# runtime); download it once and point this at the file, e.g.:
-#   curl -L -o models/face_landmarker.task \
+# runtime); download it once to `models/mediapipe/face_landmarker.task`, or
+# set MEDIAPIPE_FACE_MODEL_PATH to a different location, e.g.:
+#   curl -L -o models/mediapipe/face_landmarker.task \
 #     https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task
-MEDIAPIPE_FACE_MODEL_PATH = os.getenv(
-    "MEDIAPIPE_FACE_MODEL_PATH", str(AI_SERVICE_ROOT / "models" / "face_landmarker.task")
-)
+_configured_face_model_path = os.getenv("MEDIAPIPE_FACE_MODEL_PATH")
+_face_model_path = AI_SERVICE_ROOT / "models" / "mediapipe" / "face_landmarker.task"
+_legacy_face_model_path = AI_SERVICE_ROOT / "models" / "face_landmarker.task"
+if _configured_face_model_path:
+    MEDIAPIPE_FACE_MODEL_PATH = _configured_face_model_path
+else:
+    # Prefer the organized model directory, but keep compatibility with older
+    # installations that placed the bundle directly under models/.
+    MEDIAPIPE_FACE_MODEL_PATH = str(
+        _face_model_path if _face_model_path.is_file() or not _legacy_face_model_path.is_file()
+        else _legacy_face_model_path
+    )
 
 OPENFACE_BIN = os.getenv("OPENFACE_BIN")  # path to OpenFace's FeatureExtraction executable
 OPENSEEFACE_DIR = os.getenv("OPENSEEFACE_DIR")  # path to a checked-out OpenSeeFace repo (contains facetracker.py)
