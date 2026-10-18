@@ -43,8 +43,9 @@ app.get('/health', (req, res) => res.json({ status: 'ok', service: 'swara-backen
 
 // Error handler
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Internal server error', error: process.env.NODE_ENV === 'development' ? err.message : undefined });
+  const status = err.statusCode || (err.code === 'LIMIT_FILE_SIZE' ? 413 : err.name === 'MulterError' ? 400 : 500);
+  console.error(`Request failed (${status}): ${err.name || 'Error'}`);
+  res.status(status).json({ message: status === 500 ? 'Internal server error' : err.message });
 });
 
 // Connect to MongoDB

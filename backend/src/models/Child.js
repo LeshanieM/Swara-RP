@@ -7,6 +7,10 @@ const childSchema = new mongoose.Schema({
   gender: { type: String },
   dateOfBirth: { type: Date },
   interests: [{ type: String }],
+  c4Preferences: {
+    ageBand: { type: String, enum: ['5-10', '11-14'] },
+    rankedInterests: [{ type: String }],
+  },
   severity: { type: String, enum: ['Mild', 'Moderate', 'Severe'] },
   stutterType: { type: String, enum: ['Repetition', 'Prolongation', 'Block', 'Mixed'] },
   parentId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
