@@ -1,0 +1,242 @@
+{
+  "model_name": "Swara Stuttering Classifier",
+  "classifier_type": "svm",
+  "feature_extractor": "facebook/wav2vec2-xls-r-300m",
+  "training_dataset": "Synthetic SEP-28k Benchmark",
+  "dataset_licenses": {
+    "SEP-28k": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+    "FluencyBank_Voices-CWS": "TalkBank Code of Conduct / Clinical Research License",
+    "UCLASS": "University College London Academic Research License",
+    "Sinhala_Child_Cohort": "Institutional Ethics Approved & Guardian Consented (Pseudonymized IDs)"
+  },
+  "timestamp": "2026-10-16T11:31:48.139898+00:00",
+  "train_samples": 240,
+  "test_samples": 60,
+  "english_test_metrics": {
+    "dataset_name": "English Test Split",
+    "macro_f1": 1.0,
+    "classes": [
+      "Block",
+      "Fluent",
+      "Interjection",
+      "Prolongation",
+      "Sound Repetition",
+      "Word Repetition"
+    ],
+    "per_class_report": {
+      "Block": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 12.0
+      },
+      "Fluent": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 8.0
+      },
+      "Interjection": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 9.0
+      },
+      "Prolongation": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 14.0
+      },
+      "Sound Repetition": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 7.0
+      },
+      "Word Repetition": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 10.0
+      },
+      "accuracy": 1.0,
+      "macro avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 60.0
+      },
+      "weighted avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 60.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        12,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        8,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        9,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        14,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        7,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        10
+      ]
+    ]
+  },
+  "sinhala_zero_shot_metrics": {
+    "dataset_name": "Sinhala Zero-Shot Evaluation (No Sinhala Training)",
+    "macro_f1": 0.0875,
+    "classes": [
+      "Block",
+      "Fluent",
+      "Interjection",
+      "Prolongation",
+      "Sound Repetition",
+      "Word Repetition"
+    ],
+    "per_class_report": {
+      "Block": {
+        "precision": 1.0,
+        "recall": 0.16666666666666666,
+        "f1-score": 0.2857142857142857,
+        "support": 12.0
+      },
+      "Fluent": {
+        "precision": 0.08695652173913043,
+        "recall": 0.16666666666666666,
+        "f1-score": 0.11428571428571428,
+        "support": 12.0
+      },
+      "Interjection": {
+        "precision": 0.1,
+        "recall": 0.16666666666666666,
+        "f1-score": 0.125,
+        "support": 12.0
+      },
+      "Prolongation": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 3.0
+      },
+      "Sound Repetition": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 9.0
+      },
+      "Word Repetition": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 12.0
+      },
+      "accuracy": 0.1,
+      "macro avg": {
+        "precision": 0.19782608695652174,
+        "recall": 0.08333333333333333,
+        "f1-score": 0.08749999999999998,
+        "support": 60.0
+      },
+      "weighted avg": {
+        "precision": 0.2373913043478261,
+        "recall": 0.1,
+        "f1-score": 0.105,
+        "support": 60.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        2,
+        0,
+        0,
+        0,
+        8,
+        2
+      ],
+      [
+        0,
+        2,
+        10,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        10,
+        2,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        0,
+        2
+      ],
+      [
+        0,
+        9,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        8,
+        0,
+        3,
+        0
+      ]
+    ]
+  },
+  "cross_lingual_note": "Zero-shot Sinhala evaluation represents performance of an English-trained classifier directly applied to Sinhala audio without target-language supervised fine-tuning. Empirical verification with annotated Sinhala child data is strictly required."
+}
