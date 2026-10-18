@@ -1,8 +1,9 @@
-require('dotenv').config({ path: '../../.env' });
+require('dotenv').config({ path: require('path').resolve(__dirname, '../../.env') });
 const mongoose = require('mongoose');
 const Child = require('../models/Child');
 const Activity = require('../models/component3/Activity');
 const TherapyPlan = require('../models/component3/TherapyPlan');
+const { CORE_ACTIVITIES } = require('../controllers/component3/activityController');
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/swara_db';
 
@@ -11,79 +12,63 @@ const seedDB = async () => {
     await mongoose.connect(MONGODB_URI);
     console.log('✅ Connected to MongoDB for Seeding...');
 
-    // 1. Create a Mock Child
-    const mockChild = new Child({
-      childId: 'MOCK_CHILD_001',
-      firstName: 'Amal',
-      age: 7,
-      dateOfBirth: new Date('2017-04-15'),
-      severity: 'Mild',
-      stutterType: 'Repetition',
-      interests: ['animals', 'drawing'],
-      assignedTheme: 'Forest Adventure'
-    });
-    await mockChild.save();
-    console.log(`✅ Created Mock Child with ID: ${mockChild._id}`);
+    // 1. Seed the 5 Core Activities for both age bands
+    const ageBands = ['5-10', '11-14'];
+    const seededActivities = [];
 
-    // 2. Create Mock Activities
-    const activities = [
-      {
-        activityId: 'act_001',
-        name: 'Syllable Practice',
-        technique: 'Pausing/Phrasing',
-        activityType: 'syllable_practice',
-        difficulty: 1,
-        active: true,
-        ageRange: [4, 12]
-      },
-      {
-        activityId: 'act_002',
-        name: 'Reading',
-        technique: 'Prolonged Speech',
-        activityType: 'reading',
-        difficulty: 2,
-        active: true,
-        ageRange: [6, 12]
-      },
-      {
-        activityId: 'act_003',
-        name: 'Picture Description',
-        technique: 'Easy Onset',
-        activityType: 'picture_description',
-        difficulty: 2,
-        active: true,
-        ageRange: [4, 10]
-      },
-      {
-        activityId: 'act_004',
-        name: 'Guided Conversation',
-        technique: 'Pausing/Phrasing',
-        activityType: 'guided_conversation',
-        difficulty: 3,
-        active: true,
-        ageRange: [6, 12]
+    for (const band of ageBands) {
+      for (const act of CORE_ACTIVITIES) {
+        const doc = {
+          ...act,
+          activityId: `${act.activityId}_${band.replace('-', '_')}`,
+          ageBand: band,
+        };
+        const updated = await Activity.findOneAndUpdate(
+          { activityId: doc.activityId },
+          doc,
+          { upsert: true, new: true, setDefaultsOnInsert: true }
+        );
+        seededActivities.push(updated);
       }
-    ];
+    }
+    console.log(`✅ Seeded ${seededActivities.length} activities (5 core × 2 age bands)`);
 
-    const insertedActivities = await Activity.insertMany(activities);
-    console.log(`✅ Created ${insertedActivities.length} Mock Activities`);
+    // 2. Create or update Mock Child
+    let mockChild = await Child.findOne({ childId: 'MOCK_CHILD_001' });
+    if (!mockChild) {
+      mockChild = new Child({
+        childId: 'MOCK_CHILD_001',
+        firstName: 'Amal',
+        age: 7,
+        dateOfBirth: new Date('2017-04-15'),
+        severity: 'Mild',
+        stutterType: 'Repetition',
+        interests: ['animals', 'drawing'],
+        assignedTheme: 'Forest Adventure',
+      });
+      await mockChild.save();
+    }
+    console.log(`✅ Mock Child ID: ${mockChild._id}`);
 
-    // 3. Create a Mock Therapy Plan
-    const plan = new TherapyPlan({
-      planId: 'PLAN_001',
-      therapeuticGoal: 'Pausing and Phrasing',
-      activities: insertedActivities.map(a => a._id),
-      active: true
-    });
-    await plan.save();
-    console.log(`✅ Created Mock Therapy Plan with ID: ${plan._id}`);
+    // 3. Create or update Mock Therapy Plan
+    const actIds = seededActivities.filter(a => a.ageBand === '5-10').map(a => a._id);
+    let plan = await TherapyPlan.findOne({ planId: 'PLAN_001' });
+    if (!plan) {
+      plan = new TherapyPlan({
+        planId: 'PLAN_001',
+        therapeuticGoal: 'Fluency and Easy Onset Mastery',
+        activities: actIds,
+        active: true,
+      });
+      await plan.save();
+    }
+    console.log(`✅ Mock Therapy Plan ID: ${plan._id}`);
 
     console.log('\n=======================================');
-    console.log('🎉 Seeding Complete! Please use these IDs to test:');
+    console.log('🎉 C3 Seeding Complete!');
     console.log(`Child ID: ${mockChild._id}`);
     console.log(`Plan ID: ${plan._id}`);
-    console.log(`Activity 1 ID (Syllable): ${insertedActivities[0]._id}`);
-    console.log(`Activity 2 ID (Reading): ${insertedActivities[1]._id}`);
+    console.log(`Core Activities Seeded: 5 activities in 2 age bands (10 total)`);
     console.log('=======================================\n');
 
     process.exit(0);

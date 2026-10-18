@@ -71,13 +71,13 @@ class _TherapyHistoryState extends State<_TherapyHistory> {
                                         label: 'Sessions',
                                         value: '${_history.length}',
                                         icon: '🗓️'),
-                                    const _HistoryStat(
+                                    _HistoryStat(
                                         label: 'Streak',
-                                        value: '5 Days',
+                                        value: '${_history.isEmpty ? 0 : (_history.length > 30 ? 30 : _history.length)} Days',
                                         icon: '🔥'),
-                                    const _HistoryStat(
+                                    _HistoryStat(
                                         label: 'Stars',
-                                        value: '1.2k',
+                                        value: '${_history.fold<int>(0, (sum, s) => sum + (((s['selectedActivities'] as List?)?.length ?? 1) * 15))}',
                                         icon: '⭐'),
                                   ]),
                             ]),

@@ -32,6 +32,22 @@ class TherapyApiService {
     };
   }
 
+  static Future<String?> getActiveSessionId() async {
+    final userId = await _currentUserId();
+    if (userId == null) return null;
+    return await StorageService.getString(_sessionKey(userId));
+  }
+
+  static Future<String?> getOrCreateActiveSessionId() async {
+    final existing = await getActiveSessionId();
+    if (existing != null && existing.isNotEmpty) return existing;
+    final started = await startSession();
+    if (started) {
+      return await getActiveSessionId();
+    }
+    return null;
+  }
+
   static Future<bool> startSession() async {
     try {
       final userId = await _currentUserId();
@@ -39,7 +55,9 @@ class TherapyApiService {
       final response = await http.post(
         Uri.parse('$baseUrl/therapy-sessions'),
         headers: await _authHeaders(),
-        body: jsonEncode({}),
+        body: jsonEncode({
+          'modelVersion': 'linucb_v3',
+        }),
       );
       if (response.statusCode == 201) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -50,25 +68,67 @@ class TherapyApiService {
         return true;
       }
     } catch (e) {
-      debugPrint('TherapyApiService API Error: $e');
+      debugPrint('TherapyApiService startSession Error: $e');
     }
     return false;
   }
 
-  static Future<void> recordActivityResult(
-      String sessionId, String activityId, double score, int duration) async {
+  static Future<bool> recordActivityResult({
+    String? sessionId,
+    required String activityId,
+    int? targetOpportunities,
+    int? successfulOpportunities,
+    double? completionFraction,
+    int? durationSeconds,
+    bool completed = true,
+    bool skipped = false,
+    String? parentDifficultyFeedback,
+    int? parentHelpLevel,
+    double? engagementScore,
+    String engagementMode = 'logs_only',
+  }) async {
     try {
-      await http.post(
-        Uri.parse('$baseUrl/therapy-sessions/$sessionId/activity-result'),
+      final activeSessionId = sessionId ?? await getOrCreateActiveSessionId();
+      if (activeSessionId == null) return false;
+
+      final payload = <String, dynamic>{
+        'activityId': activityId,
+        'completed': completed,
+        'skipped': skipped,
+        'engagementMode': engagementMode,
+      };
+
+      if (targetOpportunities != null) {
+        payload['targetOpportunities'] = targetOpportunities;
+      }
+      if (successfulOpportunities != null) {
+        payload['successfulOpportunities'] = successfulOpportunities;
+      }
+      if (completionFraction != null) {
+        payload['completionFraction'] = completionFraction;
+      }
+      if (durationSeconds != null) {
+        payload['durationSeconds'] = durationSeconds;
+      }
+      if (parentDifficultyFeedback != null) {
+        payload['parentDifficultyFeedback'] = parentDifficultyFeedback;
+      }
+      if (parentHelpLevel != null) {
+        payload['parentHelpLevel'] = parentHelpLevel;
+      }
+      if (engagementScore != null) {
+        payload['engagementScore'] = engagementScore;
+      }
+
+      final response = await http.post(
+        Uri.parse('$baseUrl/therapy-sessions/$activeSessionId/activity-result'),
         headers: await _authHeaders(),
-        body: jsonEncode({
-          'activityId': activityId,
-          'score': score,
-          'duration': duration,
-        }),
+        body: jsonEncode(payload),
       );
+      return response.statusCode == 201;
     } catch (e) {
-      debugPrint('TherapyApiService API Error: $e');
+      debugPrint('TherapyApiService recordActivityResult Error: $e');
+      return false;
     }
   }
 
@@ -89,7 +149,29 @@ class TherapyApiService {
       await StorageService.remove(_sessionKey(userId));
       return true;
     } catch (e) {
-      debugPrint('TherapyApiService API Error: $e');
+      debugPrint('TherapyApiService completeActiveSession Error: $e');
+      return false;
+    }
+  }
+
+  static Future<bool> submitParentQuestionnaire({
+    String? sessionId,
+    required Map<String, int> responses,
+  }) async {
+    try {
+      final activeSessionId = sessionId ?? await getActiveSessionId();
+      if (activeSessionId == null) return false;
+      final response = await http.post(
+        Uri.parse('$baseUrl/therapy-sessions/$activeSessionId/questionnaire'),
+        headers: await _authHeaders(),
+        body: jsonEncode({
+          'version': 'prime_o_adapt_v1',
+          'responses': responses,
+        }),
+      );
+      return response.statusCode == 201;
+    } catch (e) {
+      debugPrint('TherapyApiService submitQuestionnaire Error: $e');
       return false;
     }
   }
@@ -106,12 +188,17 @@ class TherapyApiService {
         return data['data'] ?? [];
       }
     } catch (e) {
-      debugPrint('TherapyApiService API Error: $e');
+      debugPrint('TherapyApiService getTherapyHistory Error: $e');
     }
     return [];
   }
 
   static Future<bool> uploadAudio(String filePath) async {
+    if (kIsWeb) {
+      // In web browser mode, multipart audio from local paths is simulated/logs-only
+      debugPrint('[TherapyApiService] Audio recording stored in memory (Web mode): $filePath');
+      return true;
+    }
     try {
       final userId = await _currentUserId();
       if (userId == null) return false;
@@ -133,4 +220,66 @@ class TherapyApiService {
       return false;
     }
   }
+
+  static Future<Map<String, dynamic>?> fetchClinicalContext({
+    bool cameraOn = false,
+    String? activityType,
+    double? parentHelpLevel,
+  }) async {
+    try {
+      final queryParams = <String, String>{
+        'cameraOn': cameraOn.toString(),
+        if (activityType != null) 'activityType': activityType,
+        if (parentHelpLevel != null) 'parentHelpLevel': parentHelpLevel.toString(),
+      };
+      final uri = Uri.parse('$baseUrl/recommendations/context')
+          .replace(queryParameters: queryParams);
+
+      final response = await http.get(uri, headers: await _authHeaders());
+      if (response.statusCode == 200) {
+        final decoded = jsonDecode(response.body) as Map<String, dynamic>;
+        return decoded['data'] as Map<String, dynamic>?;
+      }
+    } catch (e) {
+      debugPrint('TherapyApiService fetchClinicalContext Error: $e');
+    }
+    return null;
+  }
+
+  static Future<Map<String, dynamic>?> fetchSharedLinUcbState() async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/recommendations/shared-state'),
+        headers: await _authHeaders(),
+      );
+      if (response.statusCode == 200) {
+        final decoded = jsonDecode(response.body) as Map<String, dynamic>;
+        return decoded['data'] as Map<String, dynamic>?;
+      }
+    } catch (e) {
+      debugPrint('TherapyApiService fetchSharedLinUcbState Error: $e');
+    }
+    return null;
+  }
+
+  static Future<bool> syncLinUcbState({
+    required List<Map<String, dynamic>> armUpdates,
+    Map<String, dynamic>? sharedDelta,
+  }) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/recommendations/sync'),
+        headers: await _authHeaders(),
+        body: jsonEncode({
+          'armUpdates': armUpdates,
+          'sharedDelta': sharedDelta,
+        }),
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      debugPrint('TherapyApiService syncLinUcbState Error: $e');
+      return false;
+    }
+  }
 }
+

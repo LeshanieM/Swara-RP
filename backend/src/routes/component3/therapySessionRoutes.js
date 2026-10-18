@@ -8,16 +8,22 @@ router.use(auth);
 // POST /api/c3/therapy-sessions
 router.post('/', therapySessionController.createSession);
 
+// GET /api/c3/therapy-sessions/history/account  — MUST be before /:sessionId
+router.get('/history/account', therapySessionController.getAccountTherapyHistory);
+
+// GET /api/c3/therapy-sessions/history/:childId  — MUST be before /:sessionId
+router.get('/history/:childId', therapySessionController.getTherapyHistory);
+
+// GET /api/c3/therapy-sessions/:sessionId
+router.get('/:sessionId', therapySessionController.getSession);
+
 // POST /api/c3/therapy-sessions/:sessionId/activity-result
 router.post('/:sessionId/activity-result', therapySessionController.recordActivityResult);
 
 // POST /api/c3/therapy-sessions/:sessionId/complete
 router.post('/:sessionId/complete', therapySessionController.completeSession);
 
-// GET /api/c3/therapy-sessions/history/account
-router.get('/history/account', therapySessionController.getAccountTherapyHistory);
-
-// GET /api/c3/therapy-sessions/history/:childId
-router.get('/history/:childId', therapySessionController.getTherapyHistory);
+// POST /api/c3/therapy-sessions/:sessionId/questionnaire
+router.post('/:sessionId/questionnaire', therapySessionController.submitQuestionnaire);
 
 module.exports = router;
