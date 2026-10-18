@@ -20,8 +20,9 @@ router.post('/register', async (req, res) => {
 
     const token = jwt.sign(
       { id: user._id, role: user.role },
-      process.env.JWT_SECRET || 'swara_research_jwt_secret_change_in_production',
-      { expiresIn: '7d' }
+      process.env.JWT_SECRET ||
+        'swara_research_jwt_secret_change_in_production',
+      { expiresIn: '7d' },
     );
 
     res.status(201).json({
@@ -32,7 +33,9 @@ router.post('/register', async (req, res) => {
       token,
     });
   } catch (err) {
-    res.status(500).json({ message: 'Registration failed', error: err.message });
+    res
+      .status(500)
+      .json({ message: 'Registration failed', error: err.message });
   }
 });
 
@@ -52,8 +55,9 @@ router.post('/login', async (req, res) => {
 
     const token = jwt.sign(
       { id: user._id, role: user.role },
-      process.env.JWT_SECRET || 'swara_research_jwt_secret_change_in_production',
-      { expiresIn: '7d' }
+      process.env.JWT_SECRET ||
+        'swara_research_jwt_secret_change_in_production',
+      { expiresIn: '7d' },
     );
 
     res.json({
@@ -68,4 +72,4 @@ router.post('/login', async (req, res) => {
   }
 });
 
-module.exports = router;								
+module.exports = router;
