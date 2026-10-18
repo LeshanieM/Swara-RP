@@ -4,8 +4,13 @@ import 'package:swara/core/theme/app_theme.dart';
 
 class SpeechCompletionScreen extends StatelessWidget {
   final int durationSeconds;
+  final Map<String, dynamic>? analysisResult;
 
-  const SpeechCompletionScreen({super.key, required this.durationSeconds});
+  const SpeechCompletionScreen({
+    super.key,
+    required this.durationSeconds,
+    this.analysisResult,
+  });
 
   String _formatTime(int sec) {
     final m = sec ~/ 60;
@@ -67,7 +72,7 @@ class SpeechCompletionScreen extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () => context.pushReplacement('/c1/result', extra: durationSeconds),
+                    onPressed: () => context.pushReplacement('/c1/result', extra: analysisResult ?? durationSeconds),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.ctaOrange,
                       padding: const EdgeInsets.symmetric(vertical: 18),

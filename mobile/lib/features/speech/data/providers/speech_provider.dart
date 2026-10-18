@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swara/core/network/api_client.dart';
 import 'package:swara/core/storage/storage_service.dart';
@@ -63,7 +64,7 @@ class SpeechNotifier extends StateNotifier<SpeechAnalysisState> {
     state = const SpeechAnalysisState();
   }
 
-  Future<Map<String, dynamic>?> analyze() async {
+  Future<Map<String, dynamic>?> analyze({String? taskType, double? age}) async {
     if (state.audioPath == null && !StorageService.isDemoMode()) return null;
     state = state.copyWith(recordState: SpeechRecordState.analyzing);
 
@@ -78,7 +79,7 @@ class SpeechNotifier extends StateNotifier<SpeechAnalysisState> {
         return result;
       }
 
-      final formData = await _buildFormData();
+      final formData = await _buildFormData(taskType: taskType, age: age);
       final response = await _api.postMultipart('/api/speech/analyze', formData);
       final result = response.data as Map<String, dynamic>;
       state = state.copyWith(recordState: SpeechRecordState.done, result: result);
@@ -86,16 +87,30 @@ class SpeechNotifier extends StateNotifier<SpeechAnalysisState> {
     } catch (e) {
       state = state.copyWith(
         recordState: SpeechRecordState.error,
-        error: 'Analysis failed. Please try again.',
+        error: 'Analysis failed: ${e.toString()}',
       );
       return null;
     }
   }
 
-  Future<dynamic> _buildFormData() async {
-    // Return FormData for real upload
-    // For now build minimal form
-    return {};
+  Future<FormData> _buildFormData({String? taskType, double? age}) async {
+    final map = <String, dynamic>{
+      'childId': childId,
+      'taskType': taskType ?? 'picture-description',
+    };
+
+    if (age != null) {
+      map['childAge'] = age;
+    }
+
+    if (state.audioPath != null && state.audioPath!.isNotEmpty) {
+      map['audio'] = await MultipartFile.fromFile(
+        state.audioPath!,
+        filename: 'recording.wav',
+      );
+    }
+
+    return FormData.fromMap(map);
   }
 }
 

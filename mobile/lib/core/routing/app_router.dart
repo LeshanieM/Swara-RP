@@ -135,15 +135,41 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/c1/complete',
-            builder: (context, state) => SpeechCompletionScreen(
-              durationSeconds: state.extra as int? ?? 0,
-            ),
+            builder: (context, state) {
+              if (state.extra is Map<String, dynamic>) {
+                final map = state.extra as Map<String, dynamic>;
+                final dur = (map['durationMetrics']?['totalDuration'] as num?)?.toInt() ??
+                    (map['features']?['duration'] as num?)?.toInt() ??
+                    (map['duration'] as num?)?.toInt() ??
+                    0;
+                return SpeechCompletionScreen(
+                  durationSeconds: dur,
+                  analysisResult: map,
+                );
+              }
+              return SpeechCompletionScreen(
+                durationSeconds: state.extra as int? ?? 0,
+              );
+            },
           ),
           GoRoute(
             path: '/c1/result',
-            builder: (context, state) => SpeechResultScreen(
-              durationSeconds: state.extra as int? ?? 0,
-            ),
+            builder: (context, state) {
+              if (state.extra is Map<String, dynamic>) {
+                final map = state.extra as Map<String, dynamic>;
+                final dur = (map['durationMetrics']?['totalDuration'] as num?)?.toInt() ??
+                    (map['features']?['duration'] as num?)?.toInt() ??
+                    (map['duration'] as num?)?.toInt() ??
+                    0;
+                return SpeechResultScreen(
+                  durationSeconds: dur,
+                  analysisResult: map,
+                );
+              }
+              return SpeechResultScreen(
+                durationSeconds: state.extra as int? ?? 0,
+              );
+            },
           ),
 
           // Component 2 routes are intentionally preserved.

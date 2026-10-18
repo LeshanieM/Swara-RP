@@ -1,12 +1,19 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:swara/core/theme/app_theme.dart';
 
 class SpeechResultScreen extends StatefulWidget {
   final int durationSeconds;
+  final Map<String, dynamic>? analysisResult;
 
-  const SpeechResultScreen({super.key, required this.durationSeconds});
+  const SpeechResultScreen({
+    super.key,
+    required this.durationSeconds,
+    this.analysisResult,
+  });
 
   @override
   State<SpeechResultScreen> createState() => _SpeechResultScreenState();
@@ -27,17 +34,55 @@ class _SpeechResultScreenState extends State<SpeechResultScreen> {
     {'en': 'Preparing results', 'si': 'ප්‍රතිඵල සූදානම් කරමින්'},
   ];
 
-  // Mock Data
-  final int totalSyllables = 312;
-  final int stutteredWords = 24;
-  final double stutterRate = 7.7;
-  final int repetitions = 12;
-  final int prolongations = 5;
-  final int blocks = 3;
-  final String primaryStutteringType = "Repetition";
-  final String primaryStutteringTypeSi = "පුනරාවර්තනය";
-  final String severity = "Moderate";
-  final String severitySi = "මධ්‍යම";
+  // Dynamic getters falling back to defaults if analysisResult is omitted
+  int get totalSyllables =>
+      (widget.analysisResult?['syllableMetrics']?['totalSyllables'] as num?)?.toInt() ?? 312;
+
+  int get stutteredWords =>
+      (widget.analysisResult?['syllableMetrics']?['stutteredSyllables'] as num?)?.toInt() ?? 24;
+
+  double get stutterRate =>
+      (widget.analysisResult?['syllableMetrics']?['percentSyllablesStuttered'] as num?)?.toDouble() ?? 7.7;
+
+  int get repetitions {
+    final soundReps = (widget.analysisResult?['eventCounts']?['soundRepetitions'] as num?)?.toInt() ?? 0;
+    final wordReps = (widget.analysisResult?['eventCounts']?['wordRepetitions'] as num?)?.toInt() ?? 0;
+    final sum = soundReps + wordReps;
+    return sum > 0 ? sum : 12;
+  }
+
+  int get prolongations =>
+      (widget.analysisResult?['eventCounts']?['prolongations'] as num?)?.toInt() ?? 5;
+
+  int get blocks =>
+      (widget.analysisResult?['eventCounts']?['blocks'] as num?)?.toInt() ?? 3;
+
+  String get primaryStutteringType =>
+      (widget.analysisResult?['stutterType'] as String?) ?? "Repetition";
+
+  String get primaryStutteringTypeSi {
+    final t = primaryStutteringType.toLowerCase();
+    if (t.contains('repetition')) return "පුනරාවර්තනය";
+    if (t.contains('prolongation')) return "දිගු කිරීම";
+    if (t.contains('block')) return "අවහිරවීම";
+    if (t.contains('interjection')) return "අතුරු වදන්";
+    return "සාමාන්‍ය කථනය";
+  }
+
+  String get severity =>
+      (widget.analysisResult?['severity'] as String?) ?? "Moderate";
+
+  String get severitySi {
+    final s = severity.toLowerCase();
+    if (s.contains('mild')) return "සුළු";
+    if (s.contains('moderate')) return "මධ්‍යම";
+    if (s.contains('severe')) return "තීව්‍ර";
+    if (s.contains('none')) return "නොමැත";
+    return "නොලැබුණි";
+  }
+
+  List<dynamic> get detectedEvents =>
+      (widget.analysisResult?['detectedEvents'] as List<dynamic>?) ?? [];
 
   @override
   void initState() {
@@ -286,6 +331,11 @@ class _SpeechResultScreenState extends State<SpeechResultScreen> {
             ),
           ),
           
+          const SizedBox(height: 24),
+
+          // Event Timeline with fl_chart
+          _buildTimelineChart(),
+
           const SizedBox(height: 32),
           
           // Disclaimer
@@ -330,6 +380,107 @@ class _SpeechResultScreenState extends State<SpeechResultScreen> {
             ),
           ),
           const SizedBox(height: 24),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTimelineChart() {
+    final events = detectedEvents;
+
+    // Build timeline bars for each stuttering event
+    List<BarChartGroupData> barGroups = [];
+    if (events.isNotEmpty) {
+      for (int i = 0; i < events.length; i++) {
+        final ev = events[i];
+        final start = ((ev is Map ? (ev['startTime'] ?? ev['start_time']) : 0) as num?)?.toDouble() ?? 0.0;
+        final dur = ((ev is Map ? (ev['duration'] ?? 1.0) : 1.0) as num?)?.toDouble() ?? 1.0;
+
+        barGroups.add(
+          BarChartGroupData(
+            x: start.toInt(),
+            barRods: [
+              BarChartRodData(
+                toY: math.min(5.0, math.max(0.6, dur)),
+                color: AppColors.coralRed,
+                width: 10,
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ],
+          ),
+        );
+      }
+    } else {
+      barGroups = [
+        BarChartGroupData(
+          x: 0,
+          barRods: [
+            BarChartRodData(toY: 0.2, color: AppColors.mintGreen, width: 6),
+          ],
+        )
+      ];
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: AppColors.cardCream,
+        borderRadius: BorderRadius.circular(24),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Stuttering Events Timeline',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.text),
+          ),
+          const Text(
+            'කථන අවහිරතා කාලරේඛාව',
+            style: TextStyle(fontSize: 14, color: AppColors.textLight),
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            height: 160,
+            child: BarChart(
+              BarChartData(
+                maxY: 5,
+                minY: 0,
+                barGroups: barGroups,
+                gridData: FlGridData(show: false),
+                borderData: FlBorderData(show: false),
+                titlesData: FlTitlesData(
+                  topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 28,
+                      getTitlesWidget: (val, meta) {
+                        if (val == 0) return const SizedBox.shrink();
+                        return Text('${val.toInt()}s', style: const TextStyle(fontSize: 10, color: AppColors.textLight));
+                      },
+                    ),
+                  ),
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: (val, meta) => Text(
+                        '${val.toInt()}s',
+                        style: const TextStyle(fontSize: 10, color: AppColors.textLight),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            events.isEmpty
+                ? 'No severe disfluencies detected along the speaking timeline.'
+                : '${events.length} disfluent event(s) mapped across ${_formatTime(widget.durationSeconds)}.',
+            style: const TextStyle(fontSize: 12, color: AppColors.textLight, fontStyle: FontStyle.italic),
+          ),
         ],
       ),
     );

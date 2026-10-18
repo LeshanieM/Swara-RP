@@ -135,7 +135,7 @@ class _SpeechTaskScreenState extends State<SpeechTaskScreen> with SingleTickerPr
                       children: [
                         Text('👧👦', style: TextStyle(fontSize: 48)),
                         SizedBox(height: 12),
-                        Text('Age 4–7', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.text)),
+                        Text('Age 5–10', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.text)),
                       ],
                     ),
                   ),
@@ -156,7 +156,7 @@ class _SpeechTaskScreenState extends State<SpeechTaskScreen> with SingleTickerPr
                       children: [
                         Text('🧑👩', style: TextStyle(fontSize: 48)),
                         SizedBox(height: 12),
-                        Text('Age 7–15', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.text)),
+                        Text('Age 11–14', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.text)),
                       ],
                     ),
                   ),
