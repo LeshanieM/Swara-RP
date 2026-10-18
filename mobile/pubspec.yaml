@@ -36,7 +36,7 @@ dependencies:
   image_picker: ^1.1.2
 
   # Charts
-  fl_chart: ^0.62.0
+  fl_chart: ^0.68.0
 
   # Networking / Cache
   cached_network_image: ^3.3.1
@@ -79,6 +79,3 @@ flutter:
     - assets/images/common/
     - assets/images/component3/
     - assets/images/component4/
-    - assets/illustrations/
-    - assets/icons/
-    - assets/audio/
