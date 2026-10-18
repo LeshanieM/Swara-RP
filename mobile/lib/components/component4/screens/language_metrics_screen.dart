@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import '../widgets/metric_card.dart';
-import 'package:swara/core/theme/app_theme.dart';
 
 class LanguageMetricsScreen extends StatelessWidget {
-  const LanguageMetricsScreen({Key? key}) : super(key: key);
+  const LanguageMetricsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
