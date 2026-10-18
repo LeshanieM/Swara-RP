@@ -136,12 +136,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
                           color: _isDemoMode
-                              ? AppColors.warning.withOpacity(0.1)
+                              ? AppColors.warning.withValues(alpha: 0.1)
                               : AppColors.primaryWash,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
                             color: _isDemoMode
-                                ? AppColors.warning.withOpacity(0.3)
+                                ? AppColors.warning.withValues(alpha: 0.3)
                                 : AppColors.divider,
                           ),
                         ),
@@ -167,7 +167,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             Switch(
                               value: _isDemoMode,
                               onChanged: (_) => _toggleDemo(),
-                              activeColor: AppColors.warning,
+                              activeThumbColor: AppColors.warning,
                             ),
                           ],
                         ),
