@@ -1,0 +1,35 @@
+{
+  "mode": "ordinary",
+  "seed": 42,
+  "device": "cpu",
+  "fps": 15,
+  "sequence_length": 30,
+  "raw_feature_dim": 111,
+  "input_feature_dim": 111,
+  "hidden": 64,
+  "num_layers": 2,
+  "dropout": 0.2,
+  "optimizer": "AdamW",
+  "learning_rate": 0.001,
+  "weight_decay": 0.0001,
+  "scheduler": {
+    "name": "ReduceLROnPlateau",
+    "mode": "max",
+    "factor": 0.5,
+    "patience": 2,
+    "metric": "validation default-threshold macro-F1"
+  },
+  "gradient_clip_norm": 1.0,
+  "batch_size": 32,
+  "max_epochs": 50,
+  "early_stopping_patience": 8,
+  "loss": "BCEWithLogitsLoss",
+  "pos_weight": {
+    "FG": 0.2833442687988281,
+    "HM": 2.2337732315063477
+  },
+  "train_windows": 11758,
+  "val_windows": 3363,
+  "normalization_fit_split": "train only; frame_mask=True; face_present left unnormalized",
+  "speaker_relative": null
+}

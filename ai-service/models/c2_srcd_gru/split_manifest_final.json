@@ -1,0 +1,19 @@
+{
+  "train_participants": ["25", "28", "29", "32", "34", "35", "37", "39", "41", "43", "44", "50", "507", "509", "54", "57", "61"],
+  "val_participants": ["24", "46", "60", "62", "68"],
+  "test_participants": ["26", "27", "33", "42", "64"],
+  "n_train_windows": 11758,
+  "n_val_windows": 3363,
+  "n_test_windows": 3087,
+  "seed": 42,
+  "selection_used": "validation_only",
+  "excluded_videos": [
+    "interview/29mc",
+    "reading/29mc",
+    "interview/503",
+    "reading/503"
+  ],
+  "excluded_participants": ["508"],
+  "n_confidence_windows": 95,
+  "n_confidence_windows_source": "As specified in the final-deliverables prompt; not independently derivable from the saved evaluation result JSON files."
+}
