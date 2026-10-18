@@ -8,14 +8,14 @@ import 'package:swara/core/constants/app_constants.dart';
 
 // Demo users for demo mode
 final _demoUsers = {
-  'parent@demo.com': UserModel(
+  'parent@demo.com': const UserModel(
     id: 'demo_parent_1',
     name: 'Demo Parent',
     email: 'parent@demo.com',
     role: AppConstants.roleParent,
     token: 'demo_token',
   ),
-  'therapist@demo.com': UserModel(
+  'therapist@demo.com': const UserModel(
     id: 'demo_therapist_1',
     name: 'Dr. Demo Therapist',
     email: 'therapist@demo.com',
