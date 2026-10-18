@@ -78,18 +78,6 @@ class _SpeechRecordingScreenState extends State<SpeechRecordingScreen> with Sing
     });
   }
 
-  void _resetRecording() {
-    Future.microtask(() {
-      if (mounted) {
-        setState(() {
-          _state = RecordingState.initial;
-          _seconds = 0;
-        });
-      }
-    });
-    _timer?.cancel();
-  }
-
   String _formatTime(int seconds) {
     final minutes = seconds ~/ 60;
     final remainingSeconds = seconds % 60;
