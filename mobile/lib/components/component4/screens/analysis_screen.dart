@@ -83,8 +83,9 @@ class _AnalysisScreenState extends State<AnalysisScreen>
   void _startAnalysis() async {
     for (int i = 0; i < _pipeline.length; i++) {
       int delay = 2000;
-      if (i == 2 || i == 3 || i == 4 || i == 5)
+      if (i == 2 || i == 3 || i == 4 || i == 5) {
         delay = 3500; // longer for calculation visuals
+      }
       await Future.delayed(Duration(milliseconds: delay));
       if (mounted) {
         setState(() {
@@ -402,16 +403,4 @@ class _AnalysisScreenState extends State<AnalysisScreen>
     );
   }
 
-  // Helper (not used for metrics now, but kept for reference)
-  Widget _buildAnimatedWordBubble(String word, MaterialColor color) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: color.shade100,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.shade300),
-      ),
-      child: Text(word, style: TextStyle(color: color.shade800, fontSize: 12)),
-    );
-  }
 }
