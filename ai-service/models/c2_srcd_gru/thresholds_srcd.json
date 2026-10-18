@@ -1,0 +1,19 @@
+{
+  "FG": {
+    "threshold_f1_max": 0.08,
+    "threshold_precision_0.5": 0.08,
+    "constraint_feasible": true,
+    "val_precision_at_threshold_f1_max": 0.7164983164983165,
+    "val_f1_at_threshold_f1_max": 0.8172043010752689,
+    "val_precision_at_threshold_precision_0.5": 0.7164983164983165,
+    "val_f1_at_threshold_precision_0.5": 0.8172043010752689
+  },
+  "HM": {
+    "threshold_f1_max": 0.05,
+    "threshold_precision_0.5": null,
+    "constraint_feasible": false,
+    "val_precision_at_threshold_f1_max": 0.31653992395437264,
+    "val_f1_at_threshold_f1_max": 0.4348677766895201,
+    "reason": "no threshold in 0.05..0.95 achieves precision >= 0.5; best precision = 0.3289 at threshold 0.23"
+  }
+}

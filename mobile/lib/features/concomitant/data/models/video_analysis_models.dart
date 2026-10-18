@@ -37,7 +37,8 @@ String? _string(dynamic v) {
 /// Lower-cases and strips punctuation so `3DDFA-V2`, `3ddfa_v2` and `3DDFA V2`
 /// all compare equal. Used to match the backend's display name
 /// (`current_technology`) to a technology key.
-String normalizeTechName(String s) => s.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]'), '');
+String normalizeTechName(String s) =>
+    s.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]'), '');
 
 /// Display names for technology keys the backend has not reported on yet
 /// (e.g. while still waiting). Only used as a label - never for capabilities.
@@ -207,7 +208,8 @@ class VideoMeta {
   final int? height;
   final int? totalFrames;
 
-  const VideoMeta({this.duration, this.fps, this.width, this.height, this.totalFrames});
+  const VideoMeta(
+      {this.duration, this.fps, this.width, this.height, this.totalFrames});
 
   factory VideoMeta.fromJson(dynamic json) {
     final m = _map(json);
@@ -221,7 +223,8 @@ class VideoMeta {
   }
 
   bool get hasDuration => (duration ?? 0) > 0;
-  String? get resolution => (width ?? 0) > 0 && (height ?? 0) > 0 ? '${width}x$height' : null;
+  String? get resolution =>
+      (width ?? 0) > 0 && (height ?? 0) > 0 ? '${width}x$height' : null;
 }
 
 class TrackingMetrics {
@@ -252,7 +255,8 @@ class TrackingMetrics {
       missingFrames: _int(m['missing_frames']),
       trackingFailures: _int(m['tracking_failures']),
       totalFramesRead: _int(m['total_frames_read']),
-      meanConfidence: _double(m['mean_confidence'] ?? m['average_confidence'] ?? m['confidence']),
+      meanConfidence: _double(
+          m['mean_confidence'] ?? m['average_confidence'] ?? m['confidence']),
       raw: m,
     );
   }
@@ -267,7 +271,8 @@ class TmmfWindow {
   final double endTime;
   final Map<String, double> features;
 
-  const TmmfWindow({required this.startTime, required this.endTime, required this.features});
+  const TmmfWindow(
+      {required this.startTime, required this.endTime, required this.features});
 
   factory TmmfWindow.fromJson(dynamic json) {
     final m = _map(json);
@@ -313,8 +318,123 @@ class TmmfResult {
       windowSeconds: _double(m['window_s']),
       overlap: _double(m['overlap']),
       targetFps: _double(m['target_fps']),
-      windows: _list(m['windows']).map(TmmfWindow.fromJson).toList(growable: false),
+      windows:
+          _list(m['windows']).map(TmmfWindow.fromJson).toList(growable: false),
       note: _string(m['note']),
+    );
+  }
+}
+
+class C2PredictionEvent {
+  final int startMs;
+  final int endMs;
+  final double? meanProbability;
+  final int nWindows;
+
+  const C2PredictionEvent({
+    required this.startMs,
+    required this.endMs,
+    this.meanProbability,
+    this.nWindows = 0,
+  });
+
+  factory C2PredictionEvent.fromJson(dynamic json) {
+    final m = _map(json);
+    return C2PredictionEvent(
+      startMs: _int(m['start_ms']) ?? 0,
+      endMs: _int(m['end_ms']) ?? 0,
+      meanProbability: _double(m['mean_probability']),
+      nWindows: _int(m['n_windows']) ?? 0,
+    );
+  }
+}
+
+class C2PredictionBehavior {
+  final int nWindows;
+  final int nPositiveWindows;
+  final double? positiveRate;
+  final double? maxProbability;
+  final double? meanProbability;
+  final double? probability;
+  final bool? detected;
+  final String? reason;
+  final List<C2PredictionEvent> events;
+
+  const C2PredictionBehavior({
+    this.nWindows = 0,
+    this.nPositiveWindows = 0,
+    this.positiveRate,
+    this.maxProbability,
+    this.meanProbability,
+    this.probability,
+    this.detected,
+    this.reason,
+    this.events = const [],
+  });
+
+  factory C2PredictionBehavior.fromJson(dynamic json) {
+    final m = _map(json);
+    return C2PredictionBehavior(
+      nWindows: _int(m['n_windows']) ?? 0,
+      nPositiveWindows: _int(m['n_positive_windows']) ?? 0,
+      positiveRate: _double(m['positive_rate']),
+      maxProbability: _double(m['max_probability']),
+      meanProbability: _double(m['mean_probability']),
+      probability: _double(m['probability']),
+      detected: m['detected'] is bool ? m['detected'] as bool : null,
+      reason: _string(m['reason']),
+      events: _list(m['events'])
+          .map(C2PredictionEvent.fromJson)
+          .toList(growable: false),
+    );
+  }
+}
+
+class C2Predictions {
+  final String status;
+  final String? model;
+  final String? checkpoint;
+  final Map<String, String> assessmentStatus;
+  final Map<String, double?> thresholds;
+  final Map<String, C2PredictionBehavior> behaviours;
+  final bool? hasSecondaryBehaviors;
+  final double? inferenceMs;
+
+  const C2Predictions({
+    required this.status,
+    this.model,
+    this.checkpoint,
+    this.assessmentStatus = const {},
+    this.thresholds = const {},
+    this.behaviours = const {},
+    this.hasSecondaryBehaviors,
+    this.inferenceMs,
+  });
+
+  factory C2Predictions.fromJson(dynamic json) {
+    final m = _map(json);
+    final statuses = <String, String>{};
+    _map(m['assessment_status']).forEach((key, value) {
+      if (value != null) statuses[key] = value.toString();
+    });
+    final thresholds = <String, double?>{};
+    _map(m['thresholds'])
+        .forEach((key, value) => thresholds[key] = _double(value));
+    final behaviours = <String, C2PredictionBehavior>{};
+    _map(m['behaviours']).forEach((key, value) {
+      behaviours[key] = C2PredictionBehavior.fromJson(value);
+    });
+    return C2Predictions(
+      status: _string(m['status']) ?? 'unknown',
+      model: _string(m['model']),
+      checkpoint: _string(m['checkpoint']),
+      assessmentStatus: statuses,
+      thresholds: thresholds,
+      behaviours: behaviours,
+      hasSecondaryBehaviors: m['hasSecondaryBehaviors'] is bool
+          ? m['hasSecondaryBehaviors'] as bool
+          : null,
+      inferenceMs: _double(m['inference_ms']),
     );
   }
 }
@@ -338,6 +458,10 @@ class TechnologyResult {
   final Map<String, dynamic> thresholdsUsed;
   final List<String> preprocessingNotes;
   final TmmfResult? tmmf;
+  final C2Predictions? c2Predictions;
+  final String? c2Status;
+  final String? c2Reason;
+  final double? inferenceMs;
 
   const TechnologyResult({
     required this.key,
@@ -354,27 +478,37 @@ class TechnologyResult {
     this.thresholdsUsed = const {},
     this.preprocessingNotes = const [],
     this.tmmf,
+    this.c2Predictions,
+    this.c2Status,
+    this.c2Reason,
+    this.inferenceMs,
   });
 
   bool get isCompleted => status == TechStatus.completed;
 
   /// Never null: a behavior the technology did not report is "unsupported".
-  BehaviorResult behavior(String key) => behaviors[key] ?? BehaviorResult.notReported(key);
+  BehaviorResult behavior(String key) =>
+      behaviors[key] ?? BehaviorResult.notReported(key);
 
-  BehaviorSupport supportFor(String behaviorKey) => behavior(behaviorKey).support;
+  BehaviorSupport supportFor(String behaviorKey) =>
+      behavior(behaviorKey).support;
 
   /// Total number of events over every supported behavior.
-  int get totalEvents =>
-      behaviors.values.where((b) => b.isSupported).fold<int>(0, (sum, b) => sum + b.eventCount);
+  int get totalEvents => behaviors.values
+      .where((b) => b.isSupported)
+      .fold<int>(0, (sum, b) => sum + b.eventCount);
 
   factory TechnologyResult.fromJson(dynamic json) {
     final m = _map(json);
-    final name = _string(m['technology']) ?? _string(m['technology_key']) ?? 'Unknown technology';
+    final name = _string(m['technology']) ??
+        _string(m['technology_key']) ??
+        'Unknown technology';
     final key = _string(m['technology_key']) ?? normalizeTechName(name);
     final rawStatus = _string(m['status']);
 
     final behaviors = <String, BehaviorResult>{};
-    _map(m['behaviors']).forEach((k, v) => behaviors[k] = BehaviorResult.fromJson(k, v));
+    _map(m['behaviors'])
+        .forEach((k, v) => behaviors[k] = BehaviorResult.fromJson(k, v));
 
     return TechnologyResult(
       key: key,
@@ -387,10 +521,19 @@ class TechnologyResult {
       video: VideoMeta.fromJson(m['video']),
       tracking: TrackingMetrics.fromJson(m['tracking']),
       behaviors: behaviors,
-      overlayAvailable: m['overlay_available'] == true || _string(m['overlay_video_path']) != null,
+      overlayAvailable: m['overlay_available'] == true ||
+          _string(m['overlay_video_path']) != null,
       thresholdsUsed: _map(m['thresholds_used']),
-      preprocessingNotes: _list(m['preprocessing_notes']).map((e) => e.toString()).toList(growable: false),
+      preprocessingNotes: _list(m['preprocessing_notes'])
+          .map((e) => e.toString())
+          .toList(growable: false),
       tmmf: m['tmmf'] is Map ? TmmfResult.fromJson(m['tmmf']) : null,
+      c2Predictions: m['c2_predictions'] is Map
+          ? C2Predictions.fromJson(m['c2_predictions'])
+          : null,
+      c2Status: _string(m['c2_status']),
+      c2Reason: _string(m['c2_reason']),
+      inferenceMs: _double(m['inference_ms']),
     );
   }
 }
@@ -431,7 +574,8 @@ class AnalysisStatus {
     final done = perTechnology[techKey];
     if (done != null) return done;
     final current = currentTechnology;
-    if (current != null && normalizeTechName(current) == normalizeTechName(techKey)) {
+    if (current != null &&
+        normalizeTechName(current) == normalizeTechName(techKey)) {
       return TechStatus.processing;
     }
     return TechStatus.waiting;
@@ -442,8 +586,11 @@ class AnalysisStatus {
   factory AnalysisStatus.fromJson(dynamic json) {
     final m = _map(json);
     final per = <String, TechStatus>{};
-    _map(m['per_technology_status']).forEach((k, v) => per[k] = techStatusFromString(_string(v)));
-    final requested = _list(m['technologies_requested']).map((e) => e.toString()).toList(growable: false);
+    _map(m['per_technology_status'])
+        .forEach((k, v) => per[k] = techStatusFromString(_string(v)));
+    final requested = _list(m['technologies_requested'])
+        .map((e) => e.toString())
+        .toList(growable: false);
     return AnalysisStatus(
       analysisId: _string(m['analysis_id']) ?? '',
       status: _string(m['status']) ?? 'queued',
@@ -514,17 +661,21 @@ class EvaluationMetrics {
   /// technology display name -> behavior key -> evaluation
   final Map<String, Map<String, BehaviorEvaluation>> perTechnology;
 
-  const EvaluationMetrics({this.groundTruthProvided = false, this.perTechnology = const {}});
+  const EvaluationMetrics(
+      {this.groundTruthProvided = false, this.perTechnology = const {}});
 
   factory EvaluationMetrics.fromJson(dynamic json) {
     final m = _map(json);
     final out = <String, Map<String, BehaviorEvaluation>>{};
     _map(m['per_technology']).forEach((tech, behaviors) {
       final inner = <String, BehaviorEvaluation>{};
-      _map(behaviors).forEach((b, e) => inner[b] = BehaviorEvaluation.fromJson(e));
+      _map(behaviors)
+          .forEach((b, e) => inner[b] = BehaviorEvaluation.fromJson(e));
       out[tech] = inner;
     });
-    return EvaluationMetrics(groundTruthProvided: m['ground_truth_provided'] == true, perTechnology: out);
+    return EvaluationMetrics(
+        groundTruthProvided: m['ground_truth_provided'] == true,
+        perTechnology: out);
   }
 }
 
@@ -556,7 +707,8 @@ class VideoAnalysisResults {
   bool get isFailed => status == 'failed';
   bool get hasResults => technologies.isNotEmpty;
 
-  int countWhere(TechStatus s) => technologies.where((t) => t.status == s).length;
+  int countWhere(TechStatus s) =>
+      technologies.where((t) => t.status == s).length;
 
   TechnologyResult? byKey(String key) {
     for (final t in technologies) {
@@ -608,7 +760,9 @@ class VideoAnalysisResults {
       analysisId: _string(m['analysis_id']) ?? '',
       status: _string(m['status']) ?? 'unknown',
       videoFilename: _string(m['video_filename']),
-      technologies: _list(m['results']).map(TechnologyResult.fromJson).toList(growable: false),
+      technologies: _list(m['results'])
+          .map(TechnologyResult.fromJson)
+          .toList(growable: false),
       timelineDuration: _double(_map(m['timeline'])['video_duration']),
       evaluation: EvaluationMetrics.fromJson(m['evaluation']),
       error: _string(m['error']),
@@ -689,4 +843,3 @@ class SelectedVideo {
         duration: duration ?? this.duration,
       );
 }
-

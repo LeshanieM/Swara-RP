@@ -129,6 +129,14 @@ ai-service/data/casa/
 
 # Downloaded MediaPipe face landmark model
 ai-service/models/face_landmarker.task
+ai-service/models/mediapipe/face_landmarker.task
+
+# Generated C2 training artifacts (keep configs, metrics, and documentation)
+ai-service/models/c2_srcd_gru/*.pt
+ai-service/models/c2_srcd_gru/norm_stats_*.npz
+ai-service/models/c2_srcd_gru/history_*.csv
+ai-service/models/c2_srcd_gru/classification_report_*.txt
+ai-service/models/c2_srcd_gru/confusion_matrices_*.json
 
 # Python Testing & Code Quality Cache
 .pytest_cache/

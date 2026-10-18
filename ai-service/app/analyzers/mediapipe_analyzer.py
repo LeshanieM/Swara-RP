@@ -26,9 +26,13 @@ settings.MEDIAPIPE_FACE_MODEL_PATH); if missing, this analyzer reports
 """
 
 import os
+import logging
 import time
 from typing import Any, Dict, List, Optional
 
+import numpy as np
+
+from app import c2_inference as c2
 from app.analyzers.base_analyzer import BehaviorEvent, BehaviorResult, UnavailableReason, VisionAnalyzer
 from app.config.settings import MEDIAPIPE_FACE_MODEL_PATH, RESULTS_DIR, THRESHOLDS
 from app.processing import feature_extraction as fx
@@ -42,6 +46,7 @@ MOUTH_TOP, MOUTH_BOTTOM, MOUTH_LEFT, MOUTH_RIGHT = 13, 14, 61, 291
 CHIN, NOSE_TIP = 152, 1
 LEFT_EYE_OUTER, RIGHT_EYE_OUTER = 33, 263
 FACE_SAMPLE = [10, 152, 234, 454, 1, 168]
+logger = logging.getLogger("swara.vision.mediapipe")
 
 
 def _to_events(intervals) -> List[BehaviorEvent]:
@@ -61,6 +66,18 @@ class MediaPipeAnalyzer(VisionAnalyzer):
         "hand_movement": False,
         "arm_movement": False,
     }
+
+    def unavailable_result(self, video_meta: Dict[str, Any], reason: str) -> Dict[str, Any]:
+        result = super().unavailable_result(video_meta, reason)
+        result.update({"c2_predictions": None, "c2_status": "unavailable", "c2_reason": reason})
+        return result
+
+    def error_result(
+        self, video_meta: Dict[str, Any], reason: str, processing_time: float = 0.0
+    ) -> Dict[str, Any]:
+        result = super().error_result(video_meta, reason, processing_time)
+        result.update({"c2_predictions": None, "c2_status": "unavailable", "c2_reason": reason})
+        return result
 
     def is_available(self):
         try:
@@ -125,6 +142,9 @@ class MediaPipeAnalyzer(VisionAnalyzer):
             ts: List[float] = []
             ear, lip, jaw, face_mv = [], [], [], []
             yaw_s, pitch_s, roll_s, blink_bs = [], [], [], []
+            c2_frame_rows: List[np.ndarray] = []
+            c2_frame_times: List[int] = []
+            c2_face_flags: List[int] = []
             prev = None
             processed = missing = frame_idx = 0
 
@@ -142,6 +162,12 @@ class MediaPipeAnalyzer(VisionAnalyzer):
                 rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb)
                 res = landmarker.detect_for_video(mp_image, int(t * 1000))
+
+                if c2.C2_AVAILABLE:
+                    c2_frame, c2_has_face = _c2_frame_features(res)
+                    c2_frame_rows.append(c2_frame)
+                    c2_frame_times.append(int(round(t * 1000)))
+                    c2_face_flags.append(int(c2_has_face))
 
                 if not res.face_landmarks:
                     missing += 1
@@ -222,8 +248,9 @@ class MediaPipeAnalyzer(VisionAnalyzer):
                     None, sm, direction="above")))
 
             c = THRESHOLDS["head_movement"]
-            vel = [max(a, b, d) for a, b, d in zip(
+            vel = ([max(a, b, d) for a, b, d in zip(
                 angular_velocity_deg(yaw_s, ts), angular_velocity_deg(pitch_s, ts), angular_velocity_deg(roll_s, ts))]
+                if ts else [])
             behaviors["head_movement"] = BehaviorResult.from_events(_to_events(detect_events_above_threshold(
                 vel, ts, c["angular_velocity_threshold_deg_s"], c["hysteresis_ratio"],
                 c["min_event_duration_s"], None, sm, direction="above")))
@@ -264,9 +291,55 @@ class MediaPipeAnalyzer(VisionAnalyzer):
                               "target_fps": round(fps / frame_stride, 3),
                               "windows": extract_windows(frames),
                               "note": "Predictions require speaker-labeled expert training data; no labels are inferred here."}
+            result["c2_predictions"] = None
+            result["c2_status"] = "unavailable"
+            if not c2.C2_AVAILABLE:
+                result["c2_reason"] = c2.C2_UNAVAILABLE_REASON or "model_unavailable"
+            else:
+                try:
+                    sampled_frames, sampled_times, sampled_faces = c2.resample_to_15_fps(
+                        np.asarray(c2_frame_rows, dtype=np.float32).reshape(-1, 56),
+                        np.asarray(c2_frame_times, dtype=np.int32),
+                        np.asarray(c2_face_flags, dtype=np.uint8),
+                        duration_ms=frame_idx / fps * 1000.0,
+                    )
+                    tracking_quality = c2.face_tracking_quality(sampled_faces)
+                    result["tracking_quality"] = tracking_quality
+                    tracking_status = c2.status_for_tracking(sampled_faces)
+                    if tracking_status:
+                        result["c2_status"] = tracking_status
+                        result["c2_reason"] = "Face detected in fewer than half of sampled frames."
+                    else:
+                        result["c2_predictions"] = c2.predict_c2(
+                            sampled_frames, sampled_times, sampled_faces
+                        )
+                        result["c2_status"] = "assessed"
+                        result["inference_ms"] = result["c2_predictions"]["inference_ms"]
+                except Exception as exc:  # C2 failures must not erase legacy feature results.
+                    logger.exception("C2 GRU inference failed")
+                    result["c2_status"] = "unavailable"
+                    result["c2_reason"] = f"inference_error: {exc}"
             return result
         except Exception as exc:  # one technology failing must not stop the experiment
             return self.error_result(video_meta, f"runtime_error: {exc}", time.time() - start)
+
+
+def _c2_frame_features(result: Any) -> tuple[np.ndarray, bool]:
+    """Create the training-order 56 raw channels from an existing MP result."""
+    landmarks = getattr(result, "face_landmarks", None) or []
+    has_face = bool(landmarks)
+    blendshapes = np.full(52, np.nan, dtype=np.float32)
+    pose = np.full(3, np.nan, dtype=np.float32)
+    categories = getattr(result, "face_blendshapes", None) or []
+    if has_face and categories:
+        scores = {str(item.category_name): float(item.score) for item in categories[0]}
+        expected = c2.BLENDSHAPE_NAMES
+        if len(expected) == 52 and all(name in scores for name in expected):
+            blendshapes = np.asarray([scores[name] for name in expected], dtype=np.float32)
+    matrices = getattr(result, "facial_transformation_matrixes", None) or []
+    if has_face and matrices:
+        pose = c2.euler_pitch_yaw_roll(matrices[0])
+    return np.concatenate([blendshapes, pose, np.asarray([float(has_face)], dtype=np.float32)]), has_face
 
 
 def _probe_video(video_path: str) -> Dict[str, Any]:
