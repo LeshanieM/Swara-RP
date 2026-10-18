@@ -15,6 +15,8 @@ class _BreathingState extends State<_Breathing>
   int _cyclesCompleted = 0;
   bool _isSaving = false;
   late final DateTime _startTime;
+  final CameraEngagementActivityTracker _engagementTracker =
+      CameraEngagementActivityTracker();
 
   @override
   void initState() {
@@ -30,6 +32,7 @@ class _BreathingState extends State<_Breathing>
   @override
   void dispose() {
     _c.dispose();
+    _engagementTracker.dispose();
     super.dispose();
   }
 
@@ -45,12 +48,22 @@ class _BreathingState extends State<_Breathing>
       targets: 4,
       completionFraction: completion,
     );
-    final engagement = _LinUcbModel.estimateLogsOnlyEngagement(
+    final logsEngagement = _LinUcbModel.estimateLogsOnlyEngagement(
       completionFraction: completion,
       targetOpportunities: 4,
       attempts: successes,
       durationSeconds: durationSeconds,
     );
+    final cameraSnapshot = await _engagementTracker.completeActivity(
+      durationSeconds: durationSeconds,
+      responseCount: successes,
+      targetCount: 4,
+      completionFraction: completion,
+    );
+    final engagement = cameraSnapshot?.engagementScore ?? logsEngagement;
+    final engagementMode = cameraSnapshot?.engagementScore == null
+        ? 'logs_only'
+        : 'camera_logs';
 
     await TherapyApiService.recordActivityResult(
       activityId: 'breathing-body-awareness',
@@ -59,7 +72,7 @@ class _BreathingState extends State<_Breathing>
       completionFraction: completion,
       durationSeconds: durationSeconds,
       completed: true,
-      engagementMode: 'logs_only',
+      engagementMode: engagementMode,
       engagementScore: engagement,
     );
 
@@ -93,6 +106,8 @@ class _BreathingState extends State<_Breathing>
                 fontSize: 20, fontWeight: FontWeight.bold, color: _C.darkText)),
         const Text('Breathing and body awareness',
             style: TextStyle(fontSize: 13, color: Colors.black54)),
+        const SizedBox(height: 14),
+        CameraEngagementActivityPanel(tracker: _engagementTracker),
         const SizedBox(height: 24),
         AnimatedBuilder(
             animation: _c,

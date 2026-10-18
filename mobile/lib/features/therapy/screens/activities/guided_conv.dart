@@ -13,6 +13,8 @@ class _GuidedConvState extends State<_GuidedConv> {
   String _difficultyFeedback = 'just_right';
   bool _isSaving = false;
   late final DateTime _startTime;
+  final CameraEngagementActivityTracker _engagementTracker =
+      CameraEngagementActivityTracker();
 
   static const _questions = [
     'What do you like most about the adventure today? (අද ගමනේ ඔබ වඩාත්ම කැමති කුමකටද?)',
@@ -26,33 +28,49 @@ class _GuidedConvState extends State<_GuidedConv> {
     _startTime = DateTime.now();
   }
 
+  @override
+  void dispose() {
+    _engagementTracker.dispose();
+    super.dispose();
+  }
+
   Future<void> _completeConversation() async {
     if (_isSaving) return;
     setState(() => _isSaving = true);
 
     final durationSeconds = DateTime.now().difference(_startTime).inSeconds;
-    const completion = 1.0;
+    final successes = _recorded ? 1 : 0;
+    final completion = successes.toDouble();
     final performance = _LinUcbModel.calculatePerformanceScore(
-      successes: 1,
+      successes: successes,
       targets: 1,
       completionFraction: completion,
     );
-    final engagement = _LinUcbModel.estimateLogsOnlyEngagement(
+    final logsEngagement = _LinUcbModel.estimateLogsOnlyEngagement(
       completionFraction: completion,
       targetOpportunities: 1,
-      attempts: 1,
+      attempts: successes,
       durationSeconds: durationSeconds,
     );
+    final cameraSnapshot = await _engagementTracker.completeActivity(
+      durationSeconds: durationSeconds,
+      responseCount: successes,
+      targetCount: 1,
+      completionFraction: completion,
+    );
+    final engagement = cameraSnapshot?.engagementScore ?? logsEngagement;
+    final engagementMode =
+        cameraSnapshot?.engagementScore == null ? 'logs_only' : 'camera_logs';
 
     await TherapyApiService.recordActivityResult(
       activityId: 'guided-conversation',
       targetOpportunities: 1,
-      successfulOpportunities: 1,
+      successfulOpportunities: successes,
       completionFraction: completion,
       durationSeconds: durationSeconds,
       parentDifficultyFeedback: _difficultyFeedback,
       completed: true,
-      engagementMode: 'logs_only',
+      engagementMode: engagementMode,
       engagementScore: engagement,
     );
 
@@ -98,6 +116,8 @@ class _GuidedConvState extends State<_GuidedConv> {
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 13, color: Colors.black54),
             ),
+            const SizedBox(height: 14),
+            CameraEngagementActivityPanel(tracker: _engagementTracker),
             const SizedBox(height: 20),
 
             // Question bubble with mascot
@@ -110,7 +130,9 @@ class _GuidedConvState extends State<_GuidedConv> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
-                      boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 8)],
+                      boxShadow: const [
+                        BoxShadow(color: Colors.black12, blurRadius: 8)
+                      ],
                     ),
                     child: Text(
                       _questions[_questionIndex],
@@ -159,7 +181,8 @@ class _GuidedConvState extends State<_GuidedConv> {
                   SizedBox(width: 6),
                   Text(
                     'සංවාද පිළිතුර පටිගත කිරීම සාර්ථකයි!',
-                    style: TextStyle(color: _C.green, fontWeight: FontWeight.bold),
+                    style:
+                        TextStyle(color: _C.green, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -172,14 +195,19 @@ class _GuidedConvState extends State<_GuidedConv> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(18),
-                boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
+                boxShadow: const [
+                  BoxShadow(color: Colors.black12, blurRadius: 4)
+                ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
                     'දෙමාපියන්ගේ ඇගයීම (Parent Feedback):',
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: _C.darkText),
+                    style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                        color: _C.darkText),
                   ),
                   const SizedBox(height: 10),
                   Wrap(
@@ -198,7 +226,8 @@ class _GuidedConvState extends State<_GuidedConv> {
                           color: isSelected ? Colors.white : _C.darkText,
                           fontWeight: FontWeight.w600,
                         ),
-                        onSelected: (_) => setState(() => _difficultyFeedback = opt['key']!),
+                        onSelected: (_) =>
+                            setState(() => _difficultyFeedback = opt['key']!),
                       );
                     }).toList(),
                   ),
@@ -208,7 +237,9 @@ class _GuidedConvState extends State<_GuidedConv> {
             const SizedBox(height: 22),
 
             _Btn(
-              text: _isSaving ? 'සුරකිමින්...' : 'සැසිය අවසන් කරන්න (Finish Session)',
+              text: _isSaving
+                  ? 'සුරකිමින්...'
+                  : 'සැසිය අවසන් කරන්න (Finish Session)',
               onTap: _completeConversation,
             ),
             const SizedBox(height: 8),

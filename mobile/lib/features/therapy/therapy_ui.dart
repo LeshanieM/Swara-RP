@@ -13,6 +13,8 @@ import 'dart:convert';
 import 'dart:math' as math;
 import 'package:record/record.dart';
 import 'package:path_provider/path_provider.dart';
+import 'engagement/camera_engagement_activity.dart';
+import 'engagement/camera_engagement_metrics.dart';
 import 'package:swara/core/constants/app_constants.dart';
 import 'package:swara/core/storage/storage_service.dart';
 import 'therapy_api_service.dart';

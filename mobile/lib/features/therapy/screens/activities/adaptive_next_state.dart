@@ -8,6 +8,7 @@ class _AdaptiveNextState extends State<_AdaptiveNext> {
   bool _isSaving = false;
   String? _error;
   double _currentParentHelp = 0.0;
+  bool _hasCurrentParentHelp = false;
 
   @override
   void initState() {
@@ -19,7 +20,10 @@ class _AdaptiveNextState extends State<_AdaptiveNext> {
     setState(() {
       _isLoading = true;
       _error = null;
-      if (parentHelpLevel != null) _currentParentHelp = parentHelpLevel;
+      if (parentHelpLevel != null) {
+        _currentParentHelp = parentHelpLevel;
+        _hasCurrentParentHelp = true;
+      }
     });
 
     try {
@@ -30,18 +34,42 @@ class _AdaptiveNextState extends State<_AdaptiveNext> {
       String? c1Severity = 'mild';
       bool? c2Secondary = false;
       List<double>? contextVec;
+      CameraEngagementSnapshot? cameraSnapshot;
+      try {
+        cameraSnapshot = await CameraEngagementSnapshot.loadLatest();
+      } catch (error, stackTrace) {
+        debugPrint(
+          'Could not load camera engagement context: $error\n$stackTrace',
+        );
+      }
+      final sessionStart = model.sessionStartedAtMilliseconds;
+      final hasCurrentCameraSnapshot = cameraSnapshot != null &&
+          sessionStart != null &&
+          cameraSnapshot.recordedAt.millisecondsSinceEpoch >= sessionStart;
+      final cameraOn = hasCurrentCameraSnapshot && cameraSnapshot.cameraEnabled;
+      final recentEngagement = hasCurrentCameraSnapshot
+          ? cameraSnapshot.engagementScore ?? 0.5
+          : 0.82;
+      final contextParentHelp = _hasCurrentParentHelp
+          ? _currentParentHelp
+          : (hasCurrentCameraSnapshot
+              ? cameraSnapshot.parentHelpLevel / 3.0
+              : _currentParentHelp);
 
       // 1. Fetch live clinical context from backend
       try {
         final serverCtx = await TherapyApiService.fetchClinicalContext(
-          cameraOn: false,
-          parentHelpLevel: _currentParentHelp,
+          cameraOn: cameraOn,
+          parentHelpLevel: contextParentHelp,
         );
         if (serverCtx != null && serverCtx['vector'] is List) {
           final list = (serverCtx['vector'] as List)
               .map((v) => (v as num).toDouble())
               .toList();
           if (list.length == _LinUcbModel.contextSize) {
+            list[7] = cameraOn ? 1.0 : 0.0;
+            list[8] = recentEngagement;
+            list[11] = contextParentHelp.clamp(0.0, 1.0).toDouble();
             contextVec = list;
           }
           final meta = serverCtx['metadata'] as Map<String, dynamic>?;
@@ -64,11 +92,11 @@ class _AdaptiveNextState extends State<_AdaptiveNext> {
         childAge: childAge,
         c1Severity: c1Severity,
         c2SecondaryBehaviours: c2Secondary,
-        cameraOn: false,
-        recentEngagementTrend: 0.82,
+        cameraOn: cameraOn,
+        recentEngagementTrend: recentEngagement,
         recentPerformanceForType: 0.75,
         sessionCount: model.sessionActivitiesCompleted,
-        parentHelpLevel: _currentParentHelp,
+        parentHelpLevel: contextParentHelp,
       );
 
       final completedActivity = _activityForId(model.pendingActivityId);
@@ -149,7 +177,8 @@ class _AdaptiveNextState extends State<_AdaptiveNext> {
       if (!mounted) return;
       _InheritedNav.of(context)?.go(recommendation.activity.route);
     } catch (error, stackTrace) {
-      debugPrint('Adaptive activity selection could not be saved: $error\n$stackTrace');
+      debugPrint(
+          'Adaptive activity selection could not be saved: $error\n$stackTrace');
       if (!mounted) return;
       setState(() {
         _error = 'Could not save this activity selection: $error';
@@ -165,7 +194,8 @@ class _AdaptiveNextState extends State<_AdaptiveNext> {
       try {
         await model.clearPendingWithoutReward();
       } catch (error, stackTrace) {
-        debugPrint('Pending activity could not be cleared: $error\n$stackTrace');
+        debugPrint(
+            'Pending activity could not be cleared: $error\n$stackTrace');
         if (!mounted) return;
         setState(() {
           _error = 'Could not finish the activity plan: $error';
@@ -249,7 +279,8 @@ class _AdaptiveNextState extends State<_AdaptiveNext> {
                   decoration: BoxDecoration(
                     color: const Color(0xFFE8F5E9),
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: const Color(0xFF81C784), width: 1.5),
+                    border:
+                        Border.all(color: const Color(0xFF81C784), width: 1.5),
                   ),
                   child: Row(
                     children: [
@@ -270,7 +301,8 @@ class _AdaptiveNextState extends State<_AdaptiveNext> {
                             SizedBox(height: 2),
                             Text(
                               'අවධානය නැවත ලබා ගැනීමට සන්සුන් හුස්ම ගැනීමේ අභ්‍යාසයක් කරමු.',
-                              style: TextStyle(fontSize: 12, color: Colors.black87),
+                              style: TextStyle(
+                                  fontSize: 12, color: Colors.black87),
                             ),
                           ],
                         ),
@@ -312,11 +344,13 @@ class _AdaptiveNextState extends State<_AdaptiveNext> {
                               vertical: 6,
                             ),
                             decoration: BoxDecoration(
-                              color: _getDifficultyColor(recommendation.arm.difficulty)
+                              color: _getDifficultyColor(
+                                      recommendation.arm.difficulty)
                                   .withOpacity(0.12),
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(
-                                color: _getDifficultyColor(recommendation.arm.difficulty),
+                                color: _getDifficultyColor(
+                                    recommendation.arm.difficulty),
                                 width: 1.5,
                               ),
                             ),
@@ -325,7 +359,8 @@ class _AdaptiveNextState extends State<_AdaptiveNext> {
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
-                                color: _getDifficultyColor(recommendation.arm.difficulty),
+                                color: _getDifficultyColor(
+                                    recommendation.arm.difficulty),
                               ),
                             ),
                           ),
@@ -347,7 +382,8 @@ class _AdaptiveNextState extends State<_AdaptiveNext> {
                       Text(
                         recommendation.arm.titleEnglish,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 13, color: Colors.black54),
+                        style: const TextStyle(
+                            fontSize: 13, color: Colors.black54),
                       ),
                       const SizedBox(height: 12),
 
@@ -365,7 +401,8 @@ class _AdaptiveNextState extends State<_AdaptiveNext> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.check_circle_outline, size: 16, color: _C.green),
+                            const Icon(Icons.check_circle_outline,
+                                size: 16, color: _C.green),
                             const SizedBox(width: 6),
                             Flexible(
                               child: Text(
@@ -415,7 +452,8 @@ class _AdaptiveNextState extends State<_AdaptiveNext> {
                               const SizedBox(height: 4),
                               Text(
                                 recommendation.level2Item.hint,
-                                style: const TextStyle(fontSize: 11, color: Colors.black45),
+                                style: const TextStyle(
+                                    fontSize: 11, color: Colors.black45),
                               ),
                             ],
                           ],
@@ -427,7 +465,8 @@ class _AdaptiveNextState extends State<_AdaptiveNext> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.auto_awesome, size: 14, color: _C.woodMid),
+                          const Icon(Icons.auto_awesome,
+                              size: 14, color: _C.woodMid),
                           const SizedBox(width: 4),
                           Flexible(
                             child: Text(
@@ -448,7 +487,8 @@ class _AdaptiveNextState extends State<_AdaptiveNext> {
 
               // Action Buttons
               _Btn(
-                text: _isSaving ? 'සූදානම් වෙමින්...' : 'අරඹමු! (Start Activity)',
+                text:
+                    _isSaving ? 'සූදානම් වෙමින්...' : 'අරඹමු! (Start Activity)',
                 onTap: _isSaving ? () {} : _startRecommendedActivity,
               ),
               const SizedBox(height: 6),
