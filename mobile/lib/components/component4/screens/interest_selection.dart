@@ -120,7 +120,13 @@ class _InterestSelectionScreenState extends State<InterestSelectionScreen> {
                     onTap: () => _toggleCategory(category),
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
-                      transform: Matrix4.identity()..scale(isSelected ? 0.96 : 1.0),
+                      transform: Matrix4.identity()
+                        ..scaleByDouble(
+                          isSelected ? 0.96 : 1.0,
+                          isSelected ? 0.96 : 1.0,
+                          1.0,
+                          1.0,
+                        ),
                       decoration: BoxDecoration(
                         borderRadius: AppRadii.lgAll,
                         border: Border.all(
@@ -142,7 +148,7 @@ class _InterestSelectionScreenState extends State<InterestSelectionScreen> {
                               gradient: LinearGradient(
                                 colors: [
                                   Colors.transparent,
-                                  AppColors.deepNavy.withOpacity(0.7),
+                                  AppColors.deepNavy.withValues(alpha: 0.7),
                                 ],
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
@@ -151,7 +157,7 @@ class _InterestSelectionScreenState extends State<InterestSelectionScreen> {
                           ),
                           if (isSelected)
                             Container(
-                              color: AppColors.primary.withOpacity(0.3),
+                              color: AppColors.primary.withValues(alpha: 0.3),
                             ),
                           Padding(
                             padding: const EdgeInsets.all(12.0),
@@ -169,7 +175,7 @@ class _InterestSelectionScreenState extends State<InterestSelectionScreen> {
                                 Text(
                                   category.englishName,
                                   style: AppTextStyles.caption.copyWith(
-                                    color: AppColors.white.withOpacity(0.9),
+                                    color: AppColors.white.withValues(alpha: 0.9),
                                   ),
                                 ),
                               ],
