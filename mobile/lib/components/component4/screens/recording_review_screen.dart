@@ -4,7 +4,7 @@ import '../widgets/audio_player.dart';
 import 'package:swara/core/theme/app_theme.dart';
 
 class RecordingReviewScreen extends StatelessWidget {
-  const RecordingReviewScreen({Key? key}) : super(key: key);
+  const RecordingReviewScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

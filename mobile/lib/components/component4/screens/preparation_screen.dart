@@ -78,7 +78,7 @@ class PreparationScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                   elevation: 6,
-                  shadowColor: AppColors.primary.withOpacity(0.5),
+                  shadowColor: AppColors.primary.withValues(alpha: 0.5),
                 ),
                 onPressed: () {
                   context.pushReplacement('/c4/record');
