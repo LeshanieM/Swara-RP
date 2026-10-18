@@ -193,7 +193,7 @@ class _SpeechTaskScreenState extends State<SpeechTaskScreen> with SingleTickerPr
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              decoration: BoxDecoration(color: Colors.black.withOpacity(0.4), borderRadius: BorderRadius.circular(20)),
+              decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.4), borderRadius: BorderRadius.circular(20)),
               child: Text(
                 _formatTime(_seconds),
                 style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.white),
@@ -249,7 +249,7 @@ class _SpeechTaskScreenState extends State<SpeechTaskScreen> with SingleTickerPr
       decoration: BoxDecoration(
         color: AppColors.cardCream,
         borderRadius: BorderRadius.circular(28),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 10)],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -263,7 +263,7 @@ class _SpeechTaskScreenState extends State<SpeechTaskScreen> with SingleTickerPr
             height: 220,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: AppColors.softYellow.withOpacity(0.4),
+              color: AppColors.softYellow.withValues(alpha: 0.4),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(color: AppColors.softYellow, width: 2),
             ),
@@ -296,7 +296,7 @@ class _SpeechTaskScreenState extends State<SpeechTaskScreen> with SingleTickerPr
       decoration: BoxDecoration(
         color: AppColors.cardCream,
         borderRadius: BorderRadius.circular(28),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 10)],
       ),
       child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
