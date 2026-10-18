@@ -5,6 +5,10 @@ numpy==1.26.4
 pandas==2.2.0
 scikit-learn==1.4.0
 python-multipart==0.0.9
+torch>=2.1.0
+transformers>=4.36.0
+soundfile>=0.12.1
+scipy>=1.11.0
 
 # --- Component 2: video-based CV secondary-behavior analysis ---
 
