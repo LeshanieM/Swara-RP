@@ -131,7 +131,17 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/c1/record',
-            builder: (context, state) => const SpeechTaskScreen(),
+            builder: (context, state) {
+              final childId = (state.extra as String?) ?? 'child_1';
+              return SpeechTaskScreen(childId: childId);
+            },
+          ),
+          GoRoute(
+            path: '/speech/record/:childId',
+            builder: (context, state) {
+              final childId = state.pathParameters['childId'] ?? 'child_1';
+              return SpeechTaskScreen(childId: childId);
+            },
           ),
           GoRoute(
             path: '/c1/complete',

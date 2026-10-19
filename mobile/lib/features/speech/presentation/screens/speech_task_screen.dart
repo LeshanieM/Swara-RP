@@ -1,26 +1,44 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:record/record.dart';
 import 'package:swara/core/theme/app_theme.dart';
+import 'package:swara/features/speech/data/providers/speech_provider.dart';
 
-class SpeechTaskScreen extends StatefulWidget {
-  const SpeechTaskScreen({super.key});
+const String _kSinhalaReadingPassage =
+    'අද උදෑසන නදී සහ ඇගේ මිතුරන් පාසල් වත්තට ගියා. ඔවුන් එහි තිබූ ලස්සන මල් පැල නිරීක්ෂණය කළා. පසුව ඔවුන් ගුරුවරිය සමඟ එකතු වී වත්ත පිරිසිදු කළා. මෙම කාර්යය ඔවුන්ට ඉතා සතුටක් ගෙන දුන්නා.';
+
+class SpeechTaskScreen extends ConsumerStatefulWidget {
+  final String childId;
+
+  const SpeechTaskScreen({
+    super.key,
+    this.childId = 'child_1',
+  });
 
   @override
-  State<SpeechTaskScreen> createState() => _SpeechTaskScreenState();
+  ConsumerState<SpeechTaskScreen> createState() => _SpeechTaskScreenState();
 }
 
-class _SpeechTaskScreenState extends State<SpeechTaskScreen> with SingleTickerProviderStateMixin {
-  int? _selectedAgeGroup; // 0 = 4-7, 1 = 7-15
+class _SpeechTaskScreenState extends ConsumerState<SpeechTaskScreen>
+    with SingleTickerProviderStateMixin {
+  int? _selectedAgeGroup; // 0 = 5–10 (Picture Description), 1 = 11–14 (Reading Passage)
   bool _isRecording = false;
+  bool _isAnalyzing = false;
   int _seconds = 0;
   Timer? _timer;
+  late final AudioRecorder _recorder;
+  String? _recordedAudioPath;
   late AnimationController _pulseController;
   late Animation<double> _pulseAnim;
 
   @override
   void initState() {
     super.initState();
+    _recorder = AudioRecorder();
     _pulseController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
@@ -30,24 +48,126 @@ class _SpeechTaskScreenState extends State<SpeechTaskScreen> with SingleTickerPr
     );
   }
 
-  void _startRecording() {
-    setState(() {
-      _isRecording = true;
-      _seconds = 0;
-    });
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+  Future<void> _startRecording() async {
+    try {
+      final status = await Permission.microphone.request();
+      if (status.isPermanentlyDenied) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Microphone permission is required. Please enable it in system settings.'),
+              backgroundColor: AppColors.coralRed,
+            ),
+          );
+        }
+        return;
+      }
+
+      final hasPermission = await _recorder.hasPermission();
+      if (!hasPermission) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Microphone access is required to assess speech disfluency.'),
+              backgroundColor: AppColors.coralRed,
+            ),
+          );
+        }
+        return;
+      }
+
+      final tempDir = await getTemporaryDirectory();
+      final taskPrefix = _selectedAgeGroup == 0 ? 'picture' : 'reading';
+      final filePath =
+          '${tempDir.path}/c1_${taskPrefix}_${DateTime.now().millisecondsSinceEpoch}.wav';
+
+      await _recorder.start(
+        const RecordConfig(
+          encoder: AudioEncoder.wav,
+          sampleRate: 16000,
+          numChannels: 1,
+          bitRate: 256000,
+        ),
+        path: filePath,
+      );
+
       setState(() {
-        _seconds++;
+        _isRecording = true;
+        _seconds = 0;
+        _recordedAudioPath = filePath;
       });
-    });
+
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        if (mounted) {
+          setState(() {
+            _seconds++;
+          });
+        }
+      });
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to start recording: $e'),
+            backgroundColor: AppColors.coralRed,
+          ),
+        );
+      }
+    }
   }
 
-  void _stopRecording() {
+  Future<void> _stopRecording() async {
     _timer?.cancel();
+
+    String? audioPath = _recordedAudioPath;
+    try {
+      if (_isRecording) {
+        final stoppedPath = await _recorder.stop();
+        if (stoppedPath != null && stoppedPath.isNotEmpty) {
+          audioPath = stoppedPath;
+        }
+      }
+    } catch (e) {
+      debugPrint('Error stopping audio recorder: $e');
+    }
+
     setState(() {
       _isRecording = false;
+      _isAnalyzing = true;
     });
-    context.pushReplacement('/c1/complete', extra: _seconds);
+
+    final taskType =
+        _selectedAgeGroup == 0 ? 'picture-description' : 'passage-reading';
+    final childAge = _selectedAgeGroup == 0 ? 8.0 : 12.0;
+    final referenceText =
+        _selectedAgeGroup == 1 ? _kSinhalaReadingPassage : null;
+
+    Map<String, dynamic>? analysisResult;
+    try {
+      final notifier = ref.read(speechNotifierProvider(widget.childId).notifier);
+      if (audioPath != null && audioPath.isNotEmpty) {
+        notifier.setAudioPath(audioPath);
+      }
+      analysisResult = await notifier.analyze(
+        taskType: taskType,
+        age: childAge,
+        referenceText: referenceText,
+      );
+    } catch (e) {
+      debugPrint('Analysis error: $e');
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      _isAnalyzing = false;
+    });
+
+    if (analysisResult != null) {
+      context.pushReplacement('/c1/complete', extra: analysisResult);
+    } else {
+      context.pushReplacement('/c1/complete', extra: _seconds);
+    }
   }
 
   String _formatTime(int sec) {
@@ -59,6 +179,7 @@ class _SpeechTaskScreenState extends State<SpeechTaskScreen> with SingleTickerPr
   @override
   void dispose() {
     _timer?.cancel();
+    _recorder.dispose();
     _pulseController.dispose();
     super.dispose();
   }
@@ -79,8 +200,17 @@ class _SpeechTaskScreenState extends State<SpeechTaskScreen> with SingleTickerPr
                 child: Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.arrow_back_rounded, color: Color(0xFF0F172A), size: 26),
-                      onPressed: () => context.go('/'),
+                      icon: const Icon(Icons.arrow_back_rounded,
+                          color: Color(0xFF0F172A), size: 26),
+                      onPressed: () {
+                        if (_isRecording) {
+                          _stopRecording();
+                        } else if (_selectedAgeGroup != null) {
+                          setState(() => _selectedAgeGroup = null);
+                        } else {
+                          context.go('/');
+                        }
+                      },
                     ),
                     const SizedBox(width: 8),
                     Expanded(
@@ -88,10 +218,23 @@ class _SpeechTaskScreenState extends State<SpeechTaskScreen> with SingleTickerPr
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            _selectedAgeGroup == null ? 'Select Age' : (_selectedAgeGroup == 0 ? 'Picture Description' : 'Reading Practice'),
-                            style: const TextStyle(color: Color(0xFF0F172A), fontSize: 18, fontWeight: FontWeight.bold),
+                            _selectedAgeGroup == null
+                                ? 'Select Age'
+                                : (_selectedAgeGroup == 0
+                                    ? 'Picture Description (Age 5–10)'
+                                    : 'Reading Practice (Age 11–14)'),
+                            style: const TextStyle(
+                                color: Color(0xFF0F172A),
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold),
                           ),
-                          const Text("Component 1 — Speech Assessment", style: TextStyle(color: Color(0xFF0066CC), fontSize: 12, fontWeight: FontWeight.w600)),
+                          const Text(
+                            "Component 1 — Sinhala Stuttering Assessment",
+                            style: TextStyle(
+                                color: Color(0xFF0066CC),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600),
+                          ),
                         ],
                       ),
                     ),
@@ -100,7 +243,9 @@ class _SpeechTaskScreenState extends State<SpeechTaskScreen> with SingleTickerPr
               ),
 
               Expanded(
-                child: _selectedAgeGroup == null ? _buildAgeSelection() : _buildTask(),
+                child: _selectedAgeGroup == null
+                    ? _buildAgeSelection()
+                    : _buildTask(),
               ),
             ],
           ),
@@ -115,9 +260,14 @@ class _SpeechTaskScreenState extends State<SpeechTaskScreen> with SingleTickerPr
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text('How old are you?', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.text)),
+          const Text('How old are you?',
+              style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.text)),
           const SizedBox(height: 8),
-          const Text('ඔයාගෙ වයස කීයද?', style: TextStyle(fontSize: 16, color: AppColors.textLight)),
+          const Text('ඔයාගෙ වයස කීයද?',
+              style: TextStyle(fontSize: 16, color: AppColors.textLight)),
           const SizedBox(height: 32),
           Row(
             children: [
@@ -135,7 +285,17 @@ class _SpeechTaskScreenState extends State<SpeechTaskScreen> with SingleTickerPr
                       children: [
                         Text('👧👦', style: TextStyle(fontSize: 48)),
                         SizedBox(height: 12),
-                        Text('Age 5–10', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.text)),
+                        Text('Age 5–10',
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.text)),
+                        SizedBox(height: 4),
+                        Text('Picture Talk',
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: Color(0xFF0066CC),
+                                fontWeight: FontWeight.w600)),
                       ],
                     ),
                   ),
@@ -156,7 +316,17 @@ class _SpeechTaskScreenState extends State<SpeechTaskScreen> with SingleTickerPr
                       children: [
                         Text('🧑👩', style: TextStyle(fontSize: 48)),
                         SizedBox(height: 12),
-                        Text('Age 11–14', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.text)),
+                        Text('Age 11–14',
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.text)),
+                        SizedBox(height: 4),
+                        Text('Reading Task',
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: Color(0xFF0066CC),
+                                fontWeight: FontWeight.w600)),
                       ],
                     ),
                   ),
@@ -175,31 +345,88 @@ class _SpeechTaskScreenState extends State<SpeechTaskScreen> with SingleTickerPr
       child: Column(
         children: [
           if (_selectedAgeGroup == 0) _buildPictureTask() else _buildReadingTask(),
-          const SizedBox(height: 32),
+          const SizedBox(height: 28),
 
-          // Timer & Animation
-          if (_isRecording) ...[
+          // Analysis In Progress
+          if (_isAnalyzing) ...[
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.08),
+                    blurRadius: 10,
+                  )
+                ],
+              ),
+              child: const Column(
+                children: [
+                  CircularProgressIndicator(color: AppColors.ctaOrange),
+                  SizedBox(height: 16),
+                  Text(
+                    'Analyzing Speech with SSI-4 Model...',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.text,
+                    ),
+                  ),
+                  SizedBox(height: 6),
+                  Text(
+                    'කථන දත්ත විශ්ලේෂණය කෙරේ. කරුණාකර රැඳී සිටින්න...',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: AppColors.textLight,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          ] else if (_isRecording) ...[
             AnimatedBuilder(
               animation: _pulseAnim,
               builder: (_, __) => Transform.scale(
                 scale: _pulseAnim.value,
                 child: Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: const BoxDecoration(color: AppColors.coralRed, shape: BoxShape.circle),
-                  child: const Icon(Icons.mic, color: Colors.white, size: 40),
+                  padding: const EdgeInsets.all(18),
+                  decoration: const BoxDecoration(
+                    color: AppColors.coralRed,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.mic, color: Colors.white, size: 42),
                 ),
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 14),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              decoration: BoxDecoration(color: Colors.black.withOpacity(0.4), borderRadius: BorderRadius.circular(20)),
+              padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+              decoration: BoxDecoration(
+                color: Colors.black.withValues(alpha: 0.5),
+                borderRadius: BorderRadius.circular(22),
+              ),
               child: Text(
                 _formatTime(_seconds),
-                style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.white),
+                style: const TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  letterSpacing: 1.5,
+                ),
               ),
             ),
-            const SizedBox(height: 28),
+            const SizedBox(height: 8),
+            const Text(
+              'Recording in 16kHz WAV mono...',
+              style: TextStyle(
+                fontSize: 12,
+                color: Color(0xFF64748B),
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -207,9 +434,18 @@ class _SpeechTaskScreenState extends State<SpeechTaskScreen> with SingleTickerPr
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.coralRed,
                   padding: const EdgeInsets.symmetric(vertical: 18),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
                 ),
-                child: const Text('Stop Recording', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+                child: const Text(
+                  'Stop & Analyze Recording',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 19,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
           ] else ...[
@@ -220,22 +456,39 @@ class _SpeechTaskScreenState extends State<SpeechTaskScreen> with SingleTickerPr
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.ctaOrange,
                   padding: const EdgeInsets.symmetric(vertical: 18),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Icon(Icons.mic, color: Colors.white, size: 28),
                     const SizedBox(width: 10),
-                    Text(_selectedAgeGroup == 0 ? 'Start Speaking' : 'Start Reading', style: const TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold)),
+                    Text(
+                      _selectedAgeGroup == 0
+                          ? 'Start Speaking'
+                          : 'Start Reading',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
             const SizedBox(height: 12),
             Text(
-              _selectedAgeGroup == 0 ? 'කතා කිරීම ආරම්භ කරන්න' : 'කියවීම ආරම්භ කරන්න',
-              style: const TextStyle(fontSize: 16, color: AppColors.text, fontWeight: FontWeight.w600),
+              _selectedAgeGroup == 0
+                  ? 'කතා කිරීම ආරම්භ කරන්න'
+                  : 'කියවීම ආරම්භ කරන්න',
+              style: const TextStyle(
+                fontSize: 16,
+                color: AppColors.text,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ],
         ],
@@ -249,21 +502,34 @@ class _SpeechTaskScreenState extends State<SpeechTaskScreen> with SingleTickerPr
       decoration: BoxDecoration(
         color: AppColors.cardCream,
         borderRadius: BorderRadius.circular(28),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 10,
+          )
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Let's Talk About This Picture!", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.text)),
+          const Text("Let's Talk About This Picture!",
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.text)),
           const SizedBox(height: 4),
-          const Text("මේ පින්තූරය ගැන අපි කතා කරමු!", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.textLight)),
+          const Text("මේ පින්තූරය ගැන අපි කතා කරමු!",
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textLight)),
           const SizedBox(height: 20),
           // Picture Box
           Container(
             height: 220,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: AppColors.softYellow.withOpacity(0.4),
+              color: AppColors.softYellow.withValues(alpha: 0.4),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(color: AppColors.softYellow, width: 2),
             ),
@@ -272,18 +538,29 @@ class _SpeechTaskScreenState extends State<SpeechTaskScreen> with SingleTickerPr
               child: Image.asset(
                 'assets/images/park_family.png',
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Center(
+                    child: Text('🌳 🧒 🐕 👨‍👩‍👦', style: TextStyle(fontSize: 48)),
+                  );
+                },
               ),
             ),
           ),
           const SizedBox(height: 20),
           const Text(
             'Look at the picture and tell us what you see.',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.text),
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: AppColors.text),
           ),
           const SizedBox(height: 4),
           const Text(
             'පින්තූරය බලලා ඔබ දකින දේ ගැන කතා කරන්න.',
-            style: TextStyle(fontSize: 14, color: AppColors.textLight, fontWeight: FontWeight.w600),
+            style: TextStyle(
+                fontSize: 14,
+                color: AppColors.textLight,
+                fontWeight: FontWeight.w600),
           ),
         ],
       ),
@@ -296,28 +573,59 @@ class _SpeechTaskScreenState extends State<SpeechTaskScreen> with SingleTickerPr
       decoration: BoxDecoration(
         color: AppColors.cardCream,
         borderRadius: BorderRadius.circular(28),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 10,
+          )
+        ],
       ),
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Read the Paragraph", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.text)),
-          SizedBox(height: 4),
-          Text("ඡේදය කියවන්න", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.textLight)),
-          SizedBox(height: 20),
-          Text(
+          const Text("Read the Paragraph",
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.text)),
+          const SizedBox(height: 4),
+          const Text("ඡේදය කියවන්න",
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textLight)),
+          const SizedBox(height: 20),
+          const Text(
             'Please read the following paragraph aloud.',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.text),
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: AppColors.text),
           ),
-          SizedBox(height: 4),
-          Text(
+          const SizedBox(height: 4),
+          const Text(
             'පහත ඡේදය ශබ්ද නඟා කියවන්න.',
-            style: TextStyle(fontSize: 14, color: AppColors.textLight, fontWeight: FontWeight.w600),
+            style: TextStyle(
+                fontSize: 14,
+                color: AppColors.textLight,
+                fontWeight: FontWeight.w600),
           ),
-          SizedBox(height: 24),
-          Text(
-            'අද උදෑසන නදී සහ ඇගේ මිතුරන් පාසල් වත්තට ගියා. ඔවුන් එහි තිබූ ලස්සන මල් පැල නිරීක්ෂණය කළා. පසුව ඔවුන් ගුරුවරිය සමඟ එකතු වී වත්ත පිරිසිදු කළා. මෙම කාර්යය ඔවුන්ට ඉතා සතුටක් ගෙන දුන්නා.',
-            style: TextStyle(fontSize: 22, height: 1.8, color: AppColors.text, fontWeight: FontWeight.bold),
+          const SizedBox(height: 24),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.8),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: const Color(0xFFE2E8F0)),
+            ),
+            child: const Text(
+              _kSinhalaReadingPassage,
+              style: TextStyle(
+                  fontSize: 21,
+                  height: 1.85,
+                  color: AppColors.text,
+                  fontWeight: FontWeight.bold),
+            ),
           ),
         ],
       ),

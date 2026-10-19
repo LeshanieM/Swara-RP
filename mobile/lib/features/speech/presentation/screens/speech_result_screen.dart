@@ -439,7 +439,7 @@ class _SpeechResultScreenState extends State<SpeechResultScreen> {
                   title: 'Component 2: Video Analysis',
                   subtitle: 'Examine secondary facial/physical concomitant behaviors',
                   buttonText: 'Start C2 Video Analysis',
-                  onTap: () => context.push('/c2/video/upload'),
+                  onTap: () => context.push('/c2/upload'),
                 ),
                 const SizedBox(height: 12),
                 _ActionTile(
@@ -448,7 +448,7 @@ class _SpeechResultScreenState extends State<SpeechResultScreen> {
                   title: 'Component 3: Guided Therapy',
                   subtitle: 'Adaptive LinUCB activities customized to $severity severity',
                   buttonText: 'Start Recommended Therapy',
-                  onTap: () => context.push('/c3/therapy/home'),
+                  onTap: () => context.push('/c3/forest-therapy'),
                 ),
                 const SizedBox(height: 12),
                 _ActionTile(
@@ -591,11 +591,11 @@ class _SpeechResultScreenState extends State<SpeechResultScreen> {
                 maxY: 5,
                 minY: 0,
                 barGroups: barGroups,
-                gridData: FlGridData(show: false),
+                gridData: const FlGridData(show: false),
                 borderData: FlBorderData(show: false),
                 titlesData: FlTitlesData(
-                  topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
                   leftTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
@@ -664,28 +664,181 @@ class _StatRow extends StatelessWidget {
   }
 }
 
-class _EventRow extends StatelessWidget {
-  final String label;
+class _CategoryRow extends StatelessWidget {
+  final String title;
+  final String sinhalaTitle;
   final int count;
-  final bool isHighlight;
+  final Color color;
+  final bool isPrimary;
 
-  const _EventRow({required this.label, required this.count, required this.isHighlight});
+  const _CategoryRow({
+    required this.title,
+    required this.sinhalaTitle,
+    required this.count,
+    required this.color,
+    this.isPrimary = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
-        color: isHighlight ? AppColors.coralRed.withValues(alpha: 0.1) : Colors.transparent,
-        border: Border.all(color: isHighlight ? AppColors.coralRed : AppColors.divider),
-        borderRadius: BorderRadius.circular(12),
+        color: isPrimary ? color.withValues(alpha: 0.12) : AppColors.surface,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: isPrimary ? color : AppColors.divider,
+          width: isPrimary ? 1.5 : 1,
+        ),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: TextStyle(fontSize: 16, fontWeight: isHighlight ? FontWeight.bold : FontWeight.normal, color: AppColors.text)),
-          Text(count.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: isHighlight ? AppColors.coralRed : AppColors.text)),
+          Container(
+            width: 12,
+            height: 12,
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: isPrimary ? FontWeight.bold : FontWeight.w600,
+                          color: AppColors.text,
+                        ),
+                      ),
+                    ),
+                    if (isPrimary) ...[
+                      const SizedBox(width: 6),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: color,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: const Text(
+                          'Primary',
+                          style: TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+                Text(
+                  sinhalaTitle,
+                  style: const TextStyle(fontSize: 12, color: AppColors.textLight),
+                ),
+              ],
+            ),
+          ),
+          Text(
+            count.toString(),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: count > 0 ? color : AppColors.textLight,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ActionTile extends StatelessWidget {
+  final IconData icon;
+  final Color color;
+  final String title;
+  final String subtitle;
+  final String buttonText;
+  final VoidCallback onTap;
+
+  const _ActionTile({
+    required this.icon,
+    required this.color,
+    required this.title,
+    required this.subtitle,
+    required this.buttonText,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.divider),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(icon, color: color, size: 20),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.text,
+                      ),
+                    ),
+                    Text(
+                      subtitle,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: AppColors.textLight,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              onPressed: onTap,
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(color: color),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 8),
+              ),
+              child: Text(
+                buttonText,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  color: color,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
