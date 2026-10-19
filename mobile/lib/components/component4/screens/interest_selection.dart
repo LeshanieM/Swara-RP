@@ -27,25 +27,8 @@ class InterestSelectionScreen extends StatefulWidget {
 class _InterestSelectionScreenState extends State<InterestSelectionScreen> {
   int _age = 10;
 
-  static const List<InterestCategory> _existingCategories = [
-    InterestCategory(id: 'animals', sinhalaName: 'සතුන්', englishName: 'Animals', imagePath: 'assets/images/component3/lion_mascot.jpg'),
-    InterestCategory(id: 'sports', sinhalaName: 'ක්‍රීඩා', englishName: 'Sports', imagePath: 'assets/images/component3/milo_trophy.jpg'),
-    InterestCategory(id: 'food', sinhalaName: 'කෑම', englishName: 'Food', imagePath: 'assets/images/component3/sugarbear_mascot.jpg'),
-    InterestCategory(id: 'school', sinhalaName: 'පාසල', englishName: 'School', imagePath: 'assets/images/component4/c4_swara_bot.png'),
-    InterestCategory(id: 'games', sinhalaName: 'සෙල්ලම්', englishName: 'Games & Toys', imagePath: 'assets/images/component4/c4_celebration.png'),
-    InterestCategory(id: 'art', sinhalaName: 'චිත්‍ර හා කලාව', englishName: 'Art', imagePath: 'assets/images/component4/c4_picture_story.png'),
-    InterestCategory(id: 'music', sinhalaName: 'සංගීතය', englishName: 'Music', imagePath: 'assets/images/home/talk_card.png'),
-    InterestCategory(id: 'nature', sinhalaName: 'ස්වභාවය', englishName: 'Nature', imagePath: 'assets/images/component3/magical_forest_bg.jpg'),
-    InterestCategory(id: 'vehicles', sinhalaName: 'වාහන', englishName: 'Vehicles', imagePath: 'assets/images/component3/space_bg.jpg'),
-    InterestCategory(id: 'travel', sinhalaName: 'ගමන් බිමන්', englishName: 'Travel & Places', imagePath: 'assets/images/component3/beach_bg.jpg'),
-    InterestCategory(id: 'stories', sinhalaName: 'කතා හා පොත්', englishName: 'Stories & Books', imagePath: 'assets/images/home/story_card.png'),
-    InterestCategory(id: 'family', sinhalaName: 'පවුල', englishName: 'Family', imagePath: 'assets/images/park_family.png'),
-  ];
-
-  List<InterestCategory> get categories => [
-        ..._existingCategories,
-        ...(_age <= 10 ? _youngerCategories : _olderCategories),
-      ];
+  List<InterestCategory> get categories =>
+      _age <= 10 ? _youngerCategories : _olderCategories;
 
   static const List<String> _youngerNames = [
     'මගේ යාළුවෝ', 'මගේ පවුල', 'මගේ සෙල්ලම්', 'මගේ පාසල',
