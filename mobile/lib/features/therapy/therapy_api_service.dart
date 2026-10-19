@@ -4,6 +4,29 @@ import 'package:http/http.dart' as http;
 import 'package:swara/core/constants/app_constants.dart';
 import 'package:swara/core/storage/storage_service.dart';
 
+/// The outcome of one defined-answer speech prompt.
+///
+/// `could_not_recognize` is deliberately distinct from `mismatch`: an
+/// uncertain transcription must never be presented as a wrong child answer.
+class SpeechVerificationResult {
+  final String status;
+  final String recognizedText;
+  final double? confidence;
+  final double? similarity;
+  final String? message;
+
+  const SpeechVerificationResult({
+    required this.status,
+    this.recognizedText = '',
+    this.confidence,
+    this.similarity,
+    this.message,
+  });
+
+  bool get isMatch => status == 'match';
+  bool get isUncertain => status == 'could_not_recognize';
+}
+
 class TherapyApiService {
   static const String activeSessionStorageKey = 'c3_active_session_id';
   static String get baseUrl => '${AppConstants.baseUrl}/api/c3';
@@ -218,6 +241,72 @@ class TherapyApiService {
     } catch (e) {
       debugPrint('Upload Audio Error: $e');
       return false;
+    }
+  }
+
+  /// Sends a single response for transcription and local-target verification.
+  /// The server stores text-only verification metadata; neither layer persists
+  /// the raw child audio after this request completes.
+  static Future<SpeechVerificationResult> verifySpeechResponse({
+    required String audioPath,
+    required String activityId,
+    required String promptId,
+    required List<String> expectedAnswers,
+    String? sessionId,
+  }) async {
+    if (kIsWeb) {
+      return const SpeechVerificationResult(
+        status: 'could_not_recognize',
+        message: 'වචනය පරීක්ෂා කිරීම සඳහා ජංගම යෙදුම භාවිතා කරන්න.',
+      );
+    }
+    try {
+      final activeSessionId = sessionId ?? await getOrCreateActiveSessionId();
+      if (activeSessionId == null) {
+        return const SpeechVerificationResult(
+          status: 'could_not_recognize',
+          message: 'සැසිය ආරම්භ කළ නොහැකි විය. නැවත උත්සාහ කරන්න.',
+        );
+      }
+      final request = http.MultipartRequest(
+        'POST',
+        Uri.parse('$baseUrl/therapy-sessions/$activeSessionId/speech-verification'),
+      );
+      final token = await StorageService.getToken();
+      if (token != null && token.isNotEmpty) {
+        request.headers['Authorization'] = 'Bearer $token';
+      }
+      request.fields.addAll({
+        'activityId': activityId,
+        'promptId': promptId,
+        'expectedAnswers': jsonEncode(expectedAnswers),
+      });
+      request.files.add(await http.MultipartFile.fromPath('audio', audioPath));
+      final response = await request.send();
+      final body = await response.stream.bytesToString();
+      final decoded = body.isEmpty
+          ? <String, dynamic>{}
+          : jsonDecode(body) as Map<String, dynamic>;
+      final data = decoded['data'] as Map<String, dynamic>?;
+      if (response.statusCode == 200 && data != null) {
+        return SpeechVerificationResult(
+          status: data['status']?.toString() ?? 'could_not_recognize',
+          recognizedText: data['recognizedText']?.toString() ?? '',
+          confidence: (data['confidence'] as num?)?.toDouble(),
+          similarity: (data['similarity'] as num?)?.toDouble(),
+        );
+      }
+      return SpeechVerificationResult(
+        status: 'could_not_recognize',
+        message: decoded['message']?.toString() ??
+            'හඬ හඳුනාගත නොහැකි විය. නැවත උත්සාහ කරන්න.',
+      );
+    } catch (error) {
+      debugPrint('TherapyApiService verifySpeechResponse Error: $error');
+      return const SpeechVerificationResult(
+        status: 'could_not_recognize',
+        message: 'හඬ පරීක්ෂා කළ නොහැකි විය. නැවත උත්සාහ කරන්න.',
+      );
     }
   }
 
