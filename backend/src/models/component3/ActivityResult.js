@@ -62,6 +62,16 @@ const activityResultSchema = new mongoose.Schema({
   durationSeconds:   { type: Number, default: null },
   responseTimeMs:    { type: Number, default: null }, // first response latency
 
+  // Text-only verification metadata for defined-answer prompts; raw audio is never stored.
+  speechVerification: {
+    promptId: { type: String, default: null },
+    expectedAnswers: { type: [String], default: [] },
+    recognizedText: { type: String, default: null },
+    confidence: { type: Number, default: null },
+    status: { type: String, enum: ['match', 'mismatch', 'could_not_recognize', 'not_applicable'], default: 'not_applicable' },
+    similarity: { type: Number, default: null },
+  },
+
   // --- recommendation context snapshot ---
   // linucbActionId and contextVector at selection time, for replay evaluation.
   recommendationActionId: { type: String, default: null },
