@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:swara/core/theme/app_theme.dart';
 
 class AudioPlayerWidget extends StatefulWidget {
-  const AudioPlayerWidget({Key? key}) : super(key: key);
+  const AudioPlayerWidget({super.key});
 
   @override
   State<AudioPlayerWidget> createState() => _AudioPlayerWidgetState();

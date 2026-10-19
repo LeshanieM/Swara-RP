@@ -42,7 +42,7 @@ class TherapistHomeScreen extends ConsumerWidget {
                     const Icon(Icons.record_voice_over, color: Colors.white54, size: 28),
                     const SizedBox(height: 6),
                     Text(
-                      'Dr. ${user?.name?.split(' ').last ?? 'Therapist'}',
+                      'Dr. ${user?.name.split(' ').last ?? 'Therapist'}',
                       style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     const Text('Speech & Language Therapist', style: TextStyle(color: Colors.white70, fontSize: 13)),

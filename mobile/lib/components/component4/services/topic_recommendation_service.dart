@@ -1,17 +1,9 @@
-import '../models/communication_assessment.dart';
-import '../models/communication_topic.dart';
-import '../mock/component4_mock_data.dart';
+import 'c4_api_service.dart';
 
+/// Topic recommendations are selected and recorded by the authenticated Node API.
 class TopicRecommendationService {
-  Future<CommunicationTopic> generateTopic(CommunicationAssessment assessment) async {
-    await Future.delayed(const Duration(seconds: 2)); // Simulate network/processing delay
+  TopicRecommendationService(this._api);
+  final C4ApiService _api;
 
-    if (assessment.age <= 7) {
-      return Component4MockData.mockTopics.firstWhere((t) => t.id == 't_animal');
-    } else if (assessment.age <= 10) {
-      return Component4MockData.mockTopics.firstWhere((t) => t.id == 't_zoo');
-    } else {
-      return Component4MockData.mockTopics.firstWhere((t) => t.id == 't_adventure');
-    }
-  }
+  Future<Map<String, dynamic>> generateTopic(String childId) => _api.nextTopic(childId);
 }

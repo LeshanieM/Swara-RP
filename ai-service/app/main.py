@@ -5,6 +5,8 @@ import time
 from app.api.vision_routes import router as vision_router
 from app.api.speech_routes import router as speech_router
 from app.api.transcription_routes import router as transcription_router
+from app.api.recommendation_routes import router as recommendation_router
+from app.api.language_routes import router as language_router
 
 app = FastAPI(title="Swara AI Service", version="1.2.0")
 
@@ -22,6 +24,9 @@ app.include_router(transcription_router)
 
 # Component 2: video-based secondary/concomitant-behavior CV analysis
 app.include_router(vision_router)
+# Component 3: LinUCB Recommendation Engine API
+app.include_router(recommendation_router)
+app.include_router(language_router)
 
 
 @app.get("/")

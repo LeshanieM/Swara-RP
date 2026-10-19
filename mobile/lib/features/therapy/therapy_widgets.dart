@@ -197,14 +197,13 @@ class _TherapyMicButton extends StatelessWidget {
   const _TherapyMicButton({
     required this.nextScreen,
     this.prompt = 'කතා කරන්න',
-    this.nextButtonText = 'ඊළඟ ක්‍රියාකාරකමට යන්න',
     this.radius = 32,
     this.onComplete,
     this.onRecordingStopped,
     this.activityId,
     this.promptId,
     this.expectedAnswers = const [],
-  });
+  }) : nextButtonText = 'ඊළඟ ක්‍රියාකාරකමට යන්න';
 
   @override
   Widget build(BuildContext context) => GestureDetector(
@@ -552,7 +551,6 @@ class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet>
             height: 90,
             child: Center(child: CircularProgressIndicator()));
       case _RecordState.idle:
-      default:
         return GestureDetector(
           onTap: _startRecording,
           child: Container(

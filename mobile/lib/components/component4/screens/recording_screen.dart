@@ -64,17 +64,17 @@ class _RecordingScreenState extends State<RecordingScreen> {
                       height: 280,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        gradient: LinearGradient(
+                        gradient: const LinearGradient(
                           colors: [AppColors.primaryWash, AppColors.primaryLight],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
                         borderRadius: BorderRadius.circular(32),
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                             color: AppColors.primaryWash,
                             blurRadius: 15,
-                            offset: const Offset(0, 8),
+                            offset: Offset(0, 8),
                           ),
                         ],
                         border: Border.all(color: AppColors.white, width: 6),
@@ -97,7 +97,7 @@ class _RecordingScreenState extends State<RecordingScreen> {
                         borderRadius: BorderRadius.circular(24),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.primaryDeep.withOpacity(0.05),
+                            color: AppColors.primaryDeep.withValues(alpha: 0.05),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           )
@@ -149,7 +149,7 @@ class _RecordingScreenState extends State<RecordingScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 20),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
                           elevation: 6,
-                          shadowColor: AppColors.success.withOpacity(0.5),
+                          shadowColor: AppColors.success.withValues(alpha: 0.5),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -217,14 +217,14 @@ class _RecordingScreenState extends State<RecordingScreen> {
             if (_seconds > 0)
               Container(
                 padding: const EdgeInsets.all(24.0),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: AppColors.white,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
                   boxShadow: [
                     BoxShadow(
                       color: AppColors.divider,
                       blurRadius: 20,
-                      offset: const Offset(0, -5),
+                      offset: Offset(0, -5),
                     )
                   ],
                 ),
@@ -245,7 +245,7 @@ class _RecordingScreenState extends State<RecordingScreen> {
                         },
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                          side: BorderSide(color: AppColors.primary, width: 2),
+                          side: const BorderSide(color: AppColors.primary, width: 2),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                         ),
                         child: Text(

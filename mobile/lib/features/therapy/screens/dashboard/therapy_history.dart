@@ -135,7 +135,7 @@ class _TherapyHistoryState extends State<_TherapyHistory> {
                                   score: score,
                                   activities: details),
                             );
-                          }).toList(),
+                          }),
                           const SizedBox(height: 30),
                         ]),
                   )),
@@ -170,26 +170,18 @@ class _HistoryCard extends StatelessWidget {
   final String theme;
   final String score;
   final List<String> activities;
-  final bool isRecent;
-  final bool hasBadge;
   const _HistoryCard(
       {required this.date,
       required this.theme,
       required this.score,
-      required this.activities,
-      this.isRecent = false,
-      this.hasBadge = false});
+      required this.activities});
 
   @override
   Widget build(BuildContext context) => Container(
         decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: 0.95),
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-                color: isRecent
-                    ? _C.blue.withValues(alpha: 0.5)
-                    : Colors.transparent,
-                width: 2),
+            border: Border.all(color: Colors.transparent, width: 2),
             boxShadow: const [
               BoxShadow(
                   color: Colors.black12, blurRadius: 8, offset: Offset(0, 2))
@@ -198,38 +190,23 @@ class _HistoryCard extends StatelessWidget {
             Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-                color: isRecent
-                    ? _C.blue.withValues(alpha: 0.1)
-                    : const Color(0xFFF8FAFC),
+            decoration: const BoxDecoration(
+              color: Color(0xFFF8FAFC),
                 borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(18))),
+                    BorderRadius.vertical(top: Radius.circular(18))),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(children: [
                     Icon(Icons.calendar_today_rounded,
-                        size: 14,
-                        color: isRecent ? _C.blue : Colors.grey.shade600),
+                      size: 14, color: Colors.grey.shade600),
                     const SizedBox(width: 6),
                     Text(date,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.bold,
-                            color: isRecent ? _C.blue : _C.darkText))
+                            color: _C.darkText))
                   ]),
-                  if (hasBadge)
-                    Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 2),
-                        decoration: BoxDecoration(
-                            color: _C.gold.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: const Text('🏆 Top Score',
-                            style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.orange))),
                 ]),
           ),
           Padding(

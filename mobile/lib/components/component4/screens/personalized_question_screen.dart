@@ -11,8 +11,6 @@ class PersonalizedQuestionScreen extends StatefulWidget {
 }
 
 class _PersonalizedQuestionScreenState extends State<PersonalizedQuestionScreen> {
-  bool _showResearchView = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +46,7 @@ class _PersonalizedQuestionScreenState extends State<PersonalizedQuestionScreen>
                       ),
                       child: Column(
                         children: [
-                          Icon(Icons.format_quote_rounded, color: AppColors.primary.withOpacity(0.5), size: 48),
+                          Icon(Icons.format_quote_rounded, color: AppColors.primary.withValues(alpha: 0.5), size: 48),
                           const SizedBox(height: 16),
                           Text(
                             '“ඔයාගේ ප්‍රියතම බල්ලා එක්ක දවසක්ම ගත කරන්න පුළුවන් නම්, ඔයා දෙන්නා මොනවා කරයිද?”',
@@ -94,11 +92,6 @@ class _PersonalizedQuestionScreenState extends State<PersonalizedQuestionScreen>
                           style: AppTextStyles.label.copyWith(color: AppColors.textLight),
                         ),
                         leading: const Icon(Icons.science, color: AppColors.textLight),
-                        onExpansionChanged: (expanded) {
-                          setState(() {
-                            _showResearchView = expanded;
-                          });
-                        },
                         children: [
                           Container(
                             padding: const EdgeInsets.all(16),

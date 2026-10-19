@@ -92,7 +92,7 @@ class _FamiliarityScreenState extends State<FamiliarityScreen> {
                         decoration: BoxDecoration(
                           borderRadius: AppRadii.lgAll,
                           gradient: LinearGradient(
-                            colors: [Colors.transparent, AppColors.deepNavy.withOpacity(0.8)],
+                            colors: [Colors.transparent, AppColors.deepNavy.withValues(alpha: 0.8)],
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                           ),
@@ -106,10 +106,11 @@ class _FamiliarityScreenState extends State<FamiliarityScreen> {
                               currentCategory.sinhalaName,
                               style: AppTextStyles.heading2.copyWith(color: AppColors.white),
                             ),
-                            Text(
-                              currentCategory.englishName,
-                              style: AppTextStyles.body.copyWith(color: AppColors.white.withOpacity(0.9)),
-                            ),
+                            if (currentCategory.englishName != null)
+                              Text(
+                                currentCategory.englishName!,
+                                style: AppTextStyles.body.copyWith(color: AppColors.white.withValues(alpha: 0.9)),
+                              ),
                           ],
                         ),
                       ),

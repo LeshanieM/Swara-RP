@@ -108,8 +108,8 @@ class SessionComparisonScreen extends StatelessWidget {
                   Text(val1, style: AppTextStyles.heading2.copyWith(color: AppColors.textLight)),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.0),
                 child: Icon(Icons.arrow_forward_rounded, color: AppColors.primaryLight, size: 32),
               ),
               Column(

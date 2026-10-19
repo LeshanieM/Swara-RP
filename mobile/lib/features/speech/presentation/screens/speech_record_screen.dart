@@ -185,7 +185,7 @@ class _SpeechRecordScreenState extends ConsumerState<SpeechRecordScreen>
             children: [
               // Bigger, rounder back button — easier for small fingers to hit
               Material(
-                color: Colors.white.withOpacity(0.55),
+                color: Colors.white.withValues(alpha: 0.55),
                 shape: const CircleBorder(),
                 child: InkWell(
                   customBorder: const CircleBorder(),
@@ -205,7 +205,7 @@ class _SpeechRecordScreenState extends ConsumerState<SpeechRecordScreen>
                 decoration: BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.circle,
-                  boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.12), blurRadius: 6)],
+                  boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.12), blurRadius: 6)],
                 ),
                 alignment: Alignment.center,
                 child: const Text('🦉', style: TextStyle(fontSize: 24)),
@@ -256,10 +256,10 @@ class _SpeechRecordScreenState extends ConsumerState<SpeechRecordScreen>
         width: active ? 34 : 28,
         height: active ? 34 : 28,
         decoration: BoxDecoration(
-          color: filled ? AppColors.ctaOrange : Colors.white.withOpacity(0.5),
+          color: filled ? AppColors.ctaOrange : Colors.white.withValues(alpha: 0.5),
           shape: BoxShape.circle,
           boxShadow: active
-              ? [BoxShadow(color: AppColors.ctaOrange.withOpacity(0.4), blurRadius: 8)]
+              ? [BoxShadow(color: AppColors.ctaOrange.withValues(alpha: 0.4), blurRadius: 8)]
               : null,
         ),
         alignment: Alignment.center,
@@ -275,7 +275,7 @@ class _SpeechRecordScreenState extends ConsumerState<SpeechRecordScreen>
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         dot(_currentActivity >= 0, _currentActivity == 0),
-        Container(width: 24, height: 4, color: Colors.white.withOpacity(0.5)),
+        Container(width: 24, height: 4, color: Colors.white.withValues(alpha: 0.5)),
         dot(_currentActivity >= 1, _currentActivity == 1),
       ],
     );
@@ -290,7 +290,7 @@ class _SpeechRecordScreenState extends ConsumerState<SpeechRecordScreen>
       decoration: BoxDecoration(
         color: AppColors.cardCream,
         borderRadius: BorderRadius.circular(32),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.15), blurRadius: 16, offset: const Offset(0, 6))],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.15), blurRadius: 16, offset: const Offset(0, 6))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -302,7 +302,7 @@ class _SpeechRecordScreenState extends ConsumerState<SpeechRecordScreen>
               const Spacer(),
               // Visual "listen to example" affordance — wire up to audio playback
               Material(
-                color: AppColors.softYellow.withOpacity(0.5),
+                color: AppColors.softYellow.withValues(alpha: 0.5),
                 shape: const CircleBorder(),
                 child: InkWell(
                   customBorder: const CircleBorder(),
@@ -334,7 +334,7 @@ class _SpeechRecordScreenState extends ConsumerState<SpeechRecordScreen>
       decoration: BoxDecoration(
         color: AppColors.cardCream,
         borderRadius: BorderRadius.circular(32),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.15), blurRadius: 16, offset: const Offset(0, 6))],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.15), blurRadius: 16, offset: const Offset(0, 6))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -350,7 +350,7 @@ class _SpeechRecordScreenState extends ConsumerState<SpeechRecordScreen>
             height: 190,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: AppColors.softYellow.withOpacity(0.4),
+              color: AppColors.softYellow.withValues(alpha: 0.4),
               borderRadius: BorderRadius.circular(24),
               border: Border.all(color: AppColors.softYellow, width: 3),
             ),
@@ -394,7 +394,7 @@ class _SpeechRecordScreenState extends ConsumerState<SpeechRecordScreen>
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: (_isPaused ? AppColors.softYellow : AppColors.coralRed).withOpacity(0.5),
+                    color: (_isPaused ? AppColors.softYellow : AppColors.coralRed).withValues(alpha: 0.5),
                     blurRadius: 20,
                     spreadRadius: 2,
                   ),
@@ -407,7 +407,7 @@ class _SpeechRecordScreenState extends ConsumerState<SpeechRecordScreen>
         const SizedBox(height: 14),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-          decoration: BoxDecoration(color: Colors.black.withOpacity(0.45), borderRadius: BorderRadius.circular(24)),
+          decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.45), borderRadius: BorderRadius.circular(24)),
           child: Text(
             _formatTime(_seconds),
             style: const TextStyle(fontSize: 38, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: 1),
@@ -428,7 +428,7 @@ class _SpeechRecordScreenState extends ConsumerState<SpeechRecordScreen>
         decoration: BoxDecoration(
           color: AppColors.mintGreen,
           borderRadius: BorderRadius.circular(28),
-          boxShadow: [BoxShadow(color: AppColors.mintGreen.withOpacity(0.5), blurRadius: 14)],
+          boxShadow: [BoxShadow(color: AppColors.mintGreen.withValues(alpha: 0.5), blurRadius: 14)],
         ),
         child: Row(
           children: [
@@ -440,7 +440,7 @@ class _SpeechRecordScreenState extends ConsumerState<SpeechRecordScreen>
                   width: 52,
                   height: 52,
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.25),
+                    color: Colors.white.withValues(alpha: 0.25),
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -471,9 +471,9 @@ class _SpeechRecordScreenState extends ConsumerState<SpeechRecordScreen>
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
       decoration: BoxDecoration(
-        color: const Color(0xFF0066CC).withOpacity(0.85),
+        color: const Color(0xFF0066CC).withValues(alpha: 0.85),
         borderRadius: BorderRadius.circular(24),
-        boxShadow: [BoxShadow(color: const Color(0xFF0066CC).withOpacity(0.3), blurRadius: 10)],
+        boxShadow: [BoxShadow(color: const Color(0xFF0066CC).withValues(alpha: 0.3), blurRadius: 10)],
       ),
       child: const Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -612,7 +612,7 @@ class _SpeechRecordScreenState extends ConsumerState<SpeechRecordScreen>
             decoration: BoxDecoration(
               color: color,
               borderRadius: BorderRadius.circular(30),
-              boxShadow: [BoxShadow(color: color.withOpacity(0.4), blurRadius: 10, offset: const Offset(0, 4))],
+              boxShadow: [BoxShadow(color: color.withValues(alpha: 0.4), blurRadius: 10, offset: const Offset(0, 4))],
             ),
             child: child,
           ),

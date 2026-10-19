@@ -117,7 +117,7 @@ class _PersonalizationProcessScreenState extends State<PersonalizationProcessScr
                 Text(
                   _stages[index]['title']!,
                   style: AppTextStyles.titleMedium.copyWith(
-                    color: isActive || isCompleted ? AppColors.primaryDeep : AppColors.textLight.withOpacity(0.5),
+                    color: isActive || isCompleted ? AppColors.primaryDeep : AppColors.textLight.withValues(alpha: 0.5),
                     fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
                   ),
                   textAlign: TextAlign.center,

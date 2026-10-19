@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:swara/core/theme/app_theme.dart';
 
 class CommunicationReportScreen extends StatelessWidget {
@@ -58,11 +57,11 @@ class CommunicationReportScreen extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.white,
             borderRadius: BorderRadius.circular(16),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                 color: AppColors.divider,
                 blurRadius: 10,
-                offset: const Offset(0, 4),
+                offset: Offset(0, 4),
               )
             ],
           ),
@@ -149,7 +148,7 @@ class CommunicationReportScreen extends StatelessWidget {
             border: Border.all(color: AppColors.primaryLight, width: 2),
             boxShadow: [
               BoxShadow(
-                color: AppColors.primaryLight.withOpacity(0.3),
+                color: AppColors.primaryLight.withValues(alpha: 0.3),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               )
@@ -250,11 +249,11 @@ class CommunicationReportScreen extends StatelessWidget {
             color: AppColors.white,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: AppColors.divider),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                 color: AppColors.divider,
                 blurRadius: 10,
-                offset: const Offset(0, 4),
+                offset: Offset(0, 4),
               )
             ],
           ),
@@ -399,7 +398,7 @@ class CommunicationReportScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: AppColors.warning.withOpacity(0.1),
+                  color: AppColors.warning.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
@@ -485,7 +484,7 @@ class CommunicationReportScreen extends StatelessWidget {
             border: Border.all(color: AppColors.primaryLight, width: 2),
             boxShadow: [
               BoxShadow(
-                color: AppColors.primaryLight.withOpacity(0.3),
+                color: AppColors.primaryLight.withValues(alpha: 0.3),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               )
@@ -540,150 +539,4 @@ class CommunicationReportScreen extends StatelessWidget {
     );
   }
 
-  void _showAlternativesBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Alternative Activities', style: AppTextStyles.heading2),
-              const SizedBox(height: 16),
-              ListTile(
-                leading: const Icon(Icons.image, color: AppColors.primary),
-                title: const Text('Picture Description'),
-                subtitle: const Text('Focus on vocabulary'),
-                trailing: const Icon(Icons.check_circle, color: AppColors.success),
-                onTap: () {
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Selected Picture Description')),
-                  );
-                },
-              ),
-              const Divider(),
-              ListTile(
-                leading: const Icon(Icons.chat_bubble_outline, color: AppColors.primary),
-                title: const Text('Open Conversation'),
-                subtitle: const Text('Focus on spontaneous utterances'),
-                trailing: const Icon(Icons.circle_outlined),
-                onTap: () {
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Selected Open Conversation')),
-                  );
-                },
-              ),
-              const SizedBox(height: 24),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void _showAssignSuccessDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-          title: Row(
-            children: [
-              const Icon(Icons.check_circle, color: AppColors.success, size: 28),
-              const SizedBox(width: 12),
-              Text('Activity Assigned', style: AppTextStyles.heading2),
-            ],
-          ),
-          content: Text(
-            'The recommended activity has been successfully assigned to the child\'s dashboard for their next session.',
-            style: AppTextStyles.bodySmall,
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                if (context.canPop()) {
-                  context.pop();
-                } else {
-                  context.go('/');
-                }
-              },
-              child: const Text('Return Home'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _buildPersonalizedNextActivity() {
-    return Builder(
-      builder: (context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Suggested Next Speaking Activity', style: AppTextStyles.heading2),
-          const SizedBox(height: 16),
-          Card(
-            elevation: 2,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            color: AppColors.surfaceRaised,
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      const Icon(Icons.auto_awesome, color: AppColors.primary, size: 20),
-                      const SizedBox(width: 8),
-                      Text('Recommended: Story Retelling', style: AppTextStyles.heading3),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Text('Reason:', style: AppTextStyles.label),
-                  const SizedBox(height: 4),
-                  Text(
-                    '“Previous sessions showed successful performance during picture description. A slightly more open-ended storytelling activity may provide an opportunity to observe spontaneous vocabulary and utterance production.”',
-                    style: AppTextStyles.bodySmall.copyWith(fontStyle: FontStyle.italic),
-                  ),
-                  const SizedBox(height: 24),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: () => _showAlternativesBottomSheet(context),
-                          child: const Text('View Alternatives'),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () => _showAssignSuccessDialog(context),
-                          child: const Text('Assign Activity'),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Center(
-                    child: Text(
-                      'AI-generated suggestion for SLP review',
-                      style: AppTextStyles.caption,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }

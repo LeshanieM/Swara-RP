@@ -5,7 +5,7 @@ import '../models/child_model.dart';
 class DemoData {
   // Demo Children
   static final List<ChildModel> children = [
-    ChildModel(
+    const ChildModel(
       id: 'demo_ch_001',
       childId: 'CH-001',
       firstName: 'Amal',
@@ -19,7 +19,7 @@ class DemoData {
       communicationScore: 7.5,
       assignedTheme: 'Animal Adventure',
     ),
-    ChildModel(
+    const ChildModel(
       id: 'demo_ch_002',
       childId: 'CH-002',
       firstName: 'Nimal',
@@ -33,7 +33,7 @@ class DemoData {
       communicationScore: 8.2,
       assignedTheme: 'Space Explorer',
     ),
-    ChildModel(
+    const ChildModel(
       id: 'demo_ch_003',
       childId: 'CH-003',
       firstName: 'Savi',
@@ -47,7 +47,7 @@ class DemoData {
       communicationScore: 5.4,
       assignedTheme: 'Forest Friends',
     ),
-    ChildModel(
+    const ChildModel(
       id: 'demo_ch_004',
       childId: 'CH-004',
       firstName: 'Kasun',
@@ -61,7 +61,7 @@ class DemoData {
       communicationScore: 6.8,
       assignedTheme: 'Ocean Adventure',
     ),
-    ChildModel(
+    const ChildModel(
       id: 'demo_ch_005',
       childId: 'CH-005',
       firstName: 'Dilani',

@@ -28,6 +28,8 @@
 	<string>Microphone access is used to let the child practise a therapy response and, for selected word activities, check the spoken word. Audio is not kept after processing.</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Swara uses the microphone to record the child's speech for this activity.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

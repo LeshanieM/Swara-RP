@@ -46,7 +46,7 @@ class PersonalizationScreen extends StatelessWidget {
                   border: Border.all(color: AppColors.primaryLight, width: 2),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.primaryLight.withOpacity(0.3),
+                      color: AppColors.primaryLight.withValues(alpha: 0.3),
                       blurRadius: 24,
                       offset: const Offset(0, 12),
                     ),
@@ -57,7 +57,7 @@ class PersonalizationScreen extends StatelessWidget {
                     Container(
                       width: 120,
                       height: 120,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: AppColors.primaryWash,
                         shape: BoxShape.circle,
                       ),
@@ -135,7 +135,7 @@ class PersonalizationScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                   elevation: 6,
-                  shadowColor: AppColors.primary.withOpacity(0.5),
+                  shadowColor: AppColors.primary.withValues(alpha: 0.5),
                 ),
                 onPressed: () {
                   context.pushReplacement('/c4/preparation');

@@ -56,7 +56,7 @@ class _Component4HomeScreenState extends State<Component4HomeScreen> {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.primaryLight.withOpacity(0.5),
+                        color: AppColors.primaryLight.withValues(alpha: 0.5),
                         blurRadius: 24,
                         offset: const Offset(0, 8),
                       ),
