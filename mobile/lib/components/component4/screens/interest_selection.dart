@@ -150,7 +150,7 @@ class _InterestSelectionScreenState extends State<InterestSelectionScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'ඔයා කැමති දේවල් 5ක් දක්වා තෝරන්න.',
+                    'මුලින්ම ඔයා මෙතන තියෙන category 20 බලන්න. බලලා ඒ අතරින් ඔයා කැමතිම දේවල් 5ක්, ඔයාගේ කැමැත්ත වැඩිම එකේ සිට පිළිවෙළට තෝරන්න.',
                     style: AppTextStyles.bodySmall,
                   ),
                 ],
