@@ -12,8 +12,43 @@ Map<String, dynamic> _results() => {
           'status': 'completed',
           'processing_time': 12.45,
           'video': {'duration': 10.0, 'fps': 30.0, 'width': 640, 'height': 480},
-          'tracking': {'processed_frames': 290, 'missing_frames': 10, 'tracking_failures': 10},
+          'tracking': {
+            'processed_frames': 290,
+            'missing_frames': 10,
+            'tracking_failures': 10
+          },
           'overlay_video_path': '/tmp/x_overlay.mp4',
+          'c2_status': 'assessed',
+          'inference_ms': 18.2,
+          'c2_predictions': {
+            'status': 'assessed',
+            'model': 'srcd_gru_ordinary',
+            'assessment_status': {'FG': 'assessed', 'HM': 'not_assessed'},
+            'thresholds': {'FG': 0.05, 'HM': null},
+            'hasSecondaryBehaviors': null,
+            'inference_ms': 18.2,
+            'behaviours': {
+              'FG': {
+                'n_windows': 4,
+                'n_positive_windows': 3,
+                'positive_rate': 0.75,
+                'events': [
+                  {
+                    'start_ms': 12000,
+                    'end_ms': 14000,
+                    'mean_probability': 0.87,
+                    'n_windows': 4
+                  },
+                ],
+              },
+              'HM': {
+                'probability': 0.14,
+                'detected': null,
+                'reason': 'not_assessed: precision constraint infeasible',
+                'events': [],
+              },
+            },
+          },
           'behaviors': {
             'eye_blink': {
               'status': 'supported',
@@ -21,12 +56,20 @@ Map<String, dynamic> _results() => {
               'frequency': 2,
               'total_duration': 0.3,
               'events': [
-                {'start_time': 1.0, 'end_time': 1.15, 'duration': 0.15, 'peak_value': 0.1},
+                {
+                  'start_time': 1.0,
+                  'end_time': 1.15,
+                  'duration': 0.15,
+                  'peak_value': 0.1
+                },
                 {'start_time': 4.0, 'end_time': 4.15, 'duration': 0.15},
                 {'start_time': null, 'end_time': 5.0}, // unusable: skipped
               ],
             },
-            'hand_movement': {'status': 'unsupported', 'reason': 'technology_does_not_provide_this_feature'},
+            'hand_movement': {
+              'status': 'unsupported',
+              'reason': 'technology_does_not_provide_this_feature'
+            },
           },
         },
         {
@@ -35,13 +78,24 @@ Map<String, dynamic> _results() => {
           'status': 'unavailable',
           'reason': 'model_unavailable: weights missing',
           'behaviors': {
-            'lip_movement': {'status': 'unavailable', 'reason': 'model_unavailable'},
+            'lip_movement': {
+              'status': 'unavailable',
+              'reason': 'model_unavailable'
+            },
           },
         },
-        {'technology': 'OpenFace', 'technology_key': 'openface', 'status': 'error', 'error': 'runtime_error: boom'},
+        {
+          'technology': 'OpenFace',
+          'technology_key': 'openface',
+          'status': 'error',
+          'error': 'runtime_error: boom'
+        },
       ],
       'timeline': {'video_duration': 10.0},
-      'evaluation': {'ground_truth_provided': false, 'evaluation_metrics': 'Not available'},
+      'evaluation': {
+        'ground_truth_provided': false,
+        'evaluation_metrics': 'Not available'
+      },
     };
 
 void main() {
@@ -54,7 +108,8 @@ void main() {
 
     final mp = r.byKey('mediapipe')!;
     expect(mp.overlayAvailable, isTrue);
-    expect(mp.behavior('eye_blink').events.length, 2); // event without start_time skipped
+    expect(mp.behavior('eye_blink').events.length,
+        2); // event without start_time skipped
     expect(mp.behavior('eye_blink').eventCount, 2);
     expect(mp.tracking.missingFrames, 10);
     expect(r.durationSeconds, 10.0);
@@ -65,11 +120,33 @@ void main() {
     final r = VideoAnalysisResults.fromJson(_results());
     final mp = r.byKey('mediapipe')!;
     expect(mp.behavior('hand_movement').support, BehaviorSupport.unsupported);
-    expect(mp.behavior('arm_movement').support, BehaviorSupport.unsupported); // not reported at all
+    expect(mp.behavior('arm_movement').support,
+        BehaviorSupport.unsupported); // not reported at all
     expect(mp.behavior('arm_movement').isSupported, isFalse);
-    expect(r.byKey('3ddfa_v2')!.behavior('lip_movement').support, BehaviorSupport.unavailable);
+    expect(r.byKey('3ddfa_v2')!.behavior('lip_movement').support,
+        BehaviorSupport.unavailable);
     expect(r.byKey('openface')!.reason, 'runtime_error: boom');
     expect(r.byKey('openface')!.overlayAvailable, isFalse);
+  });
+
+  test('parses optional C2 predictions and preserves HM as not assessed', () {
+    final mp = VideoAnalysisResults.fromJson(_results()).byKey('mediapipe')!;
+    final c2 = mp.c2Predictions!;
+    expect(mp.c2Status, 'assessed');
+    expect(mp.inferenceMs, closeTo(18.2, 1e-9));
+    expect(c2.assessmentStatus['FG'], 'assessed');
+    expect(c2.assessmentStatus['HM'], 'not_assessed');
+    expect(c2.thresholds['HM'], isNull);
+    expect(c2.hasSecondaryBehaviors, isNull);
+    expect(c2.behaviours['FG']!.events.single.startMs, 12000);
+    expect(c2.behaviours['HM']!.detected, isNull);
+
+    final legacy = VideoAnalysisResults.fromJson({
+      'results': [
+        {'technology': 'MediaPipe', 'status': 'completed'}
+      ],
+    }).byKey('mediapipe')!;
+    expect(legacy.c2Predictions, isNull);
   });
 
   test('empty / malformed payloads do not throw', () {
@@ -101,8 +178,17 @@ void main() {
       'ground_truth_provided': true,
       'per_technology': {
         'MediaPipe': {
-          'eye_blink': {'evaluated': true, 'precision': 0.5, 'recall': 1.0, 'f1_score': 0.6667, 'frequency_error': -1},
-          'lip_movement': {'evaluated': false, 'reason': 'no ground-truth annotations for this behavior'},
+          'eye_blink': {
+            'evaluated': true,
+            'precision': 0.5,
+            'recall': 1.0,
+            'f1_score': 0.6667,
+            'frequency_error': -1
+          },
+          'lip_movement': {
+            'evaluated': false,
+            'reason': 'no ground-truth annotations for this behavior'
+          },
         },
       },
     });

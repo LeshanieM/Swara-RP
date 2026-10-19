@@ -129,6 +129,14 @@ ai-service/data/casa/
 
 # Downloaded MediaPipe face landmark model
 ai-service/models/face_landmarker.task
+ai-service/models/mediapipe/face_landmarker.task
+
+# Generated C2 training artifacts (keep configs, metrics, and documentation)
+ai-service/models/c2_srcd_gru/*.pt
+ai-service/models/c2_srcd_gru/norm_stats_*.npz
+ai-service/models/c2_srcd_gru/history_*.csv
+ai-service/models/c2_srcd_gru/classification_report_*.txt
+ai-service/models/c2_srcd_gru/confusion_matrices_*.json
 
 # Python Testing & Code Quality Cache
 .pytest_cache/
@@ -152,6 +160,18 @@ uploads/
 # Generated AI analysis results (per-run JSON, media, and logs)
 ai-service/results/*
 !ai-service/results/.gitkeep
+
+# DAiSEE engagement-model training: licensed videos, extracted features,
+# manifests containing local paths, and generated model/evaluation artifacts.
+# Keep these private; only source code under ai-service/engagement_training is tracked.
+ai-service/engagement_training/data/
+ai-service/engagement_training/manifests/
+ai-service/engagement_training/features/
+ai-service/engagement_training/artifacts/
+ai-service/c3_engagement_training/data/
+ai-service/c3_engagement_training/manifests/
+ai-service/c3_engagement_training/features/
+ai-service/c3_engagement_training/artifacts/
 
 
 # ==========================================

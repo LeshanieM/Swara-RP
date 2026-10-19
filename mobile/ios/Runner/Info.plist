@@ -22,6 +22,10 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera access is optional and used on this device to estimate engagement during a therapy activity. Images and video are not saved or uploaded.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Microphone access is used to let the child practise a therapy response and, for selected word activities, check the spoken word. Audio is not kept after processing.</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

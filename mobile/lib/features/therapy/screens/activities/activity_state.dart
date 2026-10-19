@@ -1,20 +1,26 @@
 part of '../../therapy_ui.dart';
 
 class _ActivityState extends State<_Activity> {
-  bool _recordingCompleted = false;
+  final Set<int> _recordedCueIndexes = {};
   int _selectedCueIndex = 0;
   int _parentHelpLevel = 0;
   bool _isSaving = false;
   late final DateTime _startTime;
+  final CameraEngagementActivityTracker _engagementTracker =
+      CameraEngagementActivityTracker();
+  bool get _recordingCompleted =>
+      _recordedCueIndexes.contains(_selectedCueIndex);
 
   static const _cues = [
     {
       'title': 'සතුන් හඳුනාගන්න (Animals)',
-      'prompt': 'පින්තූරයේ ඔබට පෙනෙන සතුන් හෝ චරිත කවුද? ඔවුන්ගේ නම් සෙමින් කියන්න.',
+      'prompt':
+          'පින්තූරයේ ඔබට පෙනෙන සතුන් හෝ චරිත කවුද? ඔවුන්ගේ නම් සෙමින් කියන්න.',
     },
     {
       'title': 'ක්‍රියාකාරකම විස්තර කරන්න (Actions)',
-      'prompt': 'ඔවුන් කුමක් කරනවාද? එක් අයෙකු කරන දෙයක් වාක්‍යයකින් විස්තර කරන්න.',
+      'prompt':
+          'ඔවුන් කුමක් කරනවාද? එක් අයෙකු කරන දෙයක් වාක්‍යයකින් විස්තර කරන්න.',
     },
     {
       'title': 'වර්ණ සහ පරිසරය (Scenery)',
@@ -28,34 +34,51 @@ class _ActivityState extends State<_Activity> {
     _startTime = DateTime.now();
   }
 
+  @override
+  void dispose() {
+    _engagementTracker.dispose();
+    super.dispose();
+  }
+
   Future<void> _completePictureActivity() async {
     if (_isSaving) return;
     setState(() => _isSaving = true);
 
     final durationSeconds = DateTime.now().difference(_startTime).inSeconds;
     final totalCues = _cues.length;
-    const completion = 1.0;
+    final successfulCues = _recordedCueIndexes.length;
+    final completion = successfulCues / totalCues;
     final performance = _LinUcbModel.calculatePerformanceScore(
-      successes: totalCues,
+      successes: successfulCues,
       targets: totalCues,
       completionFraction: completion,
     );
-    final engagement = _LinUcbModel.estimateLogsOnlyEngagement(
+    final logsEngagement = _LinUcbModel.estimateLogsOnlyEngagement(
       completionFraction: completion,
       targetOpportunities: totalCues,
-      attempts: totalCues,
+      attempts: successfulCues,
       durationSeconds: durationSeconds,
     );
+    final cameraSnapshot = await _engagementTracker.completeActivity(
+      durationSeconds: durationSeconds,
+      responseCount: successfulCues,
+      targetCount: totalCues,
+      completionFraction: completion,
+      parentHelpLevel: _parentHelpLevel,
+    );
+    final engagement = cameraSnapshot?.engagementScore ?? logsEngagement;
+    final engagementMode =
+        cameraSnapshot?.engagementScore == null ? 'logs_only' : 'camera_logs';
 
     await TherapyApiService.recordActivityResult(
       activityId: 'picture-description',
       targetOpportunities: totalCues,
-      successfulOpportunities: totalCues,
+      successfulOpportunities: successfulCues,
       completionFraction: completion,
       durationSeconds: durationSeconds,
       parentHelpLevel: _parentHelpLevel,
       completed: true,
-      engagementMode: 'logs_only',
+      engagementMode: engagementMode,
       engagementScore: engagement,
     );
 
@@ -122,7 +145,8 @@ class _ActivityState extends State<_Activity> {
               },
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 44),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14)),
               ),
               child: const Text('ක්‍රියාකාරකම් එකතුවට (Activity Library)'),
             ),
@@ -158,6 +182,7 @@ class _ActivityState extends State<_Activity> {
               style: TextStyle(fontSize: 13, color: Colors.black54),
             ),
             const SizedBox(height: 14),
+            CameraEngagementActivityPanel(tracker: _engagementTracker),
 
             // Illustrated scene
             const _SceneWidget(height: 200),
@@ -176,7 +201,8 @@ class _ActivityState extends State<_Activity> {
                       decoration: BoxDecoration(
                         color: isSelected ? _C.blue : Colors.white,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: _C.blue.withValues(alpha: 0.3)),
+                        border:
+                            Border.all(color: _C.blue.withValues(alpha: 0.3)),
                       ),
                       child: Text(
                         entry.value['title']!.split(' ')[0],
@@ -201,19 +227,25 @@ class _ActivityState extends State<_Activity> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
-                boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
+                boxShadow: const [
+                  BoxShadow(color: Colors.black12, blurRadius: 4)
+                ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     cue['title']!,
-                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: _C.darkText),
+                    style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: _C.darkText),
                   ),
                   const SizedBox(height: 6),
                   Text(
                     cue['prompt']!,
-                    style: const TextStyle(fontSize: 13, height: 1.35, color: Colors.black87),
+                    style: const TextStyle(
+                        fontSize: 13, height: 1.35, color: Colors.black87),
                   ),
                 ],
               ),
@@ -226,15 +258,21 @@ class _ActivityState extends State<_Activity> {
               children: [
                 _TherapyMicButton(
                   nextScreen: _TherapyRoute.adaptiveConversation,
-                  prompt: _recordingCompleted ? 'නැවත පටිගත කරන්න' : 'විස්තරය පටිගත කරන්න',
-                  onRecordingStopped: () => setState(() => _recordingCompleted = true),
+                  prompt: _recordingCompleted
+                      ? 'නැවත පටිගත කරන්න'
+                      : 'විස්තරය පටිගත කරන්න',
+                  onRecordingStopped: () => setState(
+                    () => _recordedCueIndexes.add(_selectedCueIndex),
+                  ),
                   radius: 34,
                 ),
                 // Parent Help Level Chip
                 GestureDetector(
-                  onTap: () => setState(() => _parentHelpLevel = (_parentHelpLevel + 1) % 4),
+                  onTap: () => setState(
+                      () => _parentHelpLevel = (_parentHelpLevel + 1) % 4),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 10),
                     decoration: BoxDecoration(
                       color: Colors.amber.shade50,
                       borderRadius: BorderRadius.circular(16),
@@ -243,11 +281,20 @@ class _ActivityState extends State<_Activity> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.support_agent_rounded, color: Colors.amber, size: 22),
+                        const Icon(Icons.support_agent_rounded,
+                            color: Colors.amber, size: 22),
                         const SizedBox(height: 4),
                         Text(
-                          'Help: ${['None', 'Low', 'Med', 'High'][_parentHelpLevel]}',
-                          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: _C.darkText),
+                          'Help: ${[
+                            'None',
+                            'Low',
+                            'Med',
+                            'High'
+                          ][_parentHelpLevel]}',
+                          style: const TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: _C.darkText),
                         ),
                       ],
                     ),
@@ -258,7 +305,8 @@ class _ActivityState extends State<_Activity> {
             if (_recordingCompleted) ...[
               const SizedBox(height: 16),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 decoration: BoxDecoration(
                   color: Colors.green.shade50,
                   borderRadius: BorderRadius.circular(14),
@@ -271,7 +319,10 @@ class _ActivityState extends State<_Activity> {
                     SizedBox(width: 8),
                     Text(
                       'ඔබේ පිළිතුර පටිගත කිරීම සම්පූර්ණයි!',
-                      style: TextStyle(fontWeight: FontWeight.bold, color: _C.green, fontSize: 13),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: _C.green,
+                          fontSize: 13),
                     ),
                   ],
                 ),
