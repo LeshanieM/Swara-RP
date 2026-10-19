@@ -106,10 +106,11 @@ class _FamiliarityScreenState extends State<FamiliarityScreen> {
                               currentCategory.sinhalaName,
                               style: AppTextStyles.heading2.copyWith(color: AppColors.white),
                             ),
-                            Text(
-                              currentCategory.englishName,
-                              style: AppTextStyles.body.copyWith(color: AppColors.white.withValues(alpha: 0.9)),
-                            ),
+                            if (currentCategory.englishName != null)
+                              Text(
+                                currentCategory.englishName!,
+                                style: AppTextStyles.body.copyWith(color: AppColors.white.withValues(alpha: 0.9)),
+                              ),
                           ],
                         ),
                       ),

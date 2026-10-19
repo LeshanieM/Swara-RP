@@ -9,7 +9,7 @@ class InterestCategory {
   final String? englishName;
   final String imagePath;
 
-  InterestCategory({
+  const InterestCategory({
     required this.id,
     required this.sinhalaName,
     required this.englishName,
