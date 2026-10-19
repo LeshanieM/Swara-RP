@@ -52,6 +52,7 @@ const speechAssessmentSchema = new mongoose.Schema({
     stutteredSyllables: { type: Number, default: 0 },
     percentSyllablesStuttered: { type: Number, default: 0 }, // %SS
     syllableCountMethod: { type: String, default: 'Acoustic Intensity Nucleus Peak Detection' },
+    referenceSyllablesSource: { type: String },
     isReliable: { type: Boolean, default: true },
   },
 
@@ -60,8 +61,14 @@ const speechAssessmentSchema = new mongoose.Schema({
     totalDuration: { type: Number, default: 0 },
     speechDuration: { type: Number, default: 0 },
     longestEventDuration: { type: Number, default: 0 },
+    meanThreeLongestEventsDuration: { type: Number, default: 0 },
     averageEventDuration: { type: Number, default: 0 },
   },
+
+  // Clinical status & SSI-4 Severity Estimation
+  clinicalStatus: { type: String, default: 'No / very mild stuttering detected' },
+  severityEstimateType: { type: String, default: 'SSI-4-inspired audio-based severity estimate' },
+  concomitantScore: { type: Number },
 
   // Legacy & C2/C3 compatible acoustic features
   features: {

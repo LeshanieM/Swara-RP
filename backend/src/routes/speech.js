@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const { auth } = require('../middleware/auth');
 const SpeechAssessment = require('../models/SpeechAssessment');
 const Child = require('../models/Child');
+const VideoAnalysis = require('../models/VideoAnalysis');
 
 const router = express.Router();
 
@@ -50,6 +51,23 @@ router.get('/status', async (req, res) => {
       backend: 'online',
       aiServiceUrl,
       aiService: 'offline_or_unreachable',
+      error: err.message,
+    });
+  }
+});
+
+/**
+ * GET /api/speech/compare
+ * Returns comparative metrics between XLS-R-300M and wav2vec2-base (Section 3 & Page 1-4)
+ */
+router.get('/compare', async (req, res) => {
+  const aiServiceUrl = process.env.AI_SERVICE_URL || 'http://localhost:8000';
+  try {
+    const aiResponse = await axios.get(`${aiServiceUrl}/speech/compare-models`, { timeout: 5000 });
+    res.json(aiResponse.data);
+  } catch (err) {
+    res.status(502).json({
+      message: 'Failed to retrieve model comparison results from AI service',
       error: err.message,
     });
   }
@@ -106,6 +124,9 @@ router.post('/analyze', upload.single('audio'), async (req, res) => {
       childAge: rawAge,
       age: altAge,
       extractor,
+      transcript,
+      referenceText,
+      concomitantScore: rawConcomitantScore,
     } = req.body;
 
     // 1. Resolve Child from Database
@@ -153,6 +174,22 @@ router.post('/analyze', upload.single('audio'), async (req, res) => {
       });
     }
 
+    // Resolve optional C2 concomitant behavior score from request or latest VideoAnalysis
+    let concomitantScore = rawConcomitantScore !== undefined && rawConcomitantScore !== null
+      ? parseFloat(rawConcomitantScore)
+      : null;
+
+    if (concomitantScore === null && resolvedChildId) {
+      try {
+        const latestVideo = await VideoAnalysis.findOne({ childId: resolvedChildId.toString() }).sort({ createdAt: -1 });
+        if (latestVideo && latestVideo.results && latestVideo.results.hasSecondaryBehaviors) {
+          concomitantScore = latestVideo.results.secondaryBehaviorScore || 0.7;
+        }
+      } catch (c2Err) {
+        console.warn('Could not query C2 VideoAnalysis for concomitant score:', c2Err.message);
+      }
+    }
+
     // 3. Prepare FormData for Python AI Service
     const aiServiceUrl = process.env.AI_SERVICE_URL || 'http://localhost:8000';
     const formData = new FormData();
@@ -167,6 +204,15 @@ router.post('/analyze', upload.single('audio'), async (req, res) => {
     }
     if (extractor) {
       formData.append('extractor', extractor);
+    }
+    if (transcript) {
+      formData.append('transcript', transcript);
+    }
+    if (referenceText) {
+      formData.append('referenceText', referenceText);
+    }
+    if (concomitantScore !== null && !isNaN(concomitantScore)) {
+      formData.append('concomitantScore', concomitantScore.toString());
     }
 
     // 4. Send to FastAPI AI Service
@@ -204,6 +250,9 @@ router.post('/analyze', upload.single('audio'), async (req, res) => {
       stutterDetected: Boolean(aiResult.stutterDetected),
       stutterType: legacyStutterType,
       severity: aiResult.severity || 'None',
+      clinicalStatus: aiResult.clinicalStatus || 'No / very mild stuttering detected',
+      severityEstimateType: aiResult.severityEstimateType || 'SSI-4-inspired audio-based severity estimate',
+      concomitantScore: aiResult.concomitantScore || concomitantScore,
       confidence: aiResult.confidence || 0,
       detectedEvents: aiResult.detectedEvents || [],
       eventCounts: aiResult.eventCounts || {},

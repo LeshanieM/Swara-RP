@@ -51,12 +51,18 @@ describe('Component 1: Speech Assessment Model & Schema Tests', () => {
         speechRate: 4.8,
         estimatedWordCount: 11
       },
-      analysisStatus: 'completed'
+      analysisStatus: 'completed',
+      clinicalStatus: 'Moderate stuttering detected',
+      severityEstimateType: 'SSI-4-inspired audio-based severity estimate',
+      concomitantScore: 0.65,
     });
 
     assert.strictEqual(assessment.stutterDetected, true);
     assert.strictEqual(assessment.stutterType, 'Repetition');
     assert.strictEqual(assessment.severity, 'Moderate');
+    assert.strictEqual(assessment.clinicalStatus, 'Moderate stuttering detected');
+    assert.strictEqual(assessment.severityEstimateType, 'SSI-4-inspired audio-based severity estimate');
+    assert.strictEqual(assessment.concomitantScore, 0.65);
     assert.strictEqual(assessment.detectedEvents.length, 1);
     assert.strictEqual(assessment.detectedEvents[0].duration, 2.3);
     assert.strictEqual(assessment.syllableMetrics.percentSyllablesStuttered, 12.5);

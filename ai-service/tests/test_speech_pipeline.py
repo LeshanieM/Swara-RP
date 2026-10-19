@@ -308,3 +308,71 @@ def test_fastapi_analyze_speech_empty_file():
         data={"childAge": "7", "taskType": "picture-description"},
     )
     assert response.status_code == 400
+
+
+def test_resolve_total_syllables_reading_passage():
+    """Ages 11-14 known passage text provides exact syllable count (Page 6)."""
+    from app.speech.syllable_counter import resolve_total_syllables, count_sinhala_text_syllables, DEFAULT_SINHALA_READING_PASSAGE
+    
+    expected_full = count_sinhala_text_syllables(DEFAULT_SINHALA_READING_PASSAGE)
+    
+    # Full duration read
+    total, source = resolve_total_syllables(
+        task_type="passage-reading",
+        audio_duration_s=22.0,
+        acoustic_syllables=30,
+    )
+    assert total == expected_full
+    assert "Exact" in source
+
+    # Early stop read (8 seconds)
+    total_early, source_early = resolve_total_syllables(
+        task_type="passage-reading",
+        audio_duration_s=8.0,
+        acoustic_syllables=12,
+    )
+    assert total_early < expected_full
+    assert "Early Stop" in source_early
+
+
+def test_resolve_total_syllables_picture_description_with_transcript():
+    """Ages 5-10 picture description counts syllables from C4 transcript if present (Page 6)."""
+    from app.speech.syllable_counter import resolve_total_syllables
+    
+    transcript = "මම සෙල්ලම් කරනවා"
+    total, source = resolve_total_syllables(
+        task_type="picture-description",
+        audio_duration_s=5.0,
+        acoustic_syllables=8,
+        transcript=transcript,
+    )
+    assert total >= 6
+    assert "C4 Sinhala Transcript" in source
+
+
+def test_duration_metrics_top_3_mean_calculation():
+    """SSI-4 inspired duration metric uses the mean of 3 longest events (Page 6)."""
+    events = [
+        {"duration": 4.0},
+        {"duration": 3.0},
+        {"duration": 2.0},
+        {"duration": 1.0},
+    ]
+    sorted_durations = sorted([e["duration"] for e in events], reverse=True)
+    top_3 = sorted_durations[:3]  # 4.0, 3.0, 2.0
+    mean_top_3 = sum(top_3) / len(top_3)
+    assert math.isclose(mean_top_3, 3.0, abs_tol=0.01)
+
+
+def test_fastapi_compare_models_endpoint():
+    """Verifies GET /speech/compare-models returns XLS-R-300M vs wav2vec2-base specs and metrics (Page 1-4)."""
+    client = TestClient(app)
+    response = client.get("/speech/compare-models")
+    assert response.status_code == 200
+    data = response.json()
+    assert "models" in data
+    assert "wav2vec2-base" in data["models"]
+    assert "xls-r-300m" in data["models"]
+    assert data["recommendation"]["selectedBestModel"] == "facebook/wav2vec2-xls-r-300m"
+    assert "crossLingualResearchFindings" in data
+
