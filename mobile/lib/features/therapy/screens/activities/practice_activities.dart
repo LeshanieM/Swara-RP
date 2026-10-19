@@ -8,6 +8,7 @@ class _TherapyActivityDefinition {
   final String instruction;
   final List<String> prompts;
   final List<String> sentenceWords;
+  final List<List<String>> expectedAnswers;
 
   const _TherapyActivityDefinition({
     required this.id,
@@ -17,6 +18,7 @@ class _TherapyActivityDefinition {
     required this.instruction,
     required this.prompts,
     this.sentenceWords = const [],
+    this.expectedAnswers = const [],
   });
 
   String get route {
@@ -34,6 +36,9 @@ class _TherapyActivityDefinition {
         return '${_TherapyRoute.practiceActivity}/$id';
     }
   }
+
+  List<String> expectedAnswersForPrompt(int index) =>
+      index < expectedAnswers.length ? expectedAnswers[index] : const [];
 }
 
 // Exactly 5 clinically-selected, functional therapy activities
@@ -64,6 +69,11 @@ const _therapyActivities = <_TherapyActivityDefinition>[
       'තනි වචනය සෙමින් කියන්න: මල (Say the word: flower)',
       'දැන් වචන දෙකක් එකතු කරන්න: ලස්සන මල (Now say: beautiful flower)',
       'සම්පූර්ණ වාක්‍යය කියන්න: වත්තේ ලස්සන මලක් තියෙනවා (Say the sentence smoothly)',
+    ],
+    expectedAnswers: [
+      ['මල'],
+      ['ලස්සන මල'],
+      ['වත්තේ ලස්සන මලක් තියෙනවා'],
     ],
   ),
   _TherapyActivityDefinition(
@@ -268,6 +278,7 @@ class _PracticeActivityState extends State<_PracticeActivity> {
   Widget build(BuildContext context) {
     final activity = widget.activity;
     final nav = _InheritedNav.of(context);
+    final expectedAnswers = activity.expectedAnswersForPrompt(_promptIndex);
 
     return _BgScaffold(
       child: SingleChildScrollView(
@@ -375,6 +386,9 @@ class _PracticeActivityState extends State<_PracticeActivity> {
                 prompt: _recorded ? 'නැවත පටිගත කරන්න' : 'හඬ පටිගත කරන්න',
                 onRecordingStopped: _recordCurrentPrompt,
                 onComplete: _advancePrompt,
+                activityId: expectedAnswers.isEmpty ? null : activity.id,
+                promptId: '${activity.id}_$_promptIndex',
+                expectedAnswers: expectedAnswers,
               ),
             ),
             if (_recorded) ...[
