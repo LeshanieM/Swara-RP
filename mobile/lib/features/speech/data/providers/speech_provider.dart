@@ -12,6 +12,8 @@ class SpeechAnalysisState {
   final SpeechRecordState recordState;
   final String? audioPath;
   final Uint8List? audioBytes;
+  final String? audioFileName;
+  final String? audioContentType;
   final Map<String, dynamic>? result;
   final String? error;
   final int recordDuration;
@@ -20,6 +22,8 @@ class SpeechAnalysisState {
     this.recordState = SpeechRecordState.idle,
     this.audioPath,
     this.audioBytes,
+    this.audioFileName,
+    this.audioContentType,
     this.result,
     this.error,
     this.recordDuration = 0,
@@ -29,6 +33,8 @@ class SpeechAnalysisState {
     SpeechRecordState? recordState,
     String? audioPath,
     Uint8List? audioBytes,
+    String? audioFileName,
+    String? audioContentType,
     Map<String, dynamic>? result,
     String? error,
     int? recordDuration,
@@ -37,6 +43,8 @@ class SpeechAnalysisState {
       recordState: recordState ?? this.recordState,
       audioPath: audioPath ?? this.audioPath,
       audioBytes: audioBytes ?? this.audioBytes,
+      audioFileName: audioFileName ?? this.audioFileName,
+      audioContentType: audioContentType ?? this.audioContentType,
       result: result ?? this.result,
       error: error,
       recordDuration: recordDuration ?? this.recordDuration,
@@ -50,19 +58,31 @@ class SpeechNotifier extends StateNotifier<SpeechAnalysisState> {
 
   SpeechNotifier(this._api, this.childId) : super(const SpeechAnalysisState());
 
-  void setAudioPath(String path) {
+  void setAudioPath(
+    String path, {
+    String fileName = 'recording.wav',
+    String contentType = 'audio/wav',
+  }) {
     state = SpeechAnalysisState(
       recordState: SpeechRecordState.stopped,
       audioPath: path,
+      audioFileName: fileName,
+      audioContentType: contentType,
       recordDuration: state.recordDuration,
       result: state.result,
     );
   }
 
-  void setAudioBytes(Uint8List bytes) {
+  void setAudioBytes(
+    Uint8List bytes, {
+    String fileName = 'recording.wav',
+    String contentType = 'audio/wav',
+  }) {
     state = SpeechAnalysisState(
       recordState: SpeechRecordState.stopped,
       audioBytes: bytes,
+      audioFileName: fileName,
+      audioContentType: contentType,
       recordDuration: state.recordDuration,
       result: state.result,
     );
@@ -133,17 +153,23 @@ class SpeechNotifier extends StateNotifier<SpeechAnalysisState> {
     if (state.audioBytes != null && state.audioBytes!.isNotEmpty) {
       map['audio'] = MultipartFile.fromBytes(
         state.audioBytes!,
-        filename: 'recording.wav',
-        contentType: DioMediaType('audio', 'wav'),
+        filename: state.audioFileName ?? 'recording.wav',
+        contentType: _mediaType(state.audioContentType),
       );
     } else if (state.audioPath != null && state.audioPath!.isNotEmpty) {
       map['audio'] = await MultipartFile.fromFile(
         state.audioPath!,
-        filename: 'recording.wav',
+        filename: state.audioFileName ?? 'recording.wav',
+        contentType: _mediaType(state.audioContentType),
       );
     }
 
     return FormData.fromMap(map);
+  }
+
+  DioMediaType _mediaType(String? contentType) {
+    final parts = (contentType ?? 'audio/wav').split('/');
+    return DioMediaType(parts.first, parts.length > 1 ? parts.last : 'wav');
   }
 }
 

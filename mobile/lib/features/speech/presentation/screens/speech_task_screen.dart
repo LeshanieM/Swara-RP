@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:record/record.dart';
 import 'package:swara/core/theme/app_theme.dart';
@@ -121,14 +122,83 @@ class _SpeechTaskScreenState extends ConsumerState<SpeechTaskScreen>
       });
     } catch (e) {
       if (mounted) {
+        final message = kIsWeb && e.toString().contains('Stream not supported')
+            ? 'Browser recording is unavailable. Please upload an audio recording instead.'
+            : 'Failed to start recording: $e';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to start recording: $e'),
+            content: Text(message),
             backgroundColor: AppColors.coralRed,
           ),
         );
       }
     }
+  }
+
+  Future<void> _pickAudioAndAnalyze() async {
+    try {
+      final selection = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: const ['wav', 'mp3', 'm4a', 'aac', 'flac', 'ogg', 'webm'],
+        allowMultiple: false,
+        withData: kIsWeb,
+      );
+      if (selection == null || selection.files.isEmpty || !mounted) return;
+
+      final file = selection.files.single;
+      if (file.size <= 0) {
+        _showAudioMessage('That audio file is empty. Please choose another one.');
+        return;
+      }
+      if (file.size > 25 * 1024 * 1024) {
+        _showAudioMessage('Please choose an audio file smaller than 25 MB.');
+        return;
+      }
+      final bytes = file.bytes;
+      final path = kIsWeb ? null : file.path;
+      if ((bytes == null || bytes.isEmpty) && (path == null || path.isEmpty)) {
+        _showAudioMessage('Could not read that audio file. Please choose another one.');
+        return;
+      }
+
+      setState(() => _seconds = 0);
+      await _analyzeAudio(
+        audioPath: path,
+        audioBytes: bytes,
+        fileName: file.name,
+        contentType: _audioContentType(file.extension ?? file.name.split('.').last),
+      );
+    } catch (error) {
+      if (mounted) {
+        _showAudioMessage('Could not open the audio picker: $error');
+      }
+    }
+  }
+
+  String _audioContentType(String extension) {
+    switch (extension.toLowerCase()) {
+      case 'mp3':
+        return 'audio/mpeg';
+      case 'm4a':
+        return 'audio/mp4';
+      case 'aac':
+        return 'audio/aac';
+      case 'flac':
+        return 'audio/flac';
+      case 'ogg':
+        return 'audio/ogg';
+      case 'webm':
+        return 'audio/webm';
+      case 'wav':
+      default:
+        return 'audio/wav';
+    }
+  }
+
+  void _showAudioMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: AppColors.coralRed),
+    );
   }
 
   Future<void> _stopRecording() async {
@@ -152,10 +222,26 @@ class _SpeechTaskScreenState extends ConsumerState<SpeechTaskScreen>
       debugPrint('Error stopping audio recorder: $e');
     }
 
-    setState(() {
-      _isRecording = false;
-      _isAnalyzing = true;
-    });
+    if (audioPath == null && (audioBytes == null || audioBytes.isEmpty)) {
+      if (mounted) {
+        setState(() => _isRecording = false);
+        _showAudioMessage('No audio was captured. Please try recording or upload a file.');
+      }
+      return;
+    }
+
+    setState(() => _isRecording = false);
+    await _analyzeAudio(audioPath: audioPath, audioBytes: audioBytes);
+  }
+
+  Future<void> _analyzeAudio({
+    String? audioPath,
+    Uint8List? audioBytes,
+    String? fileName,
+    String? contentType,
+  }) async {
+    if (!mounted) return;
+    setState(() => _isAnalyzing = true);
 
     final taskType =
         _selectedAgeGroup == 0 ? 'picture-description' : 'passage-reading';
@@ -167,9 +253,17 @@ class _SpeechTaskScreenState extends ConsumerState<SpeechTaskScreen>
     try {
       final notifier = ref.read(speechNotifierProvider(widget.childId).notifier);
       if (audioPath != null && audioPath.isNotEmpty) {
-        notifier.setAudioPath(audioPath);
+        notifier.setAudioPath(
+          audioPath,
+          fileName: fileName ?? 'recording.wav',
+          contentType: contentType ?? 'audio/wav',
+        );
       } else if (audioBytes != null && audioBytes.isNotEmpty) {
-        notifier.setAudioBytes(audioBytes);
+        notifier.setAudioBytes(
+          audioBytes,
+          fileName: fileName ?? 'recording.wav',
+          contentType: contentType ?? 'audio/wav',
+        );
       }
       analysisResult = await notifier.analyze(
         taskType: taskType,
@@ -513,6 +607,33 @@ class _SpeechTaskScreenState extends ConsumerState<SpeechTaskScreen>
                 color: AppColors.text,
                 fontWeight: FontWeight.w600,
               ),
+            ),
+            const SizedBox(height: 18),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: _pickAudioAndAnalyze,
+                icon: const Icon(Icons.upload_file_rounded),
+                label: const Text('Upload an audio recording'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: const Color(0xFF1D4A87),
+                  side: const BorderSide(color: Color(0xFF1D4A87), width: 1.5),
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(26),
+                  ),
+                  textStyle: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 6),
+            const Text(
+              'WAV, MP3, M4A, AAC, FLAC, OGG or WEBM · up to 25 MB',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 12, color: Color(0xFF64748B)),
             ),
           ],
         ],
