@@ -38,6 +38,8 @@ class MainScaffold extends StatelessWidget {
       currentIndex = 2;
     } else if (location.startsWith('/profile')) {
       currentIndex = 3;
+    } else if (location.startsWith('/commercialization')) {
+      currentIndex = 4;
     } else if (location.startsWith('/c1') ||
         location.startsWith('/c2') ||
         location.startsWith('/c4')) {
@@ -82,6 +84,11 @@ class MainScaffold extends StatelessWidget {
                     label: 'Profile',
                     isActive: currentIndex == 3,
                     route: '/profile'),
+                _buildNavItem(context,
+                    icon: Icons.payments_outlined,
+                    label: 'Revenue',
+                    isActive: currentIndex == 4,
+                    route: '/commercialization'),
               ],
             ),
           ),
