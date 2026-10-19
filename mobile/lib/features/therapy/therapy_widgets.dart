@@ -191,6 +191,9 @@ class _TherapyMicButton extends StatelessWidget {
   final double radius;
   final VoidCallback? onComplete;
   final VoidCallback? onRecordingStopped;
+  final String? activityId;
+  final String? promptId;
+  final List<String> expectedAnswers;
   const _TherapyMicButton({
     required this.nextScreen,
     this.prompt = 'කතා කරන්න',
@@ -198,6 +201,9 @@ class _TherapyMicButton extends StatelessWidget {
     this.radius = 32,
     this.onComplete,
     this.onRecordingStopped,
+    this.activityId,
+    this.promptId,
+    this.expectedAnswers = const [],
   });
 
   @override
@@ -210,7 +216,10 @@ class _TherapyMicButton extends StatelessWidget {
               nextScreen: nextScreen,
               nextButtonText: nextButtonText,
               onComplete: onComplete,
-              onRecordingStopped: onRecordingStopped),
+              onRecordingStopped: onRecordingStopped,
+              activityId: activityId,
+              promptId: promptId,
+              expectedAnswers: expectedAnswers),
         ),
         child: Column(children: [
           CircleAvatar(
@@ -231,11 +240,17 @@ class _TherapyRecordingSheet extends StatefulWidget {
   final String nextButtonText;
   final VoidCallback? onComplete;
   final VoidCallback? onRecordingStopped;
+  final String? activityId;
+  final String? promptId;
+  final List<String> expectedAnswers;
   const _TherapyRecordingSheet(
       {required this.nextScreen,
       required this.nextButtonText,
       this.onComplete,
-      this.onRecordingStopped});
+      this.onRecordingStopped,
+      this.activityId,
+      this.promptId,
+      this.expectedAnswers = const []});
 
   @override
   State<_TherapyRecordingSheet> createState() => _TherapyRecordingSheetState();
@@ -250,6 +265,11 @@ class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet>
   int _seconds = 0;
   final _audioRecorder = AudioRecorder();
   String? _audioPath;
+  SpeechVerificationResult? _verification;
+  bool _isVerifying = false;
+
+  bool get _hasExpectedAnswer =>
+      widget.activityId != null && widget.expectedAnswers.isNotEmpty;
 
   // Pulse animation for mic during recording
   late AnimationController _pulse;
@@ -334,14 +354,30 @@ class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet>
     } catch (e) {
       debugPrint('Stop error: $e');
     }
+    if (!mounted) return;
     setState(() => _state = _RecordState.done);
 
-    if (_audioPath != null) {
-      TherapyApiService.uploadAudio(_audioPath!);
+    if (_audioPath == null) return;
+    if (!_hasExpectedAnswer) {
+      await deleteLocalAudio(_audioPath!);
+      widget.onRecordingStopped?.call();
+      return;
     }
-    if (widget.onRecordingStopped != null) {
-      widget.onRecordingStopped!();
-    }
+
+    setState(() => _isVerifying = true);
+    final verification = await TherapyApiService.verifySpeechResponse(
+      audioPath: _audioPath!,
+      activityId: widget.activityId!,
+      promptId: widget.promptId ?? '',
+      expectedAnswers: widget.expectedAnswers,
+    );
+    await deleteLocalAudio(_audioPath!);
+    if (!mounted) return;
+    setState(() {
+      _isVerifying = false;
+      _verification = verification;
+    });
+    if (verification.isMatch) widget.onRecordingStopped?.call();
   }
 
   Future<void> _reRecord() async {
@@ -352,6 +388,8 @@ class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet>
     setState(() {
       _state = _RecordState.idle;
       _seconds = 0;
+      _verification = null;
+      _audioPath = null;
     });
     await _startRecording();
   }
@@ -403,6 +441,15 @@ class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet>
           // ── Status text ──
           _buildStatusText(),
           const SizedBox(height: 6),
+
+          if (_isVerifying) const Padding(
+            padding: EdgeInsets.only(top: 6),
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)),
+              SizedBox(width: 8),
+              Text('වචනය පරීක්ෂා කරමින්...'),
+            ]),
+          ) else if (_verification != null) _buildVerificationMessage(),
 
           // ── Timer ──
           if (_state == _RecordState.recording ||
@@ -548,7 +595,9 @@ class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet>
         color = Colors.orange.shade700;
         break;
       case _RecordState.done:
-        msg = '✅ හඬ සාර්ථකව සුරකිනු ලැබීය!';
+        msg = _hasExpectedAnswer
+            ? '✅ හඬ සුරැකී ඇත — ප්‍රතිඵලය පහතින් බලන්න'
+            : '✅ හඬ සාර්ථකව සුරකිනු ලැබීය!';
         color = _C.green;
         break;
       case _RecordState.denied:
@@ -643,7 +692,7 @@ class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet>
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
-              onPressed: _continue,
+              onPressed: _isVerifying ? null : _continue,
               icon: const Icon(Icons.arrow_forward_rounded),
               label:
                   Text(widget.nextButtonText, overflow: TextOverflow.ellipsis),
@@ -672,6 +721,27 @@ class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet>
       default:
         return const SizedBox.shrink();
     }
+  }
+
+  Widget _buildVerificationMessage() {
+    final result = _verification!;
+    final matched = result.isMatch;
+    final uncertain = result.isUncertain;
+    final color = matched ? _C.green : uncertain ? Colors.orange.shade800 : Colors.red.shade700;
+    final icon = matched ? Icons.check_circle_rounded : uncertain ? Icons.help_outline_rounded : Icons.refresh_rounded;
+    final text = matched
+        ? 'හරි! ඔබ කීවේ: ${result.recognizedText}'
+        : uncertain
+            ? (result.message ?? 'හඬ පැහැදිලිව හඳුනාගත නොහැකි විය. නැවත උත්සාහ කරන්න.')
+            : 'ඔබ කීවේ: ${result.recognizedText}\nඑකම වචනය සෙමින් නැවත උත්සාහ කරන්න.';
+    return Padding(
+      padding: const EdgeInsets.only(top: 6),
+      child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Icon(icon, color: color, size: 20),
+        const SizedBox(width: 8),
+        Expanded(child: Text(text, textAlign: TextAlign.center, style: TextStyle(color: color, fontSize: 13, fontWeight: FontWeight.w600))),
+      ]),
+    );
   }
 }
 

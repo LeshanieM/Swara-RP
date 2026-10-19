@@ -11,6 +11,7 @@ class _SyllablePracticeState extends State<_SyllablePractice> {
   static const _practiceWords = [
     {
       'word': 'අම්-මා',
+      'expected': 'අම්මා',
       'meaning': 'අම්මා / Mother',
       'syllables': ['අම්', 'මා'],
       'hint':
@@ -18,24 +19,28 @@ class _SyllablePracticeState extends State<_SyllablePractice> {
     },
     {
       'word': 'ම-ල',
+      'expected': 'මල',
       'meaning': 'මල / Flower',
       'syllables': ['ම', 'ල'],
       'hint': 'Soft continuous voicing across "ම" and "ල"',
     },
     {
       'word': 'ගෙ-දර',
+      'expected': 'ගෙදර',
       'meaning': 'ගෙදර / Home',
       'syllables': ['ගෙ', 'දර'],
       'hint': 'Light contact on "ගෙ", relaxed vowel flow to "දර"',
     },
     {
       'word': 'පා-ට',
+      'expected': 'පාට',
       'meaning': 'පාට / Colour',
       'syllables': ['පා', 'ට'],
       'hint': 'Gentle breath release before "පා", soft tap on "ට"',
     },
     {
       'word': 'පො-ත',
+      'expected': 'පොත',
       'meaning': 'පොත / Book',
       'syllables': ['පො', 'ත'],
       'hint': 'Calm prolongation on "පො", gentle stop on "ත"',
@@ -191,6 +196,7 @@ class _SyllablePracticeState extends State<_SyllablePractice> {
     final nav = _InheritedNav.of(context);
     final activeWord = _practiceWords[_selectedWordIndex];
     final syllables = activeWord['syllables'] as List<String>;
+    final expectedWord = activeWord['expected'] as String;
 
     return _BgScaffold(
       child: SingleChildScrollView(
@@ -351,6 +357,12 @@ class _SyllablePracticeState extends State<_SyllablePractice> {
               nextScreen: _TherapyRoute.adaptivePicture,
               prompt: 'මෙම වචනය සෙමින් කියන්න (Speak Word)',
               onRecordingStopped: _onWordRecorded,
+              // Keep the child on this screen after a response. The activity
+              // advances to the next word only after a verified match.
+              onComplete: () {},
+              activityId: 'syllable-practice',
+              promptId: 'syllable_$_selectedWordIndex',
+              expectedAnswers: [expectedWord],
               radius: 34,
             ),
             const SizedBox(height: 12),
