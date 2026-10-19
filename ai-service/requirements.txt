@@ -5,6 +5,9 @@ numpy==1.26.4
 pandas==2.2.0
 scikit-learn==1.4.0
 python-multipart==0.0.9
+# Component 3 local Sinhala transcription. Downloads the selected Whisper model
+# locally on first use; audio itself is not retained by the service.
+faster-whisper==1.1.1
 
 # --- Component 2: video-based CV secondary-behavior analysis ---
 
