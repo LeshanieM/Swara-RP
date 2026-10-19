@@ -17,6 +17,7 @@ import 'package:swara/components/component4/screens/speech_recording_screen.dart
 import 'package:swara/components/component4/screens/transcription_screen.dart';
 import 'package:swara/core/constants/app_constants.dart';
 import 'package:swara/core/widgets/main_scaffold.dart';
+import 'package:swara/features/commercialization/presentation/screens/revenue_model_screen.dart';
 import 'package:swara/features/auth/data/providers/auth_provider.dart';
 import 'package:swara/features/auth/presentation/screens/login_screen.dart';
 import 'package:swara/features/auth/presentation/screens/register_screen.dart';
@@ -124,6 +125,10 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/profile',
             builder: (context, state) =>
                 const ProgressScreen(childId: 'child_1'),
+          ),
+          GoRoute(
+            path: '/commercialization',
+            builder: (context, state) => const RevenueModelScreen(),
           ),
           GoRoute(
             path: '/c1/record',
