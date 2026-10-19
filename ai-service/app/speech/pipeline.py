@@ -24,11 +24,15 @@ from app.speech.audio_processor import (
 from app.speech.syllable_counter import (
     count_acoustic_syllables,
     calculate_stuttered_syllables,
+    resolve_total_syllables,
 )
 from app.speech.feature_extractor import SpeechFeatureExtractor
 from app.speech.classifier import StutterClassifier
 from app.speech.event_merger import merge_window_predictions
-from app.speech.severity_estimator import estimate_stuttering_severity
+from app.speech.severity_estimator import (
+    estimate_stuttering_severity,
+    estimate_stuttering_severity_detailed,
+)
 from app.speech.schemas import (
     SpeechAnalysisResponse,
     DetectedEvent,
@@ -66,6 +70,9 @@ class SpeechAnalysisPipeline:
         child_id: Optional[str] = None,
         filename: str = "recording.wav",
         extractor_override: Optional[str] = None,
+        transcript: Optional[str] = None,
+        reference_text: Optional[str] = None,
+        concomitant_score: Optional[float] = None,
     ) -> SpeechAnalysisResponse:
         """
         Executes the full stuttering detection and severity estimation pipeline.
@@ -83,8 +90,15 @@ class SpeechAnalysisPipeline:
         acoustic_feats = extract_acoustic_features(audio_16k)
         active_speech_duration = acoustic_feats.get("activeSpeechDuration", total_duration)
 
-        # 4. Syllable nucleus detection
-        total_syllables, syllable_timestamps, _ = count_acoustic_syllables(audio_16k)
+        # 4. Syllable nucleus detection & reference resolution (Section 2 & Page 6)
+        acoustic_syllable_count, syllable_timestamps, _ = count_acoustic_syllables(audio_16k)
+        total_syllables, syllable_method_source = resolve_total_syllables(
+            task_type=task_type,
+            audio_duration_s=total_duration,
+            acoustic_syllables=acoustic_syllable_count,
+            transcript=transcript,
+            reference_text=reference_text,
+        )
 
         # 5. Segment into 3.0s overlapping windows (1.5s step)
         windows = segment_into_windows(audio_16k)
@@ -137,30 +151,40 @@ class SpeechAnalysisPipeline:
         ]
 
         # 8. Calculate stuttered syllables and %SS
+        # Clinical %SS counting: each detected event counts once (PDF Page 6)
         stuttered_syl_count, percent_ss, is_reliable = calculate_stuttered_syllables(
-            syllable_timestamps, raw_events, total_duration
+            syllable_timestamps,
+            raw_events,
+            total_duration,
+            total_syllables_override=total_syllables,
+            event_based_counting=True,
         )
 
         if not is_reliable:
             warnings.append("Low syllable count detected (< 5 syllables). %SS calculation may be uncalibrated.")
 
-        # 9. Duration metrics and longest event
-        event_durations = [ev["duration"] for ev in raw_events]
-        longest_event = max(event_durations) if event_durations else 0.0
+        # 9. Duration metrics: Longest event and mean length of 3 longest events (SSI-4)
+        event_durations = sorted([ev["duration"] for ev in raw_events], reverse=True)
+        longest_event = event_durations[0] if event_durations else 0.0
+        top_3_durations = event_durations[:3]
+        mean_top_3_dur = round(sum(top_3_durations) / len(top_3_durations), 2) if top_3_durations else 0.0
         avg_event_dur = round(sum(event_durations) / len(event_durations), 2) if event_durations else 0.0
 
-        # 10. Severity estimation
-        severity, severity_warnings = estimate_stuttering_severity(
+        # 10. Multi-factor SSI-4-inspired Severity estimation
+        severity, clinical_status, estimate_type, severity_warnings = estimate_stuttering_severity_detailed(
             percent_ss=percent_ss,
             longest_event_duration_s=longest_event,
+            mean_top_3_duration_s=mean_top_3_dur,
             total_events=len(detected_events),
+            task_type=task_type,
+            concomitant_score=concomitant_score,
             is_reliable_syllables=is_reliable,
             weights_loaded=self.classifier.weights_loaded,
         )
         warnings.extend(severity_warnings)
 
         # Overall stutter detected boolean
-        stutter_detected = len(detected_events) > 0 and self.classifier.weights_loaded
+        stutter_detected = (len(detected_events) > 0 and severity != "None") and self.classifier.weights_loaded
 
         # Aggregate confidence
         if detected_events:
@@ -180,6 +204,9 @@ class SpeechAnalysisPipeline:
             stutterDetected=stutter_detected,
             stutterType=primary_stutter_type,
             severity=severity,
+            clinicalStatus=clinical_status,
+            severityEstimateType=estimate_type,
+            concomitantScore=concomitant_score,
             confidence=overall_confidence,
             detectedEvents=detected_events,
             eventCounts=EventCounts(**event_counts_dict),
@@ -188,12 +215,14 @@ class SpeechAnalysisPipeline:
                 stutteredSyllables=stuttered_syl_count,
                 percentSyllablesStuttered=percent_ss,
                 syllableCountMethod="Acoustic Intensity Nucleus Peak Detection (de Jong & Wempe)",
+                referenceSyllablesSource=syllable_method_source,
                 isReliable=is_reliable,
             ),
             durationMetrics=DurationMetrics(
                 totalDuration=round(total_duration, 2),
                 speechDuration=round(active_speech_duration, 2),
                 longestEventDuration=round(longest_event, 2),
+                meanThreeLongestEventsDuration=mean_top_3_dur,
                 averageEventDuration=round(avg_event_dur, 2),
             ),
             features=SpeechFeatures(

@@ -70,6 +70,9 @@ class SyllableMetrics(BaseModel):
     syllable_count_method: str = Field(
         ..., alias="syllableCountMethod", description="Documented method used for syllable counting"
     )
+    reference_syllables_source: Optional[str] = Field(
+        None, alias="referenceSyllablesSource", description="Source of reference syllables (Passage, C4 transcript, or acoustic)"
+    )
     is_reliable: bool = Field(
         True, alias="isReliable", description="Whether sufficient syllables were detected for reliable estimation"
     )
@@ -82,6 +85,9 @@ class DurationMetrics(BaseModel):
     speech_duration: float = Field(..., alias="speechDuration", description="Active speech duration in seconds")
     longest_event_duration: float = Field(
         ..., alias="longestEventDuration", description="Duration of the longest stuttering event"
+    )
+    mean_three_longest_events_duration: float = Field(
+        0.0, alias="meanThreeLongestEventsDuration", description="Mean duration of top 3 longest events (SSI-4 duration metric)"
     )
     average_event_duration: float = Field(
         ..., alias="averageEventDuration", description="Average stuttering event duration"
@@ -128,6 +134,9 @@ class SpeechAnalysisResponse(BaseModel):
     stutter_detected: bool = Field(..., alias="stutterDetected")
     stutter_type: str = Field(..., alias="stutterType")
     severity: str = Field(..., alias="severity")
+    clinical_status: str = Field("No / very mild stuttering detected", alias="clinicalStatus")
+    severity_estimate_type: str = Field("SSI-4-inspired audio-based severity estimate", alias="severityEstimateType")
+    concomitant_score: Optional[float] = Field(None, alias="concomitantScore")
     confidence: float = Field(..., ge=0.0, le=1.0)
     
     # Granular timeline and metrics

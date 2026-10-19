@@ -137,22 +137,78 @@ def count_sinhala_text_syllables(text: str) -> int:
     return max(1, syllable_count)
 
 
+DEFAULT_SINHALA_READING_PASSAGE = (
+    "අද උදෑසන නදී සහ ඇගේ මිතුරන් පාසල් වත්තට ගියා. "
+    "ඔවුන් එහි තිබූ ලස්සන මල් පැල නිරීක්ෂණය කළා. "
+    "පසුව ඔවුන් ගුරුවරිය සමඟ එකතු වී වත්ත පිරිසිදු කළා. "
+    "මෙම කාර්යය ඔවුන්ට ඉතා සතුටක් ගෙන දුන්නා."
+)
+
+
+def resolve_total_syllables(
+    task_type: str,
+    audio_duration_s: float,
+    acoustic_syllables: int,
+    transcript: Optional[str] = None,
+    reference_text: Optional[str] = None,
+) -> Tuple[int, str]:
+    """
+    Resolves total spoken syllables per Section 2 & Page 6 specifications:
+    - Ages 11-14 (Passage reading): Text is known -> exact syllable count, adjusted if child stopped early.
+    - Ages 5-10 (Picture description): Count syllables from C4 transcript if provided, else acoustic energy peaks.
+    """
+    norm_task = (task_type or "").lower()
+
+    if "read" in norm_task or "passage" in norm_task:
+        # Passage reading (ages 11–14)
+        passage = reference_text or DEFAULT_SINHALA_READING_PASSAGE
+        exact_syllables = count_sinhala_text_syllables(passage)
+        # Expected normal pace duration for this ~35 syllable passage is ~20 seconds
+        expected_full_duration = 20.0
+        if audio_duration_s < 16.0:
+            ratio = min(1.0, max(0.2, audio_duration_s / expected_full_duration))
+            adjusted_syllables = int(round(exact_syllables * ratio))
+            total = max(acoustic_syllables, max(MIN_TOTAL_SYLLABLES_FOR_SS, adjusted_syllables))
+            source = "Sinhala Known Passage Text (Adjusted for Early Stop)"
+        else:
+            total = exact_syllables
+            source = "Sinhala Known Passage Text (Exact Orthographic Count)"
+        return total, source
+    else:
+        # Picture description (ages 5–10)
+        if transcript and transcript.strip():
+            transcript_syllables = count_sinhala_text_syllables(transcript)
+            return transcript_syllables, "C4 Sinhala Transcript Syllable Count"
+        else:
+            return acoustic_syllables, "Acoustic Intensity Nucleus Peak Detection (de Jong & Wempe)"
+
+
 def calculate_stuttered_syllables(
     syllable_timestamps: List[float],
     detected_events: List[Dict[str, Any]],
     total_duration_s: float,
+    total_syllables_override: Optional[int] = None,
+    event_based_counting: bool = False,
 ) -> Tuple[int, float, bool]:
     """
     Computes:
     - stuttered_syllables: Number of syllables affected by stuttering events.
+      In clinical %SS counting (event_based_counting=True): each detected event counts once.
     - percent_ss: Percentage of syllables stuttered (%SS).
     - is_reliable: Whether the total syllable count is sufficient for reliable calculation.
     """
-    total_syllables = len(syllable_timestamps)
+    total_syllables = total_syllables_override if total_syllables_override is not None else len(syllable_timestamps)
 
     if total_syllables < MIN_TOTAL_SYLLABLES_FOR_SS:
         # Insufficient speech or silence
         return 0, 0.0, False
+
+    if event_based_counting:
+        # Clinical %SS event-based definition: each detected event counts once
+        stuttered_count = len(detected_events)
+        percent_ss = round((stuttered_count / max(total_syllables, 1)) * 100.0, 2)
+        percent_ss = min(100.0, percent_ss)
+        return stuttered_count, percent_ss, True
 
     stuttered_indices = set()
 
@@ -170,11 +226,9 @@ def calculate_stuttered_syllables(
         else:
             # If the event is short or between detected peaks (e.g., tense block or quick repetition),
             # count at least one stuttered syllable for the event.
-            # For sound/word repetitions, estimate syllables based on event duration
             if "Repetition" in event_type:
                 dur = max(0.3, end - start)
                 estimated_reps = max(1, int(round(dur / 0.25)))
-                # Add virtual count
                 total_syllables += max(0, estimated_reps - 1)
                 for k in range(estimated_reps):
                     stuttered_indices.add(len(syllable_timestamps) + k)
@@ -183,7 +237,6 @@ def calculate_stuttered_syllables(
 
     stuttered_count = len(stuttered_indices)
     percent_ss = round((stuttered_count / max(total_syllables, 1)) * 100.0, 2)
-    # Ensure %SS does not exceed 100%
     percent_ss = min(100.0, percent_ss)
 
     return stuttered_count, percent_ss, True
