@@ -1,11 +1,13 @@
 import 'dart:async';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:record/record.dart';
 import 'package:swara/core/theme/app_theme.dart';
+import 'package:swara/features/speech/data/recording_temp_path.dart';
 import 'package:swara/features/speech/data/providers/speech_provider.dart';
 
 const String _kSinhalaReadingPassage =
@@ -32,6 +34,8 @@ class _SpeechTaskScreenState extends ConsumerState<SpeechTaskScreen>
   Timer? _timer;
   late final AudioRecorder _recorder;
   String? _recordedAudioPath;
+  BytesBuilder? _webAudioBuilder;
+  StreamSubscription<Uint8List>? _webAudioSubscription;
   late AnimationController _pulseController;
   late Animation<double> _pulseAnim;
 
@@ -50,17 +54,19 @@ class _SpeechTaskScreenState extends ConsumerState<SpeechTaskScreen>
 
   Future<void> _startRecording() async {
     try {
-      final status = await Permission.microphone.request();
-      if (status.isPermanentlyDenied) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Microphone permission is required. Please enable it in system settings.'),
-              backgroundColor: AppColors.coralRed,
-            ),
-          );
+      if (!kIsWeb) {
+        final status = await Permission.microphone.request();
+        if (status.isPermanentlyDenied) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Microphone permission is required. Please enable it in system settings.'),
+                backgroundColor: AppColors.coralRed,
+              ),
+            );
+          }
+          return;
         }
-        return;
       }
 
       final hasPermission = await _recorder.hasPermission();
@@ -76,25 +82,34 @@ class _SpeechTaskScreenState extends ConsumerState<SpeechTaskScreen>
         return;
       }
 
-      final tempDir = await getTemporaryDirectory();
       final taskPrefix = _selectedAgeGroup == 0 ? 'picture' : 'reading';
-      final filePath =
-          '${tempDir.path}/c1_${taskPrefix}_${DateTime.now().millisecondsSinceEpoch}.wav';
-
-      await _recorder.start(
-        const RecordConfig(
-          encoder: AudioEncoder.wav,
-          sampleRate: 16000,
-          numChannels: 1,
-          bitRate: 256000,
-        ),
-        path: filePath,
+      const config = RecordConfig(
+        encoder: AudioEncoder.wav,
+        sampleRate: 16000,
+        numChannels: 1,
+        bitRate: 256000,
       );
+
+      if (kIsWeb) {
+        _webAudioBuilder = BytesBuilder(copy: false);
+        _webAudioSubscription = (await _recorder.startStream(config)).listen(
+          (chunk) => _webAudioBuilder?.add(chunk),
+          onError: (Object error) {
+            debugPrint('Browser audio stream error: $error');
+          },
+        );
+        _recordedAudioPath = null;
+      } else {
+        final tempDir = await recordingTempPath();
+        final filePath =
+            '$tempDir/c1_${taskPrefix}_${DateTime.now().millisecondsSinceEpoch}.wav';
+        await _recorder.start(config, path: filePath);
+        _recordedAudioPath = filePath;
+      }
 
       setState(() {
         _isRecording = true;
         _seconds = 0;
-        _recordedAudioPath = filePath;
       });
 
       _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -120,10 +135,16 @@ class _SpeechTaskScreenState extends ConsumerState<SpeechTaskScreen>
     _timer?.cancel();
 
     String? audioPath = _recordedAudioPath;
+    Uint8List? audioBytes;
     try {
       if (_isRecording) {
         final stoppedPath = await _recorder.stop();
-        if (stoppedPath != null && stoppedPath.isNotEmpty) {
+        if (kIsWeb) {
+          audioBytes = _webAudioBuilder?.takeBytes();
+          await _webAudioSubscription?.cancel();
+          _webAudioSubscription = null;
+          _webAudioBuilder = null;
+        } else if (stoppedPath != null && stoppedPath.isNotEmpty) {
           audioPath = stoppedPath;
         }
       }
@@ -147,6 +168,8 @@ class _SpeechTaskScreenState extends ConsumerState<SpeechTaskScreen>
       final notifier = ref.read(speechNotifierProvider(widget.childId).notifier);
       if (audioPath != null && audioPath.isNotEmpty) {
         notifier.setAudioPath(audioPath);
+      } else if (audioBytes != null && audioBytes.isNotEmpty) {
+        notifier.setAudioBytes(audioBytes);
       }
       analysisResult = await notifier.analyze(
         taskType: taskType,
@@ -179,6 +202,7 @@ class _SpeechTaskScreenState extends ConsumerState<SpeechTaskScreen>
   @override
   void dispose() {
     _timer?.cancel();
+    _webAudioSubscription?.cancel();
     _recorder.dispose();
     _pulseController.dispose();
     super.dispose();

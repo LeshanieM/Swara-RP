@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swara/core/network/api_client.dart';
@@ -9,6 +11,7 @@ enum SpeechRecordState { idle, recording, stopped, uploading, analyzing, done, e
 class SpeechAnalysisState {
   final SpeechRecordState recordState;
   final String? audioPath;
+  final Uint8List? audioBytes;
   final Map<String, dynamic>? result;
   final String? error;
   final int recordDuration;
@@ -16,6 +19,7 @@ class SpeechAnalysisState {
   const SpeechAnalysisState({
     this.recordState = SpeechRecordState.idle,
     this.audioPath,
+    this.audioBytes,
     this.result,
     this.error,
     this.recordDuration = 0,
@@ -24,6 +28,7 @@ class SpeechAnalysisState {
   SpeechAnalysisState copyWith({
     SpeechRecordState? recordState,
     String? audioPath,
+    Uint8List? audioBytes,
     Map<String, dynamic>? result,
     String? error,
     int? recordDuration,
@@ -31,6 +36,7 @@ class SpeechAnalysisState {
     return SpeechAnalysisState(
       recordState: recordState ?? this.recordState,
       audioPath: audioPath ?? this.audioPath,
+      audioBytes: audioBytes ?? this.audioBytes,
       result: result ?? this.result,
       error: error,
       recordDuration: recordDuration ?? this.recordDuration,
@@ -45,7 +51,21 @@ class SpeechNotifier extends StateNotifier<SpeechAnalysisState> {
   SpeechNotifier(this._api, this.childId) : super(const SpeechAnalysisState());
 
   void setAudioPath(String path) {
-    state = state.copyWith(audioPath: path, recordState: SpeechRecordState.stopped);
+    state = SpeechAnalysisState(
+      recordState: SpeechRecordState.stopped,
+      audioPath: path,
+      recordDuration: state.recordDuration,
+      result: state.result,
+    );
+  }
+
+  void setAudioBytes(Uint8List bytes) {
+    state = SpeechAnalysisState(
+      recordState: SpeechRecordState.stopped,
+      audioBytes: bytes,
+      recordDuration: state.recordDuration,
+      result: state.result,
+    );
   }
 
   void setRecording() {
@@ -65,7 +85,7 @@ class SpeechNotifier extends StateNotifier<SpeechAnalysisState> {
   }
 
   Future<Map<String, dynamic>?> analyze({String? taskType, double? age, String? referenceText}) async {
-    if (state.audioPath == null && !StorageService.isDemoMode()) return null;
+    if (state.audioPath == null && state.audioBytes == null && !StorageService.isDemoMode()) return null;
     state = state.copyWith(recordState: SpeechRecordState.analyzing);
 
     try {
@@ -110,7 +130,13 @@ class SpeechNotifier extends StateNotifier<SpeechAnalysisState> {
       map['referenceText'] = referenceText;
     }
 
-    if (state.audioPath != null && state.audioPath!.isNotEmpty) {
+    if (state.audioBytes != null && state.audioBytes!.isNotEmpty) {
+      map['audio'] = MultipartFile.fromBytes(
+        state.audioBytes!,
+        filename: 'recording.wav',
+        contentType: DioMediaType('audio', 'wav'),
+      );
+    } else if (state.audioPath != null && state.audioPath!.isNotEmpty) {
       map['audio'] = await MultipartFile.fromFile(
         state.audioPath!,
         filename: 'recording.wav',
