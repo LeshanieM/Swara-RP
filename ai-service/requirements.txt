@@ -8,6 +8,9 @@ python-multipart==0.0.9
 # Component 3 local Sinhala transcription. Downloads the selected Whisper model
 # locally on first use; audio itself is not retained by the service.
 faster-whisper==1.1.1
+transformers>=4.36.0
+soundfile>=0.12.1
+scipy>=1.11.0
 
 # --- Component 2: video-based CV secondary-behavior analysis ---
 
@@ -17,7 +20,7 @@ opencv-contrib-python==4.11.0.86
 mediapipe==0.10.21
 
 # Required for CPU inference with the trained C2 GRU checkpoint.
-torch>=2.0,<3.0
+torch>=2.1,<3.0
 
 
 # Required only if OpenFace/OpenSeeFace/3DDFA-V2/MMPose are configured

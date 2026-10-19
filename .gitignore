@@ -265,6 +265,16 @@ Desktop.ini
 /windows/Runner/Release/
 /windows/Runner/Generated Files/
 
+# Windows Flutter generated files for this app (under mobile/)
+/mobile/windows/flutter/generated_plugins.cmake
+/mobile/windows/flutter/generated_plugin_registrant.cc
+/mobile/windows/flutter/generated_plugin_registrant.h
+/mobile/windows/runner/GeneratedPluginRegistrant.*
+/mobile/windows/CMakeLists.txt.user
+/mobile/windows/Runner/Debug/
+/mobile/windows/Runner/Release/
+/mobile/windows/Runner/Generated Files/
+
 # Web builds
 /build/web/
 
