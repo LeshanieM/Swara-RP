@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:record/record.dart';
 import 'package:swara/core/theme/app_theme.dart';
 import 'package:swara/components/component4/widgets/c4_header.dart';
 
@@ -17,6 +20,9 @@ class _SpeechRecordingScreenState extends State<SpeechRecordingScreen> with Sing
   RecordingState _state = RecordingState.initial;
   int _seconds = 0;
   Timer? _timer;
+  final AudioRecorder _recorder = AudioRecorder();
+  bool _isBusy = false;
+  String? _errorMessage;
   late AnimationController _pulseController;
 
   @override
@@ -31,51 +37,78 @@ class _SpeechRecordingScreenState extends State<SpeechRecordingScreen> with Sing
   @override
   void dispose() {
     _timer?.cancel();
+    _recorder.dispose();
     _pulseController.dispose();
     super.dispose();
   }
 
-  void _startRecording() {
-    Future.microtask(() {
-      if (mounted) {
-        setState(() {
-          _state = RecordingState.recording;
-        });
-      }
+  Future<void> _startRecording() async {
+    setState(() {
+      _isBusy = true;
+      _errorMessage = null;
     });
+    try {
+      if (!await _recorder.hasPermission()) {
+        throw Exception('Microphone permission is required to record.');
+      }
+      final path = kIsWeb
+          ? 'swara_recording.m4a'
+          : '${(await getTemporaryDirectory()).path}/swara_${DateTime.now().millisecondsSinceEpoch}.m4a';
+      await _recorder.start(
+        const RecordConfig(encoder: AudioEncoder.aacLc),
+        path: path,
+      );
+      if (!mounted) return;
+      setState(() => _state = RecordingState.recording);
+      _startTimer();
+    } catch (error) {
+      if (mounted) {
+        setState(() => _errorMessage = 'Recording could not start: $error');
+      }
+    } finally {
+      if (mounted) setState(() => _isBusy = false);
+    }
+  }
+
+  void _startTimer() {
+    _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) return;
       setState(() {
         _seconds++;
       });
     });
   }
 
-  void _pauseRecording() {
-    Future.microtask(() {
-      if (mounted) {
-        setState(() {
-          _state = RecordingState.paused;
-        });
-      }
-    });
+  Future<void> _pauseRecording() async {
     _timer?.cancel();
+    await _recorder.pause();
+    if (mounted) setState(() => _state = RecordingState.paused);
   }
 
-  void _stopRecording() {
+  Future<void> _resumeRecording() async {
+    await _recorder.resume();
+    if (!mounted) return;
+    setState(() => _state = RecordingState.recording);
+    _startTimer();
+  }
+
+  Future<void> _stopRecording() async {
     _timer?.cancel();
-    Future.microtask(() {
+    setState(() => _isBusy = true);
+    try {
+      final recordingPath = await _recorder.stop();
+      if (!mounted) return;
+      setState(() => _state = RecordingState.completed);
+      await Future.delayed(const Duration(milliseconds: 500));
       if (mounted) {
-        setState(() {
-          _state = RecordingState.completed;
-        });
-        // Automatically navigate to processing screen as requested
-        Future.delayed(const Duration(milliseconds: 500), () {
-          if (mounted) {
-            context.push('/c4/speech_processing');
-          }
-        });
+        context.push('/c4/speech_processing', extra: recordingPath);
       }
-    });
+    } catch (error) {
+      if (mounted) setState(() => _errorMessage = 'Recording could not be saved: $error');
+    } finally {
+      if (mounted) setState(() => _isBusy = false);
+    }
   }
 
   String _formatTime(int seconds) {
@@ -122,7 +155,13 @@ class _SpeechRecordingScreenState extends State<SpeechRecordingScreen> with Sing
                       const SizedBox(height: 24),
                     ],
                     Text(
-                      _state == RecordingState.initial ? 'Tap to Start' : (_state == RecordingState.completed ? 'Done' : 'Recording...'),
+                      _state == RecordingState.initial
+                          ? 'Tap to Start'
+                          : (_state == RecordingState.completed
+                              ? 'Done'
+                              : (_state == RecordingState.paused
+                                  ? 'Recording paused'
+                                  : 'Recording your voice...')),
                       style: AppTextStyles.titleLarge,
                     ),
                     const SizedBox(height: 8),
@@ -131,9 +170,17 @@ class _SpeechRecordingScreenState extends State<SpeechRecordingScreen> with Sing
                       style: AppTextStyles.heading1.copyWith(color: _state == RecordingState.recording ? AppColors.error : AppColors.primaryDeep),
                     ),
                     const SizedBox(height: 48),
+                    if (_errorMessage != null) ...[
+                      Text(
+                        _errorMessage!,
+                        style: AppTextStyles.bodySmall.copyWith(color: AppColors.error),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 16),
+                    ],
                     if (_state == RecordingState.initial)
                       GestureDetector(
-                        onTap: _startRecording,
+                        onTap: _isBusy ? null : _startRecording,
                         child: Container(
                           width: 96,
                           height: 96,
@@ -144,7 +191,12 @@ class _SpeechRecordingScreenState extends State<SpeechRecordingScreen> with Sing
                               BoxShadow(color: AppColors.error, blurRadius: 20, spreadRadius: 2),
                             ],
                           ),
-                          child: const Icon(Icons.mic, color: AppColors.white, size: 48),
+                          child: _isBusy
+                              ? const Padding(
+                                  padding: EdgeInsets.all(28),
+                                  child: CircularProgressIndicator(color: AppColors.white),
+                                )
+                              : const Icon(Icons.mic, color: AppColors.white, size: 48),
                         ),
                       )
                     else if (_state == RecordingState.recording || _state == RecordingState.paused)
@@ -152,12 +204,16 @@ class _SpeechRecordingScreenState extends State<SpeechRecordingScreen> with Sing
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           IconButton(
-                            onPressed: _state == RecordingState.recording ? _pauseRecording : _startRecording,
+                            onPressed: _isBusy
+                                ? null
+                                : (_state == RecordingState.recording
+                                    ? _pauseRecording
+                                    : _resumeRecording),
                             icon: Icon(_state == RecordingState.recording ? Icons.pause_circle_filled : Icons.play_circle_fill, size: 64, color: AppColors.warning),
                           ),
                           const SizedBox(width: 32),
                           IconButton(
-                            onPressed: _stopRecording,
+                            onPressed: _isBusy ? null : _stopRecording,
                             icon: const Icon(Icons.stop_circle, size: 64, color: AppColors.error),
                           ),
                         ],
