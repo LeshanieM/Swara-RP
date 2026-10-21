@@ -113,6 +113,49 @@ class _ItemPicture extends StatelessWidget {
 }
 
 /// "Skip this activity": the server records it as skipped (P = 0, low engagement), which the recommender learns from.
+/// Picture description is restricted to the dedicated PD image set.
+class _PictureDescriptionImage extends StatelessWidget {
+  final String? asset;
+  final double height;
+  const _PictureDescriptionImage({required this.asset, this.height = 220});
+
+  static const _fallback = 'assets/images/component3/items/PD-E-01.png';
+  static const _pdAssets = <String>{
+    _fallback,
+    'assets/images/component3/items/PD-E-02.png',
+    'assets/images/component3/items/PD-E-03.png',
+    'assets/images/component3/items/PD-E-04.png',
+    'assets/images/component3/items/PD-M-01.png',
+    'assets/images/component3/items/PD-M-02.png',
+    'assets/images/component3/items/PD-M-03.png',
+    'assets/images/component3/items/PD-M-04.png',
+    'assets/images/component3/items/PD-D-01.png',
+    'assets/images/component3/items/PD-D-02.png',
+    'assets/images/component3/items/PD-D-03.png',
+    'assets/images/component3/items/PD-D-04.png',
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    final image = _pdAssets.contains(asset) ? asset! : _fallback;
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(18),
+      child: Image.asset(
+        image,
+        height: height,
+        width: double.infinity,
+        fit: BoxFit.contain,
+        errorBuilder: (_, __, ___) => Container(
+          height: height,
+          alignment: Alignment.center,
+          color: Colors.white,
+          child: const Text('Picture unavailable'),
+        ),
+      ),
+    );
+  }
+}
+
 class _SkipActivityButton extends StatelessWidget {
   const _SkipActivityButton();
 

@@ -835,8 +835,8 @@
    "contentKind": "picture",
    "contentRef": "assets/c3/pd/PD-E-01",
    "prompt": {
-    "en": "A child flying a kite",
-    "si": "සරුංගලයක් යවන ළමයෙක්"
+    "en": "A mother helps her child get ready for school.",
+    "si": "පාසල් යාමට මව දරුවාට උදව් කරයි."
    },
    "targets": 3,
    "slpApproved": true,
@@ -844,9 +844,9 @@
    "image": "assets/images/component3/items/PD-E-01.png",
    "keywords": {
     "si": [
-     "සරුංගලය",
-     "ළමයා",
-     "අහස"
+     "අම්මා",
+     "බෑගය",
+     "පොත්"
     ]
    }
   },
@@ -858,8 +858,8 @@
    "contentKind": "picture",
    "contentRef": "assets/c3/pd/PD-E-02",
    "prompt": {
-    "en": "A dog in the garden",
-    "si": "වත්තේ ඉන්න බල්ලා"
+    "en": "Children head to school as a bus and cyclist pass.",
+    "si": "බස් රථයක් සහ බයිසිකලයක් අසලින් යද්දී ළමයි පාසලට යති."
    },
    "targets": 3,
    "slpApproved": true,
@@ -867,9 +867,9 @@
    "image": "assets/images/component3/items/PD-E-02.png",
    "keywords": {
     "si": [
-     "බල්ලා",
-     "වත්ත",
-     "මල්"
+     "බස්",
+     "ළමයි",
+     "බයිසිකලය"
     ]
    }
   },
@@ -881,8 +881,8 @@
    "contentKind": "picture",
    "contentRef": "assets/c3/pd/PD-M-01",
    "prompt": {
-    "en": "A family at the beach",
-    "si": "මුහුදු වෙරළේ පවුලක්"
+    "en": "Children play together at the beach.",
+    "si": "ළමයි වෙරළේ එකට සෙල්ලම් කරති."
    },
    "targets": 4,
    "slpApproved": true,
@@ -892,8 +892,8 @@
     "si": [
      "මුහුද",
      "වෙරළ",
-     "රළ",
-     "පවුල"
+     "බෝලය",
+     "වැලි"
     ]
    }
   },
@@ -905,8 +905,8 @@
    "contentKind": "picture",
    "contentRef": "assets/c3/pd/PD-M-02",
    "prompt": {
-    "en": "Children at the market",
-    "si": "පොළේ ළමයි"
+    "en": "A family spends time reading and playing at home.",
+    "si": "පවුලේ අය ගෙදරදී කියවමින් සහ සෙල්ලම් කරමින් කාලය ගත කරති."
    },
    "targets": 4,
    "slpApproved": true,
@@ -914,10 +914,10 @@
    "image": "assets/images/component3/items/PD-M-02.png",
    "keywords": {
     "si": [
-     "පොළ",
-     "එළවළු",
-     "පලතුරු",
-     "ළමයි"
+     "පවුල",
+     "පොත",
+     "ළමයි",
+     "සෙල්ලම්"
     ]
    }
   },
@@ -929,8 +929,8 @@
    "contentKind": "picture",
    "contentRef": "assets/c3/pd/PD-D-01",
    "prompt": {
-    "en": "A busy railway station",
-    "si": "කාර්යබහුල දුම්රිය ස්ථානය"
+    "en": "Passengers wait at a busy railway station.",
+    "si": "කාර්යබහුල දුම්රිය ස්ථානයක මගීන් බලා සිටිති."
    },
    "targets": 5,
    "slpApproved": true,
@@ -939,7 +939,7 @@
    "keywords": {
     "si": [
      "දුම්රිය",
-     "මිනිස්සු",
+     "මගීන්",
      "වේදිකාව",
      "බෑග්",
      "ඔරලෝසුව"
@@ -954,8 +954,8 @@
    "contentKind": "picture",
    "contentRef": "assets/c3/pd/PD-D-02",
    "prompt": {
-    "en": "A village festival",
-    "si": "ගමේ උත්සවය"
+    "en": "Families celebrate Vesak at a temple with lanterns and lights.",
+    "si": "පහන් සහ වෙසක් කූඩු සමඟ පවුල් පන්සලේ වෙසක් සමරති."
    },
    "targets": 5,
    "slpApproved": true,
@@ -963,11 +963,11 @@
    "image": "assets/images/component3/items/PD-D-02.png",
    "keywords": {
     "si": [
-     "උත්සවය",
+     "පන්සල",
+     "වෙසක්",
+     "කූඩු",
      "පහන්",
-     "අලියා",
-     "බෙර",
-     "මිනිස්සු"
+     "ළමයි"
     ]
    }
   },
@@ -979,16 +979,16 @@
    "contentKind": "picture",
    "contentRef": "assets/c3/pi/PD-E-03",
    "prompt": {
-    "en": "A boy playing cricket",
-    "si": "ක්‍රිකට් ගහන පිරිමි ළමයෙක්"
+    "en": "Children plant flowers together in a garden.",
+    "si": "ළමයි වත්තක එකට මල් පැළ කරති."
    },
    "targets": 3,
    "image": "assets/images/component3/items/PD-E-03.png",
    "keywords": {
     "si": [
-     "ක්‍රිකට්",
-     "පන්දුව",
-     "පිත්ත"
+     "ළමයි",
+     "මල්",
+     "පැළය"
     ]
    },
    "slpApproved": true,
@@ -1002,16 +1002,16 @@
    "contentKind": "picture",
    "contentRef": "assets/c3/pi/PD-E-04",
    "prompt": {
-    "en": "A girl reading in a library",
-    "si": "පුස්තකාලයේ පොතක් කියවන ගැහැණු ළමයෙක්"
+    "en": "Children play in a park after the rain.",
+    "si": "වැස්සෙන් පසු ළමයි උද්‍යානයක සෙල්ලම් කරති."
    },
    "targets": 3,
    "image": "assets/images/component3/items/PD-E-04.png",
    "keywords": {
     "si": [
-     "පොත",
-     "පුස්තකාලය",
-     "කියවනවා"
+     "දේදුන්න",
+     "බයිසිකලය",
+     "පන්දුව"
     ]
    },
    "slpApproved": true,
@@ -1025,17 +1025,17 @@
    "contentKind": "picture",
    "contentRef": "assets/c3/pi/PD-M-03",
    "prompt": {
-    "en": "A school science exhibition",
-    "si": "පාසලේ විද්‍යා ප්‍රදර්ශනයක්"
+    "en": "Children play in the rain near their homes.",
+    "si": "ළමයි තම නිවෙස් අසල වැස්සේ සෙල්ලම් කරති."
    },
    "targets": 4,
    "image": "assets/images/component3/items/PD-M-03.png",
    "keywords": {
     "si": [
-     "විද්‍යා",
-     "ප්‍රදර්ශනය",
-     "ශිෂ්‍යයෝ",
-     "ගුරුවරයා"
+     "වැස්ස",
+     "කුඩය",
+     "ළමයි",
+     "වතුර"
     ]
    },
    "slpApproved": true,
@@ -1049,17 +1049,17 @@
    "contentKind": "picture",
    "contentRef": "assets/c3/pi/PD-M-04",
    "prompt": {
-    "en": "A rainy day at the bus stop",
-    "si": "බස් නැවතුමේ වැසි දවසක්"
+    "en": "Children play games at a park playground.",
+    "si": "ළමයි උද්‍යානයේ ක්‍රීඩා පිටියේ සෙල්ලම් කරති."
    },
    "targets": 4,
    "image": "assets/images/component3/items/PD-M-04.png",
    "keywords": {
     "si": [
-     "වැස්ස",
-     "බස්",
-     "කුඩය",
-     "මිනිස්සු"
+     "ළමයි",
+     "පන්දුව",
+     "බයිසිකලය",
+     "ස්ලයිඩය"
     ]
    },
    "slpApproved": true,
@@ -1073,18 +1073,18 @@
    "contentKind": "picture",
    "contentRef": "assets/c3/pi/PD-D-03",
    "prompt": {
-    "en": "A tea estate in the hills",
-    "si": "කඳුකරයේ තේ වත්තක්"
+    "en": "A girl and an adult plant and water flowers in a garden.",
+    "si": "ගැහැණු ළමයෙක් සහ වැඩිහිටියෙක් වත්තක මල් පැළ කර වතුර දමති."
    },
    "targets": 5,
    "image": "assets/images/component3/items/PD-D-03.png",
    "keywords": {
     "si": [
-     "තේ",
-     "කඳු",
-     "දළු",
-     "වත්ත",
-     "මීදුම"
+     "ළමයි",
+     "ගස",
+     "මල්",
+     "වතුර",
+     "වත්ත"
     ]
    },
    "slpApproved": true,
@@ -1098,18 +1098,18 @@
    "contentKind": "picture",
    "contentRef": "assets/c3/pi/PD-D-04",
    "prompt": {
-    "en": "A cricket match at a stadium",
-    "si": "ක්‍රීඩාංගණයේ ක්‍රිකට් තරඟයක්"
+    "en": "People shop for fresh produce at a market.",
+    "si": "මිනිසුන් වෙළඳපොළක නැවුම් එළවළු සහ පලතුරු මිලදී ගනිති."
    },
    "targets": 5,
    "image": "assets/images/component3/items/PD-D-04.png",
    "keywords": {
     "si": [
-     "තරඟය",
-     "ක්‍රීඩාංගණය",
-     "ප්‍රේක්ෂකයෝ",
-     "පිත්ත",
-     "පන්දුව"
+     "පොළ",
+     "එළවළු",
+     "පලතුරු",
+     "වෙළෙන්දා",
+     "ගැනුම්කරුවෝ"
     ]
    },
    "slpApproved": true,
