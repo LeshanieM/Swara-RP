@@ -22,7 +22,7 @@ class _EngagementState extends State<_Engagement> {
 
   Future<void> _loadSessions() async {
     if (mounted) setState(() => _isLoading = true);
-    final sessions = await TherapyApiService.getTherapyHistory();
+    final sessions = await _C3Session.history();
     if (!mounted) return;
     setState(() {
       _sessions = sessions;
@@ -63,11 +63,14 @@ class _EngagementState extends State<_Engagement> {
       final total = _number(summary['activitiesTotal']);
       final score = _number(summary['score']);
       final scoreOutOf = _number(summary['scoreOutOf']);
-      final engagement = total > 0
-          ? (completed / total).clamp(0.0, 1.0)
-          : scoreOutOf > 0
-              ? (score / scoreOutOf).clamp(0.0, 1.0)
-              : null;
+      // The API's mean engagement when it is there, otherwise the old completion share.
+      final engagement = summary['engagement'] is num
+          ? (summary['engagement'] as num).toDouble().clamp(0.0, 1.0)
+          : total > 0
+              ? (completed / total).clamp(0.0, 1.0)
+              : scoreOutOf > 0
+                  ? (score / scoreOutOf).clamp(0.0, 1.0)
+                  : null;
       if (engagement == null) continue;
 
       days[index].add(
