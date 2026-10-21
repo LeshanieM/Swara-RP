@@ -134,6 +134,9 @@ class _TherapyJourneyShellState extends State<_TherapyJourneyShell> {
 
   @override
   Widget build(BuildContext context) {
+    // Therapy uses pushed routes for its internal screens. Only the visible route
+    // may mount the camera's texture/HTML video surface.
+    final isCurrentRoute = ModalRoute.of(context)?.isCurrent ?? true;
     return ValueListenableBuilder<_AppTheme>(
       valueListenable: _therapyTheme,
       builder: (context, theme, _) => _InheritedTheme(
@@ -146,12 +149,14 @@ class _TherapyJourneyShellState extends State<_TherapyJourneyShell> {
             onPointerDown: (_) => _C3Session.tapped(),
             child: Stack(fit: StackFit.expand, children: [
               _screenForRoute(),
-              const Positioned(
-                  top: 8, right: 8, child: SafeArea(child: _CameraOnBadge())),
-              const Positioned(
-                  top: 44,
-                  left: 8,
-                  child: SafeArea(child: _CameraPreviewTile())),
+              if (isCurrentRoute)
+                const Positioned(
+                    top: 8, right: 8, child: SafeArea(child: _CameraOnBadge())),
+              if (isCurrentRoute)
+                const Positioned(
+                    top: 44,
+                    left: 8,
+                    child: SafeArea(child: _CameraPreviewTile())),
             ]),
           ),
         ),

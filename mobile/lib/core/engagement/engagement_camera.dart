@@ -1,10 +1,10 @@
-import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' show Size;
 
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 
 import 'camera_features.dart';
@@ -15,8 +15,10 @@ import 'camera_features.dart';
 /// Only per-frame numbers are kept (face visible, head yaw and pitch, eye-open and smile
 /// probabilities); frames are never stored or sent. [stop] returns the activity's
 /// 10-second window features for the server's engagement model.
-class EngagementCamera {
-  EngagementCamera._();
+class EngagementCamera with WidgetsBindingObserver {
+  EngagementCamera._() {
+    WidgetsBinding.instance.addObserver(this);
+  }
   static final instance = EngagementCamera._();
 
   /// Android and iOS support on-device features; web supports preview only.
@@ -37,7 +39,6 @@ class EngagementCamera {
 
   static const _frameInterval =
       Duration(milliseconds: 200); // about 5 frames a second, as in training
-  static const _maxRun = Duration(minutes: 10);
   CameraController? _controller;
   CameraDescription? _camera;
   FaceDetector? _detector;
@@ -45,14 +46,18 @@ class EngagementCamera {
   DateTime? _startedAt;
   DateTime _lastFrame = DateTime.fromMillisecondsSinceEpoch(0);
   bool _busy = false;
-  Timer? _limit;
   Future<void>? _starting;
+  Future<void>? _lifecycleTask;
+  bool _monitoring = false;
+  bool _activityActive = false;
+  Duration _activityElapsed = Duration.zero;
 
   /// Starts reading frames. Returns false if the camera can't be used (unsupported, no permission, no front camera).
-  Future<bool> start() async {
+  Future<bool> start({bool resumeActivity = false}) async {
     if (!isSupported) return false;
+    _monitoring = true;
     if (_controller != null) return true;
-    final starting = _starting ??= _open();
+    final starting = _starting ??= _open(resumeActivity: resumeActivity);
     try {
       await starting;
     } finally {
@@ -61,7 +66,7 @@ class EngagementCamera {
     return _controller != null;
   }
 
-  Future<void> _open() async {
+  Future<void> _open({bool resumeActivity = false}) async {
     try {
       final cameras = await availableCameras();
       final front = cameras
@@ -91,11 +96,13 @@ class EngagementCamera {
       }
       _camera = front;
       _controller = controller;
-      _samples.clear();
-      _startedAt = null; // activity window starts immediately after camera open
+      if (!resumeActivity) {
+        _samples.clear();
+        _activityElapsed = Duration.zero;
+      }
+      _startedAt = resumeActivity && _activityActive ? DateTime.now() : null;
       facePresent.value = null;
       if (!kIsWeb) await controller.startImageStream(_onFrame);
-      _limit = Timer(_maxRun, () => stop());
       running.value = true;
     } catch (error) {
       // Permission refused or camera busy: the activity goes on, scored from its logs.
@@ -106,17 +113,24 @@ class EngagementCamera {
 
   /// Begin a per-activity feature window without reopening the session camera.
   Future<void> beginActivityWindow() async {
+    _activityActive = true;
     if (_controller == null) await start();
     _samples.clear();
+    _activityElapsed = Duration.zero;
     _startedAt = _controller == null ? null : DateTime.now();
   }
 
-  /// End the current activity's feature window while keeping live preview and face checks running.
+  /// End the current activity's feature window; stop() then closes the camera.
   Map<String, Object?>? endActivityWindow() {
-    if (_startedAt == null) return null;
+    if (!_activityActive) return null;
+    if (_startedAt != null) {
+      _activityElapsed += DateTime.now().difference(_startedAt!);
+      _startedAt = null;
+    }
+    _activityActive = false;
     final samples = List<FaceSample>.of(_samples);
     _samples.clear();
-    _startedAt = null;
+    _activityElapsed = Duration.zero;
     return CameraFeatures.payload(samples);
   }
 
@@ -133,7 +147,7 @@ class EngagementCamera {
       facePresent.value = faces.isNotEmpty;
       final activityStartedAt = _startedAt;
       if (activityStartedAt == null) return;
-      final t = now.difference(activityStartedAt);
+      final t = _activityElapsed + now.difference(activityStartedAt);
       if (faces.isEmpty) {
         _samples.add(FaceSample.noFace(t));
         return;
@@ -203,19 +217,63 @@ class EngagementCamera {
 
   /// Stops the camera and returns the activity's `camera` block, or null if no frame was read.
   Future<Map<String, Object?>?> stop() async {
+    _monitoring = false;
     await _starting;
     final payload = endActivityWindow();
     await _close();
     return payload;
   }
 
-  Future<void> _close() async {
-    _limit?.cancel();
-    _limit = null;
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (kIsWeb || !isSupported) return;
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      if (_monitoring) _queueLifecycle(_suspendForLifecycle);
+    } else if (state == AppLifecycleState.resumed && _monitoring) {
+      _queueLifecycle(_resumeAfterLifecycle);
+    }
+  }
+
+  void _queueLifecycle(Future<void> Function() operation) {
+    final previous = _lifecycleTask ?? Future<void>.value();
+    late final Future<void> next;
+    next = previous.then((_) => operation()).whenComplete(() {
+      if (identical(_lifecycleTask, next)) _lifecycleTask = null;
+    });
+    _lifecycleTask = next;
+  }
+
+  Future<void> _suspendForLifecycle() async {
+    await _starting;
+    if (_controller == null) return;
+    if (_activityActive && _startedAt != null) {
+      _activityElapsed += DateTime.now().difference(_startedAt!);
+      _startedAt = null;
+    }
+    await _close(preserveActivity: true);
+  }
+
+  Future<void> _resumeAfterLifecycle() async {
+    await _starting;
+    if (_monitoring && _controller == null) {
+      await start(resumeActivity: true);
+    }
+  }
+
+  Future<void> _close({bool preserveActivity = false}) async {
     final controller = _controller;
     _controller = null;
     _camera = null;
-    _startedAt = null;
+    if (!preserveActivity) {
+      _startedAt = null;
+      _activityActive = false;
+      _activityElapsed = Duration.zero;
+      _samples.clear();
+    } else {
+      _startedAt = null;
+    }
     running.value = false;
     facePresent.value = null;
     try {
@@ -227,6 +285,5 @@ class EngagementCamera {
     }
     await _detector?.close();
     _detector = null;
-    _samples.clear();
   }
 }

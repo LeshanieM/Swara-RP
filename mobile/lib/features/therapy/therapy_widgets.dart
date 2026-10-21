@@ -1395,8 +1395,30 @@ class _CameraPreviewTileState extends State<_CameraPreviewTile> {
         valueListenable: _running,
         builder: (context, on, _) {
           final controller = EngagementCamera.instance.previewController;
+          final activityStillOpen = _C3Session.cameraOn &&
+              _C3Session.current != null &&
+              _C3Session.startedAt != null &&
+              !_C3Session.awaitingResult;
+          if (!activityStillOpen) return const SizedBox.shrink();
           if (!on || controller == null || !controller.value.isInitialized) {
-            return const SizedBox.shrink();
+            return Container(
+              width: 104,
+              height: 138,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.white, width: 2),
+              ),
+              alignment: Alignment.center,
+              child: const Padding(
+                padding: EdgeInsets.all(8),
+                child: Text(
+                  'Reconnecting camera…',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white, fontSize: 11),
+                ),
+              ),
+            );
           }
           return Semantics(
             label:

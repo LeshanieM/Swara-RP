@@ -290,6 +290,7 @@ class _C3Session {
     _readAdvice(res);
     awaitingResult = false;
     current = null;
+    startedAt = null;
     return res;
   }
 
@@ -366,6 +367,8 @@ class _C3Session {
         : null;
     current = null;
     awaitingResult = false;
+    startedAt = null;
+    cameraOn = false;
     return res;
   }
 
