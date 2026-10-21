@@ -9,6 +9,7 @@ scipy==1.14.1
 librosa==0.10.2.post1
 soundfile==0.12.1
 soxr==0.5.0.post1
+av==14.1.0  # decodes M4A / AAC phone recordings (wheels bundle FFmpeg)
 
 # Optional, only for C1_DETECTOR=xlsr (not installed by default):
 #   torch, transformers, joblib, scikit-learn
