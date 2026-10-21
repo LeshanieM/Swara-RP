@@ -1,0 +1,14 @@
+# C4 language service. Python 3.11.
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+python-multipart==0.0.20
+pydantic==2.10.4
+pydantic-settings==2.7.1
+numpy==2.1.3
+soundfile==0.12.1
+soxr==0.5.0.post1
+jiwer==3.0.5
+
+# ASR engines (CPU). They load lazily on first use; the text endpoints work without them.
+torch==2.5.1
+transformers==4.47.1
