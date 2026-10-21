@@ -1,0 +1,139 @@
+{
+ "_note": "Shared check for the C3 engagement camera features: vision-service/app/engagement/features.py and mobile/lib/core/engagement/camera_features.dart must both turn each case's samples into its expected numbers (to 1e-6). Samples are per-frame face readings; no image data.",
+ "features": [
+  "facePresentRatio",
+  "yawStdDeg",
+  "pitchStdDeg",
+  "yawAbsMeanDeg",
+  "pitchAbsMeanDeg",
+  "lookAwayRatio",
+  "eyeOpenMean",
+  "eyesClosedRatio",
+  "smileMean"
+ ],
+ "cases": [
+  {
+   "name": "mixed window: one look-away, one no-face frame, one closed-eyes frame, one frame without classification",
+   "samples": [
+    {
+     "face": true,
+     "yaw": 2.0,
+     "pitch": -3.5,
+     "eyeOpen": 0.92,
+     "smile": 0.1
+    },
+    {
+     "face": true,
+     "yaw": 4.5,
+     "pitch": -1.0,
+     "eyeOpen": 0.88,
+     "smile": 0.05
+    },
+    {
+     "face": false
+    },
+    {
+     "face": true,
+     "yaw": 31.0,
+     "pitch": 2.0,
+     "eyeOpen": 0.8,
+     "smile": 0.0
+    },
+    {
+     "face": true,
+     "yaw": -6.0,
+     "pitch": 22.5,
+     "eyeOpen": 0.15,
+     "smile": 0.3
+    },
+    {
+     "face": true,
+     "yaw": 1.0,
+     "pitch": 0.5,
+     "eyeOpen": null,
+     "smile": null
+    },
+    {
+     "face": true,
+     "yaw": -3.0,
+     "pitch": -4.0,
+     "eyeOpen": 0.95,
+     "smile": 0.6
+    },
+    {
+     "face": true,
+     "yaw": 0.0,
+     "pitch": 1.0,
+     "eyeOpen": 0.9,
+     "smile": 0.2
+    }
+   ],
+   "expected": {
+    "facePresentRatio": 0.875,
+    "yawStdDeg": 11.382496,
+    "pitchStdDeg": 8.42615,
+    "yawAbsMeanDeg": 6.785714,
+    "pitchAbsMeanDeg": 4.928571,
+    "lookAwayRatio": 0.285714,
+    "eyeOpenMean": 0.766667,
+    "eyesClosedRatio": 0.166667,
+    "smileMean": 0.208333
+   }
+  },
+  {
+   "name": "no face in the window",
+   "samples": [
+    {
+     "face": false
+    },
+    {
+     "face": false
+    },
+    {
+     "face": false
+    }
+   ],
+   "expected": {
+    "facePresentRatio": 0.0,
+    "yawStdDeg": null,
+    "pitchStdDeg": null,
+    "yawAbsMeanDeg": null,
+    "pitchAbsMeanDeg": null,
+    "lookAwayRatio": null,
+    "eyeOpenMean": null,
+    "eyesClosedRatio": null,
+    "smileMean": null
+   }
+  },
+  {
+   "name": "face in every frame, looking straight",
+   "samples": [
+    {
+     "face": true,
+     "yaw": 0.0,
+     "pitch": 0.0,
+     "eyeOpen": 1.0,
+     "smile": 0.0
+    },
+    {
+     "face": true,
+     "yaw": 0.0,
+     "pitch": 0.0,
+     "eyeOpen": 1.0,
+     "smile": 0.0
+    }
+   ],
+   "expected": {
+    "facePresentRatio": 1.0,
+    "yawStdDeg": 0.0,
+    "pitchStdDeg": 0.0,
+    "yawAbsMeanDeg": 0.0,
+    "pitchAbsMeanDeg": 0.0,
+    "lookAwayRatio": 0.0,
+    "eyeOpenMean": 1.0,
+    "eyesClosedRatio": 0.0,
+    "smileMean": 0.0
+   }
+  }
+ ]
+}
