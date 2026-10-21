@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../constants/app_constants.dart';
 import '../storage/storage_service.dart';
+import 'parent_mode.dart';
 
 final apiClientProvider = Provider<ApiClient>((ref) {
   return ApiClient();
@@ -28,6 +29,10 @@ class ApiClient {
           if (token != null) {
             options.headers['Authorization'] = 'Bearer $token';
           }
+          final parentToken = ParentMode.token;
+          if (parentToken != null) {
+            options.headers['X-Parent-Token'] = parentToken;
+          }
           return handler.next(options);
         },
         onError: (error, handler) {
@@ -51,6 +56,10 @@ class ApiClient {
     return _dio.put(path, data: data);
   }
 
+  Future<Response> patch(String path, {dynamic data}) {
+    return _dio.patch(path, data: data);
+  }
+
   Future<Response> delete(String path) {
     return _dio.delete(path);
   }
@@ -65,8 +74,8 @@ class ApiClient {
       data: formData,
       options: Options(
         contentType: 'multipart/form-data',
-        // Large videos can take several minutes to reach Node and FastAPI on a
-        // slower connection. Analysis itself is queued and polled separately.
+        // Large videos can take several minutes to reach the API on a slower
+        // connection. Analysis itself is queued and polled separately.
         receiveTimeout: const Duration(minutes: 15),
       ),
       onSendProgress: onSendProgress,

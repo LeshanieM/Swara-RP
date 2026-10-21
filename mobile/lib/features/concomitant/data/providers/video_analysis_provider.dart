@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swara/core/constants/app_constants.dart';
 import 'package:swara/core/network/api_client.dart';
+import 'package:swara/core/network/api_exception.dart';
 import 'package:swara/core/storage/storage_service.dart';
 import 'package:swara/features/concomitant/data/models/video_analysis_models.dart';
 
@@ -31,8 +32,8 @@ class VideoAnalysisException implements Exception {
 
   factory VideoAnalysisException.fromDio(DioException e) {
     final status = e.response?.statusCode;
-    final data = e.response?.data;
-    final serverMsg = data is Map && data['message'] != null ? data['message'].toString() : null;
+    final api = ApiException.fromDio(e);
+    final serverMsg = api.isNetwork ? null : api.message;
 
     if (status == null) {
       if (e.type == DioExceptionType.sendTimeout ||
@@ -45,14 +46,14 @@ class VideoAnalysisException implements Exception {
       }
       return const VideoAnalysisException(VideoAnalysisErrorKind.connection, connectionMessage);
     }
-    if (status == 401 || status == 403) {
+    if (status == 401 || (status == 403 && !api.needsParentMode)) {
       final demo = StorageService.isDemoMode();
       return VideoAnalysisException(
         VideoAnalysisErrorKind.unauthorized,
         demo
-            ? 'Video analysis needs a real signed-in account. Demo mode has no backend session - '
+            ? 'Video analysis needs a real signed-in account. Demo mode has no server session - '
                 'sign out and log in with a registered account.'
-            : 'Your session is not authorised for this analysis. Please sign in again.',
+            : (status == 401 ? 'Your session has expired. Please sign in again.' : api.message),
         statusCode: status,
         serverMessage: serverMsg,
       );
@@ -60,8 +61,7 @@ class VideoAnalysisException implements Exception {
     if (status == 404) {
       return VideoAnalysisException(
         VideoAnalysisErrorKind.notFound,
-        'This analysis was not found. The analysis service may have been restarted - '
-        'please start a new analysis.',
+        'This analysis was not found. It may have been deleted - please start a new analysis.',
         statusCode: status,
         serverMessage: serverMsg,
       );
@@ -69,8 +69,7 @@ class VideoAnalysisException implements Exception {
     if (status == 502 || status == 503 || status == 504) {
       return VideoAnalysisException(
         VideoAnalysisErrorKind.server,
-        'The server could not reach the computer-vision service. '
-        'Make sure the FastAPI service is running.',
+        serverMsg ?? 'The server could not reach the vision service. Make sure it is running.',
         statusCode: status,
         serverMessage: serverMsg,
       );
@@ -102,19 +101,23 @@ class VideoAnalysisException implements Exception {
 }
 
 // ---------------------------------------------------------------------------
-// Service (Flutter -> Node -> FastAPI)
+// Service (Swara API /api/c2)
 // ---------------------------------------------------------------------------
 
 class VideoAnalysisService {
   final ApiClient _api;
   VideoAnalysisService(this._api);
 
-  static const _base = '/api/concomitant/video-analysis';
+  static const _base = '/api/c2/analyses';
 
-  /// Uploads the ONE selected video and returns the analysis id.
+  /// Uploads the ONE selected video as a parent upload (path B) and returns the analysis id.
+  /// The API extracts the audio track and runs it through C1 to find the stutter moments,
+  /// so ages 11–14 need the reading passage the child read in the video.
   Future<String> start({
     required String childId,
+    required int age,
     required SelectedVideo video,
+    String? passageId,
     void Function(int sent, int total)? onProgress,
   }) async {
     try {
@@ -131,8 +134,11 @@ class VideoAnalysisService {
       }
       final form = FormData.fromMap({
         'childId': childId,
-        'technologies': 'mediapipe',
-        'generateOverlay': 'false',
+        'age': age,
+        'inputPath': 'parent_upload',
+        'videoConsent': 'true',
+        'language': 'si',
+        if (passageId != null) 'passageId': passageId,
         'video': file,
       });
       final res = await _api.postMultipart(_base, form, onSendProgress: onProgress);
@@ -147,35 +153,54 @@ class VideoAnalysisService {
     }
   }
 
-  Future<AnalysisStatus> status(String id) async {
+  /// Uploads the face video filmed during a C1 task (path A). C2 uses that C1 assessment's stutter moments,
+  /// waiting for it if its analysis is still running, so no second C1 assessment is made.
+  Future<String> startInTask({
+    required String childId,
+    required int age,
+    required String c1AssessmentId,
+    required String videoPath,
+  }) async {
+    try {
+      final form = FormData.fromMap({
+        'childId': childId,
+        'age': age,
+        'inputPath': 'in_task_camera',
+        'videoConsent': 'true',
+        'c1AssessmentId': c1AssessmentId,
+        'video': await MultipartFile.fromFile(videoPath, filename: 'task.mp4'),
+      });
+      final res = await _api.postMultipart(_base, form);
+      final id = res.data is Map ? res.data['analysisId'] : null;
+      if (id is! String || id.isEmpty) {
+        throw const VideoAnalysisException(VideoAnalysisErrorKind.server, 'The server did not return an analysis id.');
+      }
+      return id;
+    } on DioException catch (e) {
+      throw VideoAnalysisException.fromDio(e);
+    }
+  }
+
+  /// Status and, once completed, the result (one document).
+  Future<VideoAnalysis> get(String id) async {
     try {
       final res = await _api.get('$_base/$id');
-      return AnalysisStatus.fromJson(res.data);
+      return VideoAnalysis.fromJson(res.data);
     } on DioException catch (e) {
       throw VideoAnalysisException.fromDio(e);
     }
   }
 
-  Future<VideoAnalysisResults> results(String id) async {
+  Future<List<VideoAnalysis>> history(String childId) async {
     try {
-      final res = await _api.get('$_base/$id/results');
-      return VideoAnalysisResults.fromJson(res.data);
+      final res = await _api.get('/api/c2/children/$childId/analyses', queryParameters: {'limit': 10});
+      final items = res.data is Map ? res.data['items'] : null;
+      if (items is! List) return const [];
+      return items.map(VideoAnalysis.fromJson).toList(growable: false);
     } on DioException catch (e) {
       throw VideoAnalysisException.fromDio(e);
     }
   }
-
-  Future<List<VideoAnalysisSummary>> history(String childId) async {
-    try {
-      final res = await _api.get('$_base/history/$childId');
-      final data = res.data;
-      if (data is! List) return const [];
-      return data.map(VideoAnalysisSummary.fromJson).toList(growable: false);
-    } on DioException catch (e) {
-      throw VideoAnalysisException.fromDio(e);
-    }
-  }
-
 }
 
 final videoAnalysisServiceProvider = Provider<VideoAnalysisService>(
@@ -186,7 +211,7 @@ final videoAnalysisServiceProvider = Provider<VideoAnalysisService>(
 // Video selection (one video only)
 // ---------------------------------------------------------------------------
 
-const kAllowedVideoExtensions = ['mp4', 'mov', 'webm', 'avi', 'mkv'];
+const kAllowedVideoExtensions = ['mp4', 'mov', 'm4v', 'webm', 'avi', 'mkv'];
 
 class SelectedVideoState {
   final SelectedVideo? video;
@@ -258,7 +283,7 @@ class VideoAnalysisController extends StateNotifier<VideoAnalysisStartState> {
 
   /// Uploads the selected video and creates the analysis.
   /// Returns the analysis id, or null (with [state].error set) on failure.
-  Future<String?> start({required String childId}) async {
+  Future<String?> start({required String childId, required int age, String? passageId}) async {
     if (state.isUploading) return null;
     final video = _ref.read(selectedVideoProvider).video;
     if (video == null) {
@@ -269,6 +294,8 @@ class VideoAnalysisController extends StateNotifier<VideoAnalysisStartState> {
     try {
       final id = await _ref.read(videoAnalysisServiceProvider).start(
             childId: childId,
+            age: age,
+            passageId: passageId,
             video: video,
             onProgress: (sent, total) {
               if (!mounted || total <= 0) return;
@@ -302,7 +329,7 @@ final videoAnalysisProvider =
 // ---------------------------------------------------------------------------
 
 class StatusPollState {
-  final AnalysisStatus? status;
+  final VideoAnalysis? status;
   final VideoAnalysisException? error;
   final int consecutiveFailures;
   const StatusPollState({this.status, this.error, this.consecutiveFailures = 0});
@@ -323,7 +350,7 @@ class StatusPoller extends StateNotifier<StatusPollState> {
     if (_busy || !mounted) return;
     _busy = true;
     try {
-      final s = await _service.status(analysisId);
+      final s = await _service.get(analysisId);
       if (!mounted) return;
       state = StatusPollState(status: s);
       if (s.isTerminal) _timer?.cancel();
@@ -369,12 +396,11 @@ final videoAnalysisStatusProvider =
 // ---------------------------------------------------------------------------
 
 final videoAnalysisResultsProvider =
-    FutureProvider.autoDispose.family<VideoAnalysisResults, String>((ref, id) {
-  return ref.watch(videoAnalysisServiceProvider).results(id);
+    FutureProvider.autoDispose.family<VideoAnalysis, String>((ref, id) {
+  return ref.watch(videoAnalysisServiceProvider).get(id);
 });
 
 final videoAnalysisHistoryProvider =
-    FutureProvider.autoDispose.family<List<VideoAnalysisSummary>, String>((ref, childId) {
+    FutureProvider.autoDispose.family<List<VideoAnalysis>, String>((ref, childId) {
   return ref.watch(videoAnalysisServiceProvider).history(childId);
 });
-

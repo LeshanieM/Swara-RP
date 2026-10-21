@@ -18,14 +18,17 @@ class AppConstants {
   }
 
   static String get baseUrl =>
-      _baseUrlOverride.isNotEmpty ? _baseUrlOverride : 'http://$_host:5000';
-  static String get aiServiceUrl => 'http://$_host:8000';
+      _baseUrlOverride.isNotEmpty ? _baseUrlOverride : 'http://$_host:5001';
 
   // Storage Keys
   static const String tokenKey = 'auth_token';
   static const String userKey = 'user_data';
   static const String demoModeKey = 'demo_mode';
   static const String c3PreferredThemeKey = 'c3_preferred_theme';
+  // Parent setting: measure C3 engagement with the front camera (off until the ethics amendment covers it).
+  static const String c3CameraEngagementKey = 'c3_camera_engagement';
+  // Parent setting: film the face during the C1 task for C2 (path A). Off until the ethics approval covers video.
+  static const String c2InTaskCameraKey = 'c2_in_task_camera';
 
   // App
   static const String appName = 'Swara';
@@ -53,5 +56,5 @@ class AppConstants {
   // Audio
   static const int maxRecordingSeconds = 120;
   static const int maxFileSizeMb = 50;
-  static const int maxVideoSizeMb = 500; // matches the Node upload limit
+  static const int maxVideoSizeMb = 200; // matches the API's MAX_VIDEO_UPLOAD_MB
 }

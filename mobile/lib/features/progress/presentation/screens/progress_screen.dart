@@ -3,13 +3,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swara/core/theme/app_theme.dart';
 import 'package:swara/features/auth/data/providers/auth_provider.dart';
+import '../../data/providers/progress_provider.dart';
 
+/// The active child's progress; the clinical summary reads each component's summary on the API.
 class ProgressScreen extends ConsumerWidget {
-  final String childId;
-  const ProgressScreen({super.key, required this.childId});
+  const ProgressScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final summary = ref.watch(clinicalSummaryProvider).valueOrNull;
+    final overall = ref.watch(overallProgressProvider).valueOrNull;
+    final (verdictEmoji, verdictSi, verdictEn) = switch (overall?.status) {
+      'improved' => ('🌟', 'ඔයා දියුණු වෙලා!', 'Improved: stuttering is going down'),
+      'needs_attention' => ('💛', 'අපි තව ටිකක් පුහුණු වෙමු', 'Needs attention: stuttering went up lately'),
+      'no_clear_change' => ('🌱', 'ඔයා දිගටම පුහුණු වෙනවා', 'No clear change yet'),
+      'insufficient_data' => ('🌱', 'තව කතා කරමු!', 'Not enough sessions yet to tell'),
+      _ => ('🌱', 'ප්‍රගතිය', 'Progress could not be loaded'),
+    };
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -93,26 +103,32 @@ class ProgressScreen extends ConsumerWidget {
                           color: Colors.black.withOpacity(0.2), blurRadius: 12)
                     ],
                   ),
-                  child: const Row(
+                  // The overall verdict from all four components (GET /api/children/:id/progress).
+                  child: Row(
                     children: [
-                      Text('🌟', style: TextStyle(fontSize: 40)),
-                      SizedBox(width: 16),
+                      Text(verdictEmoji, style: const TextStyle(fontSize: 40)),
+                      const SizedBox(width: 16),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'ඔයා අද වෙනදට වඩා ගොඩක් කතා කළා!',
-                              style: TextStyle(
+                              verdictSi,
+                              style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   color: AppColors.text),
                             ),
                             Text(
-                              'You spoke longer today than last time!',
-                              style: TextStyle(
+                              verdictEn,
+                              style: const TextStyle(
                                   fontSize: 12, color: AppColors.textLight),
                             ),
+                            for (final r in overall?.reasons ?? const <String>[])
+                              Padding(
+                                padding: const EdgeInsets.only(top: 4),
+                                child: Text('• $r', style: const TextStyle(fontSize: 12, color: AppColors.text)),
+                              ),
                           ],
                         ),
                       ),
@@ -120,12 +136,14 @@ class ProgressScreen extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
+                // Earned achievements are bright; the others are greyed until the child earns them.
                 _buildAchievement(
                   'පළමු පියවර',
                   'First Steps',
                   'ඔයා ඔයාගේ පළමු ක්‍රියාකාරකම අවසන් කළා!',
                   '🌟',
                   AppColors.softYellow,
+                  earned: overall?.firstSteps ?? false,
                 ),
                 _buildAchievement(
                   'දින 3 ක අඛණ්ඩ ගමන',
@@ -133,6 +151,7 @@ class ProgressScreen extends ConsumerWidget {
                   'ඔයා දින 3 ක් දිගටම පුහුණු වුණා!',
                   '🔥',
                   AppColors.coralRed,
+                  earned: overall?.threeDayStreak ?? false,
                 ),
                 _buildAchievement(
                   'කතා කරන යාළුවා',
@@ -140,6 +159,7 @@ class ProgressScreen extends ConsumerWidget {
                   'ඔයා කථන ක්‍රියාකාරකම් 5 ක් අවසන් කළා!',
                   '🏆',
                   AppColors.ctaOrange,
+                  earned: overall?.speechBuddy ?? false,
                 ),
                 const SizedBox(height: 32),
                 const Text('සායනික ප්‍රගති සාරාංශය (Clinical Summary)',
@@ -148,7 +168,7 @@ class ProgressScreen extends ConsumerWidget {
                         fontWeight: FontWeight.bold,
                         color: AppColors.text)),
                 const SizedBox(height: 16),
-                _buildComponentsSummary(),
+                _buildComponentsSummary(summary),
                 const SizedBox(height: 32),
                 SizedBox(
                   width: double.infinity,
@@ -186,8 +206,8 @@ class ProgressScreen extends ConsumerWidget {
   }
 
   Widget _buildAchievement(String titleSi, String titleEn, String descSi,
-      String emoji, Color color) {
-    return Container(
+      String emoji, Color color, {bool earned = true}) {
+    return Opacity(opacity: earned ? 1 : 0.4, child: Container(
       margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
@@ -233,10 +253,11 @@ class ProgressScreen extends ConsumerWidget {
           )
         ],
       ),
-    );
+    ));
   }
 
-  Widget _buildComponentsSummary() {
+  Widget _buildComponentsSummary(ClinicalSummary? s) {
+    const loading = '...';
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -249,15 +270,15 @@ class ProgressScreen extends ConsumerWidget {
       ),
       child: Column(
         children: [
-          _buildComponentRow('Component 1', 'Fluency / Stuttering', 'Moderate'),
+          _buildComponentRow('Component 1', 'Fluency / Stuttering', s?.c1 ?? loading),
           const Divider(height: 24),
           _buildComponentRow(
-              'Component 2', 'Temporal movement features', 'Research analysis'),
+              'Component 2', 'Secondary behaviours', s?.c2 ?? loading),
           const Divider(height: 24),
-          _buildComponentRow('Component 3', 'Therapy Activity', 'Storytelling'),
+          _buildComponentRow('Component 3', 'Therapy Activity', s?.c3 ?? loading),
           const Divider(height: 24),
           _buildComponentRow('Component 4', 'Language Characteristics',
-              'Increasing lexical diversity'),
+              s?.c4 ?? loading),
         ],
       ),
     );

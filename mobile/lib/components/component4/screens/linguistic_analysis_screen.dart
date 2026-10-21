@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swara/core/theme/app_theme.dart';
 import 'package:swara/components/component4/widgets/c4_header.dart';
+import 'package:swara/components/component4/services/c4_flow.dart';
 
 class LinguisticAnalysisScreen extends StatefulWidget {
   const LinguisticAnalysisScreen({super.key});
@@ -50,12 +51,15 @@ class _LinguisticAnalysisScreenState extends State<LinguisticAnalysisScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final v = C4Flow.view;
+    final duration = fmtClock(v.durationSec);
+    final mlu = v.mlu == null ? '—' : v.mlu!.toStringAsFixed(1);
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
-            const C4Header(currentStep: 11, totalSteps: 12),
+            const C4Header(currentStep: 11, totalSteps: 14),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(24.0),
@@ -93,7 +97,7 @@ class _LinguisticAnalysisScreenState extends State<LinguisticAnalysisScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text('Sinhala Speech', style: AppTextStyles.titleMedium),
-                                Text('01:24', style: AppTextStyles.bodySmall),
+                                Text(duration, style: AppTextStyles.bodySmall),
                               ],
                             ),
                           ),
@@ -110,15 +114,15 @@ class _LinguisticAnalysisScreenState extends State<LinguisticAnalysisScreen> {
                         subtitle: 'සාමාන්‍ය ප්‍රකාශන දිග',
                         child: Column(
                           children: [
-                            if (_mluStep >= 1) _buildCalcStep('Scanning utterances...', '12 utterances detected'),
-                            if (_mluStep >= 2) _buildCalcStep('Counting words...', '62 total words'),
-                            if (_mluStep >= 3) _buildCalcStep('MLU = Total Words ÷ Number of Utterances', '62 ÷ 12'),
+                            if (_mluStep >= 1) _buildCalcStep('Scanning utterances...', '${v.utterances} utterances detected'),
+                            if (_mluStep >= 2) _buildCalcStep('Counting words...', '${v.totalWords} total words'),
+                            if (_mluStep >= 3) _buildCalcStep('MLU = Total Words ÷ Number of Utterances', '${v.totalWords} ÷ ${v.utterances}'),
                             if (_mluStep >= 4)
                               Padding(
                                 padding: const EdgeInsets.only(top: 16.0),
                                 child: Column(
                                   children: [
-                                    Text('5.2', style: AppTextStyles.heading1.copyWith(color: AppColors.primaryDeep, fontSize: 48)),
+                                    Text(mlu, style: AppTextStyles.heading1.copyWith(color: AppColors.primaryDeep, fontSize: 48)),
                                     Text('words / utterance', style: AppTextStyles.bodySmall),
                                   ],
                                 ),
@@ -135,14 +139,14 @@ class _LinguisticAnalysisScreenState extends State<LinguisticAnalysisScreen> {
                         subtitle: 'වෙනස් වචන ගණන',
                         child: Column(
                           children: [
-                            if (_ndwStep >= 1) _buildCalcStep('Extract words from transcript', '62 words'),
-                            if (_ndwStep >= 2) _buildCalcStep('Identify unique words', '37 unique words'),
+                            if (_ndwStep >= 1) _buildCalcStep('Extract words from transcript', '${v.totalWords} words'),
+                            if (_ndwStep >= 2) _buildCalcStep('Identify unique words', '${v.ndw} unique words'),
                             if (_ndwStep >= 3)
                               Padding(
                                 padding: const EdgeInsets.only(top: 16.0),
                                 child: Column(
                                   children: [
-                                    Text('37', style: AppTextStyles.heading1.copyWith(color: AppColors.primaryDeep, fontSize: 48)),
+                                    Text('${v.ndw}', style: AppTextStyles.heading1.copyWith(color: AppColors.primaryDeep, fontSize: 48)),
                                     Text('Different Words', style: AppTextStyles.bodySmall),
                                   ],
                                 ),
@@ -163,11 +167,11 @@ class _LinguisticAnalysisScreenState extends State<LinguisticAnalysisScreen> {
                               children: [
                                 Text('Start: 00:00', style: AppTextStyles.bodySmall),
                                 const Icon(Icons.arrow_forward, size: 16, color: AppColors.textLight),
-                                Text('End: 01:24', style: AppTextStyles.bodySmall),
+                                Text('End: $duration', style: AppTextStyles.bodySmall),
                               ],
                             ),
                             const SizedBox(height: 16),
-                            Text('01:24', style: AppTextStyles.heading1.copyWith(color: AppColors.primaryDeep, fontSize: 32)),
+                            Text(duration, style: AppTextStyles.heading1.copyWith(color: AppColors.primaryDeep, fontSize: 32)),
                             Text('Total speaking response duration', style: AppTextStyles.bodySmall),
                           ],
                         ),
