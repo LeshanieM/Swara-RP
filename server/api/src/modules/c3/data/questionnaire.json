@@ -1,0 +1,21 @@
+{
+  "_note": "Parent-rated engagement questionnaire adapted from PRIME-O (an observer measure; parent rating is an adaptation). Item wording is a placeholder: check PRIME-O permission and wording, and have the Sinhala reviewed, before use.",
+  "version": "c3-questionnaire-0.1",
+  "scale": {
+    "min": 1,
+    "max": 5,
+    "labels": {
+      "en": ["Not at all", "A little", "Somewhat", "Quite a lot", "Very much"],
+      "si": ["කොහෙත්ම නැහැ", "ටිකක්", "යම් තරමකට", "හොඳටම", "ඉතා හොඳින්"]
+    }
+  },
+  "engagedThreshold": 3.5,
+  "items": [
+    { "id": "interest", "text": { "en": "My child was interested in today's activities.", "si": "අද ක්‍රියාකාරකම් ගැන මගේ දරුවා උනන්දුවක් දැක්වූවා." } },
+    { "id": "willing_participation", "text": { "en": "My child took part willingly, without being pushed.", "si": "මගේ දරුවා බලකිරීමකින් තොරව කැමැත්තෙන් සහභාගී වුණා." } },
+    { "id": "enthusiasm", "text": { "en": "My child showed enthusiasm (smiling, wanting more).", "si": "මගේ දරුවා උද්යෝගයක් පෙන්නුවා (හිනාවුණා, තව කරන්න කැමති වුණා)." } },
+    { "id": "staying_involved", "text": { "en": "My child stayed involved until each activity finished.", "si": "හැම ක්‍රියාකාරකමක්ම අවසන් වෙනකම් මගේ දරුවා එයට සම්බන්ධ වී සිටියා." } },
+    { "id": "comfort", "text": { "en": "My child seemed comfortable and relaxed while speaking.", "si": "කතා කරන අතරතුර මගේ දරුවා සුවපහසුවෙන් හා සන්සුන්ව සිටියා." } },
+    { "id": "confidence", "text": { "en": "My child spoke with confidence.", "si": "මගේ දරුවා විශ්වාසයෙන් කතා කළා." } }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "_note": "PLACEHOLDER CONTENT. Passages and picture prompts must be checked by an SLP or teacher before use with children. The app holds the images; imageRef is a hint for the Flutter asset path.",
+  "ageBands": [
+    { "id": "5-10", "minAge": 5, "maxAge": 10, "taskType": "picture_description" },
+    { "id": "11-14", "minAge": 11, "maxAge": 14, "taskType": "reading" }
+  ],
+  "passages": [
+    {
+      "id": "si-reading-village-01",
+      "ageBand": "11-14",
+      "language": "si",
+      "title": "අපේ ගම",
+      "text": "අපේ ගම ලස්සන කඳු අතර පිහිටා තිබේ. උදේට කුරුල්ලන් ගී ගයන හඬ ඇසේ. මගේ මල්ලී සමඟ මම පාසල් යන්නේ පයින්. පාර දෙපස කොළ පාට කුඹුරු තිබේ. ගුරුතුමිය අපට හොඳ කතා කියා දෙයි. පාසල ඇරුණු පසු අපි ගඟ අසල සෙල්ලම් කරමු.",
+      "placeholder": true
+    },
+    {
+      "id": "en-reading-school-01",
+      "ageBand": "11-14",
+      "language": "en",
+      "title": "Walking to school",
+      "text": "Every morning Nimal walks to school with his sister. They cross a small bridge over a quiet river. Sometimes they stop to watch the fish swimming below. Their teacher always smiles when they arrive on time. After school they play cricket with their friends in the garden.",
+      "placeholder": true
+    }
+  ],
+  "pictures": [
+    {
+      "id": "pic-market-01",
+      "ageBand": "5-10",
+      "imageRef": "assets/images/c1/market.png",
+      "prompt": { "si": "මේ පින්තූරයේ ඔබට පේන දේවල් ගැන කියන්න.", "en": "Tell us about what you can see in this picture." },
+      "placeholder": true
+    },
+    {
+      "id": "pic-beach-01",
+      "ageBand": "5-10",
+      "imageRef": "assets/images/c1/beach.png",
+      "prompt": { "si": "මෙම පින්තූරයේ මිනිසුන් කරන්නේ මොනවාද?", "en": "What are the people in this picture doing?" },
+      "placeholder": true
+    }
+  ]
+}

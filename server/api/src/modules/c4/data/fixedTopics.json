@@ -1,0 +1,26 @@
+{
+  "version": "c4-fixed-0.1",
+  "note": "The fixed-topic sequence for H4c (the control condition): every child in a band gets these topics in this order, ignoring their interests. Everyday topics from across the bank, mostly concrete.",
+  "bands": {
+    "5-10": [
+      "5-10.school.02",
+      "5-10.family.03",
+      "5-10.food.02",
+      "5-10.weather-and-rain.01",
+      "5-10.helping-at-home.01",
+      "5-10.vehicles.01",
+      "5-10.friends.03",
+      "5-10.holidays-and-trips.02"
+    ],
+    "11-14": [
+      "11-14.school-life.01",
+      "11-14.travel-and-places.02",
+      "11-14.food-and-cooking.02",
+      "11-14.hobbies-and-crafts.01",
+      "11-14.friends.02",
+      "11-14.inventions.01",
+      "11-14.environment.01",
+      "11-14.future-and-careers.03"
+    ]
+  }
+}

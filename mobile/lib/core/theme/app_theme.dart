@@ -3,43 +3,53 @@ import 'package:google_fonts/google_fonts.dart';
 
 /// Swara design tokens.
 ///
-/// Brand blues are fixed:
-/// - primary `#2563EB`
-/// - primaryDeep `#1E40AF`
-/// - primaryLight `#60A5FA`
+/// Shared Swara Calm Cub palette.
 class AppColors {
   AppColors._();
 
-  // Brand (do not change these values)
-  static const Color primary = Color(0xFF2563EB);
-  static const Color primaryDeep = Color(0xFF1E40AF);
-  static const Color primaryLight = Color(0xFF60A5FA);
+  // Brand
+  static const Color primary = Color(0xFF1D4A87);
+  static const Color primaryDeep = Color(0xFF1D4A87);
+  static const Color primaryLight = Color(0xFFD9E6F7);
 
   // Surfaces — warm linen, not clinic-white
-  static const Color background = Color(0xFFF4F0E8);
-  static const Color surface = Color(0xFFFAF7F1);
-  static const Color surfaceRaised = Color(0xFFFFFCF7);
-  static const Color primaryWash = Color(0xFFE8EEF9);
+  static const Color background = Color(0xFFF2F6F5);
+  static const Color surface = Color(0xFFF2F6F5);
+  static const Color surfaceRaised = Color(0xFFFFFFFF);
+  static const Color primaryWash = Color(0xFFD9E6F7);
+  static const Color groundHome = Color(0xFFE6F4F1);
+  static const Color groundBreathe = Color(0xFFDCEEFA);
+  static const Color groundRead = Color(0xFFFFF6E0);
+  static const Color groundFeel = Color(0xFFEEE9FB);
+  static const Color groundGarden = Color(0xFFE4F3DC);
+  static const Color groundAdult = Color(0xFFF2F6F5);
+  static const Color groundSky = Color(0xFFDCEEFA);
+  static const Color sun = Color(0xFFFFC94A);
+  static const Color sunTint = Color(0xFFFFF3CF);
+  static const Color lilacTint = Color(0xFFDCD3F8);
+  static const Color coral = Color(0xFFFF8A6B);
+  static const Color coralDeep = Color(0xFFE4553A);
+  static const Color coralTint = Color(0xFFFFD3C6);
 
   // Ink — cool charcoal for contrast on warm paper
-  static const Color text = Color(0xFF1B2433);
-  static const Color textLight = Color(0xFF5A6472);
-  static const Color mutedText = Color(0xFF5A6472);
-  static const Color onPrimary = Color(0xFFF7F4EE);
+  static const Color text = Color(0xFF1E3A44);
+  static const Color textLight = Color(0xFF3F5F6A);
+  static const Color mutedText = Color(0xFF3F5F6A);
+  static const Color onPrimary = Color(0xFFFFFFFF);
 
-  static const Color divider = Color(0xFFDDD6C8);
-  static const Color borderNavy = Color(0xFFC9D4E8);
+  static const Color divider = Color(0xFFD9E6F7);
+  static const Color borderNavy = Color(0xFFD9E6F7);
 
   // Semantic — one earth accent family, not extra brand hues
-  static const Color success = Color(0xFF2F7D5A);
-  static const Color warning = Color(0xFFB45309);
-  static const Color error = Color(0xFFC45C4A);
+  static const Color success = Color(0xFF5FB77A);
+  static const Color warning = Color(0xFFF2B93B);
+  static const Color error = Color(0xFF1E3A44);
   static const Color coralRed = error;
 
-  static const Color white = Color(0xFFFAF7F1);
+  static const Color white = Color(0xFFFFFFFF);
   static const Color cardCream = surfaceRaised;
   static const Color cardBg = surfaceRaised;
-  static const Color deepNavy = Color(0xFF1B2433);
+  static const Color deepNavy = Color(0xFF1E3A44);
 
   // Backward-compatible aliases (map old names onto the new system)
   static const Color primaryBlue = primary;
@@ -49,11 +59,11 @@ class AppColors {
   static const Color navyBlue = primaryDeep;
   static const Color iceBlue = primaryWash;
   static const Color softBlueBg = background;
-  static const Color ctaOrange = primary;
+  static const Color ctaOrange = sun;
   static const Color secondary = primaryDeep;
   static const Color secondaryLight = primaryWash;
-  static const Color softYellow = warning;
-  static const Color accentYellow = warning;
+  static const Color softYellow = sunTint;
+  static const Color accentYellow = sun;
   static const Color mintGreen = success;
   static const Color skyBlue = primaryLight;
   static const Color jewelNavy = background;
@@ -105,16 +115,16 @@ class AppRadii {
   static const double xs = 6;
 
   /// Text fields, settings rows
-  static const double sm = 10;
+  static const double sm = 22;
 
   /// Standard content cards
-  static const double md = 14;
+  static const double md = 24;
 
   /// Featured modules (home activities, recording well)
-  static const double lg = 20;
+  static const double lg = 32;
 
   /// Primary CTAs, nav pill
-  static const double pill = 28;
+  static const double pill = 32;
 
   static BorderRadius xsAll = BorderRadius.circular(xs);
   static BorderRadius smAll = BorderRadius.circular(sm);
@@ -142,30 +152,18 @@ class AppElevation {
   /// Settings / list rows — structure from a hairline, not a shadow
   static List<BoxShadow> get rest => none;
 
-  static List<BoxShadow> get card => [
-        BoxShadow(
-          color: AppColors.primaryDeep.withValues(alpha: 0.06),
-          blurRadius: 2,
-          offset: const Offset(0, 1),
-        ),
-      ];
+  static List<BoxShadow> get card => none;
 
   /// Primary actions only
-  static List<BoxShadow> get cta => [
-        BoxShadow(
-          color: AppColors.primaryDeep.withValues(alpha: 0.28),
-          blurRadius: 10,
-          offset: const Offset(0, 4),
-        ),
-      ];
+  static List<BoxShadow> get cta => none;
 }
 
 class AppMotion {
   AppMotion._();
 
   /// The one transition we use: screen / splash entrance.
-  static const Duration entrance = Duration(milliseconds: 420);
-  static const Curve entranceCurve = Curves.easeOutCubic;
+  static const Duration entrance = Duration(milliseconds: 500);
+  static const Curve entranceCurve = Curves.easeInOut;
 }
 
 class AppTheme {
@@ -176,6 +174,20 @@ class AppTheme {
   ];
 
   static String get _uiFont => GoogleFonts.nunito().fontFamily!;
+
+  static TextStyle _display({
+    required double size,
+    required FontWeight weight,
+    double height = 1.2,
+    double letterSpacing = 0,
+    Color color = AppColors.text,
+  }) => GoogleFonts.fredoka(
+        fontSize: size,
+        fontWeight: weight,
+        color: color,
+        height: height,
+        letterSpacing: letterSpacing,
+      ).copyWith(fontFamilyFallback: fontFallbacks);
 
   static TextStyle _ui({
     required double size,
@@ -213,23 +225,23 @@ class AppTheme {
     );
 
     final textTheme = TextTheme(
-      displayLarge: _ui(size: 32, weight: FontWeight.w800, height: 1.15, letterSpacing: -0.4),
-      headlineLarge: _ui(size: 24, weight: FontWeight.w700, height: 1.2, letterSpacing: -0.3),
-      headlineMedium: _ui(size: 20, weight: FontWeight.w700, height: 1.25),
-      titleLarge: _ui(size: 18, weight: FontWeight.w700, height: 1.3),
-      titleMedium: _ui(size: 16, weight: FontWeight.w600, height: 1.35),
-      bodyLarge: _ui(size: 16, weight: FontWeight.w400, height: 1.5),
-      bodyMedium: _ui(size: 14, weight: FontWeight.w400, height: 1.45, color: AppColors.textLight),
-      bodySmall: _ui(size: 12, weight: FontWeight.w500, height: 1.4, color: AppColors.textLight),
-      labelLarge: _ui(size: 16, weight: FontWeight.w700, letterSpacing: 0.15),
-      labelMedium: _ui(size: 13, weight: FontWeight.w600, letterSpacing: 0.1),
+      displayLarge: _display(size: 32, weight: FontWeight.w600),
+      headlineLarge: _display(size: 24, weight: FontWeight.w600),
+      headlineMedium: _display(size: 22, weight: FontWeight.w600),
+      titleLarge: _display(size: 20, weight: FontWeight.w600),
+      titleMedium: _display(size: 18, weight: FontWeight.w600),
+      bodyLarge: _ui(size: 17, weight: FontWeight.w700, height: 1.3),
+      bodyMedium: _ui(size: 16, weight: FontWeight.w700, height: 1.35, color: AppColors.textLight),
+      bodySmall: _ui(size: 16, weight: FontWeight.w700, height: 1.35, color: AppColors.textLight),
+      labelLarge: _display(size: 22, weight: FontWeight.w600),
+      labelMedium: _ui(size: 14, weight: FontWeight.w700),
     );
 
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
       colorScheme: colorScheme,
-      scaffoldBackgroundColor: AppColors.background,
+      scaffoldBackgroundColor: AppColors.groundAdult,
       fontFamily: _uiFont,
       fontFamilyFallback: fontFallbacks,
       textTheme: textTheme,
@@ -248,8 +260,8 @@ class AppTheme {
         foregroundColor: AppColors.text,
         elevation: 0,
         scrolledUnderElevation: 0,
-        centerTitle: false,
-        titleTextStyle: _ui(size: 20, weight: FontWeight.w700),
+        centerTitle: true,
+        titleTextStyle: _display(size: 22, weight: FontWeight.w600),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -259,10 +271,10 @@ class AppTheme {
           disabledForegroundColor: AppColors.textLight,
           elevation: 0,
           shadowColor: AppColors.primaryDeep.withValues(alpha: 0.28),
-          minimumSize: const Size(double.infinity, 52),
+          minimumSize: const Size(double.infinity, 64),
           padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
           shape: RoundedRectangleBorder(borderRadius: AppRadii.pillAll),
-          textStyle: _ui(size: 16, weight: FontWeight.w700, letterSpacing: 0.15, color: AppColors.onPrimary),
+          textStyle: _display(size: 22, weight: FontWeight.w600).copyWith(color: AppColors.onPrimary),
         ).copyWith(
           overlayColor: WidgetStateProperty.resolveWith((states) {
             if (states.contains(WidgetState.pressed)) {
@@ -276,17 +288,17 @@ class AppTheme {
           elevation: WidgetStateProperty.resolveWith((states) {
             if (states.contains(WidgetState.pressed)) return 0;
             if (states.contains(WidgetState.disabled)) return 0;
-            return 3;
+            return 0;
           }),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.primaryDeep,
-          minimumSize: const Size(double.infinity, 48),
-          side: const BorderSide(color: AppColors.primary, width: 1.5),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadii.sm)),
-          textStyle: _ui(size: 15, weight: FontWeight.w600),
+          minimumSize: const Size(double.infinity, 52),
+          side: const BorderSide(color: AppColors.primary, width: 2),
+          shape: RoundedRectangleBorder(borderRadius: AppRadii.pillAll),
+          textStyle: _display(size: 19, weight: FontWeight.w600),
         ).copyWith(
           overlayColor: WidgetStateProperty.all(AppColors.primaryWash),
         ),
@@ -294,31 +306,31 @@ class AppTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: AppColors.primaryDeep,
-          textStyle: _ui(size: 14, weight: FontWeight.w700),
+          minimumSize: const Size(48, 52),
+          textStyle: _ui(size: 16, weight: FontWeight.w700),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.surfaceRaised,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        border: OutlineInputBorder(
-          borderRadius: AppRadii.smAll,
-          borderSide: const BorderSide(color: AppColors.divider),
-        ),
+        fillColor: AppColors.groundAdult,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+        border: OutlineInputBorder(borderRadius: AppRadii.smAll, borderSide: BorderSide.none),
         enabledBorder: OutlineInputBorder(
           borderRadius: AppRadii.smAll,
-          borderSide: const BorderSide(color: AppColors.divider),
+          borderSide: const BorderSide(color: AppColors.primaryWash, width: 1.5),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: AppRadii.smAll,
-          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+          borderSide: const BorderSide(color: AppColors.primary, width: 3),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: AppRadii.smAll,
-          borderSide: const BorderSide(color: AppColors.error),
+          borderSide: const BorderSide(color: AppColors.text, width: 2),
         ),
-        labelStyle: _ui(size: 14, color: AppColors.textLight),
-        hintStyle: _ui(size: 14, color: AppColors.textLight),
+        labelStyle: _ui(size: 16, weight: FontWeight.w700, color: AppColors.textLight),
+        floatingLabelStyle: _ui(size: 16, weight: FontWeight.w700, color: AppColors.primary),
+        hintStyle: _ui(size: 16, weight: FontWeight.w700, color: AppColors.textLight),
+        errorMaxLines: 3,
         prefixIconColor: AppColors.primaryDeep,
       ),
       chipTheme: ChipThemeData(
@@ -357,7 +369,7 @@ class AppTheme {
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: AppRadii.mdAll,
-          side: const BorderSide(color: AppColors.divider),
+          side: const BorderSide(color: AppColors.primaryWash, width: 2),
         ),
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
@@ -389,36 +401,37 @@ class _SwaraFadeTransitionsBuilder extends PageTransitionsBuilder {
 }
 
 class AppTextStyles {
-  static TextStyle get heading1 => AppTheme._ui(
+  static TextStyle get heading1 => AppTheme._display(
         size: 32,
-        weight: FontWeight.w800,
+        weight: FontWeight.w600,
         height: 1.15,
         letterSpacing: -0.4,
       );
-  static TextStyle get heading2 => AppTheme._ui(
+  static TextStyle get heading2 => AppTheme._display(
         size: 24,
-        weight: FontWeight.w700,
+        weight: FontWeight.w600,
         height: 1.2,
         letterSpacing: -0.3,
       );
-  static TextStyle get heading3 => AppTheme._ui(
-        size: 18,
-        weight: FontWeight.w700,
+  static TextStyle get heading3 => AppTheme._display(
+        size: 20,
+        weight: FontWeight.w600,
         height: 1.3,
         color: AppColors.text,
       );
-  static TextStyle get body => AppTheme._ui(size: 16, height: 1.5);
+  static TextStyle get body => AppTheme._ui(size: 17, weight: FontWeight.w700, height: 1.3);
   static TextStyle get bodySmall => AppTheme._ui(
-        size: 14,
+        size: 16,
+        weight: FontWeight.w700,
         color: AppColors.textLight,
         height: 1.45,
       );
   static TextStyle get caption => AppTheme._ui(
-        size: 12,
-        weight: FontWeight.w500,
+        size: 14,
+        weight: FontWeight.w700,
         color: AppColors.textLight,
       );
-  static TextStyle get label => AppTheme._ui(size: 13, weight: FontWeight.w600);
-  static TextStyle get titleLarge => AppTheme._ui(size: 18, weight: FontWeight.w700, height: 1.3);
-  static TextStyle get titleMedium => AppTheme._ui(size: 16, weight: FontWeight.w600, height: 1.35);
+  static TextStyle get label => AppTheme._ui(size: 14, weight: FontWeight.w700);
+  static TextStyle get titleLarge => AppTheme._display(size: 20, weight: FontWeight.w600, height: 1.3);
+  static TextStyle get titleMedium => AppTheme._display(size: 18, weight: FontWeight.w600, height: 1.35);
 }

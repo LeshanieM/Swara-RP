@@ -1,19 +1,24 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:swara/core/network/api_exception.dart';
 import 'package:swara/core/theme/app_theme.dart';
+import '../../data/models/speech_assessment.dart';
+import '../../data/providers/speech_provider.dart';
 
-class SpeechResultScreen extends StatefulWidget {
-  final int durationSeconds;
+class SpeechResultScreen extends ConsumerStatefulWidget {
+  final SpeechSubmission submission;
 
-  const SpeechResultScreen({super.key, required this.durationSeconds});
+  const SpeechResultScreen({super.key, required this.submission});
 
   @override
-  State<SpeechResultScreen> createState() => _SpeechResultScreenState();
+  ConsumerState<SpeechResultScreen> createState() => _SpeechResultScreenState();
 }
 
-class _SpeechResultScreenState extends State<SpeechResultScreen> {
-  bool _isProcessing = true;
+class _SpeechResultScreenState extends ConsumerState<SpeechResultScreen> {
+  // The step animation runs while the API analyses the recording; results show once both are done.
+  bool _animationDone = false;
   int _currentStep = 0;
   int _progress = 0;
 
@@ -27,17 +32,6 @@ class _SpeechResultScreenState extends State<SpeechResultScreen> {
     {'en': 'Preparing results', 'si': 'ප්‍රතිඵල සූදානම් කරමින්'},
   ];
 
-  // Mock Data
-  final int totalSyllables = 312;
-  final int stutteredWords = 24;
-  final double stutterRate = 7.7;
-  final int repetitions = 12;
-  final int prolongations = 5;
-  final int blocks = 3;
-  final String primaryStutteringType = "Repetition";
-  final String primaryStutteringTypeSi = "පුනරාවර්තනය";
-  final String severity = "Moderate";
-  final String severitySi = "මධ්‍යම";
 
   @override
   void initState() {
@@ -56,7 +50,7 @@ class _SpeechResultScreenState extends State<SpeechResultScreen> {
       }
     }
     await Future.delayed(const Duration(milliseconds: 800));
-    if (mounted) setState(() => _isProcessing = false);
+    if (mounted) setState(() => _animationDone = true);
   }
 
   String _formatTime(int sec) {
@@ -73,7 +67,11 @@ class _SpeechResultScreenState extends State<SpeechResultScreen> {
           gradient: AppColors.c1Gradient,
         ),
         child: SafeArea(
-          child: _isProcessing ? _buildProcessing() : _buildResults(),
+          child: ref.watch(speechResultProvider(widget.submission.assessmentId)).when(
+                data: (result) => _animationDone ? _buildResults(result) : _buildProcessing(),
+                loading: _buildProcessing,
+                error: (e, _) => _buildError(ApiException.from(e).message),
+              ),
         ),
       ),
     );
@@ -127,6 +125,40 @@ class _SpeechResultScreenState extends State<SpeechResultScreen> {
     );
   }
 
+  Widget _buildError(String message) {
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.error_outline, color: AppColors.coralRed, size: 56),
+          const SizedBox(height: 16),
+          const Text('We could not analyse this recording',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.text), textAlign: TextAlign.center),
+          const Text('මෙම පටිගත කිරීම විශ්ලේෂණය කළ නොහැකි විය',
+              style: TextStyle(fontSize: 16, color: AppColors.textLight, fontWeight: FontWeight.w600), textAlign: TextAlign.center),
+          const SizedBox(height: 16),
+          Text(message, style: const TextStyle(fontSize: 14, color: AppColors.text), textAlign: TextAlign.center),
+          const SizedBox(height: 32),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () => context.pushReplacement('/c1/record'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.ctaOrange,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+              ),
+              child: const Text('Record Again', style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold)),
+            ),
+          ),
+          const SizedBox(height: 12),
+          TextButton(onPressed: () => context.go('/'), child: const Text('Back to Home')),
+        ],
+      ),
+    );
+  }
+
   Widget _buildStepIndicator(Map<String, String> step, bool isCompleted, bool isCurrent, bool isWaiting) {
     IconData iconData = isCompleted ? Icons.check_circle : (isCurrent ? Icons.radio_button_checked : Icons.radio_button_unchecked);
     Color iconColor = isCompleted ? AppColors.mintGreen : (isCurrent ? AppColors.ctaOrange : AppColors.divider);
@@ -152,7 +184,15 @@ class _SpeechResultScreenState extends State<SpeechResultScreen> {
     );
   }
 
-  Widget _buildResults() {
+  Widget _buildResults(SpeechResult r) {
+    final primaryStutteringType = r.typeEn;
+    final primaryStutteringTypeSi = r.typeSi;
+    final severity = r.severityEn;
+    final severitySi = r.severitySi;
+    final totalSyllables = r.totalSyllables;
+    final stutteredWords = r.stutteredSyllables;
+    final stutterRate = r.percentSS.toStringAsFixed(1);
+    final duration = r.durationSec?.round() ?? widget.submission.durationSeconds;
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -235,18 +275,22 @@ class _SpeechResultScreenState extends State<SpeechResultScreen> {
                 const Text('කථන සංඛ්‍යාලේඛන', style: TextStyle(fontSize: 14, color: AppColors.textLight)),
                 const SizedBox(height: 16),
                 
-                _StatRow(label: 'Speaking Duration', value: _formatTime(widget.durationSeconds)),
+                _StatRow(label: 'Speaking Duration', value: _formatTime(duration)),
                 const Divider(),
                 _StatRow(label: 'Total Syllables', value: totalSyllables.toString()),
                 const Divider(),
-                _StatRow(label: 'Stuttered Words', value: stutteredWords.toString()),
+                _StatRow(label: 'Stuttered Syllables', value: stutteredWords.toString()),
                 const Divider(),
                 _StatRow(label: 'Stutter Rate', value: '$stutterRate%'),
                 const SizedBox(height: 8),
                 Text(
-                  '$stutteredWords stuttered words / $totalSyllables spoken syllables',
+                  '$stutteredWords stuttered syllables / $totalSyllables spoken syllables',
                   style: const TextStyle(fontSize: 12, color: AppColors.textLight, fontStyle: FontStyle.italic),
                 ),
+                for (final warning in r.warnings) ...[
+                  const SizedBox(height: 6),
+                  Text('⚠ $warning', style: const TextStyle(fontSize: 12, color: AppColors.warning)),
+                ],
               ],
             ),
           ),
@@ -266,9 +310,11 @@ class _SpeechResultScreenState extends State<SpeechResultScreen> {
                 const Text('Detected Stuttering Events', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.text)),
                 const SizedBox(height: 16),
                 
-                _EventRow(label: 'Repetition', count: repetitions, isHighlight: primaryStutteringType == "Repetition"),
-                _EventRow(label: 'Prolongation', count: prolongations, isHighlight: primaryStutteringType == "Prolongation"),
-                _EventRow(label: 'Block', count: blocks, isHighlight: primaryStutteringType == "Block"),
+                _EventRow(label: 'Repetition', count: r.repetitions, isHighlight: primaryStutteringType == "Repetition"),
+                _EventRow(label: 'Prolongation', count: r.prolongations, isHighlight: primaryStutteringType == "Prolongation"),
+                _EventRow(label: 'Block', count: r.blocks, isHighlight: primaryStutteringType == "Block"),
+                if (r.interjections > 0)
+                  _EventRow(label: 'Interjection', count: r.interjections, isHighlight: primaryStutteringType == "Interjection"),
                 
                 const SizedBox(height: 16),
                 Container(
@@ -278,7 +324,9 @@ class _SpeechResultScreenState extends State<SpeechResultScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    '$primaryStutteringType was the most frequently detected stuttering event.\nවැඩිම වාර ගණනක් හඳුනාගත් කථන අවහිරතා වර්ගය $primaryStutteringTypeSi.',
+                    primaryStutteringType == 'None'
+                        ? 'No stuttering events were detected in this recording.\nමෙම පටිගත කිරීමේ කථන අවහිරතා හඳුනා නොගැනිණි.'
+                        : '$primaryStutteringType was the most frequently detected stuttering event.\nවැඩිම වාර ගණනක් හඳුනාගත් කථන අවහිරතා වර්ගය $primaryStutteringTypeSi.',
                     style: const TextStyle(fontSize: 13, color: AppColors.primaryDeep, fontWeight: FontWeight.w600),
                   ),
                 ),

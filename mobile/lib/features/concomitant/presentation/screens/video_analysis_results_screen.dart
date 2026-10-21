@@ -7,8 +7,8 @@ import 'package:swara/features/concomitant/data/models/video_analysis_models.dar
 import 'package:swara/features/concomitant/data/providers/video_analysis_provider.dart';
 import 'package:swara/features/concomitant/presentation/widgets/video_analysis_ui.dart';
 
-/// Results for the TMMF feature-extraction workflow. This screen deliberately
-/// does not present movement signals as validated FG/HM predictions.
+/// Results of the secondary-behaviour analysis: for each stutter moment, whether the face (FG)
+/// or the head (HM) moved unusually compared with the child's own fluent speech.
 class VideoAnalysisResultsScreen extends ConsumerWidget {
   final String analysisId;
   const VideoAnalysisResultsScreen({super.key, required this.analysisId});
@@ -17,131 +17,125 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final async = ref.watch(videoAnalysisResultsProvider(analysisId));
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.groundAdult,
       appBar: AppBar(
-        title: const Text('Results · ප්‍රතිඵල'),
+        title: const Text('Movement analysis results'),
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
         actions: [
           IconButton(
-            tooltip: 'Refresh · යාවත්කාලීන කරන්න',
+            tooltip: 'Refresh',
             icon: const Icon(Icons.refresh),
-            onPressed: () =>
-                ref.invalidate(videoAnalysisResultsProvider(analysisId)),
+            onPressed: () => ref.invalidate(videoAnalysisResultsProvider(analysisId)),
           ),
         ],
       ),
-      body: SafeArea(
+      body: CalmSceneBackground(
+        child: SafeArea(
         child: ResponsiveBody(
           child: async.when(
-            loading: () => const SwaraLoadingWidget(
-                message: 'Loading results · ප්‍රතිඵල පූරණය කරමින්'),
+            loading: () => const SwaraLoadingWidget(message: 'Loading the analysis...'),
             error: (e, _) => SwaraErrorWidget(
               message: VideoAnalysisException.from(e).message,
-              onRetry: () =>
-                  ref.invalidate(videoAnalysisResultsProvider(analysisId)),
+              onRetry: () => ref.invalidate(videoAnalysisResultsProvider(analysisId)),
             ),
             data: (data) => _content(context, data),
           ),
+        ),
         ),
       ),
     );
   }
 
-  Widget _content(BuildContext context, VideoAnalysisResults data) {
-    final analysis = data.byKey('mediapipe');
-    if (analysis == null || !analysis.isCompleted) {
-      return SwaraErrorWidget(
-        message: analysis == null
-            ? 'No MediaPipe movement analysis was returned.'
-            : 'Movement feature extraction did not complete. ${humanizeReason(analysis.reason)}',
-        onRetry: () => context.pushReplacement('/c2/video/upload'),
+  Widget _content(BuildContext context, VideoAnalysis data) {
+    if (data.isNotAssessed) {
+      return const SwaraEmptyState(
+        title: 'Not assessed',
+        subtitle: 'No video was recorded, so secondary behaviours were not assessed.',
+        icon: Icons.videocam_off_outlined,
       );
     }
-
-    final tmmf = analysis.tmmf;
-    if ((tmmf == null || !tmmf.hasWindows) && analysis.c2Predictions == null) {
-      return const SwaraEmptyState(
-        title: 'No results · ප්‍රතිඵල නැත',
-        subtitle: 'Try another video · වෙනත් වීඩියෝවක් උත්සාහ කරන්න',
+    final result = data.result;
+    if (!data.isCompleted || result == null) {
+      return SwaraErrorWidget(
+        message: data.isFailed
+            ? 'The analysis did not complete. ${humanizeReason(data.errorMessage)}'
+            : 'The analysis is still running.',
+        onRetry: () => context.pushReplacement(data.isFailed ? '/c2/video/upload' : '/c2/video/process/${data.id}'),
+      );
+    }
+    if (result.moments.isEmpty) {
+      return SwaraEmptyState(
+        title: 'No stutter moments were found.',
+        subtitle: result.warnings.isNotEmpty
+            ? result.warnings.first
+            : 'Secondary behaviours are only checked during stutter moments.',
         icon: Icons.face_retouching_off_outlined,
       );
     }
 
-    final meta = data.videoMeta;
+    final meta = result.video;
     return ListView(
-      padding: videoPagePadding(context),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       children: [
         SwaraCard(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Row(children: [
               const Icon(Icons.videocam_outlined, color: AppColors.primary),
               const SizedBox(width: AppSpacing.sm),
               Expanded(
-                child: Text(data.videoFilename ?? 'Analyzed video',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.titleMedium),
+                child: Text(data.filename ?? 'Analyzed video',
+                    maxLines: 2, overflow: TextOverflow.ellipsis, style: AppTextStyles.titleMedium),
               ),
             ]),
             const SizedBox(height: AppSpacing.md),
             Wrap(spacing: AppSpacing.sm, runSpacing: AppSpacing.xs, children: [
-              if (tmmf != null)
-                StatusPill(
-                    label: '${tmmf.windows.length} windows',
-                    color: AppColors.primaryDeep,
-                    icon: Icons.view_week_outlined),
-              if (tmmf?.windowSeconds != null)
-                StatusPill(
-                    label:
-                        '${tmmf!.windowSeconds!.toStringAsFixed(0)} s windows',
-                    color: AppColors.primaryDeep),
-              if (tmmf?.overlap != null)
-                StatusPill(
-                    label: '${(tmmf!.overlap! * 100).round()}% overlap',
-                    color: AppColors.primaryDeep),
-              if (tmmf?.targetFps != null)
-                StatusPill(
-                    label: '${tmmf!.targetFps!.toStringAsFixed(0)} sampled fps',
-                    color: AppColors.primaryDeep),
+              StatusPill(label: '${result.momentsTotal} stutter moments', color: AppColors.primaryDeep,
+                  icon: Icons.view_week_outlined),
+              if (meta.duration != null)
+                StatusPill(label: fmtSeconds(meta.duration, digits: 0), color: AppColors.primaryDeep),
+              if (meta.analysedFps != null)
+                StatusPill(label: '${meta.analysedFps!.toStringAsFixed(0)} sampled fps', color: AppColors.primaryDeep),
               if (meta.resolution != null)
-                StatusPill(
-                    label: meta.resolution!, color: AppColors.primaryDeep),
+                StatusPill(label: meta.resolution!, color: AppColors.primaryDeep),
+              if (result.detectorFallback)
+                const StatusPill(label: 'Fallback detector', color: AppColors.warning),
             ]),
           ]),
         ),
         const SizedBox(height: AppSpacing.md),
-        const ResearchNote(
-          'Research features only · පර්යේෂණ දත්ත පමණි',
+        _summaryCard(result),
+        const SizedBox(height: AppSpacing.md),
+        ResearchNote(
+          'Each signal is compared with this child\'s own fluent speech'
+          '${result.baselineSource == 'whole_recording' ? ' (estimated from the whole video, as there was too little fluent speech)' : ''}. '
+          'Values are in standard deviations from that normal. This is a research estimate for an SLP to review, not a diagnosis.',
           icon: Icons.science_outlined,
         ),
-        if (analysis.c2Predictions != null) ...[
-          const SizedBox(height: AppSpacing.md),
-          _c2PredictionsSection(analysis.c2Predictions!),
-        ],
-        if (tmmf != null && tmmf.hasWindows) ...[
-          const SectionTitle('Movement summary · චලන සාරාංශය'),
-          _channelGrid(tmmf),
-          const SizedBox(height: AppSpacing.md),
-          _windowPreview(tmmf),
-          const SizedBox(height: AppSpacing.md),
-        ],
+        const SectionTitle('Movement at stutter moments'),
+        _channelGrid(result),
+        const SizedBox(height: AppSpacing.md),
+        _momentList(result),
+        const SizedBox(height: AppSpacing.md),
         SwaraCard(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('Face tracking · මුහුණු හඳුනාගැනීම',
-                style: AppTextStyles.titleMedium),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text('Tracking', style: AppTextStyles.titleMedium),
             const SizedBox(height: AppSpacing.sm),
             Text(
-              '${analysis.tracking.processedFrames ?? 0} frames analyzed'
-              '${analysis.tracking.missingFrames == null ? '' : ' · ${analysis.tracking.missingFrames} frames without a face'}',
+              '${meta.framesAnalysed ?? 0} frames analyzed'
+              '${meta.missingFrames == null ? '' : ' · ${meta.missingFrames} frames without a face'}',
               style: AppTextStyles.bodySmall,
             ),
-            if (analysis.processingTime != null)
+            if (result.processingSeconds != null)
               Padding(
                 padding: const EdgeInsets.only(top: AppSpacing.xs),
-                child: Text(
-                    'Processing time: ${fmtSeconds(analysis.processingTime)}',
+                child: Text('Processing time: ${fmtSeconds(result.processingSeconds)}',
                     style: AppTextStyles.caption),
+              ),
+            for (final w in result.warnings)
+              Padding(
+                padding: const EdgeInsets.only(top: AppSpacing.xs),
+                child: Text('⚠ $w', style: AppTextStyles.caption.copyWith(color: AppColors.warning)),
               ),
           ]),
         ),
@@ -149,104 +143,51 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
         TextButton.icon(
           onPressed: () => context.pushReplacement('/c2/video/upload'),
           icon: const Icon(Icons.add),
-          label: const Text('Another video · තවත් වීඩියෝවක්'),
+          label: const Text('Analyze another video'),
         ),
         const SizedBox(height: AppSpacing.xl),
       ],
     );
   }
 
-  Widget _c2PredictionsSection(C2Predictions predictions) {
-    final fg = predictions.behaviours['FG'];
-    final events = fg?.events ?? const <C2PredictionEvent>[];
-    final flaggedMs = _totalFlaggedMilliseconds(events);
-
+  Widget _summaryCard(C2Result r) {
+    final (label, color) = switch (r.hasSecondaryBehaviors) {
+      true => ('Secondary behaviours seen', AppColors.warning),
+      false => ('No secondary behaviours seen', AppColors.success),
+      null => ('Could not be assessed', AppColors.textLight),
+    };
     return SwaraCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Detected Behaviours (Research Model)',
-              style: AppTextStyles.titleMedium),
-          const SizedBox(height: AppSpacing.sm),
-          if (predictions.hasSecondaryBehaviors == null)
-            const ResearchNote(
-              'Secondary behaviours: assessment incomplete — HM not assessed by the model',
-              icon: Icons.info_outline,
-            ),
-          const SizedBox(height: AppSpacing.sm),
-          Text(
-            'FG — assessed: ${events.length} facial grimacing intervals detected · '
-            '${(flaggedMs / 1000).toStringAsFixed(1)} s total time flagged',
-            style: AppTextStyles.bodySmall,
-          ),
-          if (events.isEmpty)
-            Padding(
-              padding: const EdgeInsets.only(top: AppSpacing.xs),
-              child: Text('No FG intervals met the model’s event rule.',
-                  style: AppTextStyles.caption),
-            )
-          else
-            ...events.map((event) => ListTile(
-                  dense: true,
-                  contentPadding: EdgeInsets.zero,
-                  leading: const Icon(Icons.schedule,
-                      size: 18, color: AppColors.primaryDeep),
-                  title: Text(
-                    '${_formatC2Time(event.startMs)}–${_formatC2Time(event.endMs)}',
-                    style: AppTextStyles.label,
-                  ),
-                )),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(children: [
+          Icon(Icons.face_retouching_natural, color: color),
+          const SizedBox(width: AppSpacing.sm),
+          Expanded(child: Text(label, style: AppTextStyles.titleMedium.copyWith(color: color))),
+        ]),
+        const SizedBox(height: AppSpacing.md),
+        _metricLine('Moments with a behaviour', '${r.momentsWithBehaviour} of ${r.momentsAssessed} assessed'),
+        const SizedBox(height: AppSpacing.xs),
+        _metricLine('Facial grimace (FG)', '${r.fgCount}'),
+        const SizedBox(height: AppSpacing.xs),
+        _metricLine('Head movement (HM)', '${r.hmCount}'),
+        if (r.concomitantScore != null) ...[
           const SizedBox(height: AppSpacing.xs),
-          Text(
-              'Head movement detection: not assessed by this model (see limitations)',
-              style: AppTextStyles.bodySmall),
-          const SizedBox(height: AppSpacing.md),
-          const ResearchNote(
-            'FG detection is trained on adult CASA interview/reading videos. It is not validated on children, does not diagnose stuttering, and should not replace clinical assessment.',
-            icon: Icons.warning_amber_rounded,
-          ),
+          _metricLine('Concomitant score', r.concomitantScore!.toStringAsFixed(2)),
         ],
-      ),
+      ]),
     );
   }
 
-  String _formatC2Time(int milliseconds) {
-    final seconds = (milliseconds / 1000).floor();
-    final minutesPart = (seconds ~/ 60).toString().padLeft(2, '0');
-    final secondsPart = (seconds % 60).toString().padLeft(2, '0');
-    return '$minutesPart:$secondsPart';
-  }
-
-  int _totalFlaggedMilliseconds(List<C2PredictionEvent> events) {
-    if (events.isEmpty) return 0;
-    final ordered = [...events]..sort((a, b) => a.startMs.compareTo(b.startMs));
-    var start = ordered.first.startMs;
-    var end = ordered.first.endMs;
-    var total = 0;
-    for (final event in ordered.skip(1)) {
-      if (event.startMs <= end) {
-        if (event.endMs > end) end = event.endMs;
-      } else {
-        total += end - start;
-        start = event.startMs;
-        end = event.endMs;
-      }
-    }
-    return total + (end - start);
-  }
-
-  Widget _channelGrid(TmmfResult tmmf) {
-    const channels = [
-      ('eye', 'Eye · ඇස්', Icons.remove_red_eye_outlined),
-      ('lip', 'Lip · තොල්', Icons.sentiment_satisfied_alt_outlined),
-      ('jaw', 'Jaw · හකු', Icons.face_outlined),
-      ('head', 'Head · හිස', Icons.accessibility_new_outlined),
+  Widget _channelGrid(C2Result r) {
+    final channels = const [
+      ('eye', 'Eye movement', Icons.remove_red_eye_outlined),
+      ('lip', 'Lip movement', Icons.sentiment_satisfied_alt_outlined),
+      ('jaw', 'Jaw movement', Icons.face_outlined),
+      ('cheek', 'Cheek movement', Icons.mood_outlined),
+      ('head', 'Head movement', Icons.accessibility_new_outlined),
     ];
     return LayoutBuilder(builder: (context, constraints) {
       final wide = constraints.maxWidth >= 560;
-      final width = wide
-          ? (constraints.maxWidth - AppSpacing.md) / 2
-          : constraints.maxWidth;
+      final width = wide ? (constraints.maxWidth - AppSpacing.md) / 2 : constraints.maxWidth;
       return Wrap(
         spacing: AppSpacing.md,
         runSpacing: AppSpacing.md,
@@ -254,76 +195,71 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
           for (final (key, label, icon) in channels)
             SizedBox(
               width: width,
-              child: _channelCard(tmmf, key, label, icon),
+              child: _channelCard(r, key, label, icon),
             ),
         ],
       );
     });
   }
 
-  Widget _channelCard(
-      TmmfResult tmmf, String key, String label, IconData icon) {
-    final meanKey = '${key}_mean';
-    final velocityKey = '${key}_max_velocity';
-    final means = tmmf.windows
-        .map((w) => w.features[meanKey])
-        .whereType<double>()
-        .toList();
-    final velocities = tmmf.windows
-        .map((w) => w.features[velocityKey])
-        .whereType<double>()
-        .toList();
-    final average =
-        means.isEmpty ? null : means.reduce((a, b) => a + b) / means.length;
-    final peak =
-        velocities.isEmpty ? null : velocities.reduce((a, b) => a > b ? a : b);
+  Widget _channelCard(C2Result r, String key, String label, IconData icon) {
+    final (mean, peak) = r.deviationOf(key);
+    final exceeded = r.exceedCount(key);
     return SwaraCard(
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(children: [
           Icon(icon, color: AppColors.primaryDeep),
           const SizedBox(width: AppSpacing.sm),
           Expanded(child: Text(label, style: AppTextStyles.titleMedium)),
+          if (exceeded > 0) StatusPill(label: '$exceeded unusual', color: AppColors.warning),
         ]),
         const SizedBox(height: AppSpacing.md),
-        _metricLine('Average window signal', average),
+        _metricLine('Mean deviation', mean == null ? '—' : '${mean.toStringAsFixed(1)} SD'),
         const SizedBox(height: AppSpacing.xs),
-        _metricLine('Peak window velocity', peak),
+        _metricLine('Peak deviation', peak == null ? '—' : '${peak.toStringAsFixed(1)} SD'),
       ]),
     );
   }
 
-  Widget _metricLine(String label, double? value) => Row(
+  Widget _metricLine(String label, String value) => Row(
         children: [
           Expanded(child: Text(label, style: AppTextStyles.caption)),
-          Text(value == null ? '—' : value.toStringAsFixed(4),
-              style: AppTextStyles.label),
+          Text(value, style: AppTextStyles.label),
         ],
       );
 
-  Widget _windowPreview(TmmfResult tmmf) {
-    final preview = tmmf.windows.take(8).toList(growable: false);
+  Widget _momentList(C2Result r) {
     return SwaraCard(
       padding: EdgeInsets.zero,
       child: ExpansionTile(
-        leading: const Icon(Icons.view_timeline_outlined,
-            color: AppColors.primaryDeep),
-        title: Text('Windows · කාල පරාස', style: AppTextStyles.titleMedium),
-        subtitle: Text('${preview.length} of ${tmmf.windows.length}',
-            style: AppTextStyles.caption),
-        childrenPadding: const EdgeInsets.fromLTRB(
-            AppSpacing.md, 0, AppSpacing.md, AppSpacing.md),
+        leading: const Icon(Icons.view_timeline_outlined, color: AppColors.primaryDeep),
+        title: Text('Stutter moments', style: AppTextStyles.titleMedium),
+        subtitle: Text('${r.momentsAssessed} of ${r.momentsTotal} could be assessed', style: AppTextStyles.caption),
+        childrenPadding: const EdgeInsets.fromLTRB(AppSpacing.md, 0, AppSpacing.md, AppSpacing.md),
         children: [
-          for (var i = 0; i < preview.length; i++)
+          for (final m in r.moments)
             ListTile(
               dense: true,
               contentPadding: EdgeInsets.zero,
-              title: Text('Window ${i + 1}', style: AppTextStyles.label),
+              title: Row(children: [
+                Expanded(
+                  child: Text(
+                    'Moment ${m.index + 1} · ${m.start.toStringAsFixed(1)}–${m.end.toStringAsFixed(1)} s'
+                    '${m.types.isEmpty ? '' : ' · ${m.types.map((t) => t.replaceAll('_', ' ')).join(', ')}'}',
+                    style: AppTextStyles.label,
+                  ),
+                ),
+                if (!m.assessed) const StatusPill(label: 'Face not visible', color: AppColors.textLight),
+                if (m.fg.present) const StatusPill(label: 'FG', color: AppColors.warning),
+                if (m.hm.present) ...[
+                  const SizedBox(width: AppSpacing.xs),
+                  const StatusPill(label: 'HM', color: AppColors.warning),
+                ],
+              ]),
               subtitle: Text(
-                '${preview[i].startTime.toStringAsFixed(1)}–${preview[i].endTime.toStringAsFixed(1)} s\n'
-                'Eye ${_short(preview[i].features['eye_mean'])} · '
-                'Lip ${_short(preview[i].features['lip_mean'])} · '
-                'Jaw ${_short(preview[i].features['jaw_mean'])} · '
-                'Head ${_short(preview[i].features['head_mean'])}',
+                m.explanation.isNotEmpty
+                    ? m.explanation.join('\n')
+                    : (m.assessed ? 'Within this child\'s normal movement.' : 'Too little of the face was visible.'),
                 style: AppTextStyles.caption,
               ),
             ),
@@ -331,7 +267,4 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
       ),
     );
   }
-
-  String _short(double? value) =>
-      value == null ? '—' : value.toStringAsFixed(2);
 }
