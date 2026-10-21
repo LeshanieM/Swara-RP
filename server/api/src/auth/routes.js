@@ -37,6 +37,11 @@ const register = z.discriminatedUnion('role', [
 
 const login = z.object({ email, password: z.string().min(1).max(200) }).strict();
 const childUpdate = z.object({ firstName: z.string().trim().min(1).max(60).optional(), age: age.optional() }).strict();
+const profileUpdate = z.object({
+  name: z.string().trim().min(1).max(100),
+  childFirstName: z.string().trim().min(1).max(60).optional(),
+  childAge: age.optional(),
+}).strict();
 const parentMode = z.object({ pin }).strict();
 
 const sameSecret = (a, b) => {
@@ -96,6 +101,21 @@ const signedIn = [authenticate, (req, _res, next) => next(req.auth ? undefined :
 
 router.get('/me', signedIn, run(async (req, res) => {
   res.json({ user: (await current(req)).toJSON() });
+}));
+
+router.patch('/me', signedIn, validate(profileUpdate), run(async (req, res) => {
+  const account = await current(req);
+  const { name, childFirstName, childAge } = req.valid.body;
+  account.name = name;
+  if (childFirstName !== undefined || childAge !== undefined) {
+    if (account.role !== 'child' || !account.child) {
+      throw new ApiError(403, 'role_not_allowed', 'Only child accounts have editable child details.');
+    }
+    if (childFirstName !== undefined) account.child.firstName = childFirstName;
+    if (childAge !== undefined) account.child.age = childAge;
+  }
+  await account.save();
+  res.json({ user: account.toJSON() });
 }));
 
 router.patch('/me/child', signedIn, validate(childUpdate), run(async (req, res) => {

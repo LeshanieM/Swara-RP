@@ -27,7 +27,7 @@
 
 | # | Deviation | Why |
 |---|---|---|
-| D1 | New self-contained folder `server/` instead of rebuilding `backend/routes/speech.js` | `Swara-RP/backend` still contains two malware payloads (`api.js` and the end of `routes/auth.js`); the second runs whenever `server.js` loads. Nothing from it was run, imported or copied. The new API can replace the C1 routes there once that code is cleaned |
+| D1 | New self-contained folder `server/` instead of rebuilding `backend/routes/speech.js` | The legacy `backend/api.js` payload and appended `backend/src/routes/auth.js` payload were removed. `backend/src/security/integrityGuard.js` now blocks backend startup if either pattern returns, and CI checks the guard on pushes and pull requests. |
 | D2 | API on **5001**, speech service on **8010** | On macOS, 5000 is taken by AirPlay (ControlCenter); 8000 is the existing ai-service. Both ports are configurable |
 | D3 | **No authentication** | The user decided this for this stage. `childId` is a free string ID, so a later auth layer (child login + parent mode) can wrap the routes without changing the data model |
 | D4 | Default detector is an **acoustic rule-based detector** until the trained head exists | The training pipeline is now in `speech-service/notebooks/` (SEP-28k with the SEP-28k-E speaker splits). It exports `models/c1_head.joblib`, which `C1_DETECTOR=xlsr` loads (verified on a smoke set, log V-21). Until it is trained on SEP-28k, the rule-based detector stays the default and the comparison row |

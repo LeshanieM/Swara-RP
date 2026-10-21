@@ -54,7 +54,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     if (!success && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(ref.read(authProvider).error ?? 'Registration failed'),
+          content: Text('${ref.read(authProvider).error ?? 'Registration failed'} · ලියාපදිංචි වීමට නොහැකි විය'),
           backgroundColor: AppColors.error,
         ),
       );
@@ -65,26 +65,26 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
   /// The child this account is for, and the PIN that guards parent-only actions.
   List<Widget> _childFields() => [
-        Text('Your child', style: AppTextStyles.label),
+        Text('Your child · ඔබේ දරුවා', style: AppTextStyles.label),
         const SizedBox(height: 10),
         TextFormField(
           controller: _childNameController,
           decoration: InputDecoration(
-            labelText: "Child's first name",
+            labelText: "Child's first name · දරුවාගේ මුල් නම",
             prefixIcon: _prefixIcon(Icons.child_care_outlined),
           ),
-          validator: (v) => v == null || v.trim().isEmpty ? "Please enter your child's name" : null,
+          validator: (v) => v == null || v.trim().isEmpty ? "Please enter your child's name · දරුවාගේ නම ඇතුළත් කරන්න" : null,
         ),
         const SizedBox(height: 16),
         DropdownButtonFormField<int>(
           value: _childAge,
           decoration: InputDecoration(
-            labelText: "Child's age",
+            labelText: "Child's age · දරුවාගේ වයස",
             prefixIcon: _prefixIcon(Icons.cake_outlined),
           ),
-          items: [for (var a = 5; a <= 14; a++) DropdownMenuItem(value: a, child: Text('$a years'))],
+          items: [for (var a = 5; a <= 14; a++) DropdownMenuItem(value: a, child: Text('$a years · අවුරුදු $a'))],
           onChanged: (v) => setState(() => _childAge = v),
-          validator: (v) => v == null ? 'Swara is for ages 5–14' : null,
+          validator: (v) => v == null ? 'Swara is for ages 5–14 · Swara වයස 5–14 දරුවන් සඳහායි' : null,
         ),
         const SizedBox(height: 16),
         TextFormField(
@@ -94,11 +94,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           maxLength: 6,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           decoration: InputDecoration(
-            labelText: 'Parent PIN',
-            helperText: 'Asked before video uploads and parent questions',
+            labelText: 'Parent PIN · දෙමාපිය PIN අංකය',
+            helperText: 'වීඩියෝ සහ දෙමාපිය කොටස් සඳහා අවශ්‍යයි',
             prefixIcon: _prefixIcon(Icons.lock_outlined),
           ),
-          validator: (v) => (v ?? '').length < 4 ? 'Use 4–6 digits' : null,
+          validator: (v) => (v ?? '').length < 4 ? 'Use 4–6 digits · ඉලක්කම් 4–6ක් භාවිත කරන්න' : null,
         ),
       ];
 
@@ -155,7 +155,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                 Container(width: 48, height: 6, decoration: BoxDecoration(
                                     color: AppColors.sun, borderRadius: BorderRadius.circular(3))),
                                 const SizedBox(height: 10),
-                                Text('Create a parent or therapist account', textAlign: TextAlign.center,
+                                  Text('දෙමාපියන් සහ කථන චිකිත්සකයන් සඳහා', textAlign: TextAlign.center,
                                     style: AppTextStyles.bodySmall),
                               ])),
                               const SizedBox(height: 24),
@@ -165,7 +165,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                     fontWeight: FontWeight.w700, color: AppColors.text),
                                 decoration: InputDecoration(labelText: 'Full name · සම්පූර්ණ නම',
                                     prefixIcon: _prefixIcon(Icons.person_outline_rounded)),
-                                validator: (v) => v == null || v.isEmpty ? 'Please enter your name' : null,
+                                validator: (v) => v == null || v.isEmpty ? 'Please enter your name · ඔබේ නම ඇතුළත් කරන්න' : null,
                               ),
                               SizedBox(height: short ? 12 : 16),
                               TextFormField(
@@ -177,8 +177,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                     prefixIcon: _prefixIcon(Icons.email_outlined)),
                                 validator: (v) {
                                   final email = v?.trim() ?? '';
-                                  if (email.isEmpty) return 'Please enter your email';
-                                  if (!RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(email)) return 'Enter a valid email address';
+                                  if (email.isEmpty) return 'Please enter your email · විද්‍යුත් තැපෑල ඇතුළත් කරන්න';
+                                  if (!RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(email)) return 'Enter a valid email address · නිවැරදි විද්‍යුත් තැපෑලක් ඇතුළත් කරන්න';
                                   return null;
                                 },
                               ),
@@ -196,20 +196,20 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                       onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                                     )),
                                 validator: (v) {
-                                  if (v == null || v.isEmpty) return 'Please enter a password';
-                                  if (v.length < 6) return 'Password must be at least 6 characters';
+                                  if (v == null || v.isEmpty) return 'Please enter a password · මුරපදයක් ඇතුළත් කරන්න';
+                                  if (v.length < 6) return 'Password must be at least 6 characters · මුරපදය අවම වශයෙන් අක්ෂර 6ක් විය යුතුයි';
                                   return null;
                                 },
                               ),
                               const SizedBox(height: 20),
-                              Text('I am a:', style: AppTextStyles.label),
+                              Text('I am a · මම', style: AppTextStyles.label),
                               const SizedBox(height: 10),
                               Row(children: [
-                                _RoleCard(title: 'Parent/Caregiver', icon: Icons.family_restroom,
+                                _RoleCard(title: 'Parent/Caregiver · දෙමාපිය/භාරකරු', icon: Icons.family_restroom,
                                     value: AppConstants.roleChild, selected: _role == AppConstants.roleChild,
                                     onTap: () => setState(() => _role = AppConstants.roleChild)),
                                 const SizedBox(width: 12),
-                                _RoleCard(title: 'Speech Therapist', icon: Icons.record_voice_over,
+                                _RoleCard(title: 'Speech Therapist · කථන චිකිත්සක', icon: Icons.record_voice_over,
                                     value: AppConstants.roleTherapist, selected: _role == AppConstants.roleTherapist,
                                     onTap: () => setState(() => _role = AppConstants.roleTherapist)),
                               ]),
@@ -218,10 +218,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                               if (_role == AppConstants.roleTherapist)
                                 TextFormField(
                                   controller: _codeController,
-                                  decoration: InputDecoration(labelText: 'Therapist code',
-                                      helperText: 'Given to the research team\'s therapists',
+                                  decoration: InputDecoration(labelText: 'Therapist code · චිකිත්සක කේතය',
+                                      helperText: 'පර්යේෂණ කණ්ඩායමෙන් ලබාගන්න',
                                       prefixIcon: _prefixIcon(Icons.badge_outlined)),
-                                  validator: (v) => v == null || v.trim().isEmpty ? 'Enter the therapist code' : null,
+                                  validator: (v) => v == null || v.trim().isEmpty ? 'Enter the therapist code · චිකිත්සක කේතය ඇතුළත් කරන්න' : null,
                                 ),
                               const SizedBox(height: 24),
                               SizedBox(height: short ? 56 : 64, child: SwaraButton(
@@ -235,7 +235,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                     style: TextButton.styleFrom(minimumSize: const Size(48, 52)),
                                     onPressed: () => context.go(widget.redirectTo == null ? '/login'
                                         : '/login?redirectTo=${Uri.encodeComponent(widget.redirectTo!)}'),
-                                    child: const Text('Sign in'),
+                                    child: const Text('Sign in · පුරනය වන්න'),
                                   ),
                                 ]),
                             ],

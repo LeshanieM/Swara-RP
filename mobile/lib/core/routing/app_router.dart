@@ -20,8 +20,10 @@ import 'package:swara/core/widgets/main_scaffold.dart';
 import 'package:swara/features/auth/data/providers/auth_provider.dart';
 import 'package:swara/features/auth/presentation/screens/login_screen.dart';
 import 'package:swara/features/auth/presentation/screens/register_screen.dart';
+import 'package:swara/features/auth/presentation/screens/profile_screen.dart';
 import 'package:swara/features/auth/presentation/screens/splash_screen.dart';
 import 'package:swara/features/child/presentation/screens/child_home_screen.dart';
+import 'package:swara/features/commercialization/presentation/screens/revenue_model_screen.dart';
 import 'package:swara/features/concomitant/presentation/screens/video_analysis_results_screen.dart';
 import 'package:swara/features/concomitant/presentation/screens/video_analysis_processing_screen.dart';
 import 'package:swara/features/concomitant/presentation/screens/video_analysis_upload_screen.dart';
@@ -100,6 +102,13 @@ final routerProvider = Provider<GoRouter>((ref) {
           redirectTo: state.uri.queryParameters['redirectTo'],
         ),
       ),
+      GoRoute(
+        path: '/commercialization',
+        builder: (context, state) => MainScaffold(
+          currentLocation: state.uri.toString(),
+          child: const RevenueModelScreen(),
+        ),
+      ),
       ShellRoute(
         navigatorKey: _shellNavigatorKey,
         builder: (context, state, child) => MainScaffold(
@@ -135,6 +144,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/profile',
+            builder: (context, state) => const ProfileScreen(),
+          ),
+          GoRoute(
+            path: '/progress',
             builder: (context, state) => const ProgressScreen(),
           ),
           GoRoute(
