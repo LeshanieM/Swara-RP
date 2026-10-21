@@ -38,9 +38,14 @@ class _ProcessingState extends ConsumerState<VideoAnalysisProcessingScreen> {
         (err.kind == VideoAnalysisErrorKind.unauthorized || err.kind == VideoAnalysisErrorKind.notFound);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(title: const Text('Movement analysis')),
-      body: SafeArea(
+      backgroundColor: AppColors.groundAdult,
+      appBar: AppBar(
+        title: const Text('Movement analysis'),
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+      ),
+      body: CalmSceneBackground(
+        child: SafeArea(
         child: ResponsiveBody(
           child: Builder(builder: (_) {
             if (fatal) return _fatalError(err);
@@ -51,6 +56,7 @@ class _ProcessingState extends ConsumerState<VideoAnalysisProcessingScreen> {
             }
             return _body(s, poll);
           }),
+        ),
         ),
       ),
     );

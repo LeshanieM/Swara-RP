@@ -88,9 +88,14 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
     final error = _localError ?? start.error ?? selection.error;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(title: const Text('Video analysis')),
-      body: SafeArea(
+      backgroundColor: AppColors.groundAdult,
+      appBar: AppBar(
+        title: const Text('Video analysis'),
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+      ),
+      body: CalmSceneBackground(
+        child: SafeArea(
         child: ResponsiveBody(
           child: ListView(
             padding: const EdgeInsets.all(AppSpacing.lg),
@@ -151,6 +156,7 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
               const SizedBox(height: AppSpacing.xl),
             ],
           ),
+        ),
         ),
       ),
     );

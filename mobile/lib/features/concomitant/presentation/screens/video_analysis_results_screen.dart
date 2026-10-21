@@ -17,9 +17,11 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final async = ref.watch(videoAnalysisResultsProvider(analysisId));
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.groundAdult,
       appBar: AppBar(
         title: const Text('Movement analysis results'),
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
         actions: [
           IconButton(
             tooltip: 'Refresh',
@@ -28,7 +30,8 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: SafeArea(
+      body: CalmSceneBackground(
+        child: SafeArea(
         child: ResponsiveBody(
           child: async.when(
             loading: () => const SwaraLoadingWidget(message: 'Loading the analysis...'),
@@ -38,6 +41,7 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
             ),
             data: (data) => _content(context, data),
           ),
+        ),
         ),
       ),
     );
