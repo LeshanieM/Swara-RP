@@ -1,6 +1,6 @@
 # C3 engagement camera model: c3-engagement-camera-gbdt-2026-10-21
 
-Trained 2026-10-21T15:46:37+00:00 on `daisee_engagement.npz`.
+Trained 2026-10-21T19:05:25+00:00 on `daisee_engagement.npz`.
 
 Rows (face visible ≥ 30% of frames): 8986, dropped for no face: 0.
 
