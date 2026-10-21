@@ -1,0 +1,64 @@
+{
+  "version": "c4-checklist-0.1",
+  "reviewed": false,
+  "note": "Parent checklist per age band, answered in parent mode at onboarding. Children never rate themselves. Placeholder wording; an SLP must check it.",
+  "levels": [
+    { "id": "emerging", "minYes": 0, "maxYes": 1 },
+    { "id": "developing", "minYes": 2, "maxYes": 2 },
+    { "id": "established", "minYes": 3, "maxYes": 3 }
+  ],
+  "bands": [
+    {
+      "id": "5-10",
+      "items": [
+        {
+          "id": "story-begin-end",
+          "text": {
+            "en": "Can your child tell a story that has a beginning and an end?",
+            "si": "ඔබේ දරුවාට ආරම්භයක් සහ අවසානයක් ඇති කතාවක් කියන්න පුළුවන්ද?"
+          }
+        },
+        {
+          "id": "explain-why-because",
+          "text": {
+            "en": "Does your child explain \"why\" using \"because\"?",
+            "si": "ඔබේ දරුවා \"ඇයි\" කියා පැහැදිලි කරන්න \"මොකද\" / \"නිසා\" භාවිතා කරනවාද?"
+          }
+        },
+        {
+          "id": "yesterday-in-order",
+          "text": {
+            "en": "Can your child describe what happened yesterday in the right order?",
+            "si": "ඔබේ දරුවාට ඊයේ වුණු දේවල් පිළිවෙළට කියන්න පුළුවන්ද?"
+          }
+        }
+      ]
+    },
+    {
+      "id": "11-14",
+      "items": [
+        {
+          "id": "opinions-explained",
+          "text": {
+            "en": "Does your child give opinions and explain them?",
+            "si": "ඔබේ දරුවා අදහස් ඉදිරිපත් කර ඒවා පැහැදිලි කරනවාද?"
+          }
+        },
+        {
+          "id": "long-joined-sentences",
+          "text": {
+            "en": "Does your child use long, joined-up sentences?",
+            "si": "ඔබේ දරුවා දිගු, එකට සම්බන්ධ කළ වාක්‍ය භාවිතා කරනවාද?"
+          }
+        },
+        {
+          "id": "retell-reading",
+          "text": {
+            "en": "Can your child retell something they have read?",
+            "si": "ඔබේ දරුවාට කියවපු දෙයක් නැවත කියන්න පුළුවන්ද?"
+          }
+        }
+      ]
+    }
+  ]
+}
