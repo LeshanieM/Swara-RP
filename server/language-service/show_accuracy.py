@@ -7,6 +7,7 @@ From this directory:
 from __future__ import annotations
 
 import argparse
+import json
 from pathlib import Path
 
 
@@ -30,6 +31,7 @@ BENCHMARK = {
         "retention": 0.741,
     },
 }
+REPORT_DIR = Path(__file__).resolve().parent / "training" / "reports"
 
 
 def percent(value: float) -> str:
@@ -52,6 +54,33 @@ def print_benchmark() -> None:
     print("Source: ../VERIFICATION_LOG_C4.md, V-23.")
 
 
+def print_training_report(path: Path) -> None:
+    report = json.loads(path.read_text(encoding="utf-8"))
+    baseline, trained = report.get("baselineTest"), report.get("test", {})
+    scope = {"head": "CTC output head only", "full": "full transformer"}.get(
+        report.get("trainScope"), report.get("trainScope", "unknown"))
+    print(f"C4 fine-tune report - {path.stem}")
+    print("=" * 58)
+    print(f"Base: {report.get('base', 'unknown')} | scope: {scope} | "
+          f"steps: {report.get('steps', 'unknown')} | device: {report.get('device', 'unknown')}")
+    print(f"SLR52 train/dev/test utterances: {report.get('trainUtterances', '?')} / "
+          f"{report.get('devUtterances', '?')} / {report.get('testUtterances', '?')}")
+    if baseline:
+        print(f"{'Model':<28}{'WER':>12}{'CER':>12}{'Utterances':>14}")
+        print("-" * 66)
+        for name, scores in (("Public baseline", baseline), ("Fine-tuned C4", trained)):
+            print(f"{name:<28}{scores['wer'] * 100:>11.2f}%{scores['cer'] * 100:>11.2f}%"
+                  f"{scores['utterances']:>14}")
+    else:
+        print(f"Fine-tuned C4 test WER/CER: {trained.get('wer')} / {trained.get('cer')} "
+              f"({trained.get('utterances', '?')} utterances)")
+    dev = report.get("dev") or {}
+    if dev:
+        print(f"Dev WER/CER: {dev.get('wer')} / {dev.get('cer')} ({dev.get('utterances', '?')} utterances)")
+    print(f"Training report: {path}")
+    print("WER/CER are error rates (lower is better). This adult read-speech sample is not child-speech validation.")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--reference", type=Path, help="UTF-8 reference transcript")
@@ -61,7 +90,15 @@ def main() -> int:
     if bool(args.reference) != bool(args.hypothesis):
         parser.error("--reference and --hypothesis must be supplied together")
     if not args.reference:
-        print_benchmark()
+        reports = sorted(REPORT_DIR.glob("c4-asr-*.json"), key=lambda path: path.stat().st_mtime, reverse=True)
+        if reports:
+            try:
+                print_training_report(reports[0])
+            except (OSError, json.JSONDecodeError, KeyError, TypeError) as exc:
+                print(f"Could not read C4 training report {reports[0]}: {exc}")
+                return 1
+        else:
+            print_benchmark()
         return 0
 
     try:
