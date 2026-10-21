@@ -39,7 +39,7 @@ class _Component4HomeScreenState extends State<Component4HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.groundHome,
       body: SafeArea(
         child: Center(
           child: Padding(
@@ -51,16 +51,9 @@ class _Component4HomeScreenState extends State<Component4HomeScreen> {
                 Container(
                   width: 160,
                   height: 160,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: AppColors.primaryWash,
                     shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.primaryLight.withOpacity(0.5),
-                        blurRadius: 24,
-                        offset: const Offset(0, 8),
-                      ),
-                    ],
                   ),
                   child: ClipOval(
                     child: Image.asset(
@@ -70,10 +63,8 @@ class _Component4HomeScreenState extends State<Component4HomeScreen> {
                   ),
                 ),
                 const SizedBox(height: 48),
-                const CircularProgressIndicator(
-                  color: AppColors.primaryDeep,
-                  strokeWidth: 4,
-                ),
+                const Icon(Icons.auto_awesome_rounded,
+                    color: AppColors.primary, size: 36),
                 const SizedBox(height: 48),
                 AnimatedSwitcher(
                   duration: const Duration(milliseconds: 500),

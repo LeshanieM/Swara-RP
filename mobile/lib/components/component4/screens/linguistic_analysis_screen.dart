@@ -55,7 +55,7 @@ class _LinguisticAnalysisScreenState extends State<LinguisticAnalysisScreen> {
     final duration = fmtClock(v.durationSec);
     final mlu = v.mlu == null ? '—' : v.mlu!.toStringAsFixed(1);
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.groundRead,
       body: SafeArea(
         child: Column(
           children: [
@@ -72,22 +72,16 @@ class _LinguisticAnalysisScreenState extends State<LinguisticAnalysisScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      _activeStage == 4 ? 'Analysis Complete' : 'Analysing Your Speech',
+                      _activeStage == 4 ? 'විශ්ලේෂණය සම්පූර්ණයි · Analysis complete' : 'කථනය විශ්ලේෂණය කරමින් · Analysing speech',
                       style: AppTextStyles.body.copyWith(color: AppColors.textLight),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 8),
-                    if (_activeStage < 4)
-                      Text(
-                        'We are analysing the language used in your response.',
-                        style: AppTextStyles.bodySmall,
-                        textAlign: TextAlign.center,
-                      ),
                     const SizedBox(height: 24),
 
                     // Audio Summary Card
                     _buildCard(
-                      title: 'Recorded Speech',
+                      title: 'පටිගත කළ කථනය · Recorded speech',
                       child: Row(
                         children: [
                           const Icon(Icons.graphic_eq, color: AppColors.primary, size: 32),
@@ -96,7 +90,7 @@ class _LinguisticAnalysisScreenState extends State<LinguisticAnalysisScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Sinhala Speech', style: AppTextStyles.titleMedium),
+                                Text('සිංහල කථනය', style: AppTextStyles.titleMedium),
                                 Text(duration, style: AppTextStyles.bodySmall),
                               ],
                             ),
@@ -110,20 +104,20 @@ class _LinguisticAnalysisScreenState extends State<LinguisticAnalysisScreen> {
                     // MLU Calculation
                     if (_activeStage >= 1)
                       _buildCard(
-                        title: 'Calculating MLU',
+                        title: 'ප්‍රකාශන දිග · MLU',
                         subtitle: 'සාමාන්‍ය ප්‍රකාශන දිග',
                         child: Column(
                           children: [
-                            if (_mluStep >= 1) _buildCalcStep('Scanning utterances...', '${v.utterances} utterances detected'),
-                            if (_mluStep >= 2) _buildCalcStep('Counting words...', '${v.totalWords} total words'),
-                            if (_mluStep >= 3) _buildCalcStep('MLU = Total Words ÷ Number of Utterances', '${v.totalWords} ÷ ${v.utterances}'),
+                            if (_mluStep >= 1) _buildCalcStep('ප්‍රකාශන · Utterances', '${v.utterances}'),
+                            if (_mluStep >= 2) _buildCalcStep('මුළු වචන · Total words', '${v.totalWords}'),
+                            if (_mluStep >= 3) _buildCalcStep('වචන ÷ ප්‍රකාශන · Words ÷ utterances', '${v.totalWords} ÷ ${v.utterances}'),
                             if (_mluStep >= 4)
                               Padding(
                                 padding: const EdgeInsets.only(top: 16.0),
                                 child: Column(
                                   children: [
                                     Text(mlu, style: AppTextStyles.heading1.copyWith(color: AppColors.primaryDeep, fontSize: 48)),
-                                    Text('words / utterance', style: AppTextStyles.bodySmall),
+                                    Text('වචන / ප්‍රකාශනය', style: AppTextStyles.bodySmall),
                                   ],
                                 ),
                               ),
@@ -135,19 +129,19 @@ class _LinguisticAnalysisScreenState extends State<LinguisticAnalysisScreen> {
                     // NDW Calculation
                     if (_activeStage >= 2)
                       _buildCard(
-                        title: 'Calculating NDW',
+                        title: 'වෙනස් වචන · Unique words',
                         subtitle: 'වෙනස් වචන ගණන',
                         child: Column(
                           children: [
-                            if (_ndwStep >= 1) _buildCalcStep('Extract words from transcript', '${v.totalWords} words'),
-                            if (_ndwStep >= 2) _buildCalcStep('Identify unique words', '${v.ndw} unique words'),
+                            if (_ndwStep >= 1) _buildCalcStep('පිටපතේ වචන · Transcript words', '${v.totalWords}'),
+                            if (_ndwStep >= 2) _buildCalcStep('වෙනස් වචන · Unique words', '${v.ndw}'),
                             if (_ndwStep >= 3)
                               Padding(
                                 padding: const EdgeInsets.only(top: 16.0),
                                 child: Column(
                                   children: [
                                     Text('${v.ndw}', style: AppTextStyles.heading1.copyWith(color: AppColors.primaryDeep, fontSize: 48)),
-                                    Text('Different Words', style: AppTextStyles.bodySmall),
+                                    Text('වෙනස් වචන', style: AppTextStyles.bodySmall),
                                   ],
                                 ),
                               ),
@@ -159,20 +153,20 @@ class _LinguisticAnalysisScreenState extends State<LinguisticAnalysisScreen> {
                     // Response Duration
                     if (_activeStage >= 3)
                       _buildCard(
-                        title: 'Response Duration',
+                        title: 'කථන කාලය · Speech duration',
                         child: Column(
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Start: 00:00', style: AppTextStyles.bodySmall),
+                                Text('ආරම්භය: 00:00', style: AppTextStyles.bodySmall),
                                 const Icon(Icons.arrow_forward, size: 16, color: AppColors.textLight),
-                                Text('End: $duration', style: AppTextStyles.bodySmall),
+                                Text('අවසානය: $duration', style: AppTextStyles.bodySmall),
                               ],
                             ),
                             const SizedBox(height: 16),
                             Text(duration, style: AppTextStyles.heading1.copyWith(color: AppColors.primaryDeep, fontSize: 32)),
-                            Text('Total speaking response duration', style: AppTextStyles.bodySmall),
+                            Text('මුළු කථන පිළිතුරු කාලය', style: AppTextStyles.bodySmall),
                           ],
                         ),
                       ),
@@ -182,7 +176,7 @@ class _LinguisticAnalysisScreenState extends State<LinguisticAnalysisScreen> {
                     if (_activeStage < 4)
                       Column(
                         children: [
-                          Text('Analysis Progress', style: AppTextStyles.label),
+                          Text('විශ්ලේෂණ ප්‍රගතිය', style: AppTextStyles.label),
                           const SizedBox(height: 8),
                           LinearProgressIndicator(
                             value: (_activeStage * 25 + (_mluStep * 5) + (_ndwStep * 5)) / 100.0,
@@ -193,7 +187,7 @@ class _LinguisticAnalysisScreenState extends State<LinguisticAnalysisScreen> {
                     if (_activeStage == 4)
                       ElevatedButton(
                         onPressed: () => context.push('/c4/results'),
-                        child: const Text('View Results →'),
+                        child: const Text('ප්‍රතිඵල බලන්න →'),
                       ),
                   ],
                 ),
@@ -211,10 +205,9 @@ class _LinguisticAnalysisScreenState extends State<LinguisticAnalysisScreen> {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surfaceRaised,
-        borderRadius: AppRadii.lgAll,
-        boxShadow: AppElevation.card,
-        border: Border.all(color: AppColors.divider),
+        color: AppColors.white,
+        borderRadius: AppRadii.mdAll,
+        border: Border.all(color: AppColors.primaryLight, width: 2),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
