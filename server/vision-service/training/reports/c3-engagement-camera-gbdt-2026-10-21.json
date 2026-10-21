@@ -1,6 +1,6 @@
 {
  "version": "c3-engagement-camera-gbdt-2026-10-21",
- "trainedAt": "2026-10-21T15:46:37+00:00",
+ "trainedAt": "2026-10-21T19:05:25+00:00",
  "data": "daisee_engagement.npz",
  "note": "",
  "rows": 8986,

@@ -113,15 +113,69 @@ class _ItemPicture extends StatelessWidget {
 }
 
 /// "Skip this activity": the server records it as skipped (P = 0, low engagement), which the recommender learns from.
+/// Picture description is restricted to the dedicated PD image set.
+class _PictureDescriptionImage extends StatelessWidget {
+  final String? asset;
+  final double height;
+  const _PictureDescriptionImage({required this.asset, this.height = 220});
+
+  static const _fallback = 'assets/images/component3/items/PD-E-01.png';
+  static const _pdAssets = <String>{
+    _fallback,
+    'assets/images/component3/items/PD-E-02.png',
+    'assets/images/component3/items/PD-E-03.png',
+    'assets/images/component3/items/PD-E-04.png',
+    'assets/images/component3/items/PD-M-01.png',
+    'assets/images/component3/items/PD-M-02.png',
+    'assets/images/component3/items/PD-M-03.png',
+    'assets/images/component3/items/PD-M-04.png',
+    'assets/images/component3/items/PD-D-01.png',
+    'assets/images/component3/items/PD-D-02.png',
+    'assets/images/component3/items/PD-D-03.png',
+    'assets/images/component3/items/PD-D-04.png',
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    final image = _pdAssets.contains(asset) ? asset! : _fallback;
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(18),
+      child: Image.asset(
+        image,
+        height: height,
+        width: double.infinity,
+        fit: BoxFit.contain,
+        errorBuilder: (_, __, ___) => Container(
+          height: height,
+          alignment: Alignment.center,
+          color: Colors.white,
+          child: const Text('Picture unavailable'),
+        ),
+      ),
+    );
+  }
+}
+
 class _SkipActivityButton extends StatelessWidget {
   const _SkipActivityButton();
 
   @override
-  Widget build(BuildContext context) => TextButton.icon(
-        onPressed: () => _C3Session.finishAndContinue(context, skipped: true),
-        icon: const Icon(Icons.skip_next_rounded, color: Colors.black54),
-        label: const Text('මෙය මඟ හරින්න · Skip this activity',
-            style: TextStyle(color: Colors.black54)),
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.only(top: 12),
+        child: OutlinedButton.icon(
+          onPressed: () => _C3Session.finishAndContinue(context, skipped: true),
+          icon: const Icon(Icons.skip_next_rounded, size: 18),
+          label: const Text('මෙය මඟ හරින්න · Skip this activity',
+              style: TextStyle(fontSize: 14)),
+          style: OutlinedButton.styleFrom(
+            backgroundColor: Colors.white,
+            foregroundColor: _C.blue,
+            side: BorderSide(color: _C.blue.withValues(alpha: 0.45)),
+            minimumSize: const Size(0, 42),
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+          ),
+        ),
       );
 }
 
@@ -1333,15 +1387,6 @@ class _SugarBearPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter o) => false;
 }
 
-class _PathPainter extends CustomPainter {
-  final _AppTheme theme;
-  _PathPainter(this.theme);
-  @override
-  void paint(Canvas canvas, Size size) {}
-  @override
-  bool shouldRepaint(covariant CustomPainter o) => false;
-}
-
 /// A small live preview stays visible only while an activity is being monitored.
 /// Camera frames are analyzed locally and are never uploaded.
 class _CameraPreviewTile extends StatefulWidget {
@@ -1367,16 +1412,16 @@ class _CameraPreviewTileState extends State<_CameraPreviewTile> {
 
   void _resumeBrowserPreviewAfterMount() {
     if (!kIsWeb) return;
-    // The web plugin starts video before HtmlElementView is attached. Resume it
-    // after Flutter mounts that view so the child sees moving video, not its first frame.
+    // The web plugin initializes playback before HtmlElementView is attached.
+    // Resume after the view mounts, without pausing first: pause/play can leave
+    // the browser video surface black on some cameras.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         if (!mounted || !_running.value) return;
         final controller = EngagementCamera.instance.previewController;
         if (controller == null || !controller.value.isInitialized) return;
         try {
-          await controller.pausePreview();
-          if (mounted && _running.value) await controller.resumePreview();
+          await controller.resumePreview();
         } catch (error) {
           debugPrint('Could not resume browser camera preview: $error');
         }

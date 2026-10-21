@@ -32,8 +32,6 @@ part 'screens/setup/home.dart';
 part 'screens/setup/theme_selection.dart';
 part 'screens/setup/state.dart';
 part 'screens/setup/adventure_plan.dart';
-part 'screens/session/journey_map.dart';
-part 'screens/activities/milestone_intro.dart';
 part 'screens/activities/activity.dart';
 part 'screens/activities/activity_state.dart';
 part 'screens/activities/feedback.dart';
@@ -95,8 +93,6 @@ class _TherapyJourneyShellState extends State<_TherapyJourneyShell> {
         return const _Character();
       case _TherapyRoute.adventurePlan:
         return const _AdventurePlan();
-      case _TherapyRoute.journeyMap:
-        return const _JourneyMap();
       case _TherapyRoute.breathing:
         return const _Breathing();
       case _TherapyRoute.adaptiveSyllable:
@@ -105,8 +101,6 @@ class _TherapyJourneyShellState extends State<_TherapyJourneyShell> {
         return const _SyllablePractice();
       case _TherapyRoute.adaptivePicture:
         return const _AdaptiveNext();
-      case _TherapyRoute.pictureIntro:
-        return const _MilestoneIntro();
       case _TherapyRoute.pictureActivity:
         return const _Activity();
       case _TherapyRoute.adaptiveConversation:
@@ -137,6 +131,15 @@ class _TherapyJourneyShellState extends State<_TherapyJourneyShell> {
     // Therapy uses pushed routes for its internal screens. Only the visible route
     // may mount the camera's texture/HTML video surface.
     final isCurrentRoute = ModalRoute.of(context)?.isCurrent ?? true;
+    // A voice recorder is a PopupRoute: keep this activity's camera tile in its
+    // original top-left position behind the sheet. GoRouter's location stays
+    // on this activity while the popup is open, and changes for page navigation.
+    final location =
+        GoRouter.of(context).routeInformationProvider.value.uri.path;
+    final screenLocation = widget.screen.startsWith('practice:')
+        ? '/c3/therapy/activity/${widget.screen.substring('practice:'.length)}'
+        : '/c3/therapy/${widget.screen}';
+    final showActivityOverlay = isCurrentRoute || location == screenLocation;
     return ValueListenableBuilder<_AppTheme>(
       valueListenable: _therapyTheme,
       builder: (context, theme, _) => _InheritedTheme(
@@ -149,10 +152,10 @@ class _TherapyJourneyShellState extends State<_TherapyJourneyShell> {
             onPointerDown: (_) => _C3Session.tapped(),
             child: Stack(fit: StackFit.expand, children: [
               _screenForRoute(),
-              if (isCurrentRoute)
+              if (showActivityOverlay)
                 const Positioned(
                     top: 8, right: 8, child: SafeArea(child: _CameraOnBadge())),
-              if (isCurrentRoute)
+              if (showActivityOverlay)
                 const Positioned(
                     top: 44,
                     left: 8,
@@ -174,12 +177,10 @@ class _TherapyRoute {
   static const welcome = 'welcome';
   static const character = 'character';
   static const adventurePlan = 'adventure-plan';
-  static const journeyMap = 'journey-map';
   static const breathing = 'breathing';
   static const adaptiveSyllable = 'adaptive-syllable';
   static const syllablePractice = 'syllable-practice';
   static const adaptivePicture = 'adaptive-picture';
-  static const pictureIntro = 'picture-intro';
   static const pictureActivity = 'picture-activity';
   static const adaptiveConversation = 'adaptive-conversation';
   static const sessionComplete = 'session-complete';

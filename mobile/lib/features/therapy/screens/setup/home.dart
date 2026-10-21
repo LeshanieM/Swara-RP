@@ -214,9 +214,7 @@ class _CameraEngagementToggleState
                   fontWeight: FontWeight.bold,
                   color: _C.darkText)),
           subtitle: const Text(
-              kIsWeb
-                  ? 'Webcam preview only; engagement uses activity signals. Video stays in your browser.'
-                  : 'Parent setting. Only face numbers are sent, never video.',
+              'ක්‍රියාකාරකම් අතරතුර පමණක් කැමරාව භාවිත වේ. වීඩියෝව සුරැකීමක් හෝ යැවීමක් සිදු නොවේ.',
               style: TextStyle(fontSize: 11, color: Colors.grey)),
         ),
       );
