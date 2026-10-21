@@ -4,24 +4,42 @@ import 'package:dio/dio.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swara/core/widgets/shared_widgets.dart';
 import 'package:swara/core/theme/app_theme.dart';
-import 'package:swara/core/constants/app_constants.dart';
+import 'package:swara/core/network/api_client.dart';
+import 'package:swara/core/network/api_exception.dart';
 import 'package:swara/core/storage/storage_service.dart';
+import 'package:swara/features/child/data/models/demo_data.dart';
 
+/// The C3 activity pool (type × difficulty, both age bands) from /api/c3/activities,
+/// in the card shape this screen shows. Demo mode shows the sample activities.
 final therapyKnowledgeBaseProvider =
-    FutureProvider<List<Map<String, dynamic>>>((_) async {
-  final token = await StorageService.getToken();
-  final response = await Dio().get<List<dynamic>>(
-    '${AppConstants.baseUrl}/api/therapy/activities',
-    options: Options(
-      headers: {
-        if (token != null && token.isNotEmpty)
-          'Authorization': 'Bearer $token',
-      },
-    ),
-  );
-  return (response.data ?? const <dynamic>[])
-      .map((activity) => Map<String, dynamic>.from(activity as Map))
-      .toList();
+    FutureProvider<List<Map<String, dynamic>>>((ref) async {
+  if (StorageService.isDemoMode()) return DemoData.therapyActivities;
+  final api = ref.read(apiClientProvider);
+  final cards = <Map<String, dynamic>>[];
+  try {
+    for (final age in const [8, 12]) {
+      final res = await api.get('/api/c3/activities', queryParameters: {'age': age});
+      for (final arm in (res.data['arms'] as List? ?? const [])) {
+        final band = (arm['ageBand'] as String? ?? '5-10').split('-').map(int.parse).toList();
+        cards.add({
+          'name': '${arm['title']?['en'] ?? arm['type']} · ${arm['title']?['si'] ?? ''}',
+          'description': 'Target skill: ${(arm['targetSkill'] as String? ?? '').replaceAll('_', ' ')} · '
+              '${arm['items']} content item${arm['items'] == 1 ? '' : 's'}',
+          'severity': const <String>[],
+          'stutterTypes': const <String>[],
+          'difficulty': arm['difficulty'] ?? '',
+          'duration': arm['durationMin'] ?? 0,
+          'ageRange': band,
+          'therapistNotes': arm['placeholder'] == true
+              ? 'Placeholder content: an SLP must review the wording before use.'
+              : '',
+        });
+      }
+    }
+  } on DioException catch (e) {
+    throw ApiException.fromDio(e);
+  }
+  return cards;
 });
 
 class TherapyKnowledgeBaseScreen extends ConsumerWidget {
@@ -47,11 +65,11 @@ class TherapyKnowledgeBaseScreen extends ConsumerWidget {
       ),
       body: activitiesAsync.when(
         loading: () => const SwaraLoadingWidget(message: 'Loading knowledge base...'),
-        error: (_, __) => const SwaraErrorWidget(message: 'Failed to load activities.'),
+        error: (e, _) => SwaraErrorWidget(message: ApiException.from(e).message),
         data: (activities) => Column(
           children: [
             const DisclaimerBanner(
-              message: 'Therapist-defined activity knowledge base.',
+              message: 'The activity pool the C3 recommender chooses from (SLP-approved type × difficulty).',
             ),
             Expanded(
               child: ListView.builder(
