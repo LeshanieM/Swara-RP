@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -19,7 +21,7 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.groundAdult,
       appBar: AppBar(
-        title: const Text('Movement analysis results · චලන විශ්ලේෂණ ප්‍රතිඵල'),
+        title: Text('Movement analysis results · චලන විශ්ලේෂණ ප්‍රතිඵල', style: AppTextStyles.titleMedium),
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
         actions: [
@@ -74,7 +76,7 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
 
     final meta = result.video;
     return ListView(
-      padding: const EdgeInsets.all(AppSpacing.lg),
+      padding: EdgeInsets.all(MediaQuery.sizeOf(context).width < 380 ? AppSpacing.md : AppSpacing.lg),
       children: [
         SwaraCard(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -149,22 +151,102 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
       null => ('Could not be assessed · තක්සේරු කිරීමට නොහැකි විය', AppColors.textLight),
     };
     return SwaraCard(
+      padding: const EdgeInsets.all(AppSpacing.md),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(children: [
-          Icon(Icons.face_retouching_natural, color: color),
+          Icon(Icons.face_retouching_natural, color: color, size: 20),
           const SizedBox(width: AppSpacing.sm),
-          Expanded(child: Text(label, style: AppTextStyles.titleMedium.copyWith(color: color))),
+          Expanded(child: Text(label, style: AppTextStyles.label.copyWith(color: color))),
         ]),
         const SizedBox(height: AppSpacing.md),
-        _metricLine('Moments with a behaviour · හැසිරීමක් දක්නට ලැබුණු අවස්ථා', '${r.momentsWithBehaviour} of ${r.momentsAssessed} assessed · තක්සේරු කළා'),
-        const SizedBox(height: AppSpacing.xs),
-        _metricLine('Facial grimace (FG) · මුහුණේ තදවීම', '${r.fgCount}'),
-        const SizedBox(height: AppSpacing.xs),
-        _metricLine('Head movement (HM) · හිස චලනය', '${r.hmCount}'),
+        Text(
+          '${r.momentsWithBehaviour} / ${r.momentsAssessed} assessed moments · තක්සේරු කළ අවස්ථා',
+          style: AppTextStyles.label,
+        ),
         if (r.concomitantScore != null) ...[
-          const SizedBox(height: AppSpacing.xs),
-          _metricLine('Concomitant score · සමගාමී හැසිරීම් ලකුණ', r.concomitantScore!.toStringAsFixed(2)),
+          const SizedBox(height: AppSpacing.sm),
+          Text('Score · ලකුණ  ${r.concomitantScore!.toStringAsFixed(2)}', style: AppTextStyles.caption),
         ],
+        const SizedBox(height: AppSpacing.md),
+        _pieDistribution(r),
+      ]),
+    );
+  }
+
+  Widget _pieDistribution(C2Result result) {
+    var fgOnly = 0;
+    var hmOnly = 0;
+    var both = 0;
+    var neither = 0;
+    for (final moment in result.assessedMoments) {
+      if (moment.fg.present && moment.hm.present) {
+        both++;
+      } else if (moment.fg.present) {
+        fgOnly++;
+      } else if (moment.hm.present) {
+        hmOnly++;
+      } else {
+        neither++;
+      }
+    }
+    final slices = <_PieSliceData>[
+      _PieSliceData('FG only · මුහුණ පමණක්', fgOnly, AppColors.coralDeep),
+      _PieSliceData('HM only · හිස පමණක්', hmOnly, AppColors.primaryDeep),
+      _PieSliceData('Both · දෙකම', both, AppColors.sun),
+      _PieSliceData('Neither · කිසිවක් නැත', neither, AppColors.success),
+    ];
+
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text('Assessed moment results · තක්සේරු කළ අවස්ථා', style: AppTextStyles.label),
+      const SizedBox(height: AppSpacing.xs),
+      Text('Pinch to zoom · විශාල කිරීමට ඇඟිලි දෙකෙන් විහිදුවන්න', style: AppTextStyles.caption),
+      const SizedBox(height: AppSpacing.sm),
+      LayoutBuilder(builder: (context, constraints) {
+        final chartSize = constraints.maxWidth < 350 ? 180.0 : 210.0;
+        final chart = SizedBox(
+          width: chartSize,
+          height: chartSize,
+          child: InteractiveViewer(
+            minScale: 0.8,
+            maxScale: 3,
+            constrained: false,
+            boundaryMargin: const EdgeInsets.all(48),
+            child: SizedBox(
+              width: chartSize,
+              height: chartSize,
+              child: CustomPaint(
+                painter: _PieChartPainter(slices.map((slice) => slice.value.toDouble()).toList(),
+                    slices.map((slice) => slice.color).toList()),
+              ),
+            ),
+          ),
+        );
+        final legend = Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (final slice in slices) _pieLegend(slice, result.momentsAssessed),
+            const SizedBox(height: AppSpacing.xs),
+            Text('Total: ${result.momentsAssessed}', style: AppTextStyles.caption),
+          ],
+        );
+        if (constraints.maxWidth >= 440) {
+          return Row(children: [chart, const SizedBox(width: AppSpacing.md), Expanded(child: legend)]);
+        }
+        return Column(children: [chart, legend]);
+      }),
+    ]);
+  }
+
+  Widget _pieLegend(_PieSliceData slice, int total) {
+    final percent = total == 0 ? 0 : (slice.value * 100 / total).round();
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 3),
+      child: Row(children: [
+        Container(width: 11, height: 11, decoration: BoxDecoration(color: slice.color, shape: BoxShape.circle)),
+        const SizedBox(width: AppSpacing.xs),
+        Expanded(child: Text(slice.label, style: AppTextStyles.caption)),
+        Text('${slice.value} ($percent%)', style: AppTextStyles.label),
       ]),
     );
   }
@@ -178,11 +260,11 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
       ('head', 'Head movement · හිස චලනය', Icons.accessibility_new_outlined),
     ];
     return LayoutBuilder(builder: (context, constraints) {
-      final wide = constraints.maxWidth >= 560;
-      final width = wide ? (constraints.maxWidth - AppSpacing.md) / 2 : constraints.maxWidth;
+      final columns = constraints.maxWidth >= 360 ? 2 : 1;
+      final width = columns == 2 ? (constraints.maxWidth - AppSpacing.sm) / 2 : constraints.maxWidth;
       return Wrap(
-        spacing: AppSpacing.md,
-        runSpacing: AppSpacing.md,
+        spacing: AppSpacing.sm,
+        runSpacing: AppSpacing.sm,
         children: [
           for (final (key, label, icon) in channels)
             SizedBox(
@@ -198,14 +280,15 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
     final (mean, peak) = r.deviationOf(key);
     final exceeded = r.exceedCount(key);
     return SwaraCard(
+      padding: const EdgeInsets.all(AppSpacing.sm),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(children: [
-          Icon(icon, color: AppColors.primaryDeep),
-          const SizedBox(width: AppSpacing.sm),
-          Expanded(child: Text(label, style: AppTextStyles.titleMedium)),
-        if (exceeded > 0) StatusPill(label: '$exceeded unusual · අසාමාන්‍ය', color: AppColors.warning),
+        Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Icon(icon, color: AppColors.primaryDeep, size: 19),
+          const SizedBox(width: AppSpacing.xs),
+          Expanded(child: Text(label, style: AppTextStyles.label)),
+          if (exceeded > 0) Text('$exceeded', style: AppTextStyles.caption.copyWith(color: AppColors.warning)),
         ]),
-        const SizedBox(height: AppSpacing.md),
+        const SizedBox(height: AppSpacing.sm),
         _metricLine('Mean deviation · සාමාන්‍ය අපගමනය', mean == null ? '—' : '${mean.toStringAsFixed(1)} SD'),
         const SizedBox(height: AppSpacing.xs),
         _metricLine('Peak deviation · ඉහළම අපගමනය', peak == null ? '—' : '${peak.toStringAsFixed(1)} SD'),
@@ -213,12 +296,20 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _metricLine(String label, String value) => Row(
-        children: [
+  Widget _metricLine(String label, String value) => LayoutBuilder(builder: (context, constraints) {
+        if (constraints.maxWidth < 300) {
+          return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(label, style: AppTextStyles.caption),
+            const SizedBox(height: AppSpacing.xs),
+            Text(value, style: AppTextStyles.label),
+          ]);
+        }
+        return Row(children: [
           Expanded(child: Text(label, style: AppTextStyles.caption)),
-          Text(value, style: AppTextStyles.label),
-        ],
-      );
+          const SizedBox(width: AppSpacing.sm),
+          Flexible(child: Text(value, style: AppTextStyles.label, textAlign: TextAlign.end)),
+        ]);
+      });
 
   Widget _momentList(C2Result r) {
     return SwaraCard(
@@ -233,19 +324,19 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
             ListTile(
               dense: true,
               contentPadding: EdgeInsets.zero,
-              title: Row(children: [
-                Expanded(
-                  child: Text(
+              title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(
                     'Moment ${m.index + 1} · අවස්ථාව ${m.index + 1} · ${m.start.toStringAsFixed(1)}–${m.end.toStringAsFixed(1)} s'
                     '${m.types.isEmpty ? '' : ' · ${m.types.map((t) => t.replaceAll('_', ' ')).join(', ')}'}',
                     style: AppTextStyles.label,
-                  ),
                 ),
-                if (!m.assessed) const StatusPill(label: 'Face not visible · මුහුණ නොපෙනේ', color: AppColors.textLight),
-                if (m.fg.present) const StatusPill(label: 'FG · මුහුණ', color: AppColors.warning),
-                if (m.hm.present) ...[
-                  const SizedBox(width: AppSpacing.xs),
-                  const StatusPill(label: 'HM · හිස', color: AppColors.warning),
+                if (!m.assessed || m.fg.present || m.hm.present) ...[
+                  const SizedBox(height: AppSpacing.xs),
+                  Wrap(spacing: AppSpacing.xs, runSpacing: AppSpacing.xs, children: [
+                    if (!m.assessed) const StatusPill(label: 'Face not visible · මුහුණ නොපෙනේ', color: AppColors.textLight),
+                    if (m.fg.present) const StatusPill(label: 'FG · මුහුණ', color: AppColors.warning),
+                    if (m.hm.present) const StatusPill(label: 'HM · හිස', color: AppColors.warning),
+                  ]),
                 ],
               ]),
               subtitle: Text(
@@ -261,4 +352,49 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
       ),
     );
   }
+}
+
+class _PieSliceData {
+  final String label;
+  final int value;
+  final Color color;
+
+  const _PieSliceData(this.label, this.value, this.color);
+}
+
+class _PieChartPainter extends CustomPainter {
+  final List<double> values;
+  final List<Color> colors;
+
+  const _PieChartPainter(this.values, this.colors);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final diameter = math.min(size.width, size.height);
+    final rect = Rect.fromCircle(center: size.center(Offset.zero), radius: diameter / 2);
+    final total = values.fold<double>(0, (sum, value) => sum + value);
+    if (total <= 0) {
+      canvas.drawCircle(rect.center, rect.width / 2, Paint()..color = AppColors.divider);
+      return;
+    }
+    var start = -math.pi / 2;
+    for (var i = 0; i < values.length; i++) {
+      if (values[i] <= 0) continue;
+      final sweep = values[i] / total * math.pi * 2;
+      canvas.drawArc(rect, start, sweep, true, Paint()..color = colors[i]);
+      start += sweep;
+    }
+    canvas.drawCircle(
+      rect.center,
+      diameter / 2,
+      Paint()
+        ..color = AppColors.surfaceRaised
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant _PieChartPainter oldDelegate) =>
+      oldDelegate.values != values || oldDelegate.colors != colors;
 }
