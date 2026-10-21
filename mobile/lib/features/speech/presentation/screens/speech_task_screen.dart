@@ -477,11 +477,9 @@ class _SpeechTaskScreenState extends ConsumerState<SpeechTaskScreen> with Single
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(18),
-              // The catalog's imageRef when the app has that picture, otherwise the park scene.
               child: Image.asset(
-                picture?.imageRef ?? 'assets/images/park_family.png',
+                'assets/icons/pic.jpeg',
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Image.asset('assets/images/park_family.png', fit: BoxFit.cover),
               ),
             ),
           ),
