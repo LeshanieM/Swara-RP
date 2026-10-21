@@ -1,0 +1,173 @@
+{
+  "taskType": "reading",
+  "language": "en",
+  "audio": {
+    "durationSec": 21.833,
+    "sampleRate": 16000,
+    "originalSampleRate": 16000,
+    "channels": 1,
+    "format": "WAV"
+  },
+  "detector": {
+    "name": "acoustic-b0",
+    "version": "0.1.0-provisional",
+    "requested": "acoustic",
+    "fallback": false,
+    "fallbackReason": null
+  },
+  "windows": {
+    "sizeSec": 3.0,
+    "hopSec": 1.5,
+    "threshold": 0.5,
+    "count": 14
+  },
+  "events": [
+    {
+      "type": "sound_repetition",
+      "start": 0.0,
+      "end": 0.74,
+      "duration": 0.74,
+      "confidence": 0.989
+    },
+    {
+      "type": "word_repetition",
+      "start": 4.14,
+      "end": 5.44,
+      "duration": 1.3,
+      "confidence": 0.832
+    },
+    {
+      "type": "prolongation",
+      "start": 8.48,
+      "end": 9.24,
+      "duration": 0.76,
+      "confidence": 0.715
+    },
+    {
+      "type": "block",
+      "start": 12.87,
+      "end": 13.84,
+      "duration": 0.97,
+      "confidence": 1.0
+    },
+    {
+      "type": "sound_repetition",
+      "start": 17.54,
+      "end": 18.32,
+      "duration": 0.78,
+      "confidence": 0.842
+    }
+  ],
+  "stutterMoments": [
+    {
+      "start": 0.0,
+      "end": 0.74,
+      "duration": 0.74,
+      "types": [
+        "sound_repetition"
+      ]
+    },
+    {
+      "start": 4.14,
+      "end": 5.44,
+      "duration": 1.3,
+      "types": [
+        "word_repetition"
+      ]
+    },
+    {
+      "start": 8.48,
+      "end": 9.24,
+      "duration": 0.76,
+      "types": [
+        "prolongation"
+      ]
+    },
+    {
+      "start": 12.87,
+      "end": 13.84,
+      "duration": 0.97,
+      "types": [
+        "block"
+      ]
+    },
+    {
+      "start": 17.54,
+      "end": 18.32,
+      "duration": 0.78,
+      "types": [
+        "sound_repetition"
+      ]
+    }
+  ],
+  "counts": {
+    "block": 1,
+    "prolongation": 1,
+    "soundRepetition": 2,
+    "wordRepetition": 1,
+    "interjection": 0
+  },
+  "primaryType": "sound_repetition",
+  "syllables": {
+    "total": 66,
+    "source": "passage",
+    "estimatedFromAudio": 73,
+    "fromText": 66
+  },
+  "stutteredSyllables": 5,
+  "percentSS": 7.58,
+  "durationTerm": {
+    "meanLongest3Sec": 1.017,
+    "longestSec": 1.3,
+    "eventsUsed": 3
+  },
+  "severity": {
+    "label": "moderate",
+    "displayLabel": "Moderate",
+    "score": 11,
+    "maxScore": 20,
+    "components": {
+      "frequencyPoints": 8,
+      "durationPoints": 3,
+      "physicalPoints": 0
+    },
+    "belowFrequencyFloor": false,
+    "physicalTermUsed": false,
+    "taskType": "reading",
+    "method": "event-based %SS + duration term, scored per task (SSI-4-inspired audio-based estimate)",
+    "version": "c1-severity-0.1-provisional",
+    "provisional": true
+  },
+  "baselines": {
+    "mimiChunkRatio": {
+      "stutteredChunks": 9,
+      "totalChunks": 14,
+      "ratioPercent": 64.29,
+      "label": "moderate"
+    }
+  },
+  "features": {
+    "duration": 21.833,
+    "speechDuration": 17.23,
+    "pauseCount": 5,
+    "averagePauseDuration": 0.552,
+    "longestPause": 0.97,
+    "speechRate": 3.023,
+    "articulationRate": 3.831,
+    "estimatedSyllables": 73
+  },
+  "summary": {
+    "stutterDetected": true,
+    "stutterType": "Repetition",
+    "severity": "Moderate",
+    "confidence": 0.876
+  },
+  "warnings": [
+    {
+      "code": "short_sample",
+      "message": "Only 66 syllables; %SS is unstable below 100 (clinical samples usually have 200+)."
+    }
+  ],
+  "processingMs": 31,
+  "serviceVersion": "0.1.0"
+}
