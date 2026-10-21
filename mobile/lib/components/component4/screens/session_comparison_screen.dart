@@ -2,12 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swara/core/theme/app_theme.dart';
 import 'package:swara/components/component4/widgets/c4_header.dart';
+import 'package:swara/components/component4/services/c4_flow.dart';
 
-class SessionComparisonScreen extends StatelessWidget {
+class SessionComparisonScreen extends StatefulWidget {
   const SessionComparisonScreen({super.key});
 
   @override
+  State<SessionComparisonScreen> createState() => _SessionComparisonScreenState();
+}
+
+class _SessionComparisonScreenState extends State<SessionComparisonScreen> {
+  late final Future<C4Comparison> _comparison = C4Flow.comparison();
+
+  static String _change(num? before, num? now, String up, String down, String same) {
+    if (before == null || now == null) return 'The first session to compare with';
+    if (now > before) return up;
+    if (now < before) return down;
+    return same;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    return FutureBuilder<C4Comparison>(
+      future: _comparison,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const Scaffold(body: Center(child: CircularProgressIndicator()));
+        }
+        final c = snapshot.data ?? const C4Comparison();
+        return _build(context, c, error: snapshot.error);
+      },
+    );
+  }
+
+  Widget _build(BuildContext context, C4Comparison c, {Object? error}) {
+    String num1(double? x) => x == null ? '—' : x.toStringAsFixed(1);
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -34,25 +63,33 @@ class SessionComparisonScreen extends StatelessWidget {
 
                     _buildComparisonCard(
                       title: 'MLU',
-                      val1: '4.1',
-                      val2: '5.2',
-                      description: 'Increased from Session 1',
+                      val1: num1(c.mluBefore),
+                      val2: num1(c.mluNow),
+                      description: _change(c.mluBefore, c.mluNow, 'Increased from Session 1', 'Lower than Session 1', 'Same as Session 1'),
                       icon: Icons.show_chart,
                     ),
                     const SizedBox(height: 16),
                     _buildComparisonCard(
                       title: 'NDW',
-                      val1: '28',
-                      val2: '37',
-                      description: 'More different words were used',
+                      val1: c.ndwBefore?.toString() ?? '—',
+                      val2: c.ndwNow?.toString() ?? '—',
+                      description: _change(c.ndwBefore, c.ndwNow, 'More different words were used', 'Fewer different words this time', 'The same number of different words'),
                       icon: Icons.bar_chart,
                     ),
                     const SizedBox(height: 16),
                     _buildComparisonCard(
+                      title: 'Stuttering (%SS)',
+                      val1: num1(c.percentSSBefore),
+                      val2: num1(c.percentSSNow),
+                      description: _change(c.percentSSBefore, c.percentSSNow, 'More stuttering than last time', 'Less stuttering than last time', 'About the same'),
+                      icon: Icons.graphic_eq,
+                    ),
+                    const SizedBox(height: 16),
+                    _buildComparisonCard(
                       title: 'Response Duration',
-                      val1: '01:05',
-                      val2: '01:24',
-                      description: 'Longer spontaneous response',
+                      val1: fmtClock(c.durationBefore),
+                      val2: fmtClock(c.durationNow),
+                      description: _change(c.durationBefore, c.durationNow, 'Longer spontaneous response', 'A shorter response this time', 'About the same length'),
                       icon: Icons.timer,
                     ),
 
