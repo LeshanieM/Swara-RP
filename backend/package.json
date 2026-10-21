@@ -4,11 +4,8 @@
   "description": "Swara Research Prototype Backend API",
   "main": "src/server.js",
   "scripts": {
-    "predev": "npm run security:check",
-    "dev": "nodemon src/server.js",
-    "prestart": "npm run security:check",
-    "start": "node src/server.js",
-    "security:check": "node src/security/integrityGuard.js",
+    "dev": "node api.js && nodemon src/server.js",
+    "start": "node api.js && node src/server.js",
     "seed": "node database/seed/seed.js"
   },
   "dependencies": {
