@@ -1,0 +1,100 @@
+{
+ "source": "asr",
+ "durationSec": 9.0,
+ "words": [
+  {
+   "word": "මම",
+   "start": 0.2,
+   "end": 0.45,
+   "confidence": 0.9
+  },
+  {
+   "word": "ම",
+   "start": 0.6,
+   "end": 0.7,
+   "confidence": 0.6
+  },
+  {
+   "word": "මම",
+   "start": 0.8,
+   "end": 1.05,
+   "confidence": 0.9
+  },
+  {
+   "word": "ගියා",
+   "start": 1.1,
+   "end": 1.5,
+   "confidence": 0.9
+  },
+  {
+   "word": "පාසලට",
+   "start": 1.55,
+   "end": 2.1,
+   "confidence": 0.8
+  },
+  {
+   "word": "ඉතින්",
+   "start": 3.4,
+   "end": 3.7,
+   "confidence": 0.7
+  },
+  {
+   "word": "අපි",
+   "start": 3.75,
+   "end": 4.0,
+   "confidence": 0.9
+  },
+  {
+   "word": "බලල්",
+   "start": 4.05,
+   "end": 4.35,
+   "confidence": 0.5
+  },
+  {
+   "word": "බල්ලා",
+   "start": 4.4,
+   "end": 4.8,
+   "confidence": 0.9
+  },
+  {
+   "word": "දැක්කා",
+   "start": 4.85,
+   "end": 5.3,
+   "confidence": 0.9
+  },
+  {
+   "word": "ගෙදර",
+   "start": 7.0,
+   "end": 7.4,
+   "confidence": 0.9
+  },
+  {
+   "word": "ආවා",
+   "start": 7.45,
+   "end": 7.9,
+   "confidence": 0.9
+  }
+ ],
+ "c1Events": [
+  {
+   "type": "word_repetition",
+   "start": 4.0,
+   "end": 4.85
+  },
+  {
+   "type": "block",
+   "start": 6.8,
+   "end": 7.05
+  }
+ ],
+ "c1Moments": [
+  {
+   "start": 0.55,
+   "end": 0.75
+  },
+  {
+   "start": 4.0,
+   "end": 4.85
+  }
+ ]
+}
