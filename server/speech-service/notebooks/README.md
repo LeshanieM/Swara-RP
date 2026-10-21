@@ -46,6 +46,13 @@ Run notebooks 1, 2 and 3 in order (Run All). Every step can be re-run: downloads
 - SEP-28k's FluencyBank part needs a TalkBank login and is not downloaded.
 - Notebook 3 writes a report to `training/reports/<version>.md` and `.json`: per-label F1, precision and recall, macro-F1, and every input/head combination. The model is chosen on dev; test is only reported. The dataset plan quotes about 0.45 macro-F1 for published systems on these splits; check the paper's setting before comparing.
 
+After notebook 3 finishes, print the latest test report in a readable terminal table (PowerShell):
+
+```powershell
+cd D:\Swara-RP\server\speech-service
+.\.venv\Scripts\python.exe show_accuracy.py
+```
+
 **Use the model in the service:**
 
 ```bash
