@@ -44,7 +44,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (!success && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(ref.read(authProvider).error ?? 'Login failed'),
+          content: Text('${ref.read(authProvider).error ?? 'Sign in did not work'} · පුරනය වීමට නොහැකි විය'),
           backgroundColor: AppColors.error,
         ),
       );
@@ -128,7 +128,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                       decoration: BoxDecoration(color: AppColors.sun,
                                           borderRadius: BorderRadius.circular(3))),
                                   const SizedBox(height: 10),
-                                  Text('Sinhala speech support', textAlign: TextAlign.center,
+                                  Text('Sinhala speech support · සිංහල කථන සහාය', textAlign: TextAlign.center,
                                       style: AppTextStyles.bodySmall),
                                 ]),
                               ),
@@ -146,7 +146,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                         color: AppColors.primary, size: 20),
                                     const SizedBox(width: 10),
                                     Expanded(child: Text(
-                                      _isDemoMode ? 'Demo mode is on' : 'Use demo mode',
+                                      _isDemoMode ? 'Demo mode is on · ආදර්ශ මාදිලිය ක්‍රියාත්මකයි' : 'Use demo mode · ආදර්ශ මාදිලිය භාවිත කරන්න',
                                       style: AppTextStyles.bodySmall.copyWith(color: AppColors.text),
                                     )),
                                     Switch(value: _isDemoMode, onChanged: (_) => _toggleDemo()),
@@ -158,11 +158,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 Row(children: [
                                   Expanded(child: OutlinedButton(
                                     onPressed: () => _fillDemo('parent@demo.com', 'demo123'),
-                                    child: const Text('Parent demo'))),
+                                    child: const Text('Parent demo · දෙමාපිය'))),
                                   const SizedBox(width: 8),
                                   Expanded(child: OutlinedButton(
                                     onPressed: () => _fillDemo('therapist@demo.com', 'demo123'),
-                                    child: const Text('Therapist demo'))),
+                                    child: const Text('Therapist demo · චිකිත්සක'))),
                                 ]),
                               ],
                               const SizedBox(height: 20),
@@ -177,9 +177,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 ),
                                 validator: (v) {
                                   final email = v?.trim() ?? '';
-                                  if (email.isEmpty) return 'Please enter your email';
+                                  if (email.isEmpty) return 'Please enter your email · විද්‍යුත් තැපෑල ඇතුළත් කරන්න';
                                   if (!RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(email)) {
-                                    return 'Enter a valid email address';
+                                    return 'Enter a valid email address · නිවැරදි විද්‍යුත් තැපෑලක් ඇතුළත් කරන්න';
                                   }
                                   return null;
                                 },
@@ -199,7 +199,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                     onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                                   ),
                                 ),
-                                validator: (v) => v == null || v.isEmpty ? 'Please enter your password' : null,
+                                validator: (v) => v == null || v.isEmpty ? 'Please enter your password · මුරපදය ඇතුළත් කරන්න' : null,
                               )),
                               SizedBox(height: short ? 20 : 24),
                               CalmReveal(order: 3, child: Column(children: [
@@ -209,7 +209,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 const SizedBox(height: 12),
                                 Wrap(alignment: WrapAlignment.center, crossAxisAlignment: WrapCrossAlignment.center,
                                   children: [
-                                    Text('New to Swara? · අලුතින්ද?', style: AppTextStyles.bodySmall),
+                                    Text('New to Swara? · Swara වෙත අලුතින්ද?', style: AppTextStyles.bodySmall),
                                     TextButton(
                                       style: TextButton.styleFrom(minimumSize: const Size(48, 52)),
                                       onPressed: () => context.go(widget.redirectTo == null
@@ -221,7 +221,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 ),
                               ])),
                               const SizedBox(height: 12),
-                              Text(AppConstants.researchDisclaimer, textAlign: TextAlign.center,
+                              Text(
+                                  'පර්යේෂණ සඳහා පමණි. මෙය කථන-භාෂා චිකිත්සක සේවාව වෙනුවට නොවේ.',
+                                  textAlign: TextAlign.center,
                                   style: AppTextStyles.caption),
                             ],
                           ),

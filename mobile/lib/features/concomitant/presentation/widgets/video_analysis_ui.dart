@@ -35,12 +35,12 @@ String fmtDate(DateTime? d) {
 String humanizeReason(String? reason) {
   if (reason == null || reason.isEmpty) return 'No reason was reported.';
   const codes = {
-    'dependency_not_installed': 'Required dependency is not installed',
-    'model_unavailable': 'Model not installed',
-    'executable_not_found': 'Executable not found',
-    'runtime_error': 'Runtime error',
-    'unsupported_platform': 'Unsupported platform',
-    'technology_does_not_provide_this_feature': 'Not provided by this technology',
+    'dependency_not_installed': 'Required dependency is not installed · අවශ්‍ය පරායත්තය ස්ථාපනය කර නැත',
+    'model_unavailable': 'Model not installed · ආකෘතිය ස්ථාපනය කර නැත',
+    'executable_not_found': 'Executable not found · ක්‍රියාත්මක කළ හැකි ගොනුව හමු නොවීය',
+    'runtime_error': 'Runtime error · ක්‍රියාත්මක වීමේ දෝෂයක්',
+    'unsupported_platform': 'Unsupported platform · සහාය නොදක්වන වේදිකාවක්',
+    'technology_does_not_provide_this_feature': 'Not provided by this technology · මෙම තාක්ෂණයෙන් ලබා නොදේ',
   };
   final idx = reason.indexOf(':');
   final code = idx == -1 ? reason.trim() : reason.substring(0, idx).trim();
@@ -56,12 +56,12 @@ String humanizeReason(String? reason) {
 
 extension TechStatusUi on TechStatus {
   String get label => switch (this) {
-        TechStatus.waiting => 'Waiting',
-        TechStatus.processing => 'Processing',
-        TechStatus.completed => 'Completed',
-        TechStatus.unavailable => 'Unavailable',
-        TechStatus.failed => 'Failed',
-        TechStatus.unknown => 'Unknown',
+        TechStatus.waiting => 'Waiting · රැඳී සිටියි',
+        TechStatus.processing => 'Processing · සැකසෙමින්',
+        TechStatus.completed => 'Completed · සම්පූර්ණයි',
+        TechStatus.unavailable => 'Unavailable · ලබාගත නොහැක',
+        TechStatus.failed => 'Failed · අසාර්ථකයි',
+        TechStatus.unknown => 'Unknown · නොදනී',
       };
 
   IconData get icon => switch (this) {

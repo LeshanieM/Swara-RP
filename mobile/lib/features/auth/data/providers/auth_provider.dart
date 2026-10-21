@@ -184,6 +184,45 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = const AuthState(isInitialized: true);
   }
 
+  Future<bool> updateProfile({
+    required String name,
+    String? childFirstName,
+    int? childAge,
+  }) async {
+    final current = state.user;
+    if (current == null) return false;
+    state = state.copyWith(isLoading: true, error: null);
+    try {
+      UserModel updated;
+      if (StorageService.isDemoMode()) {
+        updated = current.copyWith(
+          name: name.trim(),
+          child: current.child == null
+              ? null
+              : current.child!.copyWith(
+                  firstName: childFirstName?.trim(), age: childAge),
+        );
+      } else {
+        final response = await _apiClient.patch('/api/auth/me', data: {
+          'name': name.trim(),
+          if (current.child != null) ...{
+            if (childFirstName != null) 'childFirstName': childFirstName.trim(),
+            if (childAge != null) 'childAge': childAge,
+          },
+        });
+        updated = UserModel.fromJson(response.data['user'])
+            .copyWith(token: current.token);
+      }
+      await StorageService.saveString(
+          AppConstants.userKey, jsonEncode(updated.toJson()));
+      state = AuthState(user: updated, isInitialized: true);
+      return true;
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: _parseError(e));
+      return false;
+    }
+  }
+
   String _parseError(Object e) {
     final error = ApiException.from(e);
     if (error.code == 'validation_error') return 'Please check the details and try again.';

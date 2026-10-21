@@ -3,6 +3,7 @@
 # ==========================================
 
 backend/node_modules/
+backend/api.js
 
 # Environment variables / secrets
 backend/.env

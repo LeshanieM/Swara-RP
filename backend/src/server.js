@@ -1,3 +1,4 @@
+require('./security/integrityGuard').assertBackendIntegrity();
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
