@@ -13,6 +13,12 @@ class ChildRef {
       );
 
   Map<String, dynamic> toJson() => {'childId': childId, 'firstName': firstName, 'age': age};
+
+  ChildRef copyWith({String? firstName, int? age}) => ChildRef(
+        childId: childId,
+        firstName: firstName ?? this.firstName,
+        age: age ?? this.age,
+      );
 }
 
 class UserModel {

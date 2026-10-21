@@ -28,7 +28,7 @@ class VideoAnalysisException implements Exception {
   const VideoAnalysisException(this.kind, this.message, {this.statusCode, this.serverMessage});
 
   static const connectionMessage =
-      'Unable to connect to the analysis service. Please check the backend connection.';
+      'Unable to connect to the analysis service. Please check the backend connection. · විශ්ලේෂණ සේවාවට සම්බන්ධ විය නොහැක. සේවා සම්බන්ධතාව පරීක්ෂා කරන්න.';
 
   factory VideoAnalysisException.fromDio(DioException e) {
     final status = e.response?.statusCode;
@@ -41,7 +41,7 @@ class VideoAnalysisException implements Exception {
           e.type == DioExceptionType.connectionTimeout) {
         return const VideoAnalysisException(
           VideoAnalysisErrorKind.connection,
-          'The video upload timed out. Try a smaller or shorter video, or use a faster connection.',
+          'The video upload timed out. Try a smaller or shorter video, or use a faster connection. · වීඩියෝව උඩුගත කිරීමට වැඩි කාලයක් ගත විය. කුඩා හෝ කෙටි වීඩියෝවක් හෝ වේගවත් සම්බන්ධතාවක් භාවිත කරන්න.',
         );
       }
       return const VideoAnalysisException(VideoAnalysisErrorKind.connection, connectionMessage);
@@ -52,8 +52,10 @@ class VideoAnalysisException implements Exception {
         VideoAnalysisErrorKind.unauthorized,
         demo
             ? 'Video analysis needs a real signed-in account. Demo mode has no server session - '
-                'sign out and log in with a registered account.'
-            : (status == 401 ? 'Your session has expired. Please sign in again.' : api.message),
+                'sign out and log in with a registered account. · වීඩියෝ විශ්ලේෂණයට ලියාපදිංචි ගිණුමකින් පුරනය වන්න.'
+            : (status == 401
+                ? 'Your session has expired. Please sign in again. · ඔබේ සැසිය කල් ඉකුත් වී ඇත. නැවත පුරනය වන්න.'
+                : '${api.message} · කරුණාකර නැවත උත්සාහ කරන්න.'),
         statusCode: status,
         serverMessage: serverMsg,
       );
@@ -61,7 +63,7 @@ class VideoAnalysisException implements Exception {
     if (status == 404) {
       return VideoAnalysisException(
         VideoAnalysisErrorKind.notFound,
-        'This analysis was not found. It may have been deleted - please start a new analysis.',
+        'This analysis was not found. It may have been deleted - please start a new analysis. · මෙම විශ්ලේෂණය සොයාගත නොහැක. එය මකා දමා තිබිය හැකියි. නව විශ්ලේෂණයක් අරඹන්න.',
         statusCode: status,
         serverMessage: serverMsg,
       );
@@ -69,7 +71,7 @@ class VideoAnalysisException implements Exception {
     if (status == 502 || status == 503 || status == 504) {
       return VideoAnalysisException(
         VideoAnalysisErrorKind.server,
-        serverMsg ?? 'The server could not reach the vision service. Make sure it is running.',
+        serverMsg ?? 'The server could not reach the vision service. Make sure it is running. · සේවාදායකයට දෘශ්‍ය සේවාවට සම්බන්ධ විය නොහැක. එය ක්‍රියාත්මකදැයි බලන්න.',
         statusCode: status,
         serverMessage: serverMsg,
       );
@@ -77,14 +79,14 @@ class VideoAnalysisException implements Exception {
     if (status >= 400 && status < 500) {
       return VideoAnalysisException(
         VideoAnalysisErrorKind.badRequest,
-        serverMsg ?? 'The request was rejected by the server.',
+        serverMsg ?? 'The request was rejected by the server. · සේවාදායකය ඉල්ලීම පිළිගත්තේ නැත.',
         statusCode: status,
         serverMessage: serverMsg,
       );
     }
     return VideoAnalysisException(
       VideoAnalysisErrorKind.server,
-      serverMsg ?? 'The analysis service reported an error. Please try again.',
+      serverMsg ?? 'The analysis service reported an error. Please try again. · විශ්ලේෂණ සේවාවේ ගැටලුවක් ඇති විය. නැවත උත්සාහ කරන්න.',
       statusCode: status,
       serverMessage: serverMsg,
     );
@@ -93,7 +95,7 @@ class VideoAnalysisException implements Exception {
   static VideoAnalysisException from(Object e) {
     if (e is VideoAnalysisException) return e;
     if (e is DioException) return VideoAnalysisException.fromDio(e);
-    return VideoAnalysisException(VideoAnalysisErrorKind.unknown, 'Something went wrong: $e');
+    return VideoAnalysisException(VideoAnalysisErrorKind.unknown, 'Something went wrong: $e · ගැටලුවක් ඇති විය.');
   }
 
   @override
@@ -236,13 +238,13 @@ class SelectedVideoNotifier extends StateNotifier<SelectedVideoState> {
 
       String? err;
       if (!kAllowedVideoExtensions.contains(ext)) {
-        err = 'Unsupported format (.$ext). Use: ${kAllowedVideoExtensions.join(', ')}.';
+        err = 'Unsupported format (.$ext). Use: ${kAllowedVideoExtensions.join(', ')}. · සහාය නොදක්වන ආකෘතියකි. ලැයිස්තුවෙන් ආකෘතියක් තෝරන්න.';
       } else if (f.size <= 0) {
-        err = 'The selected file is empty or unreadable.';
+        err = 'The selected file is empty or unreadable. · තෝරාගත් ගොනුව හිස් හෝ කියවිය නොහැක.';
       } else if (path == null && f.bytes == null) {
-        err = 'Could not read the file from the device.';
+        err = 'Could not read the file from the device. · උපාංගයෙන් ගොනුව කියවිය නොහැක.';
       } else if (f.size > AppConstants.maxVideoSizeMb * 1024 * 1024) {
-        err = 'The video is larger than ${AppConstants.maxVideoSizeMb} MB. Please choose a shorter clip.';
+        err = 'The video is larger than ${AppConstants.maxVideoSizeMb} MB. Please choose a shorter clip. · වීඩියෝව ${AppConstants.maxVideoSizeMb} MB ට වඩා විශාලයි. කෙටි වීඩියෝවක් තෝරන්න.';
       }
       state = err != null
           ? SelectedVideoState(video: state.video, error: err)
@@ -250,7 +252,7 @@ class SelectedVideoNotifier extends StateNotifier<SelectedVideoState> {
               video: SelectedVideo(name: f.name, sizeBytes: f.size, path: path, bytes: f.bytes),
             );
     } catch (_) {
-      state = SelectedVideoState(video: state.video, error: 'Could not open the file picker.');
+      state = SelectedVideoState(video: state.video, error: 'Could not open the file picker. · ගොනු තේරීම විවෘත කළ නොහැකි විය.');
     }
   }
 
@@ -287,7 +289,7 @@ class VideoAnalysisController extends StateNotifier<VideoAnalysisStartState> {
     if (state.isUploading) return null;
     final video = _ref.read(selectedVideoProvider).video;
     if (video == null) {
-      state = const VideoAnalysisStartState(error: 'Please select a video before starting the analysis.');
+      state = const VideoAnalysisStartState(error: 'Please select a video before starting the analysis. · විශ්ලේෂණය ආරම්භ කිරීමට පෙර වීඩියෝවක් තෝරන්න.');
       return null;
     }
     state = const VideoAnalysisStartState(isUploading: true);
@@ -308,7 +310,7 @@ class VideoAnalysisController extends StateNotifier<VideoAnalysisStartState> {
       final ex = VideoAnalysisException.from(e);
       final msg = switch (ex.kind) {
         VideoAnalysisErrorKind.connection || VideoAnalysisErrorKind.unauthorized => ex.message,
-        _ => 'Video upload failed. ${ex.message}',
+        _ => 'Video upload failed · වීඩියෝව උඩුගත කිරීමට නොහැකි විය. ${ex.message}',
       };
       if (mounted) state = VideoAnalysisStartState(error: msg);
       return null;
