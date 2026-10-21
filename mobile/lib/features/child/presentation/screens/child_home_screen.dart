@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swara/core/theme/app_theme.dart';
+import 'package:swara/core/widgets/shared_widgets.dart';
 import 'package:swara/features/auth/data/providers/auth_provider.dart';
 
 class ChildHomeScreen extends ConsumerWidget {
@@ -19,8 +20,8 @@ class ChildHomeScreen extends ConsumerWidget {
         ? rawName.split(' ').first
         : null;
 
-    return ColoredBox(
-      color: AppColors.background,
+    return CalmSceneBackground(
+      groundColor: AppColors.groundHome,
       child: SafeArea(
         bottom: false,
         child: Column(
@@ -65,7 +66,7 @@ class ChildHomeScreen extends ConsumerWidget {
                           titleSi: 'කතා කරමු',
                           titleEn: "Let's Talk",
                           subtitle: 'Reading and picture practice',
-                          accentColor: const Color(0xFF3B82F6),
+                          accentColor: AppColors.primary,
                           onAccentColor: Colors.white,
                           onTap: () => context.push('/c1/record'),
                         ),
@@ -75,7 +76,7 @@ class ChildHomeScreen extends ConsumerWidget {
                           titleSi: 'කතා කරන විදිහ',
                           titleEn: 'Behavior Analysis',
                           subtitle: 'Explore movement features in a video',
-                          accentColor: const Color(0xFF0FA3A3),
+                          accentColor: AppColors.coralDeep,
                           onAccentColor: Colors.white,
                           onTap: () => context.push('/c2/video/upload'),
                         ),
@@ -85,8 +86,8 @@ class ChildHomeScreen extends ConsumerWidget {
                           titleSi: 'කතා පුහුණුව',
                           titleEn: 'Therapy Journey',
                           subtitle: 'Guided speech practice',
-                          accentColor: const Color(0xFFE08A2E),
-                          onAccentColor: Colors.white,
+                          accentColor: AppColors.sun,
+                          onAccentColor: AppColors.text,
                           onTap: () => context.push('/c3/forest-therapy'),
                         ),
                         _CompactAdventureCard(
@@ -95,8 +96,8 @@ class ChildHomeScreen extends ConsumerWidget {
                           titleSi: 'නිදහසේ කතා',
                           titleEn: 'Free Talk',
                           subtitle: 'Speak on a topic you like',
-                          accentColor: const Color(0xFF7C5CE0),
-                          onAccentColor: Colors.white,
+                          accentColor: AppColors.lilacTint,
+                          onAccentColor: AppColors.text,
                           onTap: () => context.push('/c4'),
                         ),
                       ],
@@ -132,15 +133,9 @@ class ChildHomeScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 14, 12, 14),
       decoration: BoxDecoration(
-        color: AppColors.primaryWash,
-        borderRadius: BorderRadius.circular(AppRadii.lg),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primaryDeep.withValues(alpha: 0.10),
-            blurRadius: 14,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        color: Colors.white.withValues(alpha: 0.84),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.primaryWash, width: 2),
       ),
       child: Row(
         children: [
@@ -296,22 +291,9 @@ class ChildHomeScreen extends ConsumerWidget {
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                AppColors.ctaOrange.withValues(alpha: 0.90),
-                AppColors.ctaOrange.withValues(alpha: 0.70),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(AppRadii.lg),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.ctaOrange.withValues(alpha: 0.35),
-                blurRadius: 16,
-                offset: const Offset(0, 6),
-              ),
-            ],
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(32),
+            border: Border.all(color: AppColors.primaryWash, width: 2),
           ),
           child: Row(
             children: [
@@ -319,12 +301,12 @@ class ChildHomeScreen extends ConsumerWidget {
                 width: 56,
                 height: 56,
                 decoration: const BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.sunTint,
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
                   Icons.emoji_events_rounded,
-                  color: AppColors.ctaOrange,
+                  color: AppColors.sun,
                   size: 30,
                 ),
               ),
@@ -336,7 +318,7 @@ class ChildHomeScreen extends ConsumerWidget {
                     Text(
                       'මගේ ගමන',
                       style: AppTextStyles.heading3.copyWith(
-                        color: Colors.white,
+                        color: AppColors.text,
                         fontSize: 16,
                       ),
                     ),
@@ -344,7 +326,7 @@ class ChildHomeScreen extends ConsumerWidget {
                     Text(
                       'My progress',
                       style: AppTextStyles.label.copyWith(
-                        color: Colors.white,
+                        color: AppColors.primary,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -352,7 +334,7 @@ class ChildHomeScreen extends ConsumerWidget {
                     Text(
                       'See how far you\'ve come!',
                       style: AppTextStyles.caption.copyWith(
-                        color: Colors.white.withValues(alpha: 0.9),
+                        color: AppColors.textLight,
                       ),
                     ),
                   ],
@@ -360,7 +342,7 @@ class ChildHomeScreen extends ConsumerWidget {
               ),
               const Icon(
                 Icons.chevron_right_rounded,
-                color: Colors.white,
+                color: AppColors.primary,
                 size: 26,
               ),
             ],
@@ -378,9 +360,9 @@ class ChildHomeScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-        color: AppColors.surfaceRaised,
-        borderRadius: BorderRadius.circular(AppRadii.md),
-        border: Border.all(color: AppColors.divider),
+        color: AppColors.primaryWash.withValues(alpha: 0.6),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: AppColors.primaryWash, width: 1.5),
       ),
       child: Row(
         children: [
@@ -553,7 +535,7 @@ class _CompactAdventureCardState extends State<_CompactAdventureCard>
                             Text(
                               widget.titleEn,
                               style: AppTextStyles.label.copyWith(
-                                color: widget.accentColor,
+                                color: AppColors.primary,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),

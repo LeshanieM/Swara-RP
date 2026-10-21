@@ -60,229 +60,186 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   Future<void> _toggleDemo() async {
     await StorageService.setDemoMode(!_isDemoMode);
-    setState(() => _isDemoMode = !_isDemoMode);
+    if (mounted) setState(() => _isDemoMode = !_isDemoMode);
   }
+
+  Widget _prefixIcon(IconData icon) => Padding(
+        padding: const EdgeInsets.only(left: 10, right: 4),
+        child: Container(
+          width: 36,
+          height: 36,
+          margin: const EdgeInsets.symmetric(vertical: 6),
+          decoration: const BoxDecoration(
+            color: AppColors.primaryWash,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, color: AppColors.primary, size: 20),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
+    final media = MediaQuery.of(context);
+    final narrow = media.size.width < 360;
+    final short = media.size.height < 640;
+    final landscape = media.size.width > media.size.height;
+    final scale = media.textScaler.scale(1).clamp(1.0, 1.3).toDouble();
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Header
-            Container(
-              height: 240,
-              width: double.infinity,
-              color: AppColors.primaryDeep,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 36),
-                  Container(
-                    width: 72,
-                    height: 72,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withValues(alpha: 0.35),
-                      borderRadius: BorderRadius.circular(AppRadii.md),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'ස',
-                        style: AppTextStyles.heading1.copyWith(
-                          color: AppColors.onPrimary,
-                          fontSize: 36,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Welcome to Swara',
-                    style: AppTextStyles.heading2.copyWith(color: AppColors.onPrimary),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    'Sinhala speech support',
-                    style: AppTextStyles.bodySmall.copyWith(
-                      color: AppColors.onPrimary.withValues(alpha: 0.85),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.all(24),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      backgroundColor: AppColors.groundAdult,
+      body: CalmSceneBackground(
+        child: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              physics: const ClampingScrollPhysics(),
+              padding: EdgeInsets.symmetric(horizontal: narrow ? 16 : 24, vertical: 24),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: landscape ? 520 : 460),
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  alignment: Alignment.topCenter,
                   children: [
-                    const SizedBox(height: 8),
-                    Text('Sign In', style: AppTextStyles.heading2),
-                    const SizedBox(height: 6),
-                    Text(
-                      'Enter your credentials to continue',
-                      style: AppTextStyles.bodySmall,
-                    ),
-                    const SizedBox(height: 24),
-
-                    // Demo mode toggle
-                    GestureDetector(
-                      onTap: _toggleDemo,
+                    Padding(
+                      padding: const EdgeInsets.only(top: 38),
                       child: Container(
-                        padding: const EdgeInsets.all(14),
+                        width: double.infinity,
+                        padding: EdgeInsets.fromLTRB(narrow ? 20 : 24, 64, narrow ? 20 : 24, 24),
                         decoration: BoxDecoration(
-                          color: _isDemoMode
-                              ? AppColors.warning.withOpacity(0.1)
-                              : AppColors.primaryWash,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: _isDemoMode
-                                ? AppColors.warning.withOpacity(0.3)
-                                : AppColors.divider,
-                          ),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(32),
+                          border: Border.all(color: AppColors.primaryWash, width: 2),
                         ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              _isDemoMode ? Icons.science : Icons.science_outlined,
-                              color: _isDemoMode ? AppColors.warning : AppColors.primary,
-                              size: 20,
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                _isDemoMode
-                                    ? 'Demo Mode ON — tap to disable'
-                                    : 'Enable Demo Mode (no backend needed)',
-                                style: AppTextStyles.bodySmall.copyWith(
-                                  color: _isDemoMode ? AppColors.warning : AppColors.primary,
-                                  fontWeight: FontWeight.w600,
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              CalmReveal(
+                                order: 0,
+                                child: Column(children: [
+                                  Text('Welcome to Swara', textAlign: TextAlign.center,
+                                      style: AppTextStyles.heading2.copyWith(
+                                        fontSize: (32 * scale).clamp(24, 34).toDouble(),
+                                        height: 1.2,
+                                      )),
+                                  const SizedBox(height: 10),
+                                  Container(width: 48, height: 6,
+                                      decoration: BoxDecoration(color: AppColors.sun,
+                                          borderRadius: BorderRadius.circular(3))),
+                                  const SizedBox(height: 10),
+                                  Text('Sinhala speech support', textAlign: TextAlign.center,
+                                      style: AppTextStyles.bodySmall),
+                                ]),
+                              ),
+                              const SizedBox(height: 24),
+                              GestureDetector(
+                                onTap: _toggleDemo,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primaryWash,
+                                    borderRadius: BorderRadius.circular(22),
+                                  ),
+                                  child: Row(children: [
+                                    Icon(_isDemoMode ? Icons.science : Icons.science_outlined,
+                                        color: AppColors.primary, size: 20),
+                                    const SizedBox(width: 10),
+                                    Expanded(child: Text(
+                                      _isDemoMode ? 'Demo mode is on' : 'Use demo mode',
+                                      style: AppTextStyles.bodySmall.copyWith(color: AppColors.text),
+                                    )),
+                                    Switch(value: _isDemoMode, onChanged: (_) => _toggleDemo()),
+                                  ]),
                                 ),
                               ),
-                            ),
-                            Switch(
-                              value: _isDemoMode,
-                              onChanged: (_) => _toggleDemo(),
-                              activeColor: AppColors.warning,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    if (_isDemoMode) ...[
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: OutlinedButton(
-                              onPressed: () => _fillDemo('parent@demo.com', 'demo123'),
-                              style: OutlinedButton.styleFrom(
-                                foregroundColor: AppColors.primary,
-                                padding: const EdgeInsets.symmetric(vertical: 10),
-                              ),
-                              child: const Text('Parent Demo', style: TextStyle(fontSize: 12)),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: OutlinedButton(
-                              onPressed: () => _fillDemo('therapist@demo.com', 'demo123'),
-                              style: OutlinedButton.styleFrom(
-                                foregroundColor: AppColors.secondary,
-                                side: const BorderSide(color: AppColors.secondary),
-                                padding: const EdgeInsets.symmetric(vertical: 10),
-                              ),
-                              child: const Text('Therapist Demo', style: TextStyle(fontSize: 12)),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(
-                        labelText: 'Email',
-                        prefixIcon: Icon(Icons.email_outlined),
-                      ),
-                      validator: (v) {
-                        final email = v?.trim() ?? '';
-                        if (email.isEmpty) return 'Please enter your email';
-                        if (!RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(email)) {
-                          return 'Enter a valid email address';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _passwordController,
-                      obscureText: _obscurePassword,
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        prefixIcon: const Icon(Icons.lock_outlined),
-                        suffixIcon: IconButton(
-                          icon: Icon(_obscurePassword
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined),
-                          onPressed: () =>
-                              setState(() => _obscurePassword = !_obscurePassword),
-                        ),
-                      ),
-                      validator: (v) =>
-                          v == null || v.isEmpty ? 'Please enter your password' : null,
-                    ),
-                    const SizedBox(height: 28),
-                    SwaraButton(
-                      label: 'Sign In',
-                      onPressed: _login,
-                      isLoading: authState.isLoading,
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Don't have an account? ", style: AppTextStyles.bodySmall),
-                        GestureDetector(
-                          onTap: () => context.go(widget.redirectTo == null
-                              ? '/register'
-                              : '/register?redirectTo=${Uri.encodeComponent(widget.redirectTo!)}'),
-                          child: const Text(
-                            'Register',
-                            style: TextStyle(
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                            ),
+                              if (_isDemoMode) ...[
+                                const SizedBox(height: 12),
+                                Row(children: [
+                                  Expanded(child: OutlinedButton(
+                                    onPressed: () => _fillDemo('parent@demo.com', 'demo123'),
+                                    child: const Text('Parent demo'))),
+                                  const SizedBox(width: 8),
+                                  Expanded(child: OutlinedButton(
+                                    onPressed: () => _fillDemo('therapist@demo.com', 'demo123'),
+                                    child: const Text('Therapist demo'))),
+                                ]),
+                              ],
+                              const SizedBox(height: 20),
+                              CalmReveal(order: 1, child: TextFormField(
+                                controller: _emailController,
+                                keyboardType: TextInputType.emailAddress,
+                                style: TextStyle(fontFamily: 'Nunito', fontSize: 18 * scale,
+                                    fontWeight: FontWeight.w700, color: AppColors.text),
+                                decoration: InputDecoration(
+                                  labelText: 'Email · විද්‍යුත් තැපෑල',
+                                  prefixIcon: _prefixIcon(Icons.email_outlined),
+                                ),
+                                validator: (v) {
+                                  final email = v?.trim() ?? '';
+                                  if (email.isEmpty) return 'Please enter your email';
+                                  if (!RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(email)) {
+                                    return 'Enter a valid email address';
+                                  }
+                                  return null;
+                                },
+                              )),
+                              SizedBox(height: short ? 12 : 16),
+                              CalmReveal(order: 2, child: TextFormField(
+                                controller: _passwordController,
+                                obscureText: _obscurePassword,
+                                style: TextStyle(fontFamily: 'Nunito', fontSize: 18 * scale,
+                                    fontWeight: FontWeight.w700, color: AppColors.text),
+                                decoration: InputDecoration(
+                                  labelText: 'Password · මුරපදය',
+                                  prefixIcon: _prefixIcon(Icons.lock_outline_rounded),
+                                  suffixIcon: IconButton(
+                                    tooltip: _obscurePassword ? 'Show password' : 'Hide password',
+                                    icon: Icon(_obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined),
+                                    onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                                  ),
+                                ),
+                                validator: (v) => v == null || v.isEmpty ? 'Please enter your password' : null,
+                              )),
+                              SizedBox(height: short ? 20 : 24),
+                              CalmReveal(order: 3, child: Column(children: [
+                                SizedBox(height: short ? 56 : 64, width: double.infinity,
+                                  child: SwaraButton(label: 'Sign in · පුරනය වන්න', onPressed: _login,
+                                      isLoading: authState.isLoading)),
+                                const SizedBox(height: 12),
+                                Wrap(alignment: WrapAlignment.center, crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: [
+                                    Text('New to Swara? · අලුතින්ද?', style: AppTextStyles.bodySmall),
+                                    TextButton(
+                                      style: TextButton.styleFrom(minimumSize: const Size(48, 52)),
+                                      onPressed: () => context.go(widget.redirectTo == null
+                                          ? '/register'
+                                          : '/register?redirectTo=${Uri.encodeComponent(widget.redirectTo!)}'),
+                                      child: const Text('Create account · ගිණුමක් සාදන්න'),
+                                    ),
+                                  ],
+                                ),
+                              ])),
+                              const SizedBox(height: 12),
+                              Text(AppConstants.researchDisclaimer, textAlign: TextAlign.center,
+                                  style: AppTextStyles.caption),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 24),
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: AppColors.background,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        AppConstants.researchDisclaimer,
-                        style: AppTextStyles.caption,
-                        textAlign: TextAlign.center,
                       ),
                     ),
+                    ExcludeSemantics(child: Container(
+                      width: 76,
+                      height: 76,
+                      decoration: BoxDecoration(color: AppColors.primary, shape: BoxShape.circle,
+                          border: Border.all(color: AppColors.groundAdult, width: 6)),
+                      child: const Icon(Icons.waving_hand_outlined, color: Colors.white, size: 34),
+                    )),
                   ],
                 ),
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

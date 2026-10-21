@@ -69,18 +69,18 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         const SizedBox(height: 10),
         TextFormField(
           controller: _childNameController,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             labelText: "Child's first name",
-            prefixIcon: Icon(Icons.child_care_outlined),
+            prefixIcon: _prefixIcon(Icons.child_care_outlined),
           ),
           validator: (v) => v == null || v.trim().isEmpty ? "Please enter your child's name" : null,
         ),
         const SizedBox(height: 16),
         DropdownButtonFormField<int>(
           value: _childAge,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             labelText: "Child's age",
-            prefixIcon: Icon(Icons.cake_outlined),
+            prefixIcon: _prefixIcon(Icons.cake_outlined),
           ),
           items: [for (var a = 5; a <= 14; a++) DropdownMenuItem(value: a, child: Text('$a years'))],
           onChanged: (v) => setState(() => _childAge = v),
@@ -93,144 +93,164 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           keyboardType: TextInputType.number,
           maxLength: 6,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             labelText: 'Parent PIN',
             helperText: 'Asked before video uploads and parent questions',
-            prefixIcon: Icon(Icons.lock_outlined),
+            prefixIcon: _prefixIcon(Icons.lock_outlined),
           ),
           validator: (v) => (v ?? '').length < 4 ? 'Use 4–6 digits' : null,
         ),
       ];
 
+  Widget _prefixIcon(IconData icon) => Padding(
+        padding: const EdgeInsets.only(left: 10, right: 4),
+        child: Container(
+          width: 36,
+          height: 36,
+          margin: const EdgeInsets.symmetric(vertical: 6),
+          decoration: const BoxDecoration(color: AppColors.primaryWash, shape: BoxShape.circle),
+          child: Icon(icon, color: AppColors.primary, size: 20),
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
+    final size = MediaQuery.sizeOf(context);
+    final narrow = size.width < 360;
+    final short = size.height < 640;
+    final scale = MediaQuery.textScalerOf(context).scale(1).clamp(1.0, 1.3).toDouble();
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create Account'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/login'),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Join Swara', style: AppTextStyles.heading2),
-              const SizedBox(height: 6),
-              Text('Create a parent or therapist account', style: AppTextStyles.bodySmall),
-              const SizedBox(height: 28),
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Full Name',
-                  prefixIcon: Icon(Icons.person_outlined),
-                ),
-                validator: (v) => v == null || v.isEmpty ? 'Please enter your name' : null,
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _emailController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  prefixIcon: Icon(Icons.email_outlined),
-                ),
-                validator: (v) {
-                  final email = v?.trim() ?? '';
-                  if (email.isEmpty) return 'Please enter your email';
-                  if (!RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(email)) {
-                    return 'Enter a valid email address';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _passwordController,
-                obscureText: _obscurePassword,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  prefixIcon: const Icon(Icons.lock_outlined),
-                  suffixIcon: IconButton(
-                    icon: Icon(_obscurePassword
-                        ? Icons.visibility_outlined
-                        : Icons.visibility_off_outlined),
-                    onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
-                  ),
-                ),
-                validator: (v) {
-                  if (v == null || v.isEmpty) return 'Please enter a password';
-                  if (v.length < 6) return 'Password must be at least 6 characters';
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-              Text('I am a:', style: AppTextStyles.label),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  _RoleCard(
-                    title: 'Parent/Caregiver',
-                    icon: Icons.family_restroom,
-                    value: AppConstants.roleChild,
-                    selected: _role == AppConstants.roleChild,
-                    onTap: () => setState(() => _role = AppConstants.roleChild),
-                  ),
-                  const SizedBox(width: 12),
-                  _RoleCard(
-                    title: 'Speech Therapist',
-                    icon: Icons.record_voice_over,
-                    value: AppConstants.roleTherapist,
-                    selected: _role == AppConstants.roleTherapist,
-                    onTap: () => setState(() => _role = AppConstants.roleTherapist),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              if (_role == AppConstants.roleChild) ..._childFields(),
-              if (_role == AppConstants.roleTherapist)
-                TextFormField(
-                  controller: _codeController,
-                  decoration: const InputDecoration(
-                    labelText: 'Therapist code',
-                    helperText: 'Given to the research team\'s therapists',
-                    prefixIcon: Icon(Icons.badge_outlined),
-                  ),
-                  validator: (v) => v == null || v.trim().isEmpty ? 'Enter the therapist code' : null,
-                ),
-              const SizedBox(height: 28),
-              SwaraButton(
-                label: 'Create Account',
-                onPressed: _register,
-                isLoading: authState.isLoading,
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Already have an account? ', style: AppTextStyles.bodySmall),
-                  GestureDetector(
-                    onTap: () => context.go(widget.redirectTo == null
-                        ? '/login'
-                        : '/login?redirectTo=${Uri.encodeComponent(widget.redirectTo!)}'),
-                    child: const Text(
-                      'Sign In',
-                      style: TextStyle(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
+      backgroundColor: AppColors.groundAdult,
+      body: CalmSceneBackground(
+        child: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              physics: const ClampingScrollPhysics(),
+              padding: EdgeInsets.symmetric(horizontal: narrow ? 16 : 24, vertical: 24),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: size.width > size.height ? 520 : 460),
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  alignment: Alignment.topCenter,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 38),
+                      child: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.fromLTRB(narrow ? 20 : 24, 64, narrow ? 20 : 24, 24),
+                        decoration: BoxDecoration(color: Colors.white,
+                            borderRadius: BorderRadius.circular(32),
+                            border: Border.all(color: AppColors.primaryWash, width: 2)),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              CalmReveal(order: 0, child: Column(children: [
+                                Text('Create account · ගිණුමක් සාදන්න', textAlign: TextAlign.center,
+                                    style: AppTextStyles.heading2.copyWith(fontSize: (30 * scale).clamp(24, 34).toDouble())),
+                                const SizedBox(height: 10),
+                                Container(width: 48, height: 6, decoration: BoxDecoration(
+                                    color: AppColors.sun, borderRadius: BorderRadius.circular(3))),
+                                const SizedBox(height: 10),
+                                Text('Create a parent or therapist account', textAlign: TextAlign.center,
+                                    style: AppTextStyles.bodySmall),
+                              ])),
+                              const SizedBox(height: 24),
+                              TextFormField(
+                                controller: _nameController,
+                                style: TextStyle(fontFamily: 'Nunito', fontSize: 18 * scale,
+                                    fontWeight: FontWeight.w700, color: AppColors.text),
+                                decoration: InputDecoration(labelText: 'Full name · සම්පූර්ණ නම',
+                                    prefixIcon: _prefixIcon(Icons.person_outline_rounded)),
+                                validator: (v) => v == null || v.isEmpty ? 'Please enter your name' : null,
+                              ),
+                              SizedBox(height: short ? 12 : 16),
+                              TextFormField(
+                                controller: _emailController,
+                                keyboardType: TextInputType.emailAddress,
+                                style: TextStyle(fontFamily: 'Nunito', fontSize: 18 * scale,
+                                    fontWeight: FontWeight.w700, color: AppColors.text),
+                                decoration: InputDecoration(labelText: 'Email · විද්‍යුත් තැපෑල',
+                                    prefixIcon: _prefixIcon(Icons.email_outlined)),
+                                validator: (v) {
+                                  final email = v?.trim() ?? '';
+                                  if (email.isEmpty) return 'Please enter your email';
+                                  if (!RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(email)) return 'Enter a valid email address';
+                                  return null;
+                                },
+                              ),
+                              SizedBox(height: short ? 12 : 16),
+                              TextFormField(
+                                controller: _passwordController,
+                                obscureText: _obscurePassword,
+                                style: TextStyle(fontFamily: 'Nunito', fontSize: 18 * scale,
+                                    fontWeight: FontWeight.w700, color: AppColors.text),
+                                decoration: InputDecoration(labelText: 'Password · මුරපදය',
+                                    prefixIcon: _prefixIcon(Icons.lock_outline_rounded),
+                                    suffixIcon: IconButton(
+                                      tooltip: _obscurePassword ? 'Show password' : 'Hide password',
+                                      icon: Icon(_obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined),
+                                      onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                                    )),
+                                validator: (v) {
+                                  if (v == null || v.isEmpty) return 'Please enter a password';
+                                  if (v.length < 6) return 'Password must be at least 6 characters';
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 20),
+                              Text('I am a:', style: AppTextStyles.label),
+                              const SizedBox(height: 10),
+                              Row(children: [
+                                _RoleCard(title: 'Parent/Caregiver', icon: Icons.family_restroom,
+                                    value: AppConstants.roleChild, selected: _role == AppConstants.roleChild,
+                                    onTap: () => setState(() => _role = AppConstants.roleChild)),
+                                const SizedBox(width: 12),
+                                _RoleCard(title: 'Speech Therapist', icon: Icons.record_voice_over,
+                                    value: AppConstants.roleTherapist, selected: _role == AppConstants.roleTherapist,
+                                    onTap: () => setState(() => _role = AppConstants.roleTherapist)),
+                              ]),
+                              const SizedBox(height: 20),
+                              if (_role == AppConstants.roleChild) ..._childFields(),
+                              if (_role == AppConstants.roleTherapist)
+                                TextFormField(
+                                  controller: _codeController,
+                                  decoration: InputDecoration(labelText: 'Therapist code',
+                                      helperText: 'Given to the research team\'s therapists',
+                                      prefixIcon: _prefixIcon(Icons.badge_outlined)),
+                                  validator: (v) => v == null || v.trim().isEmpty ? 'Enter the therapist code' : null,
+                                ),
+                              const SizedBox(height: 24),
+                              SizedBox(height: short ? 56 : 64, child: SwaraButton(
+                                  label: 'Create account · ගිණුමක් සාදන්න', onPressed: _register,
+                                  isLoading: authState.isLoading)),
+                              const SizedBox(height: 12),
+                              Wrap(alignment: WrapAlignment.center, crossAxisAlignment: WrapCrossAlignment.center,
+                                children: [
+                                  Text('Already have an account? · ගිණුමක් තිබේද?', style: AppTextStyles.bodySmall),
+                                  TextButton(
+                                    style: TextButton.styleFrom(minimumSize: const Size(48, 52)),
+                                    onPressed: () => context.go(widget.redirectTo == null ? '/login'
+                                        : '/login?redirectTo=${Uri.encodeComponent(widget.redirectTo!)}'),
+                                    child: const Text('Sign in'),
+                                  ),
+                                ]),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    ExcludeSemantics(child: Container(width: 76, height: 76,
+                      decoration: BoxDecoration(color: AppColors.primary, shape: BoxShape.circle,
+                          border: Border.all(color: AppColors.groundAdult, width: 6)),
+                      child: const Icon(Icons.people_outline_rounded, color: Colors.white, size: 34))),
+                  ],
+                ),
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -263,7 +283,7 @@ class _RoleCard extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: selected ? AppColors.primaryWash : AppColors.surface,
-            borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(22),
             border: Border.all(
               color: selected ? AppColors.primary : AppColors.divider,
               width: selected ? 2 : 1,
@@ -280,8 +300,8 @@ class _RoleCard extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
                   color: selected ? AppColors.primary : AppColors.text,
                 ),
                 textAlign: TextAlign.center,

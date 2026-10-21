@@ -1,6 +1,96 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
+/// A quiet, decorative landscape shared by authentication, home, and analysis pages.
+class CalmSceneBackground extends StatelessWidget {
+  final Widget child;
+  final Color groundColor;
+
+  const CalmSceneBackground({
+    super.key,
+    required this.child,
+    this.groundColor = AppColors.groundAdult,
+  });
+
+  @override
+  Widget build(BuildContext context) => Stack(
+        fit: StackFit.expand,
+        children: [
+          ExcludeSemantics(
+            child: CustomPaint(painter: _CalmScenePainter(groundColor)),
+          ),
+          child,
+        ],
+      );
+}
+
+class _CalmScenePainter extends CustomPainter {
+  final Color ground;
+  const _CalmScenePainter(this.ground);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final w = size.width;
+    final h = size.height;
+    Paint paint(Color color) => Paint()..color = color;
+    canvas.drawRect(Offset.zero & size, paint(ground));
+    canvas.drawCircle(Offset(w * .92, h * .07), w * .55, paint(AppColors.groundSky));
+    canvas.drawCircle(Offset(w * .92, h * .07), w * .36,
+        paint(AppColors.primaryWash.withValues(alpha: .85)));
+    canvas.drawCircle(Offset(w * .92, h * .07), w * .18,
+        paint(Colors.white.withValues(alpha: .55)));
+    canvas.drawCircle(Offset(w * .04, h * .26), w * .22, paint(AppColors.sunTint));
+    canvas.drawCircle(Offset(w * .98, h * .50), w * .15,
+        paint(AppColors.lilacTint.withValues(alpha: .7)));
+    canvas.drawCircle(Offset(w * .15, h * .12), w * .045, paint(AppColors.sun));
+    canvas.drawCircle(Offset(w * .26, h * .17), w * .012, paint(Colors.white));
+    canvas.drawCircle(Offset(w * .74, h * .20), w * .016, paint(Colors.white));
+    canvas.drawCircle(Offset(w * .06, h * .60), w * .02, paint(AppColors.primaryWash));
+
+    Path hill(double y, double a, double b, double c) => Path()
+      ..moveTo(0, h * y)
+      ..quadraticBezierTo(w * .22, h * a, w * .50, h * b)
+      ..quadraticBezierTo(w * .80, h * c, w, h * (y - .06))
+      ..lineTo(w, h)
+      ..lineTo(0, h)
+      ..close();
+    canvas.drawPath(hill(.80, .70, .78, .86),
+        paint(AppColors.lilacTint.withValues(alpha: .55)));
+    canvas.drawPath(hill(.86, .76, .84, .90), paint(AppColors.primaryWash));
+    canvas.drawPath(hill(.93, .87, .93, .97), paint(AppColors.groundGarden));
+  }
+
+  @override
+  bool shouldRepaint(covariant _CalmScenePainter oldDelegate) => ground != oldDelegate.ground;
+}
+
+class CalmReveal extends StatelessWidget {
+  final int order;
+  final Widget child;
+
+  const CalmReveal({super.key, required this.order, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    final reduceMotion = MediaQuery.disableAnimationsOf(context);
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0, end: 1),
+      duration: reduceMotion
+          ? Duration.zero
+          : Duration(milliseconds: 500 + order * 140),
+      curve: Curves.easeInOut,
+      builder: (context, t, child) => Opacity(
+        opacity: t,
+        child: Transform.translate(
+          offset: Offset(0, 14 * (1 - t)),
+          child: child,
+        ),
+      ),
+      child: child,
+    );
+  }
+}
+
 class SwaraButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
@@ -84,14 +174,13 @@ class SwaraCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final radius = borderRadius ?? AppRadii.md;
+    final radius = borderRadius ?? 24;
     final content = Container(
       padding: padding ?? const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
         color: color ?? AppColors.cardBg,
         borderRadius: BorderRadius.circular(radius),
-        border: Border.all(color: AppColors.divider),
-        boxShadow: AppElevation.card,
+        border: Border.all(color: AppColors.primaryWash, width: 2),
       ),
       child: child,
     );
@@ -139,7 +228,7 @@ class SwaraGradientCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: fill,
             borderRadius: AppRadii.lgAll,
-            boxShadow: AppElevation.cta,
+            boxShadow: const [],
           ),
           child: DefaultTextStyle.merge(
             style: const TextStyle(color: AppColors.onPrimary),
