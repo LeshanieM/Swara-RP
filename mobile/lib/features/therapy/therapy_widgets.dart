@@ -1342,7 +1342,7 @@ class _PathPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter o) => false;
 }
 
-/// A small live preview stays visible while the camera is actively monitoring an activity.
+/// A small live preview stays visible only while an activity is being monitored.
 /// Camera frames are analyzed locally and are never uploaded.
 class _CameraPreviewTile extends StatefulWidget {
   const _CameraPreviewTile();
@@ -1460,11 +1460,22 @@ class _CameraOnBadge extends StatelessWidget {
                 decoration: BoxDecoration(
                     color: Colors.black54,
                     borderRadius: BorderRadius.circular(12)),
-                child: const Row(mainAxisSize: MainAxisSize.min, children: [
+                child: Row(mainAxisSize: MainAxisSize.min, children: [
                   Icon(Icons.videocam_rounded, color: Colors.white, size: 14),
                   SizedBox(width: 4),
-                  Text('Camera on',
-                      style: TextStyle(color: Colors.white, fontSize: 11)),
+                  ValueListenableBuilder<bool?>(
+                    valueListenable: EngagementCamera.instance.facePresent,
+                    builder: (context, present, _) => Text(
+                      present == null
+                          ? (kIsWeb
+                              ? 'Camera on · preview only'
+                              : 'Camera on · checking for a face')
+                          : present
+                              ? 'Camera on · face detected'
+                              : 'Camera on · no face detected',
+                      style: const TextStyle(color: Colors.white, fontSize: 11),
+                    ),
+                  ),
                 ]),
               ),
       );

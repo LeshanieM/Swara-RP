@@ -229,12 +229,12 @@ class _C3Session {
   }
 
   /// The activity screen calls this as the child starts.
-  static void begin() {
+  static Future<void> begin() async {
     if (startedAt != null) return;
     startedAt = DateTime.now();
     progress.promptShownAt = startedAt;
     _cameraResult = null;
-    if (cameraOn) EngagementCamera.instance.start();
+    if (cameraOn) await EngagementCamera.instance.beginActivityWindow();
   }
 
   /// The activity screen calls this when the child finishes (or skips) it.
@@ -255,7 +255,8 @@ class _C3Session {
     final shown = attempt.prompts.length;
     // Face numbers only (10-second windows); null when the camera was off or never saw a frame.
     final camera = cameraOn
-        ? await (_cameraResult ?? EngagementCamera.instance.stop())
+        ? await (_cameraResult ??
+            Future.value(EngagementCamera.instance.endActivityWindow()))
         : null;
     _cameraResult = null;
     final latencies = p.latenciesMs;

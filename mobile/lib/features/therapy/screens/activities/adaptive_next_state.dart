@@ -193,7 +193,8 @@ class _AdaptiveNextState extends State<_AdaptiveNext> {
     final live = _liveNext;
     if (_C3Session.isLive) {
       if (live == null || _isSaving) return;
-      _C3Session.begin();
+      await _C3Session.begin();
+      if (!mounted) return;
       _InheritedNav.of(context)?.go(_C3Session.routeFor(live));
       return;
     }

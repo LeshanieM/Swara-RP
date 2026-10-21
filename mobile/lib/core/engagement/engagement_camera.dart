@@ -10,6 +10,7 @@ import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'camera_features.dart';
 
 /// The front camera during a C3 activity, read by ML Kit face detection on the phone.
+/// It is opened at activity start and closed at activity end.
 ///
 /// Only per-frame numbers are kept (face visible, head yaw and pitch, eye-open and smile
 /// probabilities); frames are never stored or sent. [stop] returns the activity's
@@ -28,14 +29,15 @@ class EngagementCamera {
   /// True while the camera is reading frames, for the preview and camera-on badge.
   final ValueNotifier<bool> running = ValueNotifier(false);
 
+  /// Latest local face-presence result. This identifies a visible face, not a person.
+  final ValueNotifier<bool?> facePresent = ValueNotifier(null);
+
   /// Live controller for the in-activity preview. It is null when the camera is off.
   CameraController? get previewController => running.value ? _controller : null;
 
   static const _frameInterval =
       Duration(milliseconds: 200); // about 5 frames a second, as in training
-  static const _maxRun = Duration(
-      minutes: 10); // activities are 3–5 minutes; never leave the camera on
-
+  static const _maxRun = Duration(minutes: 10);
   CameraController? _controller;
   CameraDescription? _camera;
   FaceDetector? _detector;
@@ -90,7 +92,8 @@ class EngagementCamera {
       _camera = front;
       _controller = controller;
       _samples.clear();
-      _startedAt = DateTime.now();
+      _startedAt = null; // activity window starts immediately after camera open
+      facePresent.value = null;
       if (!kIsWeb) await controller.startImageStream(_onFrame);
       _limit = Timer(_maxRun, () => stop());
       running.value = true;
@@ -101,11 +104,25 @@ class EngagementCamera {
     }
   }
 
+  /// Begin a per-activity feature window without reopening the session camera.
+  Future<void> beginActivityWindow() async {
+    if (_controller == null) await start();
+    _samples.clear();
+    _startedAt = _controller == null ? null : DateTime.now();
+  }
+
+  /// End the current activity's feature window while keeping live preview and face checks running.
+  Map<String, Object?>? endActivityWindow() {
+    if (_startedAt == null) return null;
+    final samples = List<FaceSample>.of(_samples);
+    _samples.clear();
+    _startedAt = null;
+    return CameraFeatures.payload(samples);
+  }
+
   Future<void> _onFrame(CameraImage image) async {
     final now = DateTime.now();
-    if (_busy ||
-        now.difference(_lastFrame) < _frameInterval ||
-        _startedAt == null) return;
+    if (_busy || now.difference(_lastFrame) < _frameInterval) return;
     _busy = true;
     _lastFrame = now;
     try {
@@ -113,7 +130,10 @@ class EngagementCamera {
       final detector = _detector;
       if (input == null || detector == null) return;
       final faces = await detector.processImage(input);
-      final t = now.difference(_startedAt!);
+      facePresent.value = faces.isNotEmpty;
+      final activityStartedAt = _startedAt;
+      if (activityStartedAt == null) return;
+      final t = now.difference(activityStartedAt);
       if (faces.isEmpty) {
         _samples.add(FaceSample.noFace(t));
         return;
@@ -184,9 +204,9 @@ class EngagementCamera {
   /// Stops the camera and returns the activity's `camera` block, or null if no frame was read.
   Future<Map<String, Object?>?> stop() async {
     await _starting;
-    final samples = List<FaceSample>.of(_samples);
+    final payload = endActivityWindow();
     await _close();
-    return CameraFeatures.payload(samples);
+    return payload;
   }
 
   Future<void> _close() async {
@@ -197,6 +217,7 @@ class EngagementCamera {
     _camera = null;
     _startedAt = null;
     running.value = false;
+    facePresent.value = null;
     try {
       if (controller != null && controller.value.isStreamingImages)
         await controller.stopImageStream();
