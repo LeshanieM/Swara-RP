@@ -1,106 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import '../../data/providers/auth_provider.dart';
 import 'package:swara/core/widgets/shared_widgets.dart';
+import 'package:swara/core/theme/app_theme.dart';
 import 'package:swara/core/constants/app_constants.dart';
-
-// Calm Cub tokens, primary swapped to dark blue
-const _groundAdult = Color(0xFFF2F6F5);
-const _groundSky = Color(0xFFDCEEFA);
-const _groundGarden = Color(0xFFE4F3DC);
-const _primary = Color(0xFF1D4A87); // dark blue
-const _primaryTint = Color(0xFFD9E6F7);
-const _sun = Color(0xFFFFC94A);
-const _sunTint = Color(0xFFFFF3CF);
-const _lilacTint = Color(0xFFDCD3F8);
-const _ink = Color(0xFF1E3A44);
-const _inkMuted = Color(0xFF3F5F6A);
-
-const _fredoka = 'Fredoka';
-const _nunito = 'Nunito';
-
-/// Flat, gradient-free scene: soft circles, a small sun, three rolling hills.
-class _CalmScenePainter extends CustomPainter {
-  const _CalmScenePainter();
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final w = size.width;
-    final h = size.height;
-    Paint p(Color c) => Paint()..color = c;
-
-    canvas.drawRect(Offset.zero & size, p(_groundAdult));
-
-    // Sky circles
-    canvas.drawCircle(Offset(w * 0.92, h * 0.07), w * 0.55, p(_groundSky));
-    canvas.drawCircle(Offset(w * 0.92, h * 0.07), w * 0.36, p(_primaryTint.withOpacity(0.85)));
-    canvas.drawCircle(Offset(w * 0.92, h * 0.07), w * 0.18, p(Colors.white.withOpacity(0.55)));
-    canvas.drawCircle(Offset(w * 0.04, h * 0.26), w * 0.22, p(_sunTint));
-    canvas.drawCircle(Offset(w * 0.98, h * 0.50), w * 0.15, p(_lilacTint.withOpacity(0.7)));
-
-    // Small sun + tiny accents
-    canvas.drawCircle(Offset(w * 0.15, h * 0.12), w * 0.045, p(_sun));
-    canvas.drawCircle(Offset(w * 0.26, h * 0.17), w * 0.012, p(Colors.white));
-    canvas.drawCircle(Offset(w * 0.74, h * 0.20), w * 0.016, p(Colors.white));
-    canvas.drawCircle(Offset(w * 0.06, h * 0.60), w * 0.02, p(_primaryTint));
-
-    // Far hill (lilac)
-    final far = Path()
-      ..moveTo(0, h * 0.80)
-      ..quadraticBezierTo(w * 0.22, h * 0.70, w * 0.50, h * 0.78)
-      ..quadraticBezierTo(w * 0.80, h * 0.86, w, h * 0.74)
-      ..lineTo(w, h)
-      ..lineTo(0, h)
-      ..close();
-    canvas.drawPath(far, p(_lilacTint.withOpacity(0.55)));
-
-    // Middle hill (blue tint)
-    final mid = Path()
-      ..moveTo(0, h * 0.86)
-      ..quadraticBezierTo(w * 0.28, h * 0.76, w * 0.58, h * 0.84)
-      ..quadraticBezierTo(w * 0.82, h * 0.90, w, h * 0.82)
-      ..lineTo(w, h)
-      ..lineTo(0, h)
-      ..close();
-    canvas.drawPath(mid, p(_primaryTint));
-
-    // Front hill (meadow)
-    final front = Path()
-      ..moveTo(0, h * 0.93)
-      ..quadraticBezierTo(w * 0.30, h * 0.87, w * 0.62, h * 0.93)
-      ..quadraticBezierTo(w * 0.85, h * 0.97, w, h * 0.92)
-      ..lineTo(w, h)
-      ..lineTo(0, h)
-      ..close();
-    canvas.drawPath(front, p(_groundGarden));
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
-
-/// Slow fade + rise. Later items take slightly longer, so they settle in order.
-class _Reveal extends StatelessWidget {
-  final int order;
-  final bool reduceMotion;
-  final Widget child;
-  const _Reveal({required this.order, required this.reduceMotion, required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0, end: 1),
-      duration: reduceMotion ? Duration.zero : Duration(milliseconds: 500 + order * 140),
-      curve: Curves.easeInOut,
-      builder: (context, t, child) => Opacity(
-        opacity: t,
-        child: Transform.translate(offset: Offset(0, 14 * (1 - t)), child: child),
-      ),
-      child: child,
-    );
-  }
-}
 
 class RegisterScreen extends ConsumerStatefulWidget {
   final String? redirectTo;
@@ -115,6 +20,12 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _childNameController = TextEditingController();
+  final _pinController = TextEditingController();
+  final _codeController = TextEditingController();
+  // A parent sets up the child's account (one login per child) and the parent-mode PIN.
+  String _role = AppConstants.roleChild;
+  int? _childAge;
   bool _obscurePassword = true;
 
   @override
@@ -122,373 +33,262 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _childNameController.dispose();
+    _pinController.dispose();
+    _codeController.dispose();
     super.dispose();
   }
 
   Future<void> _register() async {
     if (!_formKey.currentState!.validate()) return;
     final success = await ref.read(authProvider.notifier).register(
-          _nameController.text.trim(),
-          _emailController.text.trim(),
-          _passwordController.text,
-          AppConstants.roleParent,
+          name: _nameController.text.trim(),
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+          role: _role,
+          childFirstName: _childNameController.text.trim(),
+          childAge: _childAge,
+          parentPin: _pinController.text,
+          signupCode: _codeController.text.trim(),
         );
-    if (!mounted) return;
-    if (success) {
-      context.go(widget.redirectTo ?? '/');
-    } else {
+    if (!success && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            ref.read(authProvider).error ??
-                "We couldn't create your account. Please check your details and try again.",
-            style: const TextStyle(fontFamily: _nunito, fontWeight: FontWeight.w700, fontSize: 16),
-          ),
+          content: Text(ref.read(authProvider).error ?? 'Registration failed'),
+          backgroundColor: AppColors.error,
         ),
       );
+    } else if (success && mounted) {
+      context.go(widget.redirectTo ?? '/');
     }
   }
 
-  InputDecoration _decoration({
-    required String label,
-    required IconData icon,
-    Widget? suffix,
-    required double scale,
-  }) {
-    OutlineInputBorder border(Color c, double w) => OutlineInputBorder(
-          borderRadius: BorderRadius.circular(22),
-          borderSide: BorderSide(color: c, width: w),
-        );
-    return InputDecoration(
-      labelText: label,
-      labelStyle: TextStyle(
-          fontFamily: _nunito, fontWeight: FontWeight.w700, fontSize: 16 * scale, color: _inkMuted),
-      floatingLabelStyle: TextStyle(
-          fontFamily: _nunito, fontWeight: FontWeight.w700, fontSize: 16 * scale, color: _primary),
-      prefixIcon: Padding(
-        padding: const EdgeInsets.only(left: 10, right: 4),
-        child: Container(
-          width: 36,
-          height: 36,
-          margin: const EdgeInsets.symmetric(vertical: 6),
-          decoration: const BoxDecoration(color: _primaryTint, shape: BoxShape.circle),
-          child: Icon(icon, color: _primary, size: 20 * scale),
+  /// The child this account is for, and the PIN that guards parent-only actions.
+  List<Widget> _childFields() => [
+        Text('Your child', style: AppTextStyles.label),
+        const SizedBox(height: 10),
+        TextFormField(
+          controller: _childNameController,
+          decoration: const InputDecoration(
+            labelText: "Child's first name",
+            prefixIcon: Icon(Icons.child_care_outlined),
+          ),
+          validator: (v) => v == null || v.trim().isEmpty ? "Please enter your child's name" : null,
         ),
-      ),
-      prefixIconConstraints: const BoxConstraints(minWidth: 50, minHeight: 48),
-      suffixIcon: suffix,
-      filled: true,
-      fillColor: _groundAdult,
-      contentPadding: EdgeInsets.symmetric(horizontal: 12 * scale, vertical: 16 * scale),
-      border: border(Colors.transparent, 0),
-      enabledBorder: border(_primaryTint, 1.5),
-      focusedBorder: border(_primary, 3),
-      errorBorder: border(_ink, 2),
-      focusedErrorBorder: border(_primary, 3),
-      errorMaxLines: 3,
-      errorStyle: const TextStyle(
-          fontFamily: _nunito, fontWeight: FontWeight.w700, fontSize: 16, height: 1.3, color: _ink),
-    );
-  }
+        const SizedBox(height: 16),
+        DropdownButtonFormField<int>(
+          value: _childAge,
+          decoration: const InputDecoration(
+            labelText: "Child's age",
+            prefixIcon: Icon(Icons.cake_outlined),
+          ),
+          items: [for (var a = 5; a <= 14; a++) DropdownMenuItem(value: a, child: Text('$a years'))],
+          onChanged: (v) => setState(() => _childAge = v),
+          validator: (v) => v == null ? 'Swara is for ages 5–14' : null,
+        ),
+        const SizedBox(height: 16),
+        TextFormField(
+          controller: _pinController,
+          obscureText: true,
+          keyboardType: TextInputType.number,
+          maxLength: 6,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          decoration: const InputDecoration(
+            labelText: 'Parent PIN',
+            helperText: 'Asked before video uploads and parent questions',
+            prefixIcon: Icon(Icons.lock_outlined),
+          ),
+          validator: (v) => (v ?? '').length < 4 ? 'Use 4–6 digits' : null,
+        ),
+      ];
 
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
-    final reduceMotion = MediaQuery.disableAnimationsOf(context);
-
-    // --- Responsive signals ---------------------------------------------------
-    final media = MediaQuery.of(context);
-    final size = media.size;
-    final keyboard = media.viewInsets.bottom;
-    final isLandscape = size.width > size.height;
-    final isNarrow = size.width < 360;
-    final isShort = size.height < 640;
-    final textScale = media.textScaler.scale(1).clamp(1.0, 1.3);
-
-    final double widthScale = (size.width / 390).clamp(0.85, 1.15);
-    final double scale = (widthScale * textScale).clamp(0.85, 1.25);
-
-    final double hPad = isNarrow ? 16 : 24;
-    final double vGap = isShort ? 12 : 16;
-    final double cardPad = isNarrow ? 20 : 24;
-    final double maxCardWidth = isLandscape ? 520 : 460;
-    final double cardWidth = (size.width - hPad * 2).clamp(0.0, maxCardWidth);
-
-    const bodyStyle =
-        TextStyle(fontFamily: _nunito, fontWeight: FontWeight.w700, fontSize: 16, color: _inkMuted);
-    final inputStyle =
-        TextStyle(fontFamily: _nunito, fontWeight: FontWeight.w700, fontSize: 18 * scale, color: _ink);
-    final headingSize = (32 * scale).clamp(24.0, 34.0);
 
     return Scaffold(
-      backgroundColor: _groundAdult,
-      extendBodyBehindAppBar: true,
-      // The scene stays fixed behind the keyboard; the scroll view is padded instead.
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        centerTitle: true,
-        leadingWidth: 64,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 16),
-          child: IconButton(
-            tooltip: 'Back · ආපසු',
-            style: IconButton.styleFrom(
-              backgroundColor: Colors.white,
-              foregroundColor: _ink,
-              fixedSize: const Size(48, 48),
-              minimumSize: const Size(48, 48),
-            ),
-            icon: const Icon(Icons.chevron_left_rounded, size: 28),
-            onPressed: () => context.go('/login'),
-          ),
+        title: const Text('Create Account'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.go('/login'),
         ),
-        title: Text(
-          'Create account · ගිණුමක් සාදන්න',
-          textAlign: TextAlign.center,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-              fontFamily: _fredoka,
-              fontSize: isNarrow ? 18 : 22,
-              fontWeight: FontWeight.w600,
-              color: _ink),
-        ),
-        actions: const [SizedBox(width: 64)],
       ),
-      body: Stack(
-        children: [
-          const Positioned.fill(
-            child: ExcludeSemantics(child: CustomPaint(painter: _CalmScenePainter())),
-          ),
-          SafeArea(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final topPad = isShort ? 12.0 : 24.0;
-                final bottomPad = isShort ? 16.0 : 28.0;
-                final minHeight =
-                    (constraints.maxHeight - topPad - bottomPad - keyboard).clamp(0.0, double.infinity);
-
-                return Center(
-                  child: SingleChildScrollView(
-                    physics: const ClampingScrollPhysics(),
-                    keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                    padding: EdgeInsets.fromLTRB(hPad, topPad, hPad, bottomPad + keyboard),
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(minHeight: minHeight, maxWidth: cardWidth),
-                      child: Center(
-                        child: Stack(
-                          clipBehavior: Clip.none,
-                          alignment: Alignment.topCenter,
-                          children: [
-                            // Card
-                            Padding(
-                              padding: const EdgeInsets.only(top: 38),
-                              child: Container(
-                                width: double.infinity,
-                                padding: EdgeInsets.fromLTRB(cardPad, cardPad + 40, cardPad, cardPad),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(32),
-                                  border: Border.all(color: _primaryTint, width: 2),
-                                ),
-                                child: Form(
-                                  key: _formKey,
-                                  child: AutofillGroup(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        _Reveal(
-                                          order: 0,
-                                          reduceMotion: reduceMotion,
-                                          child: Column(
-                                            children: [
-                                              Text(
-                                                'Join Swara',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontFamily: _fredoka,
-                                                    fontSize: headingSize,
-                                                    height: 1.2,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: _ink),
-                                              ),
-                                              const SizedBox(height: 10),
-                                              // Sun accent under the heading
-                                              ExcludeSemantics(
-                                                child: Container(
-                                                  width: 48,
-                                                  height: 6,
-                                                  decoration: BoxDecoration(
-                                                    color: _sun,
-                                                    borderRadius: BorderRadius.circular(3),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(height: cardPad),
-                                        _Reveal(
-                                          order: 1,
-                                          reduceMotion: reduceMotion,
-                                          child: TextFormField(
-                                            controller: _nameController,
-                                            style: inputStyle,
-                                            textCapitalization: TextCapitalization.words,
-                                            textInputAction: TextInputAction.next,
-                                            autofillHints: const [AutofillHints.name],
-                                            decoration: _decoration(
-                                                label: 'Full name · සම්පූර්ණ නම',
-                                                icon: Icons.person_outline_rounded,
-                                                scale: scale),
-                                            validator: (value) => value == null || value.trim().isEmpty
-                                                ? 'Please enter your name · ඔබගේ නම ඇතුළත් කරන්න'
-                                                : null,
-                                          ),
-                                        ),
-                                        SizedBox(height: vGap),
-                                        _Reveal(
-                                          order: 2,
-                                          reduceMotion: reduceMotion,
-                                          child: TextFormField(
-                                            controller: _emailController,
-                                            style: inputStyle,
-                                            keyboardType: TextInputType.emailAddress,
-                                            textInputAction: TextInputAction.next,
-                                            autofillHints: const [AutofillHints.email],
-                                            decoration: _decoration(
-                                                label: 'Email · විද්‍යුත් තැපෑල',
-                                                icon: Icons.email_outlined,
-                                                scale: scale),
-                                            validator: (value) {
-                                              final email = value?.trim() ?? '';
-                                              if (email.isEmpty) {
-                                                return 'Please enter your email · විද්‍යුත් තැපෑල ඇතුළත් කරන්න';
-                                              }
-                                              if (!RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(email)) {
-                                                return 'Enter a valid email · නිවැරදි විද්‍යුත් තැපෑලක් ඇතුළත් කරන්න';
-                                              }
-                                              return null;
-                                            },
-                                          ),
-                                        ),
-                                        SizedBox(height: vGap),
-                                        _Reveal(
-                                          order: 3,
-                                          reduceMotion: reduceMotion,
-                                          child: TextFormField(
-                                            controller: _passwordController,
-                                            style: inputStyle,
-                                            obscureText: _obscurePassword,
-                                            textInputAction: TextInputAction.done,
-                                            autofillHints: const [AutofillHints.newPassword],
-                                            onFieldSubmitted: (_) =>
-                                                authState.isLoading ? null : _register(),
-                                            decoration: _decoration(
-                                              label: 'Password · මුරපදය',
-                                              icon: Icons.lock_outline_rounded,
-                                              scale: scale,
-                                              suffix: IconButton(
-                                                tooltip:
-                                                    _obscurePassword ? 'Show password' : 'Hide password',
-                                                constraints:
-                                                    const BoxConstraints(minWidth: 48, minHeight: 48),
-                                                icon: Icon(
-                                                  _obscurePassword
-                                                      ? Icons.visibility_outlined
-                                                      : Icons.visibility_off_outlined,
-                                                  color: _ink,
-                                                ),
-                                                onPressed: () =>
-                                                    setState(() => _obscurePassword = !_obscurePassword),
-                                              ),
-                                            ),
-                                            validator: (value) {
-                                              if (value == null || value.isEmpty) {
-                                                return 'Please enter a password · මුරපදයක් ඇතුළත් කරන්න';
-                                              }
-                                              if (value.length < 6) {
-                                                return 'Use at least 6 characters · අකුරු 6ක් හෝ ඊට වැඩි ගණනක් යොදන්න';
-                                              }
-                                              return null;
-                                            },
-                                          ),
-                                        ),
-                                        SizedBox(height: cardPad),
-                                        _Reveal(
-                                          order: 4,
-                                          reduceMotion: reduceMotion,
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                                            children: [
-                                              SizedBox(
-                                                height: isShort ? 56 : 64,
-                                                child: SwaraButton(
-                                                  label: 'Create account · ගිණුම සාදන්න',
-                                                  color: _primary,
-                                                  onPressed: authState.isLoading ? null : _register,
-                                                  isLoading: authState.isLoading,
-                                                ),
-                                              ),
-                                              const SizedBox(height: 12),
-                                              Wrap(
-                                                alignment: WrapAlignment.center,
-                                                crossAxisAlignment: WrapCrossAlignment.center,
-                                                children: [
-                                                  const Text('Already have an account? · ගිණුමක් තිබේද?',
-                                                      style: bodyStyle),
-                                                  TextButton(
-                                                    style: TextButton.styleFrom(
-                                                        minimumSize: const Size(48, 52)),
-                                                    onPressed: () => context.go(widget.redirectTo == null
-                                                        ? '/login'
-                                                        : '/login?redirectTo=${Uri.encodeComponent(widget.redirectTo!)}'),
-                                                    child: const Text('Sign in · පුරනය වන්න',
-                                                        style: TextStyle(
-                                                            fontFamily: _nunito,
-                                                            fontSize: 16,
-                                                            fontWeight: FontWeight.w800,
-                                                            color: _primary)),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            // Badge overlapping the card's top edge
-                            ExcludeSemantics(
-                              child: Container(
-                                width: 76,
-                                height: 76,
-                                decoration: BoxDecoration(
-                                  color: _primary,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(color: _groundAdult, width: 6),
-                                ),
-                                child: const Icon(Icons.people_outline_rounded,
-                                    color: Colors.white, size: 34),
-                              ),
-                            ),
-                          ],
-                        ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Join Swara', style: AppTextStyles.heading2),
+              const SizedBox(height: 6),
+              Text('Create a parent or therapist account', style: AppTextStyles.bodySmall),
+              const SizedBox(height: 28),
+              TextFormField(
+                controller: _nameController,
+                decoration: const InputDecoration(
+                  labelText: 'Full Name',
+                  prefixIcon: Icon(Icons.person_outlined),
+                ),
+                validator: (v) => v == null || v.isEmpty ? 'Please enter your name' : null,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  prefixIcon: Icon(Icons.email_outlined),
+                ),
+                validator: (v) {
+                  final email = v?.trim() ?? '';
+                  if (email.isEmpty) return 'Please enter your email';
+                  if (!RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(email)) {
+                    return 'Enter a valid email address';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _passwordController,
+                obscureText: _obscurePassword,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  prefixIcon: const Icon(Icons.lock_outlined),
+                  suffixIcon: IconButton(
+                    icon: Icon(_obscurePassword
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined),
+                    onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                  ),
+                ),
+                validator: (v) {
+                  if (v == null || v.isEmpty) return 'Please enter a password';
+                  if (v.length < 6) return 'Password must be at least 6 characters';
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
+              Text('I am a:', style: AppTextStyles.label),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  _RoleCard(
+                    title: 'Parent/Caregiver',
+                    icon: Icons.family_restroom,
+                    value: AppConstants.roleChild,
+                    selected: _role == AppConstants.roleChild,
+                    onTap: () => setState(() => _role = AppConstants.roleChild),
+                  ),
+                  const SizedBox(width: 12),
+                  _RoleCard(
+                    title: 'Speech Therapist',
+                    icon: Icons.record_voice_over,
+                    value: AppConstants.roleTherapist,
+                    selected: _role == AppConstants.roleTherapist,
+                    onTap: () => setState(() => _role = AppConstants.roleTherapist),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              if (_role == AppConstants.roleChild) ..._childFields(),
+              if (_role == AppConstants.roleTherapist)
+                TextFormField(
+                  controller: _codeController,
+                  decoration: const InputDecoration(
+                    labelText: 'Therapist code',
+                    helperText: 'Given to the research team\'s therapists',
+                    prefixIcon: Icon(Icons.badge_outlined),
+                  ),
+                  validator: (v) => v == null || v.trim().isEmpty ? 'Enter the therapist code' : null,
+                ),
+              const SizedBox(height: 28),
+              SwaraButton(
+                label: 'Create Account',
+                onPressed: _register,
+                isLoading: authState.isLoading,
+              ),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Already have an account? ', style: AppTextStyles.bodySmall),
+                  GestureDetector(
+                    onTap: () => context.go(widget.redirectTo == null
+                        ? '/login'
+                        : '/login?redirectTo=${Uri.encodeComponent(widget.redirectTo!)}'),
+                    child: const Text(
+                      'Sign In',
+                      style: TextStyle(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
                       ),
                     ),
                   ),
-                );
-              },
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _RoleCard extends StatelessWidget {
+  final String title;
+  final IconData icon;
+  final String value;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _RoleCard({
+    required this.title,
+    required this.icon,
+    required this.value,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: selected ? AppColors.primaryWash : AppColors.surface,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: selected ? AppColors.primary : AppColors.divider,
+              width: selected ? 2 : 1,
             ),
           ),
-        ],
+          child: Column(
+            children: [
+              Icon(
+                icon,
+                color: selected ? AppColors.primary : AppColors.textLight,
+                size: 32,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: selected ? AppColors.primary : AppColors.text,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

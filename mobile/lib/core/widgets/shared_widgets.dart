@@ -37,13 +37,7 @@ class SwaraButton extends StatelessWidget {
                 Icon(icon, size: 20),
                 const SizedBox(width: AppSpacing.sm),
               ],
-              Flexible(
-                child: Text(
-                  label,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-              ),
+              Text(label),
             ],
           );
 
