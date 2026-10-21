@@ -8,23 +8,23 @@ class SpeechMetricsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Speech Metrics')),
+      appBar: AppBar(title: const Text('කථන මිනුම්')),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: const [
-          MetricCard(title: 'Speech Duration', value: '01:12', icon: Icons.timer),
+          MetricCard(title: 'කථන කාලය', value: '01:12', icon: Icons.timer),
           SizedBox(height: 8),
-          MetricCard(title: 'Speech Rate', value: '2.8', subtitle: 'syllables/sec', icon: Icons.speed),
+          MetricCard(title: 'කථන වේගය', value: '2.8', subtitle: 'අක්ෂර/තත්පරයට', icon: Icons.speed),
           SizedBox(height: 8),
-          MetricCard(title: 'Pause Frequency', value: '7 pauses', icon: Icons.pause_circle_outline),
+          MetricCard(title: 'විරාම ගණන', value: 'විරාම 7ක්', icon: Icons.pause_circle_outline),
           SizedBox(height: 8),
-          MetricCard(title: 'Mean Pause Duration', value: '1.1 sec', icon: Icons.hourglass_bottom),
+          MetricCard(title: 'සාමාන්‍ය විරාම කාලය', value: 'තත්පර 1.1ක්', icon: Icons.hourglass_bottom),
           SizedBox(height: 8),
-          MetricCard(title: 'Response Latency', value: '2.4 sec', icon: Icons.pending_actions),
+          MetricCard(title: 'පිළිතුර ඇරඹීමට ගත වූ කාලය', value: 'තත්පර 2.4ක්', icon: Icons.pending_actions),
           SizedBox(height: 24),
-          Text('Observed Fluency Events', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textLight)),
+          Text('හඳුනාගත් කථන පැකිළීම්', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textLight)),
           SizedBox(height: 8),
-          MetricCard(title: 'Events', value: '8', icon: Icons.warning_amber_rounded),
+          MetricCard(title: 'සිදුවීම්', value: '8', icon: Icons.warning_amber_rounded),
         ],
       ),
     );

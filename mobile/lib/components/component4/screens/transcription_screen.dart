@@ -30,7 +30,7 @@ class _TranscriptionScreenState extends ConsumerState<TranscriptionScreen> {
   Future<void> _play() async {
     final recording = C4Flow.recording;
     if (recording == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('The recording is not on this device.')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('මෙම උපකරණයේ පටිගත කිරීම සොයාගත නොහැක.')));
       return;
     }
     try {
@@ -43,7 +43,7 @@ class _TranscriptionScreenState extends ConsumerState<TranscriptionScreen> {
       await _player.play();
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('The recording could not be played.')));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('පටිගත කිරීම වාදනය කළ නොහැකි විය.')));
       }
     }
   }
@@ -55,15 +55,15 @@ class _TranscriptionScreenState extends ConsumerState<TranscriptionScreen> {
     final text = await showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Correct the transcript'),
+        title: const Text('කථන පිටපත නිවැරදි කරන්න'),
         content: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('Write exactly what the child said, repetitions included ("ම ම මම").', style: AppTextStyles.caption),
+          Text('දරුවා පැවසූ දේ නැවතීම්ද ඇතුළුව ඒ ආකාරයෙන්ම ලියන්න ("ම ම මම").', style: AppTextStyles.caption),
           const SizedBox(height: 12),
           TextField(controller: controller, maxLines: 8, minLines: 4, decoration: const InputDecoration(border: OutlineInputBorder())),
         ]),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
-          ElevatedButton(onPressed: () => Navigator.pop(context, controller.text.trim()), child: const Text('Save')),
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('අවලංගු කරන්න')),
+          ElevatedButton(onPressed: () => Navigator.pop(context, controller.text.trim()), child: const Text('සුරකින්න')),
         ],
       ),
     );
@@ -84,7 +84,7 @@ class _TranscriptionScreenState extends ConsumerState<TranscriptionScreen> {
   Widget build(BuildContext context) {
     final v = C4Flow.view;
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.groundRead,
       body: SafeArea(
         child: Column(
           children: [
@@ -101,7 +101,7 @@ class _TranscriptionScreenState extends ConsumerState<TranscriptionScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'What you said',
+                      'ඔයා පැවසූ දේ',
                       style: AppTextStyles.body.copyWith(color: AppColors.textLight),
                       textAlign: TextAlign.center,
                     ),
@@ -131,14 +131,14 @@ class _TranscriptionScreenState extends ConsumerState<TranscriptionScreen> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(v.transcriptKind == 'asr' ? 'Sinhala ASR' : 'Corrected by parent', style: AppTextStyles.label),
-                                  Text('Completed', style: AppTextStyles.caption.copyWith(color: AppColors.success)),
+                                  Text(v.transcriptKind == 'asr' ? 'සිංහල හඬ හඳුනාගැනීම' : 'දෙමාපියන් නිවැරදි කළා', style: AppTextStyles.label),
+                                  Text('සම්පූර්ණයි', style: AppTextStyles.caption.copyWith(color: AppColors.success)),
                                 ],
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  Text('Response Duration', style: AppTextStyles.label),
+                                  Text('පිළිතුරු කාලය', style: AppTextStyles.label),
                                   Text(fmtClock(v.durationSec), style: AppTextStyles.titleMedium.copyWith(color: AppColors.primaryDeep)),
                                 ],
                               ),
@@ -151,20 +151,20 @@ class _TranscriptionScreenState extends ConsumerState<TranscriptionScreen> {
                     OutlinedButton.icon(
                       onPressed: C4Flow.isLive ? _play : () {},
                       icon: const Icon(Icons.volume_up),
-                      label: const Text('Listen to Recording'),
+                      label: const Text('පටිගත කළ හඬට සවන් දෙන්න'),
                     ),
                     if (C4Flow.isLive && C4Flow.sampleId != null) ...[
                       const SizedBox(height: 12),
                       OutlinedButton.icon(
                         onPressed: _saving ? null : () => _correct(v.transcript),
                         icon: const Icon(Icons.edit_note),
-                        label: Text(_saving ? 'Saving...' : 'Correct transcript (parent)'),
+                        label: Text(_saving ? 'සුරකිමින්...' : 'පිටපත නිවැරදි කරන්න (දෙමාපියන්)'),
                       ),
                     ],
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () => context.push('/c4/analysis'),
-                      child: const Text('Analyse Speech'),
+                      child: const Text('කථනය විශ්ලේෂණය කරන්න'),
                     ),
                   ],
                 ),
