@@ -50,6 +50,7 @@ The model also does C3's word, reading and picture checks, so check those after 
 
 ## 4. Reading the result
 
+- Print the latest recorded CTC / Whisper benchmark table in the terminal from `language-service/` with `.venv\\Scripts\\python.exe show_accuracy.py`. To compare a new reference transcript with an ASR transcript, pass `--reference reference.txt --hypothesis asr.txt`; both files should be UTF-8.
 - The notebook reports WER and CER for the current model and for the new one on the same test speakers, who are never seen in training.
 - Sentences read in dev or test are removed from train, so the model is not tested on text it learned.
 - SLR52 is adult read speech. Before relying on the model for children, check it on the team's own child recordings: put their transcripts through `POST /evaluate-asr`.
