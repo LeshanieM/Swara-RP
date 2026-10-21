@@ -407,8 +407,3 @@ The contract example, `contracts/c3/word-check.response.example.json`, is the à¶
 - **Simulator:** `run.js main --seeds 2 --children 40 --sessions 6` ran end to end with the new pool, the 5-activity cap and the type rule. The full `run.js all` was started but stopped part-way (the machine ran low on memory), so `C3_EVALUATION.md` still shows the results of the earlier pool.
 - **Contracts:** `contracts/c3/` (session, next activity, result, completion, questionnaire, child summary) were saved again from a real 11â€“14 session.
 - **App:** `flutter analyze` (no errors) and the unit tests passed. The new screens were not driven on the emulator: it was starved of CPU and memory by the parallel runs.
-
-### V-34 Chrome camera control
-- The C3 parent setting is available on web. During an active activity, a parent-authorized switch starts/stops the browser camera and displays a local preview.
-- Web sends no camera-derived features to the API; engagement scoring remains based on activity signals. Android/iOS keep ML Kit feature extraction.
-- `flutter build web` passed and `flutter test test/camera_features_test.dart` passed (2/2). Chrome permission and preview behavior still need a browser run on `localhost` or HTTPS.
