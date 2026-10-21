@@ -22,7 +22,10 @@ class _JourneyMap extends StatelessWidget {
             bottom: 20,
             left: 30,
             child: GestureDetector(
-                onTap: () => nav?.go(_TherapyRoute.breathing),
+                // Live sessions let the server pick the first activity too.
+                onTap: () => nav?.go(_C3Session.isLive
+                    ? _TherapyRoute.adaptiveSyllable
+                    : _TherapyRoute.breathing),
                 child: Column(children: [
                   const _Mascot(size: 56),
                   Container(
