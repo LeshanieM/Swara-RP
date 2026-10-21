@@ -13,7 +13,7 @@ class SpeechPreparationScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const C4Header(currentStep: 7, totalSteps: 12),
+            const C4Header(currentStep: 7, totalSteps: 14),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(24.0),

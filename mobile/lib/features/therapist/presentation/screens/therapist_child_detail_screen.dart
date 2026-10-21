@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../child/data/models/child_model.dart';
 import '../../../child/data/providers/child_provider.dart';
 import 'package:swara/core/widgets/shared_widgets.dart';
 import 'package:swara/core/theme/app_theme.dart';
@@ -74,29 +75,27 @@ class TherapistChildDetailScreen extends ConsumerWidget {
               _ActionTile(
                 icon: Icons.mic,
                 label: 'View Speech Assessments',
-                onTap: () => context.push('/speech/record/${child.childId}'),
+                onTap: () => _open(context, ref, child, '/c1/record'),
               ),
               _ActionTile(
                 icon: Icons.psychology,
-                label: 'View Behavioral Assessment',
-                onTap: () => context.push('/psychology/questionnaire/${child.childId}'),
+                label: 'View Engagement',
+                onTap: () => _open(context, ref, child, '/c3/therapy/engagement'),
               ),
               _ActionTile(
                 icon: Icons.face_retouching_natural,
                 label: 'Component 2 Movement Analysis',
-                onTap: () => context.push(
-                  '/c2/video/upload?childId=${Uri.encodeComponent(child.childId)}',
-                ),
+                onTap: () => _open(context, ref, child, '/c2/video/upload'),
               ),
               _ActionTile(
                 icon: Icons.auto_awesome,
                 label: 'Therapy Recommendations',
-                onTap: () => context.push('/therapy/recommendations/${child.childId}'),
+                onTap: () => _open(context, ref, child, '/c3/therapy/home'),
               ),
               _ActionTile(
                 icon: Icons.trending_up,
                 label: 'Progress Dashboard',
-                onTap: () => context.push('/progress/${child.childId}'),
+                onTap: () => _open(context, ref, child, '/profile'),
               ),
               const SizedBox(height: 32),
             ],
@@ -104,6 +103,12 @@ class TherapistChildDetailScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  /// Every component acts for the active child, so select this child before opening one.
+  void _open(BuildContext context, WidgetRef ref, ChildModel child, String location) {
+    ref.read(selectedChildProvider.notifier).state = child;
+    context.push(location);
   }
 
   Widget _section(String title) => Padding(

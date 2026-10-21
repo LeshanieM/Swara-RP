@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swara/core/theme/app_theme.dart';
 import 'package:swara/components/component4/widgets/c4_header.dart';
+import 'package:swara/components/component4/services/c4_flow.dart';
+import 'package:swara/core/network/api_exception.dart';
 
 class PersonalizationProcessScreen extends StatefulWidget {
   const PersonalizationProcessScreen({super.key});
@@ -12,19 +14,39 @@ class PersonalizationProcessScreen extends StatefulWidget {
 
 class _PersonalizationProcessScreenState extends State<PersonalizationProcessScreen> {
   int _activeStage = 0;
+  Future<void>? _session;
+  String? _error;
 
-  final List<Map<String, String>> _stages = [
-    {'title': 'Animals', 'subtitle': 'Your Interests'},
-    {'title': 'Familiarity: 5/5', 'subtitle': 'Knowledge Level'},
-    {'title': 'Age: 9', 'subtitle': 'Child Profile'},
-    {'title': 'Matching validated topics...', 'subtitle': 'SLP Topic Bank'},
-    {'title': 'My Favourite Animal', 'subtitle': 'Personalized Topic'},
-  ];
+  /// The stage cards: the chosen topic's category and its rank, the child's age and the topic itself.
+  List<Map<String, String>> get _stages {
+    final ready = !C4Flow.isLive || C4Flow.session != null;
+    final v = C4Flow.view;
+    return [
+      {'title': ready ? v.categoryEn : '...', 'subtitle': 'Your Interests'},
+      {'title': ready && v.categoryRank != null ? 'Favourite no. ${v.categoryRank} of 5' : 'Ranking', 'subtitle': 'Your Ranking'},
+      {'title': C4Flow.isLive ? 'Age: ${C4Flow.child?.age ?? ''}' : 'Age: 9', 'subtitle': 'Child Profile'},
+      {'title': 'Matching validated topics...', 'subtitle': 'SLP Topic Bank'},
+      {'title': ready ? (v.topicEn.isEmpty ? v.topicSi : v.topicEn) : '...', 'subtitle': v.isFixed ? "Today's Topic" : 'Personalized Topic'},
+    ];
+  }
 
   @override
   void initState() {
     super.initState();
+    if (C4Flow.isLive) _session = _prepare();
     _startAnimation();
+  }
+
+  /// Saves a new ranking from onboarding (if there is one), then starts today's session.
+  Future<void> _prepare() async {
+    try {
+      if (C4Flow.ranked.length == 5) await C4Flow.saveProfile();
+      await C4Flow.startSession();
+      if (mounted) setState(() {});
+    } catch (e) {
+      if (mounted) setState(() => _error = ApiException.from(e).message);
+      rethrow;
+    }
   }
 
   void _startAnimation() async {
@@ -37,8 +59,14 @@ class _PersonalizationProcessScreenState extends State<PersonalizationProcessScr
       }
     }
     await Future.delayed(const Duration(milliseconds: 1500));
+    try {
+      await _session;
+    } catch (_) {
+      return; // the error card is showing
+    }
     if (mounted) {
-      context.push('/c4/topic');
+      // The parent checklist comes once, after the interests are saved; it sets the starting level.
+      context.push(C4Flow.isLive && !C4Flow.checklistDone ? '/c4/checklist' : '/c4/topic');
     }
   }
 
@@ -49,7 +77,7 @@ class _PersonalizationProcessScreenState extends State<PersonalizationProcessScr
       body: SafeArea(
         child: Column(
           children: [
-            const C4Header(currentStep: 4, totalSteps: 12),
+            const C4Header(currentStep: 4, totalSteps: 14),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 48.0),
@@ -68,6 +96,20 @@ class _PersonalizationProcessScreenState extends State<PersonalizationProcessScr
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 48),
+                    if (_error != null) ...[
+                      Text(_error!, style: AppTextStyles.body.copyWith(color: AppColors.error), textAlign: TextAlign.center),
+                      TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _error = null;
+                            _activeStage = 0;
+                            _session = _prepare();
+                          });
+                          _startAnimation();
+                        },
+                        child: const Text('Try again'),
+                      ),
+                    ],
                     for (int i = 0; i < _stages.length; i++) ...[
                       _buildStageCard(i),
                       if (i < _stages.length - 1)

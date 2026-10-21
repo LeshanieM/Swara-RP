@@ -66,15 +66,18 @@ docker compose ps            # swara-mongo should be "healthy"
 
 ### 2.2 Python services
 
-Each service has its own `.venv`. The training packages go into the same `.venv`, so the notebooks run the services' own code.
+Each service has its own `.venv`. Install the runtime requirements to run the default models. Training dependencies are optional and should only be installed from a requirements file that exists for that service.
 
 ```bash
-# C1 speech service (+ training: torch, transformers, scikit-learn, pandas, PyAV, jupyter)
+# C1 speech service (default acoustic detector; no training dependencies needed)
 cd Swara-RP/server/speech-service
 uv venv --python 3.11 .venv
-uv pip install --python .venv/bin/python -r requirements.txt -r requirements-training.txt 
-or
- uv pip install --python .venv\Scripts\python.exe -r requirements.txt -r requirements-training.txt
+uv pip install --python .venv/bin/python -r requirements.txt
+# Windows: uv pip install --python .venv\Scripts\python.exe -r requirements.txt
+
+# Do not recreate an existing .venv; install into it with the command above.
+# This checkout has no requirements-training.txt. The optional XLS-R detector
+# needs torch, transformers, joblib and scikit-learn, plus a trained head file.
 
 # C2 vision service (+ training: torch, scikit-learn, pandas, jupyter; also used for C3's camera model)
 
