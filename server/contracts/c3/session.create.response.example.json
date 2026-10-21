@@ -1,0 +1,66 @@
+{
+  "childId": "CH-FHCKR4",
+  "ageAtSession": 12,
+  "ageBand": "11-14",
+  "language": "si",
+  "cameraOn": false,
+  "plannedMinutes": 25,
+  "maxActivities": 5,
+  "c2Flag": "missing",
+  "c2FlagSource": "none",
+  "c2AnalysisId": null,
+  "c2BehaviourTypes": [],
+  "c2FlagClient": null,
+  "status": "active",
+  "policy": "hybrid",
+  "rewardMode": "fused",
+  "breaks": [],
+  "contextAtStart": {
+    "values": {
+      "bias": 1,
+      "band11to14": 1,
+      "c1Severity": 0,
+      "c1Missing": 1,
+      "c1PercentSS": 0,
+      "c1Repetition": 0,
+      "c1BlockProlong": 0,
+      "c2Yes": 0,
+      "c2Missing": 1,
+      "c2FG": 0,
+      "c2HM": 0,
+      "cameraOn": 0,
+      "parentHelp": 0,
+      "engagementTrend": 0.5,
+      "sessionsCompleted": 0,
+      "sessionElapsed": 0
+    },
+    "sources": {
+      "c1": {
+        "status": "missing"
+      },
+      "c2": {
+        "flag": "missing",
+        "source": "none",
+        "analysisId": null,
+        "behaviourTypes": []
+      },
+      "parentHelp": {
+        "activities": 0
+      },
+      "engagementTrend": {
+        "sessions": 0,
+        "prior": true
+      },
+      "sessionsCompleted": 0,
+      "elapsedMinutes": 0,
+      "plannedMinutes": 25
+    }
+  },
+  "createdAt": "2026-10-20T16:44:52.752Z",
+  "updatedAt": "2026-10-20T16:44:52.752Z",
+  "id": "6ad79a84338cfca60658d567",
+  "links": {
+    "self": "/api/c3/sessions/6ad79a84338cfca60658d567",
+    "nextActivity": "/api/c3/sessions/6ad79a84338cfca60658d567/next-activity"
+  }
+}

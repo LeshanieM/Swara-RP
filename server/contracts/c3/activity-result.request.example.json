@@ -1,0 +1,52 @@
+{
+  "targets": 2,
+  "successes": 2,
+  "completedShare": 1,
+  "attempts": 3,
+  "responseLatencyMs": 2200,
+  "taps": 14,
+  "durationSec": 200,
+  "earlyExit": false,
+  "parentHelp": 1,
+  "parentFeedback": "just_right",
+  "camera": {
+    "windows": [
+      {
+        "durationSec": 10,
+        "facePresentRatio": 0.95,
+        "yawStdDeg": 4,
+        "pitchStdDeg": 3,
+        "yawAbsMeanDeg": 5,
+        "pitchAbsMeanDeg": 4,
+        "lookAwayRatio": 0.02,
+        "eyeOpenMean": 0.85,
+        "eyesClosedRatio": 0.03,
+        "smileMean": 0.3
+      },
+      {
+        "durationSec": 10,
+        "facePresentRatio": 0.95,
+        "yawStdDeg": 4,
+        "pitchStdDeg": 3,
+        "yawAbsMeanDeg": 5,
+        "pitchAbsMeanDeg": 4,
+        "lookAwayRatio": 0.02,
+        "eyeOpenMean": 0.85,
+        "eyesClosedRatio": 0.03,
+        "smileMean": 0.3
+      },
+      {
+        "durationSec": 6,
+        "facePresentRatio": 0.95,
+        "yawStdDeg": 4,
+        "pitchStdDeg": 3,
+        "yawAbsMeanDeg": 5,
+        "pitchAbsMeanDeg": 4,
+        "lookAwayRatio": 0.02,
+        "eyeOpenMean": 0.85,
+        "eyesClosedRatio": 0.03,
+        "smileMean": 0.3
+      }
+    ]
+  }
+}

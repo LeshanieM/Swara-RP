@@ -1,0 +1,89 @@
+{
+  "childId": "CH-FHCKR4",
+  "sessionsCompleted": 1,
+  "sessionsActive": 0,
+  "sessionsAbandoned": 0,
+  "streakDays": 1,
+  "stars": 5,
+  "activitiesSkipped": 0,
+  "tss": {
+    "latest": 92,
+    "previous": null,
+    "trend": "insufficient_data",
+    "recent": [
+      {
+        "sessionId": "6ad79a84338cfca60658d567",
+        "date": "2026-10-20T16:44:53.809Z",
+        "tss": 92
+      }
+    ]
+  },
+  "engagement": {
+    "lastSessions": [
+      0.899
+    ],
+    "mean": 0.899
+  },
+  "questionnaire": {
+    "lastScore": 4
+  },
+  "typeScores": {
+    "breathing": {
+      "score": 0.961,
+      "n": 1
+    },
+    "picture_naming": {
+      "score": 0.961,
+      "n": 1
+    },
+    "syllable_practice": {
+      "score": 0.9586,
+      "n": 1
+    },
+    "passage_reading": {
+      "score": 0.9586,
+      "n": 1
+    },
+    "word_phrase_practice": {
+      "score": 0.9586,
+      "n": 1
+    }
+  },
+  "c1": {
+    "status": "missing"
+  },
+  "c2": {
+    "status": "missing",
+    "flag": "missing"
+  },
+  "bandit": {
+    "updates": 5,
+    "arms": [
+      {
+        "armId": "11-14:word_phrase_practice:easy",
+        "n": 1,
+        "meanReward": 0.9586
+      },
+      {
+        "armId": "11-14:passage_reading:easy",
+        "n": 1,
+        "meanReward": 0.9586
+      },
+      {
+        "armId": "11-14:syllable_practice:easy",
+        "n": 1,
+        "meanReward": 0.9586
+      },
+      {
+        "armId": "11-14:picture_naming:easy",
+        "n": 1,
+        "meanReward": 0.961
+      },
+      {
+        "armId": "11-14:breathing:easy",
+        "n": 1,
+        "meanReward": 0.961
+      }
+    ]
+  }
+}
