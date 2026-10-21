@@ -1,0 +1,29 @@
+{
+ "_note": "SHA-1 of the generated placeholder pictures in mobile/assets/images/component3/items/ (scripts/checkContent.js reports a picture as placeholder while its file still has this hash).",
+ "sha1": {
+  "PD-D-01.png": "7b6358b398851db3e8d8b8039be0bd8ef77d71a6",
+  "PD-D-02.png": "83d498e81f61502f4a5716d4040320a42fb614f5",
+  "PD-D-03.png": "3e7908a4c63e19ad728799e4f97c5d857cd261a9",
+  "PD-D-04.png": "7d405f48580ac094c7b8b9c7f0edf2de2cb7f452",
+  "PD-E-01.png": "0de4023c8df89655281ab40a55214589e5d5ca12",
+  "PD-E-02.png": "2a84e2be63c882f3d3a722d8910cf9e722de3abf",
+  "PD-E-03.png": "9e824fda709316cbacc3111cbb5d765c2d6a440a",
+  "PD-E-04.png": "199da4ec7537778c6e779e5645cde5a6b2542cff",
+  "PD-M-01.png": "e052026010c3cae048b3eb2596db91acc2fc139f",
+  "PD-M-02.png": "433bd14e58342196ba0f00936f82a4b7fbf92d48",
+  "PD-M-03.png": "c503626e18caced6d18379b72ae8cce89ce02cec",
+  "PD-M-04.png": "9059532c4821df678e6882c7417966ef84ffc627",
+  "PN-D-01.png": "a7bc6ad0dc4c28dc8f7d34394b4f8a6851be0fe4",
+  "PN-D-02.png": "88dd8164638a25121d4ae9caa3cf8532f581c198",
+  "PN-D-03.png": "964402fc973c2d5271d47a8441043f7bd5181518",
+  "PN-D-04.png": "2c4b3f78eae251fbae58a09fc5b462aea134eb69",
+  "PN-E-01.png": "39430fcc10518a8137091303284ecc077fa57571",
+  "PN-E-02.png": "02f4e9f3b4cd4f0d3496754e87d8164de1760393",
+  "PN-E-03.png": "1b7ae603f11eda1f48670dc525bc6f63dbf48656",
+  "PN-E-04.png": "c798ac50954e25c58359371afb046cb09b5efd93",
+  "PN-M-01.png": "2250d3475f6d118f99989b8fe79c02729d3baa15",
+  "PN-M-02.png": "086ce8d9cec0e91563256ff620591e2ed58654c5",
+  "PN-M-03.png": "8af9d4afb7514958206ba5d6aa4102cdf773d5cb",
+  "PN-M-04.png": "82c7d87d05995bf608363fbd44dc273163fe653e"
+ }
+}
