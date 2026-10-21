@@ -24,7 +24,7 @@ class _TherapyActivityDefinition {
       case 'syllable-practice':
         return _TherapyRoute.syllablePractice;
       case 'picture-description':
-        return _TherapyRoute.pictureIntro;
+        return _TherapyRoute.pictureActivity;
       default:
         return '${_TherapyRoute.practiceActivity}/$id';
     }
@@ -57,7 +57,7 @@ const _therapyActivities = <_TherapyActivityDefinition>[
     emoji: '🐘',
     focus: 'Name the picture with a gentle start',
     instruction: 'Look at the picture and say its name slowly and gently.',
-    prompts: ['බළලා', 'බෝලය'],
+    prompts: ['පූසා', 'බෝලය'],
   ),
   _TherapyActivityDefinition(
     id: 'syllable-practice',

@@ -1124,21 +1124,21 @@
    "contentRef": "assets/c3/pn/PN-E-01",
    "prompt": {
     "en": "cat",
-    "si": "බළලා"
+    "si": "පූසා"
    },
    "targets": 5,
    "slpApproved": true,
    "placeholder": true,
    "targetWords": {
     "si": [
-     "බළලා"
+     "පූසා"
     ],
     "en": [
      "cat"
     ]
    },
    "confusables": {
-    "බළලා": [
+    "පූසා": [
      "බල්ලා"
     ]
    },
