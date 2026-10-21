@@ -39,6 +39,19 @@ uv pip install --python .venv/bin/python -r requirements-training.txt   # pandas
 - MMS-1B needs a GPU with about 24 GB, or Google Colab; on a laptop use it only with a small `SWARA_C4_MAX_TRAIN`.
 - A real run (several shards, a few thousand steps) is best done on a CUDA GPU.
 
+### CPU run with a local shard
+
+`training/train_c4.py` reuses shard ZIPs already on disk, prints step progress, and defaults to training only the small CTC output head so a CPU run uses less memory. From PowerShell in `server/language-service`:
+
+```powershell
+.\.venv\Scripts\python.exe -m training.train_c4 `
+  --data data\slr52 --shards 0 --steps 200 `
+  --batch-size 1 --max-train 1024 --max-eval 128 `
+  --device cpu --train-scope head --out models\c4_asr
+```
+
+Use `--train-scope full` on a GPU to fine-tune the complete transformer. The report records the scope, sample sizes, and comparison against the current public model. `show_accuracy.py` prints the latest report when one exists.
+
 ## 3. Use the model in the service
 
 ```bash
@@ -50,7 +63,7 @@ The model also does C3's word, reading and picture checks, so check those after 
 
 ## 4. Reading the result
 
-- Print the latest recorded CTC / Whisper benchmark table in the terminal from `language-service/` with `.venv\\Scripts\\python.exe show_accuracy.py`. To compare a new reference transcript with an ASR transcript, pass `--reference reference.txt --hypothesis asr.txt`; both files should be UTF-8.
+- Print the latest fine-tuning report (or the recorded CTC / Whisper benchmark if no report exists) in the terminal from `language-service/` with `.venv\\Scripts\\python.exe show_accuracy.py`. To compare a new reference transcript with an ASR transcript, pass `--reference reference.txt --hypothesis asr.txt`; both files should be UTF-8.
 - The notebook reports WER and CER for the current model and for the new one on the same test speakers, who are never seen in training.
 - Sentences read in dev or test are removed from train, so the model is not tested on text it learned.
 - SLR52 is adult read speech. Before relying on the model for children, check it on the team's own child recordings: put their transcripts through `POST /evaluate-asr`.
@@ -59,4 +72,4 @@ The model also does C3's word, reading and picture checks, so check those after 
 
 ## Smoke test
 
-On 2026-10-20 the data step was checked on shard 0: speaker- and sentence-disjoint splits of 8,896 / 647 / 614 utterances (`server/VERIFICATION_LOG_C4.md`, V-24). A short training run (10 steps) was started but stopped by the system for low memory, so training and export have **not** been verified yet. Run it on its own, with nothing else heavy running: `SWARA_C4_MAX_TRAIN=64 SWARA_C4_MAX_EVAL=24 SWARA_C4_STEPS=10`.
+On 2026-10-22 an initial head-only CPU fine-tune completed on shard 0; it used 1,024 train and 128 dev/test utterances and is recorded in `server/VERIFICATION_LOG_C4.md`, V-25. Full-transformer training and full-test-set evaluation still need a GPU run.

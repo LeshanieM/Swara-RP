@@ -25,10 +25,13 @@ def pct(value: object) -> str:
 def print_report(report: dict, path: Path) -> None:
     test = report.get("test", {})
     baseline = report.get("ruleBaselineTest", {})
-    print(f"C1 stutter-type evaluation — {path.stem}")
+    print(f"C1 stutter-type evaluation - {path.stem}")
     print("=" * 64)
     print(f"Dataset split: {report.get('split', 'unknown')} (held-out test set)")
-    print(f"Chosen XLS-R layer: {report.get('layer', 'acoustic only')}")
+    if report.get("input") == "acoustic" or report.get("inputs") == ["acoustic"]:
+        print("Chosen feature set: acoustic only")
+    else:
+        print(f"Chosen XLS-R layer: {report.get('layer', 'unknown')}")
     print(f"{'Label':<24}{'Precision':>13}{'Recall':>13}{'F1':>13}")
     print("-" * 63)
     for label, scores in test.get("perLabel", {}).items():
