@@ -148,7 +148,7 @@ class _InterestSelectionScreenState extends State<InterestSelectionScreen> {
           _selectedCategories.add(category);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Maximum 5 categories allowed.')),
+            const SnackBar(content: Text('උපරිම වශයෙන් වර්ග 5ක් පමණක් තෝරන්න.')),
           );
         }
       }
@@ -158,7 +158,7 @@ class _InterestSelectionScreenState extends State<InterestSelectionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.groundHome,
       body: SafeArea(
         child: Column(
           children: [
@@ -208,7 +208,7 @@ class _InterestSelectionScreenState extends State<InterestSelectionScreen> {
                 child: Center(
                   child: Column(mainAxisSize: MainAxisSize.min, children: [
                     Text(_error!, textAlign: TextAlign.center),
-                    TextButton(onPressed: _loadCategories, child: const Text('Try again')),
+                    TextButton(onPressed: _loadCategories, child: const Text('නැවත උත්සාහ කරන්න')),
                   ]),
                 ),
               )
@@ -246,42 +246,35 @@ class _InterestSelectionScreenState extends State<InterestSelectionScreen> {
                         fit: StackFit.expand,
                         children: [
                           InterestImage(category),
-                          Container(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  Colors.transparent,
-                                  AppColors.deepNavy.withOpacity(0.7),
-                                ],
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
+                          Positioned(
+                            left: 8,
+                            right: 8,
+                            bottom: 8,
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: AppColors.surfaceRaised.withValues(alpha: 0.96),
+                                borderRadius: AppRadii.smAll,
                               ),
-                            ),
-                          ),
-                          if (isSelected)
-                            Container(
-                              color: AppColors.primary.withOpacity(0.3),
-                            ),
-                          Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Column(
+                              child: Column(
                               mainAxisAlignment: MainAxisAlignment.end,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   category.sinhalaName,
                                   style: AppTextStyles.titleMedium.copyWith(
-                                    color: AppColors.white,
+                                    color: AppColors.text,
                                     fontWeight: FontWeight.w800,
                                   ),
                                 ),
                                 Text(
                                   category.englishName,
                                   style: AppTextStyles.caption.copyWith(
-                                    color: AppColors.white.withOpacity(0.9),
+                                    color: AppColors.textLight,
                                   ),
                                 ),
                               ],
+                              ),
                             ),
                           ),
                           if (isSelected)
@@ -358,7 +351,7 @@ class _InterestSelectionScreenState extends State<InterestSelectionScreen> {
                     onPressed: _selectedCategories.isEmpty || (_needsExactlyFive && _selectedCategories.length < 5)
                         ? null
                         : _continue,
-                    child: const Text('Continue'),
+                    child: const Text('ඉදිරියට යන්න'),
                   ),
                 ),
               ]),

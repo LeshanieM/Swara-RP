@@ -27,6 +27,7 @@ class UserModel {
   final String email;
   final String role;
   final String? token;
+  final String? photoUrl;
   final ChildRef? child;
 
   const UserModel({
@@ -35,6 +36,7 @@ class UserModel {
     required this.email,
     required this.role,
     this.token,
+    this.photoUrl,
     this.child,
   });
 
@@ -45,6 +47,7 @@ class UserModel {
       email: json['email'] ?? '',
       role: json['role'] ?? '',
       token: json['token'],
+      photoUrl: json['photoUrl'] as String?,
       child: json['child'] is Map<String, dynamic> ? ChildRef.fromJson(json['child']) : null,
     );
   }
@@ -54,6 +57,7 @@ class UserModel {
         'name': name,
         'email': email,
         'role': role,
+        if (photoUrl != null) 'photoUrl': photoUrl,
         if (child != null) 'child': child!.toJson(),
       };
 
@@ -63,6 +67,7 @@ class UserModel {
     String? email,
     String? role,
     String? token,
+    String? photoUrl,
     ChildRef? child,
   }) {
     return UserModel(
@@ -71,6 +76,7 @@ class UserModel {
       email: email ?? this.email,
       role: role ?? this.role,
       token: token ?? this.token,
+      photoUrl: photoUrl ?? this.photoUrl,
       child: child ?? this.child,
     );
   }

@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:swara/core/constants/app_constants.dart';
 import 'package:swara/core/theme/app_theme.dart';
 import 'package:swara/core/widgets/shared_widgets.dart';
 import 'package:swara/features/auth/data/providers/auth_provider.dart';
@@ -22,6 +26,23 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   bool _isChildAccount = false;
   bool _loaded = false;
 
+  Future<void> _pickProfilePhoto() async {
+    final image = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 82,
+      maxWidth: 1200,
+      maxHeight: 1200,
+    );
+    if (image == null || !mounted) return;
+
+    final success = await ref.read(authProvider.notifier).updateProfilePhoto(image);
+    if (!mounted) return;
+    final error = ref.read(authProvider).error;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(success ? 'පැතිකඩ ඡායාරූපය යාවත්කාලීන කළා' : (error ?? 'ඡායාරූපය එක් කළ නොහැක. නැවත උත්සාහ කරන්න.')),
+    ));
+  }
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -38,7 +59,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     _nameController.text = user.name;
     _email = user.email;
     _role = user.role;
-    _isChildAccount = user.child != null;
+    _isChildAccount = user.role == AppConstants.roleChild || user.child != null;
     _childNameController.text = user.child?.firstName ?? '';
     _childAgeController.text = user.child?.age.toString() ?? '';
   }
@@ -63,6 +84,25 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Widget build(BuildContext context) {
     _loadProfile();
     final busy = ref.watch(authProvider).isLoading;
+    final profileUser = ref.watch(authProvider).user;
+    final photoUrl = profileUser?.photoUrl;
+    ImageProvider? profileImage;
+    if (photoUrl != null) {
+      if (photoUrl.startsWith('data:image/')) {
+        profileImage = MemoryImage(
+          base64Decode(photoUrl.substring(photoUrl.indexOf(',') + 1)),
+        );
+      } else if (photoUrl.startsWith('http') ||
+          photoUrl.startsWith('/api/profile/photo/')) {
+        profileImage = NetworkImage(
+          Uri.parse(AppConstants.baseUrl).resolve(photoUrl).toString(),
+          headers: photoUrl.startsWith('/api/profile/photo/') &&
+                  profileUser?.token != null
+              ? {'Authorization': 'Bearer ${profileUser!.token}'}
+              : null,
+        );
+      }
+    }
     return Scaffold(
       backgroundColor: AppColors.groundAdult,
       appBar: AppBar(
@@ -94,15 +134,42 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       color: Colors.white.withValues(alpha: 0.94),
                       child: Row(
                         children: [
-                          CircleAvatar(
-                            radius: 32,
-                            backgroundColor: AppColors.primaryWash,
-                            child: Icon(
-                              _isChildAccount
-                                  ? Icons.child_care_rounded
-                                  : Icons.person_rounded,
-                              size: 32,
-                              color: AppColors.primaryDeep,
+                          Semantics(
+                            button: _isChildAccount,
+                            label: 'පැතිකඩ ඡායාරූපය වෙනස් කරන්න',
+                            child: InkWell(
+                              onTap: _isChildAccount && !busy ? _pickProfilePhoto : null,
+                              customBorder: const CircleBorder(),
+                              child: Stack(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 36,
+                                    backgroundColor: AppColors.primaryWash,
+                                    backgroundImage: profileImage,
+                                    child: photoUrl == null
+                                        ? Icon(
+                                            _isChildAccount ? Icons.child_care_rounded : Icons.person_rounded,
+                                            size: 36,
+                                            color: AppColors.primaryDeep,
+                                          )
+                                        : null,
+                                  ),
+                                  if (_isChildAccount)
+                                    Positioned(
+                                      right: 0,
+                                      bottom: 0,
+                                      child: CircleAvatar(
+                                        radius: 12,
+                                        backgroundColor: AppColors.primaryDeep,
+                                        child: Icon(
+                                          busy ? Icons.hourglass_top_rounded : Icons.camera_alt_rounded,
+                                          color: Colors.white,
+                                          size: 14,
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
                             ),
                           ),
                           const SizedBox(width: AppSpacing.md),

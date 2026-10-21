@@ -16,10 +16,10 @@ class _SpeechProcessingScreenState extends State<SpeechProcessingScreen> {
   int _activeStage = 1; // 0 completed, 1 processing
 
   final List<Map<String, dynamic>> _stages = [
-    {'title': 'Speech Recorded', 'icon': Icons.mic},
-    {'title': 'Sinhala Speech → Text', 'icon': Icons.translate},
-    {'title': 'Language Analysis', 'icon': Icons.analytics},
-    {'title': 'Communication Results', 'icon': Icons.assignment},
+    {'title': 'කථනය පටිගත කළා', 'icon': Icons.mic},
+    {'title': 'සිංහල කථනය → ලිඛිත වචන', 'icon': Icons.translate},
+    {'title': 'භාෂා විශ්ලේෂණය', 'icon': Icons.analytics},
+    {'title': 'සන්නිවේදන ප්‍රතිඵල', 'icon': Icons.assignment},
   ];
 
   @override
@@ -56,7 +56,7 @@ class _SpeechProcessingScreenState extends State<SpeechProcessingScreen> {
     final isComplete = _activeStage >= _stages.length;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.groundRead,
       body: SafeArea(
         child: Column(
           children: [
@@ -73,7 +73,7 @@ class _SpeechProcessingScreenState extends State<SpeechProcessingScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      isComplete ? 'Analysis Complete' : 'Understanding your speech...',
+                      isComplete ? 'විශ්ලේෂණය අවසන්' : 'ඔයාගේ කථනය තේරුම් ගනිමින්...',
                       style: AppTextStyles.body.copyWith(color: AppColors.textLight),
                       textAlign: TextAlign.center,
                     ),
@@ -88,7 +88,7 @@ class _SpeechProcessingScreenState extends State<SpeechProcessingScreen> {
                       ElevatedButton(
                         // One sample per session, so recording again starts a new session.
                         onPressed: () => context.go('/c4'),
-                        child: const Text('Try again'),
+                        child: const Text('නැවත උත්සාහ කරන්න'),
                       ),
                     ],
                     if (isComplete)
@@ -96,7 +96,7 @@ class _SpeechProcessingScreenState extends State<SpeechProcessingScreen> {
                         onPressed: () {
                           Future.microtask(() => context.push('/c4/transcription'));
                         },
-                        child: const Text('View Transcript'),
+                        child: const Text('පිටපත බලන්න'),
                       ),
                   ],
                 ),
@@ -140,7 +140,7 @@ class _SpeechProcessingScreenState extends State<SpeechProcessingScreen> {
                   ),
                 ),
                 Text(
-                  isCompleted ? 'Completed' : (isCurrent ? 'Processing...' : 'Waiting'),
+                  isCompleted ? 'අවසන්' : (isCurrent ? 'සකසමින්...' : 'බලා සිටියි'),
                   style: AppTextStyles.caption,
                 ),
               ],

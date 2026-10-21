@@ -42,9 +42,9 @@ class _RecordingScreenState extends State<RecordingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.groundRead,
       appBar: AppBar(
-        title: const Text('🌟 Your Activity 🌟'),
+        title: const Text('🌟 ඔයාගේ ක්‍රියාකාරකම 🌟'),
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: AppColors.primaryDeep,
@@ -65,7 +65,7 @@ class _RecordingScreenState extends State<RecordingScreen> {
                       width: double.infinity,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [AppColors.primaryWash, AppColors.primaryLight],
+          colors: [AppColors.sunTint, AppColors.groundRead],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
@@ -115,13 +115,13 @@ class _RecordingScreenState extends State<RecordingScreen> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'Tell me your story',
+                            'ඔයාගේ කතාව කියන්න',
                             textAlign: TextAlign.center,
                             style: AppTextStyles.label.copyWith(color: AppColors.textLight),
                           ),
                           const SizedBox(height: 12),
                           Text(
-                            'ඉක්මන් වෙන්න ඕනේ නැහැ. ඔයාට පහසු විදිහට කතා කරන්න.\n(Take your time. Speak comfortably.)',
+                            'ඉක්මන් වෙන්න ඕනේ නැහැ. ඔයාට පහසු විදිහට කතා කරන්න.',
                             textAlign: TextAlign.center,
                             style: AppTextStyles.label.copyWith(
                               color: AppColors.textLight,
@@ -249,7 +249,7 @@ class _RecordingScreenState extends State<RecordingScreen> {
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                         ),
                         child: Text(
-                          _isRecording ? '⏸️ Pause' : '▶️ Resume',
+                          _isRecording ? '⏸️ නවත්වන්න' : '▶️ නැවත අරඹන්න',
                           style: AppTextStyles.heading3.copyWith(color: AppColors.primaryDeep),
                         ),
                       ),
@@ -267,7 +267,7 @@ class _RecordingScreenState extends State<RecordingScreen> {
                           _stopTimer();
                           context.pushReplacement('/c4/analysis');
                         },
-                        child: const Text('🛑 Stop & Finish', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.white)),
+                        child: const Text('🛑 නවතා අවසන් කරන්න', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.white)),
                       ),
                     ),
                   ],

@@ -18,53 +18,53 @@ class _AnalysisScreenState extends State<AnalysisScreen>
   final List<Map<String, dynamic>> _pipeline = [
  
   {
-    'icon': '🎙️',
+    'icon': Icons.mic_none_rounded,
     'titleEn': 'Speech Captured',
     'titleSi': 'කතාව ලබාගත්තා',
-    'desc': 'Your talking sample is ready.',
+    'desc': 'ඔයාගේ කථන නියැදිය සූදානම්.',
     'color': AppColors.primary
   },
   {
-    'icon': '📝',
+    'icon': Icons.translate_rounded,
     'titleEn': 'Transcription',
     'titleSi': 'කතාව වචන වලට හරවනවා',
-    'desc': 'Converting speech to text...',
+    'desc': 'කථනය ලිඛිත වචන බවට පරිවර්තනය කරමින්...',
     'color': AppColors.primary
   },
   {
-    'icon': '💬',
+    'icon': Icons.text_fields_rounded,
     'titleEn': 'NDW Calculated',
     'titleSi': 'NDW ගණනය කරනවා',
-    'desc': 'Counting unique words (Number of Different Words)...',
-    'color': Colors.purple
+    'desc': 'වෙනස් වචන ගණන ගණනය කරමින්...',
+    'color': AppColors.lilacTint
   },
   {
-    'icon': '🧩',
+    'icon': Icons.format_size_rounded,
     'titleEn': 'MLU Calculated',
     'titleSi': 'MLU ගණනය කරනවා',
-    'desc': 'Measuring Mean Length of Utterance...',
-    'color': Colors.indigo
+    'desc': 'සාමාන්‍ය ප්‍රකාශන දිග මනිමින්...',
+    'color': AppColors.primaryLight
   },
   {
-    'icon': '📊',
+    'icon': Icons.graphic_eq_rounded,
     'titleEn': 'Speech Flow Analysis',
     'titleSi': 'කතා ප්‍රවාහ විශ්ලේෂණය',
-    'desc': 'Analyzing duration, rate, pauses, latency...',
-    'color': Colors.teal
+    'desc': 'කාලය, කථන වේගය සහ විරාම විශ්ලේෂණය කරමින්...',
+    'color': AppColors.groundBreathe
   },
   {
-    'icon': '✨',
+    'icon': Icons.hearing_rounded,
     'titleEn': 'Fluency Check',
     'titleSi': 'සුමට බව පරීක්ෂාව',
-    'desc': 'Detecting fluency events (repetitions, hesitations)...',
-    'color': Colors.pink
+    'desc': 'වචන නැවතීම් සහ පැකිළීම් හඳුනාගනිමින්...',
+    'color': AppColors.coralTint
   },
   {
-    'icon': '🌱',
+    'icon': Icons.auto_awesome_rounded,
     'titleEn': 'Preparing Results',
     'titleSi': 'ප්‍රතිඵල සකස් කරනවා',
-    'desc': 'Almost ready!',
-    'color': AppColors.success
+    'desc': 'තව මොහොතකින් සූදානම්!',
+    'color': AppColors.sunTint
   },
 
   ];
@@ -111,17 +111,9 @@ class _AnalysisScreenState extends State<AnalysisScreen>
     bool isFinished = _currentStep >= _pipeline.length;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.groundRead,
       body: SafeArea(
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [AppColors.primaryWash, Colors.purple.shade50],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-          child: Padding(
+        child: Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
             child: Column(
@@ -150,7 +142,7 @@ class _AnalysisScreenState extends State<AnalysisScreen>
                             .copyWith(color: AppColors.primaryDeep),
                       ),
                       Text(
-                        'All done!',
+                        'සියල්ල සූදානම්!',
                         textAlign: TextAlign.center,
                         style: AppTextStyles.heading1.copyWith(
                           color: AppColors.primaryDeep,
@@ -163,7 +155,7 @@ class _AnalysisScreenState extends State<AnalysisScreen>
                   Column(
                     children: [
                       Text(
-                        'Let\'s explore your story 🌱',
+                        'ඔයාගේ කතාව ගැන බලමු!',
                         textAlign: TextAlign.center,
                         style: AppTextStyles.heading1.copyWith(
                           color: AppColors.primaryDeep,
@@ -171,12 +163,6 @@ class _AnalysisScreenState extends State<AnalysisScreen>
                         ),
                       ),
                       const SizedBox(height: 8),
-                      Text(
-                        'ඔයාගේ කතාව ගැන බලමු!',
-                        textAlign: TextAlign.center,
-                        style: AppTextStyles.label
-                            .copyWith(color: AppColors.textLight),
-                      ),
                     ],
                   ),
 
@@ -191,43 +177,25 @@ class _AnalysisScreenState extends State<AnalysisScreen>
                       final isCompleted = _currentStep > index;
                       final isCurrent = _currentStep == index;
 
-                      return AnimatedOpacity(
-                        duration: const Duration(milliseconds: 500),
-                        opacity: (isCompleted || isCurrent) ? 1.0 : 0.3,
-                        child: Container(
+                      return Container(
                           margin: const EdgeInsets.only(bottom: 16),
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: isCurrent
-                                ? AppColors.white
-                                : (isCompleted
-                                    ? step['color'].withOpacity(0.05)
-                                    : Colors.transparent),
+                            color: AppColors.surfaceRaised,
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color: isCurrent
-                                  ? step['color']
-                                  : (isCompleted
-                                      ? step['color'].withOpacity(0.3)
-                                      : Colors.transparent),
-                              width: 2,
+                              color: isCurrent ? AppColors.primary : AppColors.primaryLight,
+                              width: isCurrent ? 3 : 2,
                             ),
-                            boxShadow: isCurrent
-                                ? [
-                                    BoxShadow(
-                                        color: step['color'].withOpacity(0.1),
-                                        blurRadius: 10,
-                                        offset: const Offset(0, 4))
-                                  ]
-                                : [],
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 children: [
-                                  Text(step['icon'] as String,
-                                      style: const TextStyle(fontSize: 32)),
+                                  Icon(step['icon'] as IconData,
+                                      size: 30,
+                                      color: AppColors.primary),
                                   const SizedBox(width: 16),
                                   Expanded(
                                     child: Column(
@@ -235,17 +203,15 @@ class _AnalysisScreenState extends State<AnalysisScreen>
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          '0${index + 1} — ${step['titleEn']}',
+                                          '0${index + 1} — ${step['titleSi']}',
                                           style:
                                               AppTextStyles.heading3.copyWith(
-                                            color: isCurrent
-                                                ? step['color']
-                                                : AppColors.text,
+                                            color: AppColors.text,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                         Text(
-                                          '${step['titleSi']} - ${step['desc']}',
+                                          step['desc'] as String,
                                           style: AppTextStyles.caption.copyWith(
                                               color: AppColors.textLight),
                                         ),
@@ -253,16 +219,20 @@ class _AnalysisScreenState extends State<AnalysisScreen>
                                     ),
                                   ),
                                   if (isCompleted)
-                                    Icon(Icons.check_circle,
-                                        color: step['color'], size: 28)
-                                  else if (isCurrent)
-                                    SizedBox(
-                                      width: 24,
-                                      height: 24,
-                                      child: CircularProgressIndicator(
-                                          color: step['color'], strokeWidth: 3),
+                                    const Icon(Icons.check_circle,
+                                        color: AppColors.primary, size: 28)
+                                  else
+                                    Icon(
+                                      isCurrent ? Icons.more_time_rounded : Icons.circle_outlined,
+                                      color: AppColors.primary,
+                                      size: 22,
                                     ),
                                 ],
+                              ),
+                              const SizedBox(height: 6),
+                              Text(
+                                isCompleted ? 'සම්පූර්ණයි' : isCurrent ? 'සකසමින්...' : 'ඉදිරියට ඇත',
+                                style: AppTextStyles.bodySmall.copyWith(color: AppColors.textLight),
                               ),
                               // Visual calculations for specific steps – now showing metrics
                               if (isCurrent && index == 2) _buildNDWVisual(),
@@ -273,7 +243,6 @@ class _AnalysisScreenState extends State<AnalysisScreen>
                                 _buildFluencyVisual(),
                             ],
                           ),
-                        ),
                       );
                     },
                   ),
@@ -288,12 +257,11 @@ class _AnalysisScreenState extends State<AnalysisScreen>
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(24)),
-                        elevation: 4,
                       ),
                       onPressed: () {
                         context.pushReplacement('/c4/child_result');
                       },
-                      child: const Text('See My Results (මගේ ප්‍රතිඵල බලමු) →',
+                      child: const Text('මගේ ප්‍රතිඵල බලමු →',
                           style: TextStyle(
                               fontSize: 18,
                               color: AppColors.white,
@@ -302,7 +270,6 @@ class _AnalysisScreenState extends State<AnalysisScreen>
                   ),
               ],
             ),
-          ),
         ),
       ),
     );
@@ -315,17 +282,16 @@ class _AnalysisScreenState extends State<AnalysisScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Number of Different Words (NDW)',
-              style: AppTextStyles.label.copyWith(color: Colors.purple)),
+          Text('වෙනස් වචන ගණන (NDW)',
+              style: AppTextStyles.label.copyWith(color: AppColors.primary)),
           const SizedBox(height: 4),
           Text('42',
               style: AppTextStyles.heading1
-                  .copyWith(color: Colors.purple, fontSize: 32)),
+                  .copyWith(color: AppColors.primary, fontSize: 32)),
           const SizedBox(height: 8),
-          // Optionally show a small list of example words (in English)
           Wrap(
             spacing: 8,
-            children: ['apple', 'school', 'friend', 'play', 'big', 'small']
+            children: ['ඇපල්', 'පාසල', 'මිතුරා', 'සෙල්ලම්', 'ලොකු', 'කුඩා']
                 .map((w) => Chip(
                     label: Text(w), backgroundColor: Colors.purple.shade50))
                 .toList(),
@@ -342,15 +308,15 @@ class _AnalysisScreenState extends State<AnalysisScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Mean Length of Utterance (MLU)',
-              style: AppTextStyles.label.copyWith(color: Colors.indigo)),
+          Text('සාමාන්‍ය ප්‍රකාශන දිග (MLU)',
+              style: AppTextStyles.label.copyWith(color: AppColors.primary)),
           const SizedBox(height: 4),
-          Text('4.0 words',
+          Text('වචන 4.0ක්',
               style: AppTextStyles.heading1
-                  .copyWith(color: Colors.indigo, fontSize: 32)),
+                  .copyWith(color: AppColors.primary, fontSize: 32)),
           const SizedBox(height: 8),
-          Text('Utterance lengths: 3, 5, 4, 2, 6',
-              style: AppTextStyles.caption.copyWith(color: Colors.indigo)),
+          Text('ප්‍රකාශනවල වචන ගණන: 3, 5, 4, 2, 6',
+              style: AppTextStyles.caption.copyWith(color: AppColors.textLight)),
         ],
       ),
     );
@@ -364,25 +330,25 @@ class _AnalysisScreenState extends State<AnalysisScreen>
         children: [
           Row(
             children: [
-              Container(width: 30, height: 8, color: Colors.teal),
-              Container(width: 15, height: 8, color: Colors.teal.shade100),
-              Container(width: 40, height: 8, color: Colors.teal),
-              Container(width: 10, height: 8, color: Colors.teal.shade100),
-              Container(width: 25, height: 8, color: Colors.teal),
+              Container(width: 30, height: 8, color: AppColors.primary),
+              Container(width: 15, height: 8, color: AppColors.primaryLight),
+              Container(width: 40, height: 8, color: AppColors.primary),
+              Container(width: 10, height: 8, color: AppColors.primaryLight),
+              Container(width: 25, height: 8, color: AppColors.primary),
             ],
           ),
           const SizedBox(height: 12),
-          Text('Duration: 01:12',
-              style: AppTextStyles.label.copyWith(color: Colors.teal)),
+          Text('කාලය: 01:12',
+              style: AppTextStyles.label.copyWith(color: AppColors.primary)),
           const SizedBox(height: 4),
-          Text('Speech Rate: 2.8 syllables/sec',
-              style: AppTextStyles.caption.copyWith(color: Colors.teal)),
+          Text('කථන වේගය: තත්පරයට අක්ෂර 2.8ක්',
+              style: AppTextStyles.caption.copyWith(color: AppColors.textLight)),
           const SizedBox(height: 4),
-          Text('Pauses: 7 (mean 1.1s)',
-              style: AppTextStyles.caption.copyWith(color: Colors.teal)),
+          Text('විරාම: 7 (සාමාන්‍යයෙන් තත්පර 1.1ක්)',
+              style: AppTextStyles.caption.copyWith(color: AppColors.textLight)),
           const SizedBox(height: 4),
-          Text('Latency: 2.4s',
-              style: AppTextStyles.caption.copyWith(color: Colors.teal)),
+          Text('පිළිතුර ආරම්භ කිරීමට: තත්පර 2.4ක්',
+              style: AppTextStyles.caption.copyWith(color: AppColors.textLight)),
         ],
       ),
     );
@@ -393,10 +359,10 @@ class _AnalysisScreenState extends State<AnalysisScreen>
       padding: const EdgeInsets.only(top: 16.0, left: 48),
       child: Row(
         children: [
-          const Icon(Icons.warning_amber_rounded, color: Colors.pink, size: 20),
+          const Icon(Icons.graphic_eq_rounded, color: AppColors.primary, size: 20),
           const SizedBox(width: 8),
-          Text('Observed Fluency Events: 8',
-              style: AppTextStyles.label.copyWith(color: Colors.pink)),
+          Text('හඳුනාගත් කථන පැකිළීම්: 8',
+              style: AppTextStyles.label.copyWith(color: AppColors.primary)),
         ],
       ),
     );

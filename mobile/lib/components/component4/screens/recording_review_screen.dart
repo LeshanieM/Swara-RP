@@ -9,9 +9,9 @@ class RecordingReviewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.groundRead,
       appBar: AppBar(
-        title: const Text('Review'),
+        title: const Text('පටිගත කළ දේ පරීක්ෂා කරන්න'),
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: Colors.black,
@@ -25,28 +25,19 @@ class RecordingReviewScreen extends StatelessWidget {
               const Icon(Icons.rocket_launch, size: 80, color: AppColors.primary),
               const SizedBox(height: 24),
               const Text(
-                'Ready to Send? 🚀',
+                'යවන්න සූදානම්ද? 🚀',
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              const Text(
-                'යවන්න සූදානම්ද? 🚀',
-                style: TextStyle(fontSize: 22, color: AppColors.primary, fontWeight: FontWeight.bold),
-              ),
               const SizedBox(height: 24),
               const Text(
-                'We\'ll look at how you communicated your story.',
+                'ඔයාගේ කතාව කියපු ආකාරය අපි බලමු.',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 16, color: AppColors.text),
               ),
-              const Text(
-                'ඔයාගේ කතාව ඔයා කොච්චර හොඳින් කියපුද කියලා අපි බලමු.',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14, color: AppColors.textLight),
-              ),
               const SizedBox(height: 48),
               const Text(
-                'Listen to your story\nඔයාගේ කතාව අහන්න',
+                'ඔයාගේ කතාවට සවන් දෙන්න',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
@@ -61,7 +52,7 @@ class RecordingReviewScreen extends StatelessWidget {
                         context.pushReplacement('/c4/record');
                       },
                       icon: const Icon(Icons.refresh),
-                      label: const Text('↻ Record Again\nනැවත පටිගත කරන්න', textAlign: TextAlign.center),
+                      label: const Text('↻ නැවත පටිගත කරන්න', textAlign: TextAlign.center),
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -76,7 +67,7 @@ class RecordingReviewScreen extends StatelessWidget {
                       },
                       icon: const Icon(Icons.check),
                       label: const Text(
-                        '✓ Use This\nමේක භාවිතා කරන්න',
+                        '✓ මෙය භාවිතා කරන්න',
                         textAlign: TextAlign.center,
                         style: TextStyle(color: AppColors.white),
                       ),
