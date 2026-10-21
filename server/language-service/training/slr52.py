@@ -48,7 +48,11 @@ def fetch(root: Path, shards: list[str]) -> Path:
         marker = root / f".unzipped_{s}"
         if marker.exists():
             continue
-        _download(f"{BASE_URL}/{z.name}", z)
+        # A complete shard may have been copied from an external drive. Reuse
+        # it directly; only resume a download when the local archive is absent
+        # or incomplete.
+        if not (z.is_file() and zipfile.is_zipfile(z)):
+            _download(f"{BASE_URL}/{z.name}", z)
         with zipfile.ZipFile(z) as zf:
             zf.extractall(root)
         marker.touch()

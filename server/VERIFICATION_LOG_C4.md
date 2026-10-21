@@ -324,9 +324,17 @@ Sample 1 was corrected with the true stuttered reference (`kind: corrected, edit
   - the notebook's smoke run (current model, 10 steps on 64 utterances) was started but stopped by the system for low memory before it finished, while the simulator and the emulator were running too. **Training and evaluation are not verified yet.**
 - **App:** `flutter analyze` (no errors); `api_adapters_test.dart` passes with the familiarity fields removed. The screens were not driven on the emulator (see C3 V-33).
 
+### V-25 Initial team C4 CTC fine-tune (2026-10-22)
+
+- Reused OpenSLR SLR52 shard 0 and `utt_spk_text.tsv` from `D:\OpenSLR`; copied them into `language-service/data/slr52` so the original external-drive files stayed untouched. The shard supplied 11,550 audio utterances. The split was built over the full 185,293-row transcript index before filtering to available audio, keeping speakers and sentences separate; it had 8,896 train / 647 dev / 614 test utterances before sampling.
+- Continued from `SpideyDLK/wav2vec2-large-xls-r-300m-sinhala-low-LR-part1`. Full-transformer CPU training was terminated by the system after its first update. The successful run froze XLS-R and fine-tuned the 82,000-parameter CTC output head for 200 steps on 1,024 sampled train utterances. Evaluation used 128 dev and 128 held-out test utterances (24 dev and 24 test speakers).
+- On the same 128 test utterances, the existing public model scored WER 0.5531 / CER 0.1526; the fine-tuned model scored WER 0.5363 / CER 0.1522. Dev WER / CER was 0.4852 / 0.1038. The improvement is small and needs evaluation on the full test set.
+- Exported the Transformers model to `language-service/models/c4_asr` and the report to `language-service/training/reports/c4-asr-2026-10-21.json`. The local C4 `CtcEngine` loaded the export and transcribed a held-out utterance. The run used the built-in normalized edit-distance fallback because `jiwer` was absent from the Python environment used for training.
+- `C4_CTC_MODEL` was not changed globally; the running service continues to use the public default until explicitly configured to use the local export. This run used adult read speech only and does not establish accuracy on children.
+
 ## Not verified
 
 - **Real children.** No recordings of Sinhala-speaking children (or any children who stutter) were available. Everything ran on adult read speech with spliced repetitions, which are cleaner than real stuttering.
 - **Formats other than WAV.** Every upload to the service was 16 kHz WAV (the SLR52 FLAC files were converted by the test script). FLAC, OGG and MP3 go through the same libsndfile loader as C1 (whose log covers FLAC and OGG), but weren't sent to C4.
-- **The team's own CTC model:** it doesn't exist yet; the fine-tuning notebook exists (V-24) but has not finished a run. The engine accepts any wav2vec2-CTC Hugging Face id or local path through `C4_CTC_MODEL`; two public checkpoints were tested.
+- **Full C4 model training:** an initial head-only export exists (V-25), but full-transformer training, more SLR52 shards, and full-test-set evaluation remain unverified. The engine accepts any wav2vec2-CTC Hugging Face id or local path through `C4_CTC_MODEL`; two public checkpoints were tested.
 - **Samples longer than 180 s:** C1 rejects them, so their stuttering would be `not_assessed` (configured limit; not run).
