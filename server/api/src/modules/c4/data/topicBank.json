@@ -1,0 +1,4825 @@
+{
+  "version": "c4-topics-0.1",
+  "reviewed": false,
+  "note": "Placeholder content written for development. An SLP or teacher must check every prompt before use with children.",
+  "bands": [
+    {
+      "id": "5-10",
+      "minAge": 5,
+      "maxAge": 10,
+      "categories": [
+        {
+          "id": "animals",
+          "title": {
+            "en": "Animals",
+            "si": "සතුන්"
+          },
+          "icon": "🐶",
+          "topics": [
+            {
+              "id": "5-10.animals.01",
+              "level": "concrete",
+              "title": {
+                "en": "My pet or favourite animal",
+                "si": "මගේ සුරතල් සතා"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a pet you have, or an animal you really like. What does it look like?",
+                "si": "ඔයාගේ ගෙදර ඉන්න සුරතල් සතෙක් ගැන, නැත්නම් ඔයා ගොඩක් කැමති සතෙක් ගැන කියන්න. ඒ සතා පේන්නේ කොහොමද?"
+              },
+              "followUps": [
+                {
+                  "en": "What does it like to eat?",
+                  "si": "ඒ සතා කන්න කැමති මොනවද?"
+                },
+                {
+                  "en": "What do you do together?",
+                  "si": "ඔයා ඒ සතා එක්ක මොනවද කරන්නේ?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.animals.02",
+              "level": "concrete",
+              "title": {
+                "en": "A visit to the zoo",
+                "si": "සත්තු වත්තට ගිය දවස"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a time you went to the zoo or saw lots of animals. What animals did you see?",
+                "si": "ඔයා සත්තු වත්තට ගිය දවසක් ගැන, නැත්නම් ගොඩක් සතුන් දැකපු දවසක් ගැන කියන්න. ඔයා දැක්කේ මොන සතුන්වද?"
+              },
+              "followUps": [
+                {
+                  "en": "Which animal was the funniest? What did it do?",
+                  "si": "වැඩියෙන්ම හිනා ගියේ මොන සතා දැකලද? ඒ සතා මොනවද කළේ?"
+                },
+                {
+                  "en": "Who went with you?",
+                  "si": "ඔයා එක්ක ගියේ කවුද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.animals.03",
+              "level": "concrete",
+              "title": {
+                "en": "Animals around my home",
+                "si": "ගෙදර වටේ ඉන්න සතුන්"
+              },
+              "mainPrompt": {
+                "en": "What animals and birds do you see around your house or school? Tell me about them.",
+                "si": "ඔයාගේ ගෙදර වටේ, නැත්නම් ඉස්කෝලේ වටේ ඔයා දකින සතුන් සහ කුරුල්ලෝ ගැන කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What sounds do they make?",
+                  "si": "ඒ සතුන් මොන වගේ සද්ද කරනවද?"
+                },
+                {
+                  "en": "What are they doing when you see them?",
+                  "si": "ඔයා දකින වෙලාවට ඒ සතුන් මොනවද කරන්නේ?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.animals.04",
+              "level": "open",
+              "title": {
+                "en": "If animals could talk",
+                "si": "සතුන්ට කතා කරන්න පුළුවන් නම්"
+              },
+              "mainPrompt": {
+                "en": "If animals could talk, which animal would you talk to first, and what would you ask it?",
+                "si": "සතුන්ට කතා කරන්න පුළුවන් වුණොත්, ඔයා මුලින්ම කතා කරන්නේ මොන සතා එක්කද? ඔයා ඒ සතාගෙන් මොනවද අහන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "What do you think it would say back?",
+                  "si": "ඒ සතා ඔයාට මොනවා කියයි කියලද ඔයා හිතන්නේ?"
+                },
+                {
+                  "en": "What would a cat or a dog tell us about our home?",
+                  "si": "පූසෙක් හරි බල්ලෙක් හරි අපේ ගෙදර ගැන මොනවා කියයිද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.animals.05",
+              "level": "open",
+              "title": {
+                "en": "Being an animal for a day",
+                "si": "එක දවසකට සතෙක් වුණොත්"
+              },
+              "mainPrompt": {
+                "en": "If you could be any animal for one day, which one would you be? What would your day be like?",
+                "si": "එක දවසකට ඔයාට ඕනම සතෙක් වෙන්න පුළුවන් නම්, ඔයා වෙන්නේ මොන සතාද? ඒ දවස කොහොම වෙයිද?"
+              },
+              "followUps": [
+                {
+                  "en": "Where would you go?",
+                  "si": "ඔයා කොහෙද යන්නේ?"
+                },
+                {
+                  "en": "Why did you choose that animal?",
+                  "si": "ඔයා ඒ සතාම තෝරගත්තේ ඇයි?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "family",
+          "title": {
+            "en": "Family",
+            "si": "පවුල"
+          },
+          "icon": "🏠",
+          "topics": [
+            {
+              "id": "5-10.family.01",
+              "level": "concrete",
+              "title": {
+                "en": "My family",
+                "si": "මගේ පවුල"
+              },
+              "mainPrompt": {
+                "en": "Tell me about the people in your family. What is each person like?",
+                "si": "ඔයාගේ පවුලේ ඉන්න අය ගැන කියන්න. එක එක්කෙනා කොහොම කෙනෙක්ද?"
+              },
+              "followUps": [
+                {
+                  "en": "Who makes you laugh the most?",
+                  "si": "ඔයාව වැඩියෙන්ම හිනස්සන්නේ කවුද?"
+                },
+                {
+                  "en": "What does each person like to do?",
+                  "si": "එයාලා එක එක්කෙනා කරන්න කැමති මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.family.02",
+              "level": "concrete",
+              "title": {
+                "en": "A day with my grandparents",
+                "si": "සීයා ආච්චි එක්ක දවසක්"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a time you spent with your grandparents or another relative. What did you do?",
+                "si": "ඔයා සීයා, ආච්චි, නැත්නම් වෙන නෑදෑයෙක් එක්ක ගත කරපු දවසක් ගැන කියන්න. ඔයාලා මොනවද කළේ?"
+              },
+              "followUps": [
+                {
+                  "en": "What stories do they tell you?",
+                  "si": "එයාලා ඔයාට කියන කතන්දර මොනවද?"
+                },
+                {
+                  "en": "What food do they make for you?",
+                  "si": "එයාලා ඔයාට හදලා දෙන කෑම මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.family.03",
+              "level": "concrete",
+              "title": {
+                "en": "Our weekend at home",
+                "si": "සෙනසුරාදා ඉරිදා ගෙදර"
+              },
+              "mainPrompt": {
+                "en": "What does your family usually do at the weekend? Tell me about last weekend.",
+                "si": "සෙනසුරාදා ඉරිදා දවස්වල ඔයාගේ පවුලේ අය මොනවද කරන්නේ? පහුගිය සෙනසුරාදා ඉරිදා ගැන කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What was the best part?",
+                  "si": "ඒකේ හොඳම දේ මොකද්ද?"
+                },
+                {
+                  "en": "Who was with you on those days?",
+                  "si": "ඒ දවස්වල ඔයා එක්ක හිටියේ කවුද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.family.04",
+              "level": "open",
+              "title": {
+                "en": "Planning a special family day",
+                "si": "පවුලට විශේෂ දවසක්"
+              },
+              "mainPrompt": {
+                "en": "If you could plan a special day for your whole family, what would you do from morning to night?",
+                "si": "මුළු පවුලටම විශේෂ දවසක් ඔයාට සැලසුම් කරන්න පුළුවන් නම්, උදේ ඉඳන් රෑ වෙනකම් ඔයාලා මොනවද කරන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "What would you eat?",
+                  "si": "ඔයාලා කන්නේ මොනවද?"
+                },
+                {
+                  "en": "Why would everyone enjoy it?",
+                  "si": "හැමෝම ඒකට කැමති වෙන්නේ ඇයි?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.family.05",
+              "level": "open",
+              "title": {
+                "en": "Why families are special",
+                "si": "පවුල වැදගත් ඇයි"
+              },
+              "mainPrompt": {
+                "en": "Why do you think families are important? How do people in a family help each other?",
+                "si": "පවුලක් වැදගත් කියලා ඔයා හිතන්නේ ඇයි? පවුලේ අය එකිනෙකාට උදව් කරන්නේ කොහොමද?"
+              },
+              "followUps": [
+                {
+                  "en": "How do you help your family?",
+                  "si": "ඔයා ඔයාගේ පවුලට උදව් කරන්නේ කොහොමද?"
+                },
+                {
+                  "en": "Tell me about something kind someone in your family did for you.",
+                  "si": "ඔයාගේ පවුලේ කෙනෙක් ඔයාට කරපු හොඳ දෙයක් ගැන කියන්න."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "school",
+          "title": {
+            "en": "School",
+            "si": "ඉස්කෝලේ"
+          },
+          "icon": "🏫",
+          "topics": [
+            {
+              "id": "5-10.school.01",
+              "level": "concrete",
+              "title": {
+                "en": "My classroom",
+                "si": "මගේ පන්තිය"
+              },
+              "mainPrompt": {
+                "en": "Tell me about your classroom. What is in it, and where do you sit?",
+                "si": "ඔයාගේ පන්තිය ගැන කියන්න. පන්තියේ මොනවද තියෙන්නේ? ඔයා වාඩිවෙන්නේ කොහෙද?"
+              },
+              "followUps": [
+                {
+                  "en": "Who sits next to you?",
+                  "si": "ඔයා ළඟ වාඩිවෙන්නේ කවුද?"
+                },
+                {
+                  "en": "What is on the walls?",
+                  "si": "පන්තියේ බිත්තිවල මොනවද තියෙන්නේ?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.school.02",
+              "level": "concrete",
+              "title": {
+                "en": "My school day",
+                "si": "ඉස්කෝලේ දවසක්"
+              },
+              "mainPrompt": {
+                "en": "Tell me everything you do on a school day, from the morning until you come home.",
+                "si": "ඉස්කෝලේ යන දවසක ඔයා උදේ ඉඳන් ගෙදර එනකම් කරන හැම දේම කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What do you do at interval time?",
+                  "si": "විවේක වෙලාවේ ඔයා මොනවද කරන්නේ?"
+                },
+                {
+                  "en": "What do you take to school to eat?",
+                  "si": "ඔයා ඉස්කෝලෙට කන්න ගෙනියන්නේ මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.school.03",
+              "level": "concrete",
+              "title": {
+                "en": "My favourite subject",
+                "si": "මම කැමතිම විෂය"
+              },
+              "mainPrompt": {
+                "en": "Which subject do you like most at school? Tell me what you do in that lesson.",
+                "si": "ඉස්කෝලේ ඔයා වැඩියෙන්ම කැමති විෂය මොකද්ද? ඒ පාඩමේදී ඔයාලා කරන දේවල් ගැන කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What did you learn in it this week?",
+                  "si": "මේ සතියේ ඒ විෂයෙන් ඔයා ඉගෙනගත්තේ මොනවද?"
+                },
+                {
+                  "en": "Why do you like it?",
+                  "si": "ඔයා ඒකට කැමති ඇයි?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.school.04",
+              "level": "open",
+              "title": {
+                "en": "My own school",
+                "si": "මම හදන ඉස්කෝලේ"
+              },
+              "mainPrompt": {
+                "en": "If you could build your own school, what would it be like? What would children do there?",
+                "si": "ඔයාටම ඉස්කෝලයක් හදන්න පුළුවන් නම්, ඒක කොහොම එකක්ද? එතන ළමයි මොනවද කරන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "What lessons would there be?",
+                  "si": "එතන තියෙන්නේ මොන පාඩම්ද?"
+                },
+                {
+                  "en": "What would the play area look like?",
+                  "si": "සෙල්ලම් කරන තැන කොහොමද තියෙන්නේ?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.school.05",
+              "level": "open",
+              "title": {
+                "en": "Being the teacher",
+                "si": "මම ටීචර් නම්"
+              },
+              "mainPrompt": {
+                "en": "If you were the teacher for one day, what would you teach the class and how?",
+                "si": "ඔයා එක දවසකට පන්තියේ ටීචර් වුණොත්, ඔයා ළමයින්ට මොනවද උගන්නන්නේ? කොහොමද උගන්නන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "What fun activity would you do?",
+                  "si": "ඔයා ළමයින්ට කරවන විනෝද වැඩේ මොකද්ද?"
+                },
+                {
+                  "en": "What rules would your class have?",
+                  "si": "ඔයාගේ පන්තියේ නීති මොනවද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "food",
+          "title": {
+            "en": "Food",
+            "si": "කෑම"
+          },
+          "icon": "🍛",
+          "topics": [
+            {
+              "id": "5-10.food.01",
+              "level": "concrete",
+              "title": {
+                "en": "My favourite food",
+                "si": "මම කැමතිම කෑම"
+              },
+              "mainPrompt": {
+                "en": "What is your favourite food? Tell me what it looks like, smells like and tastes like.",
+                "si": "ඔයා ගොඩක්ම කැමති කෑම මොකද්ද? ඒක පේන හැටි, සුවඳ, රස ගැන කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "Who makes it for you?",
+                  "si": "ඒක ඔයාට හදලා දෙන්නේ කවුද?"
+                },
+                {
+                  "en": "When do you eat it?",
+                  "si": "ඔයා ඒක කන්නේ කවදද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.food.02",
+              "level": "concrete",
+              "title": {
+                "en": "Breakfast at home",
+                "si": "ගෙදර උදේ කෑම"
+              },
+              "mainPrompt": {
+                "en": "What do you usually eat for breakfast? Tell me about this morning's breakfast.",
+                "si": "ඔයා උදේට වැඩිපුරම කන්නේ මොනවද? අද උදේ කෑම ගැන කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "Who makes breakfast in your house?",
+                  "si": "ඔයාලගේ ගෙදර උදේ කෑම හදන්නේ කවුද?"
+                },
+                {
+                  "en": "What do you drink with it?",
+                  "si": "ඒත් එක්ක ඔයා බොන්නේ මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.food.03",
+              "level": "concrete",
+              "title": {
+                "en": "Helping to make food",
+                "si": "කෑම හදන්න උදව් කරපු දවස"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a time you helped to make food, like rice and curry, kiribath or a cake. What did you do?",
+                "si": "ඔයා බත් කරි, කිරිබත්, නැත්නම් කේක් වගේ කෑමක් හදන්න උදව් කරපු දවසක් ගැන කියන්න. ඔයා මොනවද කළේ?"
+              },
+              "followUps": [
+                {
+                  "en": "What did you put in it?",
+                  "si": "ඒකට දැම්මේ මොනවද?"
+                },
+                {
+                  "en": "How did it taste?",
+                  "si": "ඒකේ රස කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.food.04",
+              "level": "open",
+              "title": {
+                "en": "Inventing a new food",
+                "si": "අලුත් කෑමක් හදමු"
+              },
+              "mainPrompt": {
+                "en": "If you could invent a brand-new food, what would it be? Tell me how you would make it.",
+                "si": "ඔයාට අලුත්ම කෑමක් හොයාගන්න පුළුවන් නම්, ඒ මොන වගේ කෑමක්ද? ඒක හදන හැටි කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What would you call it?",
+                  "si": "ඔයා ඒකට දාන නම මොකද්ද?"
+                },
+                {
+                  "en": "Who would you share it with?",
+                  "si": "ඔයා ඒක බෙදලා දෙන්නේ කාටද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.food.05",
+              "level": "open",
+              "title": {
+                "en": "Why we need healthy food",
+                "si": "හොඳ කෑම ඕනේ ඇයි"
+              },
+              "mainPrompt": {
+                "en": "Why do you think we should eat fruit and vegetables? What happens to our body when we eat well?",
+                "si": "අපි පලතුරු, එළවළු කන්න ඕනේ ඇයි කියලා ඔයා හිතන්නේ? හොඳට කෑම කනකොට අපේ ඇඟට මොකද වෙන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "Which fruit do you like the most, and why?",
+                  "si": "ඔයා වැඩියෙන්ම කැමති පලතුර මොකද්ද? ඇයි?"
+                },
+                {
+                  "en": "What would happen if we only ate sweets?",
+                  "si": "අපි රසකැවිලි විතරක් කෑවොත් මොකද වෙන්නේ?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "games-and-toys",
+          "title": {
+            "en": "Games and toys",
+            "si": "සෙල්ලම් සහ සෙල්ලම් බඩු"
+          },
+          "icon": "🧸",
+          "topics": [
+            {
+              "id": "5-10.games-and-toys.01",
+              "level": "concrete",
+              "title": {
+                "en": "My favourite toy",
+                "si": "මම කැමතිම සෙල්ලම් බඩුව"
+              },
+              "mainPrompt": {
+                "en": "Tell me about your favourite toy. What does it look like and how do you play with it?",
+                "si": "ඔයා ගොඩක්ම කැමති සෙල්ලම් බඩුව ගැන කියන්න. ඒක පේන්නේ කොහොමද? ඔයා ඒකෙන් සෙල්ලම් කරන්නේ කොහොමද?"
+              },
+              "followUps": [
+                {
+                  "en": "Who gave it to you?",
+                  "si": "ඒක ඔයාට දුන්නේ කවුද?"
+                },
+                {
+                  "en": "Where do you keep it?",
+                  "si": "ඔයා ඒක තියාගන්නේ කොහෙද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.games-and-toys.02",
+              "level": "concrete",
+              "title": {
+                "en": "A game we play outside",
+                "si": "එළියේ කරන සෙල්ලමක්"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a game you play outside with friends, like elle, hide-and-seek or kotta pora. How do you play it?",
+                "si": "ඔයා යාළුවෝ එක්ක එළියේ කරන එල්ලේ, හැංගිමුත්තං, නැත්නම් කොට්ට පොර වගේ සෙල්ලමක් ගැන කියන්න. ඒක සෙල්ලම් කරන්නේ කොහොමද?"
+              },
+              "followUps": [
+                {
+                  "en": "What are the rules?",
+                  "si": "ඒකේ නීති මොනවද?"
+                },
+                {
+                  "en": "Tell me about a time you played it.",
+                  "si": "ඔයා ඒක සෙල්ලම් කරපු දවසක් ගැන කියන්න."
+                }
+              ]
+            },
+            {
+              "id": "5-10.games-and-toys.03",
+              "level": "concrete",
+              "title": {
+                "en": "Playing indoors on a rainy day",
+                "si": "වැස්ස දවසක ගෙදර සෙල්ලම්"
+              },
+              "mainPrompt": {
+                "en": "When it rains and you have to stay inside, what games do you play? Tell me about one.",
+                "si": "වැස්සට එළියට යන්න බැරි දවසට ඔයා ගෙදර ඇතුළේ කරන සෙල්ලම් මොනවද? එකක් ගැන කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "Who plays with you?",
+                  "si": "ඔයා එක්ක සෙල්ලම් කරන්නේ කවුද?"
+                },
+                {
+                  "en": "How do you win?",
+                  "si": "ඒකෙන් දිනන්නේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.games-and-toys.04",
+              "level": "open",
+              "title": {
+                "en": "A toy that comes alive",
+                "si": "පණ ලැබුණු සෙල්ලම් බඩුව"
+              },
+              "mainPrompt": {
+                "en": "Imagine your toy came alive at night. What would it do, and where would it go?",
+                "si": "රෑට ඔයාගේ සෙල්ලම් බඩුවට පණ ආවා කියලා හිතන්න. ඒක මොනවද කරන්නේ? කොහෙද යන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "What would it say to you in the morning?",
+                  "si": "උදේට ඒක ඔයාට මොනවා කියයිද?"
+                },
+                {
+                  "en": "Which other toys would be its friends?",
+                  "si": "ඒකේ යාළුවෝ වෙන්නේ වෙන මොන සෙල්ලම් බඩුද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.games-and-toys.05",
+              "level": "open",
+              "title": {
+                "en": "Making up a new game",
+                "si": "අලුත් සෙල්ලමක් හදමු"
+              },
+              "mainPrompt": {
+                "en": "If you made up a brand-new game, what would it be called and how would people play it?",
+                "si": "ඔයා අලුත්ම සෙල්ලමක් හැදුවොත්, ඒකේ නම මොකද්ද? ඒක සෙල්ලම් කරන්නේ කොහොමද?"
+              },
+              "followUps": [
+                {
+                  "en": "What would you need to play it?",
+                  "si": "ඒක සෙල්ලම් කරන්න මොනවද ඕනේ?"
+                },
+                {
+                  "en": "How would someone win?",
+                  "si": "කෙනෙක් දිනන්නේ කොහොමද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cartoons-and-stories",
+          "title": {
+            "en": "Cartoons and stories",
+            "si": "කාටූන් සහ කතන්දර"
+          },
+          "icon": "📚",
+          "topics": [
+            {
+              "id": "5-10.cartoons-and-stories.01",
+              "level": "concrete",
+              "title": {
+                "en": "My favourite cartoon",
+                "si": "මම කැමතිම කාටූන් එක"
+              },
+              "mainPrompt": {
+                "en": "Tell me about your favourite cartoon. Who are the characters and what happens in it?",
+                "si": "ඔයා ගොඩක් කැමති කාටූන් එක ගැන කියන්න. ඒකේ ඉන්න චරිත කවුද? ඒකේ මොනවද වෙන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "Which character do you like most, and why?",
+                  "si": "ඔයා වැඩියෙන්ම කැමති චරිතය කවුද? ඇයි?"
+                },
+                {
+                  "en": "Tell me about a funny part.",
+                  "si": "ඒකේ හිනායන කොටසක් ගැන කියන්න."
+                }
+              ]
+            },
+            {
+              "id": "5-10.cartoons-and-stories.02",
+              "level": "concrete",
+              "title": {
+                "en": "A story I know",
+                "si": "මම දන්න කතන්දරයක්"
+              },
+              "mainPrompt": {
+                "en": "Tell me a story you know, like a story from a book or one your grandmother told you.",
+                "si": "ඔයා දන්න කතන්දරයක් කියන්න. පොතක තියෙන කතාවක් හරි, ආච්චි කියපු කතාවක් හරි කමක් නෑ."
+              },
+              "followUps": [
+                {
+                  "en": "How does the story end?",
+                  "si": "කතාව ඉවර වෙන්නේ කොහොමද?"
+                },
+                {
+                  "en": "What did you learn from it?",
+                  "si": "ඒ කතාවෙන් ඔයා ඉගෙනගත්තේ මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.cartoons-and-stories.03",
+              "level": "concrete",
+              "title": {
+                "en": "Bedtime stories",
+                "si": "නිදාගන්න කලින් කතන්දර"
+              },
+              "mainPrompt": {
+                "en": "Who tells you stories or reads to you? Tell me about a story you heard or read recently.",
+                "si": "ඔයාට කතන්දර කියන්නේ, නැත්නම් පොත් කියවලා දෙන්නේ කවුද? ළඟදී අහපු, නැත්නම් කියවපු කතාවක් ගැන කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "Where do you sit when you listen?",
+                  "si": "කතාව අහනකොට ඔයා ඉන්නේ කොහෙද?"
+                },
+                {
+                  "en": "Who was in the story?",
+                  "si": "ඒ කතාවේ හිටියේ කවුද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.cartoons-and-stories.04",
+              "level": "open",
+              "title": {
+                "en": "A new story for a character",
+                "si": "චරිතයකට අලුත් කතාවක්"
+              },
+              "mainPrompt": {
+                "en": "Choose a cartoon character you like and make up a new adventure for them. What happens?",
+                "si": "ඔයා කැමති කාටූන් චරිතයක් තෝරලා, එයාට අලුත් කතාවක් හදන්න. මොකද වෙන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "Where does the adventure happen?",
+                  "si": "කතාව වෙන්නේ කොහෙද?"
+                },
+                {
+                  "en": "How does it end?",
+                  "si": "කතාව ඉවර වෙන්නේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.cartoons-and-stories.05",
+              "level": "open",
+              "title": {
+                "en": "Me inside a story",
+                "si": "මම කතාවක් ඇතුළේ"
+              },
+              "mainPrompt": {
+                "en": "If you could jump inside any story or cartoon, which one would it be and what would you do there?",
+                "si": "ඔයාට ඕනම කතාවකට හරි කාටූන් එකකට හරි පනින්න පුළුවන් නම්, ඒ මොකද්ද? ඔයා එතන මොනවද කරන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "Who would you meet?",
+                  "si": "ඔයා මුණගැහෙන්නේ කාවද?"
+                },
+                {
+                  "en": "What would you bring back with you?",
+                  "si": "ඔයා ආපහු එනකොට එතනින් මොනවද ගේන්නේ?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "festivals",
+          "title": {
+            "en": "Festivals",
+            "si": "උත්සව"
+          },
+          "icon": "🪔",
+          "topics": [
+            {
+              "id": "5-10.festivals.01",
+              "level": "concrete",
+              "title": {
+                "en": "Sinhala and Tamil New Year",
+                "si": "සිංහල දෙමළ අලුත් අවුරුද්ද"
+              },
+              "mainPrompt": {
+                "en": "Tell me what your family does at Avurudu. What do you eat and what games do you play?",
+                "si": "අවුරුද්දට ඔයාලගේ ගෙදර මොනවද කරන්නේ? ඔයාලා කන්නේ මොනවද? සෙල්ලම් කරන්නේ මොනවද?"
+              },
+              "followUps": [
+                {
+                  "en": "What did you do at the last Avurudu?",
+                  "si": "පහුගිය අවුරුද්දට ඔයා මොනවද කළේ?"
+                },
+                {
+                  "en": "Which Avurudu game is your favourite?",
+                  "si": "ඔයා වැඩියෙන්ම කැමති අවුරුදු සෙල්ලම මොකද්ද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.festivals.02",
+              "level": "concrete",
+              "title": {
+                "en": "Vesak lanterns",
+                "si": "වෙසක් කූඩු"
+              },
+              "mainPrompt": {
+                "en": "Tell me about Vesak. What lanterns and lights do you see, and what do people do?",
+                "si": "වෙසක් ගැන කියන්න. ඔයා දකින වෙසක් කූඩු, පහන් මොන වගේද? මිනිස්සු මොනවද කරන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "Tell me how a Vesak lantern is made.",
+                  "si": "වෙසක් කූඩුවක් හදන්නේ කොහොමද කියලා කියන්න."
+                },
+                {
+                  "en": "What do you see at a dansala?",
+                  "si": "දන්සැලකදී ඔයා දකින්නේ මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.festivals.03",
+              "level": "concrete",
+              "title": {
+                "en": "A festival I enjoyed",
+                "si": "මම ආසාවෙන් හිටපු උත්සවයක්"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a festival or celebration you enjoyed, like Christmas, Deepavali, Ramazan or Poson. What happened?",
+                "si": "ඔයා ආසාවෙන් හිටපු උත්සවයක් ගැන කියන්න. නත්තල, දීපවාලි, රාමසාන්, නැත්නම් පොසොන් වගේ. මොනවද වුණේ?"
+              },
+              "followUps": [
+                {
+                  "en": "What did you wear?",
+                  "si": "ඔයා ඇඳගෙන හිටියේ මොනවද?"
+                },
+                {
+                  "en": "Who was with you that day?",
+                  "si": "ඒ දවසේ ඔයා එක්ක හිටියේ කවුද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.festivals.04",
+              "level": "open",
+              "title": {
+                "en": "A brand-new festival",
+                "si": "අලුත් උත්සවයක්"
+              },
+              "mainPrompt": {
+                "en": "If you could create a new festival for everyone in Sri Lanka, what would it celebrate and what would people do?",
+                "si": "ලංකාවේ හැමෝටම අලුත් උත්සවයක් ඔයාට හදන්න පුළුවන් නම්, ඒකෙන් සමරන්නේ මොකද්ද? මිනිස්සු ඒ දවසට මොනවද කරන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "What food would people eat?",
+                  "si": "මිනිස්සු ඒ දවසට කන්නේ මොන කෑමද?"
+                },
+                {
+                  "en": "What would you call it?",
+                  "si": "ඔයා ඒකට දාන නම මොකද්ද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.festivals.05",
+              "level": "open",
+              "title": {
+                "en": "Why we celebrate",
+                "si": "අපි උත්සව සමරන්නේ ඇයි"
+              },
+              "mainPrompt": {
+                "en": "Why do you think people celebrate festivals? What makes a festival happy?",
+                "si": "මිනිස්සු උත්සව සමරන්නේ ඇයි කියලා ඔයා හිතන්නේ? උත්සවයක් සතුටු වෙන්නේ මොකද නිසාද?"
+              },
+              "followUps": [
+                {
+                  "en": "What is your favourite part of any festival?",
+                  "si": "ඕනම උත්සවයක ඔයා වැඩියෙන්ම කැමති කොටස මොකද්ද?"
+                },
+                {
+                  "en": "How can we make others happy at festival time?",
+                  "si": "උත්සව කාලෙට අනිත් අයව සතුටු කරන්න අපිට පුළුවන් කොහොමද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "nature-and-garden",
+          "title": {
+            "en": "Nature and garden",
+            "si": "සොබාදහම සහ වත්ත"
+          },
+          "icon": "🌳",
+          "topics": [
+            {
+              "id": "5-10.nature-and-garden.01",
+              "level": "concrete",
+              "title": {
+                "en": "Our garden",
+                "si": "අපේ වත්ත"
+              },
+              "mainPrompt": {
+                "en": "Tell me about the garden or plants near your home. What trees and flowers are there?",
+                "si": "ඔයාගේ ගෙදර වත්ත, නැත්නම් ගෙදර ළඟ තියෙන ගස්වැල් ගැන කියන්න. එතන මොන ගස්, මල්ද තියෙන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "Which trees have fruit?",
+                  "si": "ගෙඩි හැදෙන්නේ මොන ගස්වලද?"
+                },
+                {
+                  "en": "What animals live in the garden?",
+                  "si": "වත්තේ ජීවත් වෙන සතුන් මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.nature-and-garden.02",
+              "level": "concrete",
+              "title": {
+                "en": "Planting a seed",
+                "si": "ඇටයක් සිටවපු දවස"
+              },
+              "mainPrompt": {
+                "en": "Tell me how you would plant a seed and look after it, or about a time you planted something.",
+                "si": "ඇටයක් සිටවලා ඒක බලාගන්නේ කොහොමද කියලා කියන්න. නැත්නම් ඔයා මොකක් හරි සිටවපු දවසක් ගැන කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What does a plant need to grow?",
+                  "si": "පැළයක් ලොකු වෙන්න මොනවද ඕනේ?"
+                },
+                {
+                  "en": "What happened to it after that?",
+                  "si": "ඊට පස්සේ ඒකට මොකද වුණේ?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.nature-and-garden.03",
+              "level": "concrete",
+              "title": {
+                "en": "A walk outside",
+                "si": "එළියේ ඇවිදපු දවස"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a walk you took in a park, a field or a village. What did you see, hear and smell?",
+                "si": "ඔයා පාර්ක් එකක, පිට්ටනියක, නැත්නම් ගමේ ඇවිදින්න ගිය දවසක් ගැන කියන්න. ඔයා දැක්කේ, ඇහුණේ, සුවඳ දැනුණේ මොනවද?"
+              },
+              "followUps": [
+                {
+                  "en": "What was the most beautiful thing you saw?",
+                  "si": "ඔයා දැකපු ලස්සනම දේ මොකද්ද?"
+                },
+                {
+                  "en": "Who was with you?",
+                  "si": "ඔයා එක්ක හිටියේ කවුද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.nature-and-garden.04",
+              "level": "open",
+              "title": {
+                "en": "If trees could talk",
+                "si": "ගස්වලට කතා කරන්න පුළුවන් නම්"
+              },
+              "mainPrompt": {
+                "en": "If an old tree could talk, what stories do you think it would tell us?",
+                "si": "පරණ ගහකට කතා කරන්න පුළුවන් නම්, ඒක අපිට මොන වගේ කතා කියයි කියලද ඔයා හිතන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "What things would it have seen?",
+                  "si": "ඒ ගහ දැකලා ඇති දේවල් මොනවද?"
+                },
+                {
+                  "en": "What would it ask us to do?",
+                  "si": "ඒ ගහ අපිට කරන්න කියන්නේ මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.nature-and-garden.05",
+              "level": "open",
+              "title": {
+                "en": "Looking after nature",
+                "si": "සොබාදහම රැකගමු"
+              },
+              "mainPrompt": {
+                "en": "Why is it important to look after trees and plants? What can children do to help?",
+                "si": "ගස්වැල් රැකගන්න එක වැදගත් ඇයි? ඒකට උදව් කරන්න ළමයින්ට මොනවද කරන්න පුළුවන්?"
+              },
+              "followUps": [
+                {
+                  "en": "What would the world be like without trees?",
+                  "si": "ගස් නැති ලෝකයක් කොහොම වෙයිද?"
+                },
+                {
+                  "en": "What could your class do?",
+                  "si": "ඔයාගේ පන්තියට කරන්න පුළුවන් මොනවද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "vehicles",
+          "title": {
+            "en": "Vehicles",
+            "si": "වාහන"
+          },
+          "icon": "🚌",
+          "topics": [
+            {
+              "id": "5-10.vehicles.01",
+              "level": "concrete",
+              "title": {
+                "en": "How I get to school",
+                "si": "මම ඉස්කෝලේ යන හැටි"
+              },
+              "mainPrompt": {
+                "en": "How do you travel to school? Tell me about the journey.",
+                "si": "ඔයා ඉස්කෝලේ යන්නේ කොහොමද? ඒ ගමන ගැන කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What do you see on the way?",
+                  "si": "යන ගමන් ඔයා දකින්නේ මොනවද?"
+                },
+                {
+                  "en": "Who goes with you?",
+                  "si": "ඔයා එක්ක යන්නේ කවුද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.vehicles.02",
+              "level": "concrete",
+              "title": {
+                "en": "A train or bus ride",
+                "si": "කෝච්චියෙන් හරි බස් එකෙන් හරි ගිය ගමනක්"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a ride you took on a train or a bus. Where did you go?",
+                "si": "ඔයා කෝච්චියෙන් හරි බස් එකෙන් හරි ගිය ගමනක් ගැන කියන්න. ඔයා ගියේ කොහෙද?"
+              },
+              "followUps": [
+                {
+                  "en": "What could you see from the window?",
+                  "si": "ජනේලෙන් ඔයාට පේන්න තිබ්බේ මොනවද?"
+                },
+                {
+                  "en": "What sounds did it make?",
+                  "si": "ඒකෙන් ආපු සද්ද මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.vehicles.03",
+              "level": "concrete",
+              "title": {
+                "en": "My favourite vehicle",
+                "si": "මම කැමතිම වාහනය"
+              },
+              "mainPrompt": {
+                "en": "Which vehicle do you like the most? Tell me what it looks like and what it does.",
+                "si": "ඔයා වැඩියෙන්ම කැමති වාහනය මොකද්ද? ඒක පේන හැටි, ඒකෙන් කරන වැඩ ගැන කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "Where have you seen one?",
+                  "si": "ඔයා ඒ වගේ එකක් දැක්කේ කොහෙදිද?"
+                },
+                {
+                  "en": "Who drives it?",
+                  "si": "ඒක පදවන්නේ කවුද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.vehicles.04",
+              "level": "open",
+              "title": {
+                "en": "A flying car",
+                "si": "පියාඹන කාර් එකක්"
+              },
+              "mainPrompt": {
+                "en": "If you had a car that could fly, where would you go and what would you see from the sky?",
+                "si": "ඔයාට පියාඹන කාර් එකක් තිබ්බොත්, ඔයා කොහෙද යන්නේ? අහසේ ඉඳන් ඔයා දකින්නේ මොනවද?"
+              },
+              "followUps": [
+                {
+                  "en": "Who would you take with you?",
+                  "si": "ඔයා එක්කන් යන්නේ කාවද?"
+                },
+                {
+                  "en": "What would it look like?",
+                  "si": "ඒ කාර් එක පේන්නේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.vehicles.05",
+              "level": "open",
+              "title": {
+                "en": "Vehicles of the future",
+                "si": "අනාගතයේ වාහන"
+              },
+              "mainPrompt": {
+                "en": "What do you think vehicles will be like when you grow up? How will people travel?",
+                "si": "ඔයා ලොකු වෙනකොට වාහන කොහොම වෙයි කියලද ඔයා හිතන්නේ? මිනිස්සු ගමන් යන්නේ කොහොමද?"
+              },
+              "followUps": [
+                {
+                  "en": "What vehicle would you invent?",
+                  "si": "ඔයා හොයාගන්න කැමති වාහනය මොකද්ද?"
+                },
+                {
+                  "en": "How would it help people?",
+                  "si": "ඒකෙන් මිනිස්සුන්ට උදව් වෙන්නේ කොහොමද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "the-sea-and-beach",
+          "title": {
+            "en": "The sea and beach",
+            "si": "මුහුද සහ වෙරළ"
+          },
+          "icon": "🌊",
+          "topics": [
+            {
+              "id": "5-10.the-sea-and-beach.01",
+              "level": "concrete",
+              "title": {
+                "en": "A day at the beach",
+                "si": "මුහුදු වෙරළේ දවසක්"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a day you went to the beach. What did you do there?",
+                "si": "ඔයා මුහුදු වෙරළට ගිය දවසක් ගැන කියන්න. ඔයා එතන මොනවද කළේ?"
+              },
+              "followUps": [
+                {
+                  "en": "What did you find on the sand?",
+                  "si": "වැලි උඩ ඔයාට හම්බවුණේ මොනවද?"
+                },
+                {
+                  "en": "What did you eat there?",
+                  "si": "එතනදී ඔයා කෑවේ මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.the-sea-and-beach.02",
+              "level": "concrete",
+              "title": {
+                "en": "Things we see at the sea",
+                "si": "මුහුදේ අපි දකින දේවල්"
+              },
+              "mainPrompt": {
+                "en": "What can you see at the sea? Tell me about the waves, boats, birds and shells.",
+                "si": "මුහුදේ අපිට දකින්න පුළුවන් මොනවද? රළ, බෝට්ටු, කුරුල්ලෝ, බෙලි කටු ගැන කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What do fishermen do?",
+                  "si": "මාළු අල්ලන අය මොනවද කරන්නේ?"
+                },
+                {
+                  "en": "How does the sea look at different times of the day?",
+                  "si": "දවසේ එක එක වෙලාවට මුහුද පේන්නේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.the-sea-and-beach.03",
+              "level": "concrete",
+              "title": {
+                "en": "Building a sandcastle",
+                "si": "වැලි මාලිගාවක් හදමු"
+              },
+              "mainPrompt": {
+                "en": "Tell me how you would build a sandcastle, step by step.",
+                "si": "වැලි මාලිගාවක් හදන හැටි පියවරෙන් පියවර කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What would you put on top?",
+                  "si": "ඒකේ උඩින් ඔයා තියන්නේ මොනවද?"
+                },
+                {
+                  "en": "What happens when a wave comes?",
+                  "si": "රළක් ආවම මොකද වෙන්නේ?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.the-sea-and-beach.04",
+              "level": "open",
+              "title": {
+                "en": "Under the sea",
+                "si": "මුහුද යට ලෝකය"
+              },
+              "mainPrompt": {
+                "en": "Imagine you could breathe under the sea. What would you see and who would you meet?",
+                "si": "ඔයාට මුහුද යට හුස්ම ගන්න පුළුවන් කියලා හිතන්න. ඔයා දකින්නේ මොනවද? මුණගැහෙන්නේ කාවද?"
+              },
+              "followUps": [
+                {
+                  "en": "Which sea animal would be your friend?",
+                  "si": "ඔයාගේ යාළුවා වෙන මුහුදු සතා කවුද?"
+                },
+                {
+                  "en": "What would your home under the sea be like?",
+                  "si": "මුහුද යට ඔයාගේ ගෙදර කොහොම එකක්ද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.the-sea-and-beach.05",
+              "level": "open",
+              "title": {
+                "en": "Keeping the beach clean",
+                "si": "වෙරළ පිරිසිදුව තියාගමු"
+              },
+              "mainPrompt": {
+                "en": "Why should we keep beaches clean? What happens to sea animals when there is rubbish?",
+                "si": "අපි වෙරළ පිරිසිදුව තියාගන්න ඕනේ ඇයි? කුණු තියෙනකොට මුහුදේ සතුන්ට මොකද වෙන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "What could you do to help?",
+                  "si": "උදව් කරන්න ඔයාට කරන්න පුළුවන් මොනවද?"
+                },
+                {
+                  "en": "How could we tell other people about this?",
+                  "si": "අපි මේ ගැන අනිත් අයට කියන්නේ කොහොමද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "friends",
+          "title": {
+            "en": "Friends",
+            "si": "යාළුවෝ"
+          },
+          "icon": "🤝",
+          "topics": [
+            {
+              "id": "5-10.friends.01",
+              "level": "concrete",
+              "title": {
+                "en": "My best friend",
+                "si": "මගේ හොඳම යාළුවා"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a good friend of yours. What is your friend like?",
+                "si": "ඔයාගේ හොඳ යාළුවෙක් ගැන කියන්න. එයා කොහොම කෙනෙක්ද?"
+              },
+              "followUps": [
+                {
+                  "en": "How did you become friends?",
+                  "si": "ඔයාලා යාළුවෝ වුණේ කොහොමද?"
+                },
+                {
+                  "en": "What do you like doing together?",
+                  "si": "ඔයාලා එකට කරන්න කැමති මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.friends.02",
+              "level": "concrete",
+              "title": {
+                "en": "A fun time with friends",
+                "si": "යාළුවෝ එක්ක විනෝද වුණු දවසක්"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a time you had lots of fun with your friends. What happened?",
+                "si": "ඔයා යාළුවෝ එක්ක ගොඩක් විනෝද වුණු දවසක් ගැන කියන්න. මොකද වුණේ?"
+              },
+              "followUps": [
+                {
+                  "en": "Where were you?",
+                  "si": "ඔයාලා හිටියේ කොහෙද?"
+                },
+                {
+                  "en": "What was the funniest part?",
+                  "si": "වැඩියෙන්ම හිනා ගිය දේ මොකද්ද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.friends.03",
+              "level": "concrete",
+              "title": {
+                "en": "Playing at interval time",
+                "si": "විවේක වෙලාවේ සෙල්ලම්"
+              },
+              "mainPrompt": {
+                "en": "What do you and your friends do at school during the break? Tell me about it.",
+                "si": "ඉස්කෝලේ විවේක වෙලාවේ ඔයයි යාළුවොයි මොනවද කරන්නේ? ඒ ගැන කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "Where do you play?",
+                  "si": "ඔයාලා සෙල්ලම් කරන්නේ කොහෙද?"
+                },
+                {
+                  "en": "Who decides which game to play?",
+                  "si": "මොන සෙල්ලමද කරන්නේ කියලා තීරණය කරන්නේ කවුද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.friends.04",
+              "level": "open",
+              "title": {
+                "en": "What makes a good friend",
+                "si": "හොඳ යාළුවෙක් කියන්නේ"
+              },
+              "mainPrompt": {
+                "en": "What do you think makes someone a good friend? Why?",
+                "si": "හොඳ යාළුවෙක් කියන්නේ කොහොම කෙනෙක්ද කියලා ඔයා හිතන්නේ? ඇයි?"
+              },
+              "followUps": [
+                {
+                  "en": "How can you be a good friend to someone new?",
+                  "si": "අලුත් කෙනෙකුට හොඳ යාළුවෙක් වෙන්න ඔයාට පුළුවන් කොහොමද?"
+                },
+                {
+                  "en": "How can two friends make up after a small quarrel?",
+                  "si": "යාළුවෝ දෙන්නෙක් පොඩි රණ්ඩුවකින් පස්සේ ආයේ යාළු වෙන්නේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.friends.05",
+              "level": "open",
+              "title": {
+                "en": "A friend from far away",
+                "si": "ඈත රටක යාළුවෙක්"
+              },
+              "mainPrompt": {
+                "en": "If you had a friend from another country, what would you show them in Sri Lanka?",
+                "si": "ඔයාට වෙන රටක ඉඳන් ආපු යාළුවෙක් හිටියොත්, ඔයා එයාට ලංකාවේ පෙන්නන්නේ මොනවද?"
+              },
+              "followUps": [
+                {
+                  "en": "What food would you give them?",
+                  "si": "ඔයා එයාට දෙන්නේ මොන කෑමද?"
+                },
+                {
+                  "en": "What would you ask about their country?",
+                  "si": "ඔයා එයාගේ රට ගැන අහන්නේ මොනවද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "birthdays-and-parties",
+          "title": {
+            "en": "Birthdays and parties",
+            "si": "උපන්දින සහ සාද"
+          },
+          "icon": "🎂",
+          "topics": [
+            {
+              "id": "5-10.birthdays-and-parties.01",
+              "level": "concrete",
+              "title": {
+                "en": "My last birthday",
+                "si": "මගේ පහුගිය උපන්දිනය"
+              },
+              "mainPrompt": {
+                "en": "Tell me about your last birthday. What did you do?",
+                "si": "ඔයාගේ පහුගිය උපන්දිනය ගැන කියන්න. ඔයා ඒ දවසේ මොනවද කළේ?"
+              },
+              "followUps": [
+                {
+                  "en": "What kind of cake was there?",
+                  "si": "එදා තිබ්බේ මොන වගේ කේක් එකක්ද?"
+                },
+                {
+                  "en": "Who came?",
+                  "si": "එදා ආවේ කවුද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.birthdays-and-parties.02",
+              "level": "concrete",
+              "title": {
+                "en": "A party I went to",
+                "si": "මම ගිය සාදයක්"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a party or celebration you went to. What happened there?",
+                "si": "ඔයා ගිය පාටියක් හරි සාදයක් හරි ගැන කියන්න. එතන මොනවද වුණේ?"
+              },
+              "followUps": [
+                {
+                  "en": "What games did you play?",
+                  "si": "ඔයාලා කරපු සෙල්ලම් මොනවද?"
+                },
+                {
+                  "en": "What did you eat?",
+                  "si": "ඔයා කෑවේ මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.birthdays-and-parties.03",
+              "level": "concrete",
+              "title": {
+                "en": "Choosing a present",
+                "si": "තෑග්ගක් තෝරමු"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a present you gave or got. How was it chosen?",
+                "si": "ඔයා දුන්න, නැත්නම් ඔයාට ලැබුණු තෑග්ගක් ගැන කියන්න. ඒක තෝරගත්තේ කොහොමද?"
+              },
+              "followUps": [
+                {
+                  "en": "How was it wrapped?",
+                  "si": "ඒක ඔතලා තිබ්බේ කොහොමද?"
+                },
+                {
+                  "en": "How did the person feel?",
+                  "si": "ඒ කෙනාට කොහොමද දැනුණේ?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.birthdays-and-parties.04",
+              "level": "open",
+              "title": {
+                "en": "My dream party",
+                "si": "මගේ හීනයේ සාදය"
+              },
+              "mainPrompt": {
+                "en": "If you could plan any party you wanted, what would it be like?",
+                "si": "ඔයාට ඕන විදියට සාදයක් සැලසුම් කරන්න පුළුවන් නම්, ඒක කොහොම එකක්ද?"
+              },
+              "followUps": [
+                {
+                  "en": "Where would it be?",
+                  "si": "ඒක තියෙන්නේ කොහෙද?"
+                },
+                {
+                  "en": "What kind of cake would you have?",
+                  "si": "ඔයාට තියෙන්නේ මොන වගේ කේක් එකක්ද?"
+                },
+                {
+                  "en": "Who would you invite?",
+                  "si": "ඔයා එන්න කියන්නේ කාටද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.birthdays-and-parties.05",
+              "level": "open",
+              "title": {
+                "en": "Why birthdays are special",
+                "si": "උපන්දිනය විශේෂ ඇයි"
+              },
+              "mainPrompt": {
+                "en": "Why do you think people celebrate birthdays? What makes a birthday special?",
+                "si": "මිනිස්සු උපන්දින සමරන්නේ ඇයි කියලා ඔයා හිතන්නේ? උපන්දිනයක් විශේෂ වෙන්නේ මොකද නිසාද?"
+              },
+              "followUps": [
+                {
+                  "en": "How can you make a friend's birthday special?",
+                  "si": "යාළුවෙකුගේ උපන්දිනය විශේෂ කරන්න ඔයාට පුළුවන් කොහොමද?"
+                },
+                {
+                  "en": "What would a birthday party on the moon be like?",
+                  "si": "හඳේ තියෙන උපන්දින සාදයක් කොහොම වෙයිද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sports",
+          "title": {
+            "en": "Sports",
+            "si": "ක්‍රීඩා"
+          },
+          "icon": "⚽",
+          "topics": [
+            {
+              "id": "5-10.sports.01",
+              "level": "concrete",
+              "title": {
+                "en": "A sport I play",
+                "si": "මම කරන ක්‍රීඩාවක්"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a sport you play or like, like cricket, football or netball. How do you play it?",
+                "si": "ඔයා කරන, නැත්නම් කැමති ක්‍රිකට්, ෆුට්බෝල්, නෙට්බෝල් වගේ ක්‍රීඩාවක් ගැන කියන්න. ඒක කරන්නේ කොහොමද?"
+              },
+              "followUps": [
+                {
+                  "en": "Where do you play?",
+                  "si": "ඔයා ඒක කරන්නේ කොහෙද?"
+                },
+                {
+                  "en": "Who plays with you?",
+                  "si": "ඔයා එක්ක සෙල්ලම් කරන්නේ කවුද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.sports.02",
+              "level": "concrete",
+              "title": {
+                "en": "Sports day at school",
+                "si": "ඉස්කෝලේ ක්‍රීඩා උත්සවය"
+              },
+              "mainPrompt": {
+                "en": "Tell me about your school sports meet. What races and events were there?",
+                "si": "ඔයාගේ ඉස්කෝලේ ක්‍රීඩා උත්සවය ගැන කියන්න. එතන තිබ්බේ මොන තරගද?"
+              },
+              "followUps": [
+                {
+                  "en": "Which event did you take part in?",
+                  "si": "ඔයා කළේ මොන තරගෙද?"
+                },
+                {
+                  "en": "What colour was your house?",
+                  "si": "ඔයාගේ නිවාසයේ පාට මොකද්ද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.sports.03",
+              "level": "concrete",
+              "title": {
+                "en": "Watching a match",
+                "si": "තරගයක් බලපු දවස"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a match you watched, on TV or at a ground. What happened?",
+                "si": "ඔයා ටීවී එකෙන් හරි පිට්ටනියට ගිහින් හරි බලපු තරගයක් ගැන කියන්න. මොකද වුණේ?"
+              },
+              "followUps": [
+                {
+                  "en": "Who won?",
+                  "si": "දිනුවේ කවුද?"
+                },
+                {
+                  "en": "What was the most exciting moment?",
+                  "si": "වැඩියෙන්ම ආසාවෙන් බලපු වෙලාව මොකද්ද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.sports.04",
+              "level": "open",
+              "title": {
+                "en": "A sports star for a day",
+                "si": "එක දවසකට ක්‍රීඩා තරුවක්"
+              },
+              "mainPrompt": {
+                "en": "If you were a famous sports player for one day, which sport would you play and what would happen?",
+                "si": "ඔයා එක දවසකට ප්‍රසිද්ධ ක්‍රීඩකයෙක් වුණොත්, ඔයා කරන්නේ මොන ක්‍රීඩාවද? ඒ දවසේ මොනවද වෙන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "What would you say to your fans?",
+                  "si": "ඔයා ඔයාගේ රසිකයන්ට මොනවද කියන්නේ?"
+                },
+                {
+                  "en": "How would you practise?",
+                  "si": "ඔයා පුහුණු වෙන්නේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.sports.05",
+              "level": "open",
+              "title": {
+                "en": "Why sport is good for us",
+                "si": "ක්‍රීඩා අපිට හොඳ ඇයි"
+              },
+              "mainPrompt": {
+                "en": "Why do you think playing sports is good for children?",
+                "si": "ක්‍රීඩා කරන එක ළමයින්ට හොඳ ඇයි කියලා ඔයා හිතන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "What do we learn when we play in a team?",
+                  "si": "කණ්ඩායමක් එක්ක සෙල්ලම් කරනකොට අපි ඉගෙනගන්නේ මොනවද?"
+                },
+                {
+                  "en": "What should we do if we lose a game?",
+                  "si": "තරගයක් පැරදුණොත් අපි මොනවද කරන්න ඕනේ?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "music-and-dance",
+          "title": {
+            "en": "Music and dance",
+            "si": "සංගීතය සහ නැටුම්"
+          },
+          "icon": "🎵",
+          "topics": [
+            {
+              "id": "5-10.music-and-dance.01",
+              "level": "concrete",
+              "title": {
+                "en": "A song I like",
+                "si": "මම කැමති සින්දුවක්"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a song you like. What is it about, and when do you sing it?",
+                "si": "ඔයා කැමති සින්දුවක් ගැන කියන්න. ඒක මොකක් ගැනද? ඔයා ඒක කියන්නේ කවදද?"
+              },
+              "followUps": [
+                {
+                  "en": "Who taught you the song?",
+                  "si": "ඔයාට ඒ සින්දුව කියලා දුන්නේ කවුද?"
+                },
+                {
+                  "en": "How does the song make you feel?",
+                  "si": "ඒ සින්දුව ඇහුණම ඔයාට කොහොමද දැනෙන්නේ?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.music-and-dance.02",
+              "level": "concrete",
+              "title": {
+                "en": "Dancing",
+                "si": "නැටුම්"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a dance you have seen or done, at school, a concert or a wedding.",
+                "si": "ඉස්කෝලේදී, ප්‍රසංගයකදී, නැත්නම් මඟුල් ගෙදරකදී ඔයා දැකපු, නැත්නම් නටපු නැටුමක් ගැන කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What were the dancers wearing?",
+                  "si": "නටපු අය ඇඳගෙන හිටියේ මොනවද?"
+                },
+                {
+                  "en": "What music was playing?",
+                  "si": "එතකොට ගැහුවේ මොන වගේ සංගීතයක්ද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.music-and-dance.03",
+              "level": "concrete",
+              "title": {
+                "en": "Musical instruments",
+                "si": "සංගීත භාණ්ඩ"
+              },
+              "mainPrompt": {
+                "en": "Which musical instruments do you know, like the drum, guitar or piano? Tell me about one.",
+                "si": "ඔයා දන්න බෙරය, ගිටාරය, පියානෝව වගේ සංගීත භාණ්ඩ මොනවද? එකක් ගැන කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What sound does it make?",
+                  "si": "ඒකෙන් එන්නේ මොන වගේ සද්දයක්ද?"
+                },
+                {
+                  "en": "Who plays it?",
+                  "si": "ඒක වාදනය කරන්නේ කවුද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.music-and-dance.04",
+              "level": "open",
+              "title": {
+                "en": "My own band",
+                "si": "මගේම සංගීත කණ්ඩායම"
+              },
+              "mainPrompt": {
+                "en": "If you started a music band, what would it be called and what songs would you play?",
+                "si": "ඔයා සංගීත කණ්ඩායමක් පටන් ගත්තොත්, ඒකේ නම මොකද්ද? ඔයාලා ගහන්නේ මොන සින්දුද?"
+              },
+              "followUps": [
+                {
+                  "en": "Who would be in your band?",
+                  "si": "ඔයාගේ කණ්ඩායමේ ඉන්නේ කවුද?"
+                },
+                {
+                  "en": "Where would you play first?",
+                  "si": "ඔයාලා මුලින්ම ගහන්නේ කොහෙද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.music-and-dance.05",
+              "level": "open",
+              "title": {
+                "en": "A world without music",
+                "si": "සංගීතය නැති ලෝකයක්"
+              },
+              "mainPrompt": {
+                "en": "What would the world be like if there was no music at all? Why do people love music?",
+                "si": "කිසිම සංගීතයක් නැති ලෝකයක් කොහොම වෙයිද? මිනිස්සු සංගීතයට ආස ඇයි?"
+              },
+              "followUps": [
+                {
+                  "en": "When do people sing together?",
+                  "si": "මිනිස්සු එකට සින්දු කියන්නේ කවදද?"
+                },
+                {
+                  "en": "What music would you play to make someone happy?",
+                  "si": "කෙනෙක්ව සතුටු කරන්න ඔයා අහන්න දෙන්නේ මොන සංගීතයද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "drawing-and-colours",
+          "title": {
+            "en": "Drawing and colours",
+            "si": "චිත්‍ර සහ පාට"
+          },
+          "icon": "🎨",
+          "topics": [
+            {
+              "id": "5-10.drawing-and-colours.01",
+              "level": "concrete",
+              "title": {
+                "en": "A picture I drew",
+                "si": "මම ඇඳපු චිත්‍රයක්"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a picture you drew or painted. What is in it?",
+                "si": "ඔයා ඇඳපු, නැත්නම් පාට කරපු චිත්‍රයක් ගැන කියන්න. ඒකේ මොනවද තියෙන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "What colours did you use?",
+                  "si": "ඔයා පාවිච්චි කළේ මොන පාටද?"
+                },
+                {
+                  "en": "Where is it now?",
+                  "si": "ඒ චිත්‍රය දැන් තියෙන්නේ කොහෙද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.drawing-and-colours.02",
+              "level": "concrete",
+              "title": {
+                "en": "My favourite colour",
+                "si": "මම කැමතිම පාට"
+              },
+              "mainPrompt": {
+                "en": "What is your favourite colour? Tell me about all the things around you that are that colour.",
+                "si": "ඔයා වැඩියෙන්ම කැමති පාට මොකද්ද? ඔයා වටේ තියෙන ඒ පාට දේවල් හැම එකක් ගැනම කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "Why do you like it?",
+                  "si": "ඔයා ඒ පාටට කැමති ඇයි?"
+                },
+                {
+                  "en": "What colour would you paint your room?",
+                  "si": "ඔයාගේ කාමරේට ඔයා ගාන්නේ මොන පාටද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.drawing-and-colours.03",
+              "level": "concrete",
+              "title": {
+                "en": "How to draw something",
+                "si": "මොකක් හරි අඳින හැටි"
+              },
+              "mainPrompt": {
+                "en": "Choose something you like to draw, like a house or a cat, and tell me how to draw it step by step.",
+                "si": "ගෙයක් හරි පූසෙක් හරි වගේ ඔයා අඳින්න කැමති දෙයක් තෝරලා, ඒක අඳින හැටි පියවරෙන් පියවර කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What do you draw first?",
+                  "si": "ඔයා මුලින්ම අඳින්නේ මොකද්ද?"
+                },
+                {
+                  "en": "How do you make it look nice?",
+                  "si": "ඒක ලස්සන කරන්නේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.drawing-and-colours.04",
+              "level": "open",
+              "title": {
+                "en": "A world with no colours",
+                "si": "පාට නැති ලෝකයක්"
+              },
+              "mainPrompt": {
+                "en": "What would happen if all the colours in the world disappeared one day?",
+                "si": "දවසක් ලෝකේ තියෙන හැම පාටක්ම නැති වුණොත් මොකද වෙන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "Which colour would you bring back first, and why?",
+                  "si": "ඔයා මුලින්ම ආපහු ගේන්නේ මොන පාටද? ඇයි?"
+                },
+                {
+                  "en": "How would people know when a fruit is ripe?",
+                  "si": "ගෙඩියක් ඉදිලාද කියලා මිනිස්සු දැනගන්නේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.drawing-and-colours.05",
+              "level": "open",
+              "title": {
+                "en": "A magic paintbrush",
+                "si": "මැජික් පින්සල"
+              },
+              "mainPrompt": {
+                "en": "If you had a magic paintbrush and everything you painted became real, what would you paint?",
+                "si": "ඔයාට මැජික් පින්සලක් තිබිලා, ඔයා අඳින හැම දෙයක්ම ඇත්ත වුණොත්, ඔයා අඳින්නේ මොනවද?"
+              },
+              "followUps": [
+                {
+                  "en": "What would you paint for your family?",
+                  "si": "ඔයාගේ පවුලට ඔයා අඳින්නේ මොනවද?"
+                },
+                {
+                  "en": "What would you paint to help others?",
+                  "si": "අනිත් අයට උදව් වෙන්න ඔයා අඳින්නේ මොනවද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "space-and-stars",
+          "title": {
+            "en": "Space and stars",
+            "si": "අභ්‍යවකාශය සහ තරු"
+          },
+          "icon": "🚀",
+          "topics": [
+            {
+              "id": "5-10.space-and-stars.01",
+              "level": "concrete",
+              "title": {
+                "en": "Looking at the night sky",
+                "si": "රෑ අහස බලමු"
+              },
+              "mainPrompt": {
+                "en": "Tell me what you see when you look at the sky at night.",
+                "si": "රෑට අහස දිහා බලනකොට ඔයා දකින්නේ මොනවද කියලා කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What shapes does the moon have on different nights?",
+                  "si": "එක එක දවස්වලට හඳ පේන්නේ මොන හැඩවලටද?"
+                },
+                {
+                  "en": "Who looks at the sky with you?",
+                  "si": "ඔයා එක්ක අහස බලන්නේ කවුද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.space-and-stars.02",
+              "level": "concrete",
+              "title": {
+                "en": "Sun, moon and stars",
+                "si": "ඉර, හඳ, තරු"
+              },
+              "mainPrompt": {
+                "en": "Tell me what you know about the sun, the moon and the stars.",
+                "si": "ඉර, හඳ, තරු ගැන ඔයා දන්න දේවල් කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "Where does the sun go at night?",
+                  "si": "රෑට ඉර කොහෙද යන්නේ?"
+                },
+                {
+                  "en": "Why is it hot in the daytime?",
+                  "si": "දවල්ට රස්නේ ඇයි?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.space-and-stars.03",
+              "level": "concrete",
+              "title": {
+                "en": "A space book or show",
+                "si": "අභ්‍යවකාශය ගැන පොතක් හරි වැඩසටහනක් හරි"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a book, cartoon or programme you saw about space or rockets.",
+                "si": "ඔයා දැකපු අභ්‍යවකාශය ගැන, නැත්නම් රොකට් ගැන පොතක්, කාටූන් එකක්, නැත්නම් වැඩසටහනක් ගැන කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What did you learn?",
+                  "si": "ඒකෙන් ඔයා ඉගෙනගත්තේ මොනවද?"
+                },
+                {
+                  "en": "What was the most amazing part?",
+                  "si": "වැඩියෙන්ම පුදුම හිතුණු කොටස මොකද්ද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.space-and-stars.04",
+              "level": "open",
+              "title": {
+                "en": "A trip to the moon",
+                "si": "හඳට ගමනක්"
+              },
+              "mainPrompt": {
+                "en": "Imagine you are going to the moon in a rocket. Tell me about your trip.",
+                "si": "ඔයා රොකට් එකකින් හඳට යනවා කියලා හිතන්න. ඒ ගමන ගැන කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What would you pack?",
+                  "si": "ඔයා අරන් යන්නේ මොනවද?"
+                },
+                {
+                  "en": "What would you do first when you land?",
+                  "si": "හඳට බැස්සම ඔයා මුලින්ම කරන්නේ මොකද්ද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.space-and-stars.05",
+              "level": "open",
+              "title": {
+                "en": "A visitor from another planet",
+                "si": "වෙන ග්‍රහලෝකයක යාළුවෙක්"
+              },
+              "mainPrompt": {
+                "en": "If a friendly visitor from another planet came to your house, what would you show them and what would you ask?",
+                "si": "වෙන ග්‍රහලෝකයක ඉඳන් හොඳ අමුත්තෙක් ඔයාගේ ගෙදරට ආවොත්, ඔයා එයාට පෙන්නන්නේ මොනවද? එයාගෙන් අහන්නේ මොනවද?"
+              },
+              "followUps": [
+                {
+                  "en": "What would they look like?",
+                  "si": "එයා පේන්නේ කොහොමද?"
+                },
+                {
+                  "en": "What food would you give them?",
+                  "si": "ඔයා එයාට කන්න දෙන්නේ මොනවද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "weather-and-rain",
+          "title": {
+            "en": "Weather and rain",
+            "si": "කාලගුණය සහ වැස්ස"
+          },
+          "icon": "☔",
+          "topics": [
+            {
+              "id": "5-10.weather-and-rain.01",
+              "level": "concrete",
+              "title": {
+                "en": "A rainy day",
+                "si": "වැස්ස දවසක්"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a rainy day. What do you see, hear and do when it rains?",
+                "si": "වැස්ස දවසක් ගැන කියන්න. වහිනකොට ඔයා දකින්නේ, අහන්නේ, කරන්නේ මොනවද?"
+              },
+              "followUps": [
+                {
+                  "en": "What do you wear when it rains?",
+                  "si": "වහිනකොට ඔයා අඳින්නේ මොනවද?"
+                },
+                {
+                  "en": "What happens to the garden?",
+                  "si": "වත්තට මොකද වෙන්නේ?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.weather-and-rain.02",
+              "level": "concrete",
+              "title": {
+                "en": "A hot sunny day",
+                "si": "අව්ව තියෙන දවසක්"
+              },
+              "mainPrompt": {
+                "en": "What do you do on a very hot, sunny day? Tell me about one.",
+                "si": "හොඳටම අව්ව තියෙන රස්නේ දවසක ඔයා මොනවද කරන්නේ? එහෙම දවසක් ගැන කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What do you like to drink?",
+                  "si": "ඔයා බොන්න කැමති මොනවද?"
+                },
+                {
+                  "en": "How do animals stay cool?",
+                  "si": "සතුන් රස්නෙන් බේරෙන්නේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.weather-and-rain.03",
+              "level": "concrete",
+              "title": {
+                "en": "Today's weather",
+                "si": "අද කාලගුණය"
+              },
+              "mainPrompt": {
+                "en": "Look outside or think about today. Tell me what the weather is like and what it is good for.",
+                "si": "එළිය දිහා බලලා, නැත්නම් අද ගැන හිතලා, අද කාලගුණය කොහොමද කියලා කියන්න. මේ වගේ දවසක කරන්න හොඳ මොනවද?"
+              },
+              "followUps": [
+                {
+                  "en": "What was the weather like yesterday?",
+                  "si": "ඊයේ කාලගුණය කොහොමද තිබ්බේ?"
+                },
+                {
+                  "en": "What do you think tomorrow will be like?",
+                  "si": "හෙට කොහොම වෙයි කියලද ඔයා හිතන්නේ?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.weather-and-rain.04",
+              "level": "open",
+              "title": {
+                "en": "Where rain comes from",
+                "si": "වැස්ස එන්නේ කොහෙන්ද"
+              },
+              "mainPrompt": {
+                "en": "Where do you think rain comes from? Tell me your idea.",
+                "si": "වැස්ස එන්නේ කොහෙන්ද කියලා ඔයා හිතන්නේ? ඔයාගේ අදහස කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "Where does the water go after it rains?",
+                  "si": "වැස්සෙන් පස්සේ වතුර කොහෙද යන්නේ?"
+                },
+                {
+                  "en": "Why do farmers need rain?",
+                  "si": "ගොවියන්ට වැස්ස ඕනේ ඇයි?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.weather-and-rain.05",
+              "level": "open",
+              "title": {
+                "en": "Choosing the weather",
+                "si": "කාලගුණය මම තෝරනවා නම්"
+              },
+              "mainPrompt": {
+                "en": "If you could choose the weather for a whole week, what would you choose for each day and why?",
+                "si": "මුළු සතියකටම කාලගුණය ඔයාට තෝරන්න පුළුවන් නම්, හැම දවසටම ඔයා තෝරන්නේ මොනවද? ඇයි?"
+              },
+              "followUps": [
+                {
+                  "en": "What would you do if it snowed one day?",
+                  "si": "එක දවසක් හිම වැටුණොත් ඔයා මොනවද කරන්නේ?"
+                },
+                {
+                  "en": "What would happen if it never rained?",
+                  "si": "කවදාවත් වැස්ස නැති වුණොත් මොකද වෙන්නේ?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "helping-at-home",
+          "title": {
+            "en": "Helping at home",
+            "si": "ගෙදර වැඩට උදව්"
+          },
+          "icon": "🧹",
+          "topics": [
+            {
+              "id": "5-10.helping-at-home.01",
+              "level": "concrete",
+              "title": {
+                "en": "How I help at home",
+                "si": "මම ගෙදරට උදව් කරන හැටි"
+              },
+              "mainPrompt": {
+                "en": "What jobs do you do to help at home? Tell me how you do one of them.",
+                "si": "ගෙදර උදව් කරන්න ඔයා කරන වැඩ මොනවද? ඒවායින් එකක් කරන හැටි කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "Which job do you like the most?",
+                  "si": "ඔයා වැඩියෙන්ම කැමති වැඩේ මොකද්ද?"
+                },
+                {
+                  "en": "Who helps you?",
+                  "si": "ඔයාට උදව් කරන්නේ කවුද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.helping-at-home.02",
+              "level": "concrete",
+              "title": {
+                "en": "Tidying my room",
+                "si": "මගේ කාමරේ අස්කරමු"
+              },
+              "mainPrompt": {
+                "en": "Tell me how you tidy your room or your school bag, step by step.",
+                "si": "ඔයාගේ කාමරේ, නැත්නම් ඉස්කෝලේ බෑග් එක අස්කරන හැටි පියවරෙන් පියවර කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "Where do your toys and books go?",
+                  "si": "ඔයාගේ සෙල්ලම් බඩු, පොත් තියන්නේ කොහෙද?"
+                },
+                {
+                  "en": "How does it feel when everything is tidy?",
+                  "si": "හැමදේම පිළිවෙළට තියෙනකොට ඔයාට කොහොමද දැනෙන්නේ?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.helping-at-home.03",
+              "level": "concrete",
+              "title": {
+                "en": "Shopping with family",
+                "si": "පවුලේ අය එක්ක කඩේ යමු"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a time you went to the shop or the market with your family. What did you buy?",
+                "si": "ඔයා පවුලේ අය එක්ක කඩේට, නැත්නම් පොළට ගිය දවසක් ගැන කියන්න. ඔයාලා ගත්තේ මොනවද?"
+              },
+              "followUps": [
+                {
+                  "en": "What did you carry home?",
+                  "si": "ඔයා අරන් ආවේ මොනවද?"
+                },
+                {
+                  "en": "What did you see at the market?",
+                  "si": "පොළේදී ඔයා දැක්කේ මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.helping-at-home.04",
+              "level": "open",
+              "title": {
+                "en": "A robot helper",
+                "si": "උදව් කරන රොබෝ"
+              },
+              "mainPrompt": {
+                "en": "If you had a robot to help at home, what jobs would you give it?",
+                "si": "ගෙදර උදව් කරන්න ඔයාට රොබෝ කෙනෙක් හිටියොත්, ඔයා ඒකට දෙන වැඩ මොනවද?"
+              },
+              "followUps": [
+                {
+                  "en": "What would you do with the extra time?",
+                  "si": "ඉතුරු වෙන වෙලාවේ ඔයා මොනවද කරන්නේ?"
+                },
+                {
+                  "en": "What funny mistakes could it make?",
+                  "si": "ඒ රොබෝ කරන්න පුළුවන් හිනායන වැරදි මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.helping-at-home.05",
+              "level": "open",
+              "title": {
+                "en": "Why we help each other",
+                "si": "අපි එකිනෙකාට උදව් කරන්නේ ඇයි"
+              },
+              "mainPrompt": {
+                "en": "Why is it important for everyone in a home to help? What would happen if nobody helped?",
+                "si": "ගෙදර හැමෝම උදව් කරන එක වැදගත් ඇයි? කවුරුත් උදව් නොකළොත් මොකද වෙන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "How do you feel after you help someone?",
+                  "si": "කාට හරි උදව් කළාට පස්සේ ඔයාට කොහොමද දැනෙන්නේ?"
+                },
+                {
+                  "en": "How can you help a neighbour?",
+                  "si": "ළඟ ගෙදරක ඉන්න කෙනෙකුට ඔයාට උදව් කරන්න පුළුවන් කොහොමද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "holidays-and-trips",
+          "title": {
+            "en": "Holidays and trips",
+            "si": "නිවාඩු සහ ගමන්"
+          },
+          "icon": "🧳",
+          "topics": [
+            {
+              "id": "5-10.holidays-and-trips.01",
+              "level": "concrete",
+              "title": {
+                "en": "A trip I remember",
+                "si": "මට මතක ගමනක්"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a trip you went on, like to Kandy, Nuwara Eliya, Anuradhapura or your village.",
+                "si": "ඔයා ගිය ගමනක් ගැන කියන්න. මහනුවර, නුවරඑළිය, අනුරාධපුරය, නැත්නම් ඔයාගේ ගමට වගේ."
+              },
+              "followUps": [
+                {
+                  "en": "How did you travel there?",
+                  "si": "ඔයාලා එහෙට ගියේ කොහොමද?"
+                },
+                {
+                  "en": "What did you see there?",
+                  "si": "එතන ඔයා දැක්කේ මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.holidays-and-trips.02",
+              "level": "concrete",
+              "title": {
+                "en": "My school holidays",
+                "si": "මගේ ඉස්කෝලේ නිවාඩුව"
+              },
+              "mainPrompt": {
+                "en": "What did you do in your last school holidays?",
+                "si": "පහුගිය ඉස්කෝලේ නිවාඩුවේ ඔයා මොනවද කළේ?"
+              },
+              "followUps": [
+                {
+                  "en": "What was the best day?",
+                  "si": "හොඳම දවස මොකද්ද?"
+                },
+                {
+                  "en": "Who did you spend the most time with?",
+                  "si": "ඔයා නිවාඩුවේ වැඩියෙන්ම හිටියේ කවුරු එක්කද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.holidays-and-trips.03",
+              "level": "concrete",
+              "title": {
+                "en": "Packing a bag",
+                "si": "ගමනකට බෑග් එක ලෑස්ති කරමු"
+              },
+              "mainPrompt": {
+                "en": "If you were going on a trip tomorrow, what would you put in your bag? Tell me everything.",
+                "si": "ඔයා හෙට ගමනක් යනවා නම්, ඔයාගේ බෑග් එකට දාන හැම දේම කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What is the most important thing to bring?",
+                  "si": "අරන් යන්නම ඕනේ වැදගත්ම දේ මොකද්ද?"
+                },
+                {
+                  "en": "What snacks would you take?",
+                  "si": "ඔයා කන්න අරන් යන්නේ මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.holidays-and-trips.04",
+              "level": "open",
+              "title": {
+                "en": "A trip anywhere in the world",
+                "si": "ලෝකේ ඕනම තැනකට ගමනක්"
+              },
+              "mainPrompt": {
+                "en": "If you could go anywhere in the world, where would you go and what would you do there?",
+                "si": "ඔයාට ලෝකේ ඕනම තැනකට යන්න පුළුවන් නම්, ඔයා කොහෙද යන්නේ? එතන ඔයා මොනවද කරන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "Who would you take?",
+                  "si": "ඔයා එක්කන් යන්නේ කාවද?"
+                },
+                {
+                  "en": "What would you bring back?",
+                  "si": "ආපහු එනකොට ඔයා ගේන්නේ මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.holidays-and-trips.05",
+              "level": "open",
+              "title": {
+                "en": "Why we like to travel",
+                "si": "ගමන් යන්න අපි කැමති ඇයි"
+              },
+              "mainPrompt": {
+                "en": "Why do you think people like going on trips? What can we learn by visiting new places?",
+                "si": "මිනිස්සු ගමන් යන්න කැමති ඇයි කියලා ඔයා හිතන්නේ? අලුත් තැන්වලට යනකොට අපිට ඉගෙනගන්න පුළුවන් මොනවද?"
+              },
+              "followUps": [
+                {
+                  "en": "Which place in Sri Lanka should every child visit?",
+                  "si": "හැම ළමයෙක්ම යන්න ඕනේ ලංකාවේ තැන මොකද්ද?"
+                },
+                {
+                  "en": "What makes that place special?",
+                  "si": "ඒ තැන විශේෂ වෙන්නේ මොකද නිසාද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "dreams-and-pretend",
+          "title": {
+            "en": "Dreams and pretend",
+            "si": "හීන සහ හිතළු"
+          },
+          "icon": "🌈",
+          "topics": [
+            {
+              "id": "5-10.dreams-and-pretend.01",
+              "level": "concrete",
+              "title": {
+                "en": "Playing pretend",
+                "si": "බොරු සෙල්ලම්"
+              },
+              "mainPrompt": {
+                "en": "What do you like to pretend to be when you play, like a teacher, a doctor or a shopkeeper? Tell me about it.",
+                "si": "සෙල්ලම් කරනකොට ඔයා ටීචර් කෙනෙක්, දොස්තර කෙනෙක්, නැත්නම් කඩේ මුදලාලි කෙනෙක් වගේ මොකක් වෙන්නද කැමති? ඒ ගැන කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "Who plays with you?",
+                  "si": "ඔයා එක්ක සෙල්ලම් කරන්නේ කවුද?"
+                },
+                {
+                  "en": "What things do you use?",
+                  "si": "ඒකට ඔයා පාවිච්චි කරන බඩු මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.dreams-and-pretend.02",
+              "level": "concrete",
+              "title": {
+                "en": "What I want to be",
+                "si": "ලොකු වුණාම මම වෙන්න කැමති"
+              },
+              "mainPrompt": {
+                "en": "What do you want to be when you grow up? Tell me what you would do every day.",
+                "si": "ඔයා ලොකු වුණාම මොකක් වෙන්නද කැමති? ඔයා හැමදාම කරන වැඩ ගැන කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "Why do you want to do that?",
+                  "si": "ඔයා ඒකට කැමති ඇයි?"
+                },
+                {
+                  "en": "What will you need to learn?",
+                  "si": "ඒකට ඔයා ඉගෙනගන්න ඕනේ මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.dreams-and-pretend.03",
+              "level": "concrete",
+              "title": {
+                "en": "A happy dream",
+                "si": "සතුටු හීනයක්"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a happy or funny dream you remember.",
+                "si": "ඔයාට මතක සතුටු, නැත්නම් හිනායන හීනයක් ගැන කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "Who was in the dream?",
+                  "si": "හීනේ හිටියේ කවුද?"
+                },
+                {
+                  "en": "What happened at the end?",
+                  "si": "අන්තිමට මොකද වුණේ?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.dreams-and-pretend.04",
+              "level": "open",
+              "title": {
+                "en": "Superpowers",
+                "si": "සුපිරි බලයක්"
+              },
+              "mainPrompt": {
+                "en": "If you could have one superpower, what would it be and how would you use it?",
+                "si": "ඔයාට එක සුපිරි බලයක් ලැබුණොත්, ඒ මොකද්ද? ඔයා ඒක පාවිච්චි කරන්නේ කොහොමද?"
+              },
+              "followUps": [
+                {
+                  "en": "Who would you help with it?",
+                  "si": "ඒකෙන් ඔයා උදව් කරන්නේ කාටද?"
+                },
+                {
+                  "en": "What would your costume look like?",
+                  "si": "ඔයාගේ ඇඳුම පේන්නේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "5-10.dreams-and-pretend.05",
+              "level": "open",
+              "title": {
+                "en": "A magic door",
+                "si": "මැජික් දොරක්"
+              },
+              "mainPrompt": {
+                "en": "Imagine you found a magic door in your house. Where does it take you, and what happens next?",
+                "si": "ඔයාගේ ගෙදර මැජික් දොරක් හම්බවුණා කියලා හිතන්න. ඒකෙන් ඔයා යන්නේ කොහෙද? ඊට පස්සේ මොකද වෙන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "Who do you meet there?",
+                  "si": "එතනදී ඔයා මුණගැහෙන්නේ කාවද?"
+                },
+                {
+                  "en": "How do you get back home?",
+                  "si": "ඔයා ආපහු ගෙදර එන්නේ කොහොමද?"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "11-14",
+      "minAge": 11,
+      "maxAge": 14,
+      "categories": [
+        {
+          "id": "sports",
+          "title": {
+            "en": "Sports",
+            "si": "ක්‍රීඩා"
+          },
+          "icon": "🏏",
+          "topics": [
+            {
+              "id": "11-14.sports.01",
+              "level": "concrete",
+              "title": {
+                "en": "The sport I play or follow",
+                "si": "මම කරන හෝ බලන ක්‍රීඩාව"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a sport you play or follow. How did you get into it, and what do you enjoy about it?",
+                "si": "ඔයා කරන, නැත්නම් බලන ක්‍රීඩාවක් ගැන කියන්න. ඔයා ඒකට ආස වුණේ කොහොමද? ඒකේ ඔයා කැමතිම දේ මොකද්ද?"
+              },
+              "followUps": [
+                {
+                  "en": "Describe a match or game you will never forget.",
+                  "si": "ඔයාට කවදාවත් අමතක නොවෙන තරගයක් ගැන කියන්න."
+                },
+                {
+                  "en": "How do you practise or train?",
+                  "si": "ඔයා පුහුණු වෙන්නේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.sports.02",
+              "level": "concrete",
+              "title": {
+                "en": "A big match I watched",
+                "si": "මම බලපු ලොකු තරගයක්"
+              },
+              "mainPrompt": {
+                "en": "Describe a big match you watched, like an international cricket match or a Big Match between schools. What happened from start to finish?",
+                "si": "ඔයා බලපු ලොකු තරගයක් ගැන කියන්න. ජාත්‍යන්තර ක්‍රිකට් තරගයක් හරි, ඉස්කෝල දෙකක් අතර බිග් මැච් එකක් හරි. මුල ඉඳන් අගට මොකද වුණේ?"
+              },
+              "followUps": [
+                {
+                  "en": "What was the atmosphere like?",
+                  "si": "එතන වාතාවරණය කොහොමද තිබ්බේ?"
+                },
+                {
+                  "en": "Which player stood out, and why?",
+                  "si": "වැඩියෙන්ම කැපී පෙනුණු ක්‍රීඩකයා කවුද? ඇයි?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.sports.03",
+              "level": "open",
+              "title": {
+                "en": "What sport teaches us",
+                "si": "ක්‍රීඩාවෙන් අපි ඉගෙනගන්න දේ"
+              },
+              "mainPrompt": {
+                "en": "What do you think sport teaches young people that they can't learn in a classroom?",
+                "si": "පන්ති කාමරේදී ඉගෙනගන්න බැරි, ඒත් ක්‍රීඩාවෙන් තරුණ අයට ඉගෙනගන්න පුළුවන් දේවල් මොනවද කියලා ඔයා හිතන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "How should a team handle a loss?",
+                  "si": "පරාජයකදී කණ්ඩායමක් හැසිරෙන්න ඕනේ කොහොමද?"
+                },
+                {
+                  "en": "How important is winning, compared with playing well?",
+                  "si": "හොඳට සෙල්ලම් කරනවට වඩා දිනන එක කොච්චර වැදගත්ද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.sports.04",
+              "level": "open",
+              "title": {
+                "en": "Inventing a new sport",
+                "si": "අලුත් ක්‍රීඩාවක් හදමු"
+              },
+              "mainPrompt": {
+                "en": "Invent a new sport. Explain the rules, the equipment and how a team wins.",
+                "si": "අලුත් ක්‍රීඩාවක් හදන්න. ඒකේ නීති, ඕනේ කරන උපකරණ, කණ්ඩායමක් දිනන හැටි පැහැදිලි කරන්න."
+              },
+              "followUps": [
+                {
+                  "en": "Where would it be played?",
+                  "si": "ඒක සෙල්ලම් කරන්නේ කොහෙද?"
+                },
+                {
+                  "en": "Why would people want to watch it?",
+                  "si": "මිනිස්සු ඒක බලන්න කැමති වෙන්නේ ඇයි?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.sports.05",
+              "level": "open",
+              "title": {
+                "en": "Role models in sport",
+                "si": "ක්‍රීඩාවේ ආදර්ශවත් චරිත"
+              },
+              "mainPrompt": {
+                "en": "Many sports stars are famous and admired. What makes someone a good role model in sport?",
+                "si": "ගොඩක් ක්‍රීඩකයෝ ප්‍රසිද්ධයි, මිනිස්සු එයාලට ආදරෙයි. ක්‍රීඩාවේ හොඳ ආදර්ශයක් වෙන කෙනෙක් කොහොම කෙනෙක්ද?"
+              },
+              "followUps": [
+                {
+                  "en": "Which sports person do you admire, and why?",
+                  "si": "ඔයා අගය කරන ක්‍රීඩකයා කවුද? ඇයි?"
+                },
+                {
+                  "en": "How should famous players behave on and off the field?",
+                  "si": "ප්‍රසිද්ධ ක්‍රීඩකයෝ පිටිය ඇතුළෙත් එළියෙත් හැසිරෙන්න ඕනේ කොහොමද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "technology-and-games",
+          "title": {
+            "en": "Technology and games",
+            "si": "තාක්ෂණය සහ ගේම්ස්"
+          },
+          "icon": "🎮",
+          "topics": [
+            {
+              "id": "11-14.technology-and-games.01",
+              "level": "concrete",
+              "title": {
+                "en": "A game I enjoy",
+                "si": "මම කැමති ගේම් එකක්"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a video game or mobile game you enjoy. What is it about and how do you play it?",
+                "si": "ඔයා කැමති වීඩියෝ ගේම් එකක් හරි ෆෝන් ගේම් එකක් හරි ගැන කියන්න. ඒක මොකක් ගැනද? ඒක සෙල්ලම් කරන්නේ කොහොමද?"
+              },
+              "followUps": [
+                {
+                  "en": "What is the hardest part?",
+                  "si": "ඒකේ අමාරුම කොටස මොකද්ද?"
+                },
+                {
+                  "en": "Who do you play with?",
+                  "si": "ඔයා ඒක සෙල්ලම් කරන්නේ කවුරු එක්කද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.technology-and-games.02",
+              "level": "concrete",
+              "title": {
+                "en": "A device I use",
+                "si": "මම පාවිච්චි කරන උපකරණයක්"
+              },
+              "mainPrompt": {
+                "en": "Describe a device you use often, like a phone, tablet or computer. What do you use it for during a normal day?",
+                "si": "ඔයා නිතර පාවිච්චි කරන ෆෝන් එකක්, ටැබ් එකක්, නැත්නම් කම්පියුටර් එකක් වගේ උපකරණයක් ගැන කියන්න. සාමාන්‍ය දවසක ඔයා ඒක පාවිච්චි කරන්නේ මොනවටද?"
+              },
+              "followUps": [
+                {
+                  "en": "What is the most useful thing it does?",
+                  "si": "ඒකෙන් වෙන වැඩියෙන්ම ප්‍රයෝජනවත් දේ මොකද්ද?"
+                },
+                {
+                  "en": "How did you learn to use it?",
+                  "si": "ඔයා ඒක පාවිච්චි කරන්න ඉගෙනගත්තේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.technology-and-games.03",
+              "level": "open",
+              "title": {
+                "en": "Designing my own game",
+                "si": "මගේම ගේම් එකක්"
+              },
+              "mainPrompt": {
+                "en": "If you could design your own video game, what would the story, characters and levels be?",
+                "si": "ඔයාටම වීඩියෝ ගේම් එකක් හදන්න පුළුවන් නම්, ඒකේ කතාව, චරිත, ලෙවල්ස් මොනවද?"
+              },
+              "followUps": [
+                {
+                  "en": "What would make it different from other games?",
+                  "si": "අනිත් ගේම්වලට වඩා ඒක වෙනස් වෙන්නේ කොහොමද?"
+                },
+                {
+                  "en": "What could players learn from it?",
+                  "si": "ඒකෙන් සෙල්ලම් කරන අයට ඉගෙනගන්න පුළුවන් මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.technology-and-games.04",
+              "level": "open",
+              "title": {
+                "en": "Technology: help or harm?",
+                "si": "තාක්ෂණය: උදව්වක්ද, හානියක්ද?"
+              },
+              "mainPrompt": {
+                "en": "In what ways does technology make life better for young people, and in what ways can it cause problems?",
+                "si": "තාක්ෂණය තරුණ අයගේ ජීවිතය හොඳ කරන්නේ කොහොමද? ඒකෙන් ප්‍රශ්න ඇති වෙන්න පුළුවන් කොහොමද?"
+              },
+              "followUps": [
+                {
+                  "en": "How much screen time do you think is right in a day, and why?",
+                  "si": "දවසකට ස්ක්‍රීන් එක බලන්න හොඳ කොච්චර වෙලාවක්ද කියලා ඔයා හිතන්නේ? ඇයි?"
+                },
+                {
+                  "en": "What do you think life was like before smartphones?",
+                  "si": "ස්මාර්ට් ෆෝන් නැති කාලේ ජීවිතය කොහොම වෙන්න ඇතිද කියලා ඔයා හිතන්නේ?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.technology-and-games.05",
+              "level": "open",
+              "title": {
+                "en": "Technology in 2050",
+                "si": "2050 දී තාක්ෂණය"
+              },
+              "mainPrompt": {
+                "en": "What do you think technology will be like in the year 2050? Describe a normal day.",
+                "si": "2050 අවුරුද්දේ තාක්ෂණය කොහොම වෙයි කියලද ඔයා හිතන්නේ? එදා සාමාන්‍ය දවසක් ගැන විස්තර කරන්න."
+              },
+              "followUps": [
+                {
+                  "en": "How will schools be different?",
+                  "si": "ඉස්කෝල වෙනස් වෙන්නේ කොහොමද?"
+                },
+                {
+                  "en": "What would you be most excited about?",
+                  "si": "ඔයා වැඩියෙන්ම ආසාවෙන් බලාපොරොත්තු වෙන දේ මොකද්ද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "music",
+          "title": {
+            "en": "Music",
+            "si": "සංගීතය"
+          },
+          "icon": "🎧",
+          "topics": [
+            {
+              "id": "11-14.music.01",
+              "level": "concrete",
+              "title": {
+                "en": "Music I listen to",
+                "si": "මම අහන සංගීතය"
+              },
+              "mainPrompt": {
+                "en": "What kind of music do you listen to? Tell me about a song or artist you like right now.",
+                "si": "ඔයා අහන්නේ මොන වගේ සංගීතයද? දැනට ඔයා කැමති සින්දුවක් හරි ගායකයෙක් හරි ගැන කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "When and where do you usually listen to music?",
+                  "si": "ඔයා වැඩිපුරම සංගීතය අහන්නේ කවදද, කොහෙදද?"
+                },
+                {
+                  "en": "What do the lyrics mean to you?",
+                  "si": "ඒ සින්දුවේ පද ඔයාට දැනෙන්නේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.music.02",
+              "level": "concrete",
+              "title": {
+                "en": "A performance I saw or took part in",
+                "si": "මම දැකපු හෝ සහභාගි වුණු ප්‍රසංගයක්"
+              },
+              "mainPrompt": {
+                "en": "Describe a concert, school performance or music event you took part in or watched.",
+                "si": "ඔයා සහභාගි වුණු, නැත්නම් බලපු ප්‍රසංගයක්, ඉස්කෝලේ වැඩසටහනක්, නැත්නම් සංගීත අවස්ථාවක් ගැන විස්තර කරන්න."
+              },
+              "followUps": [
+                {
+                  "en": "How did the performers prepare?",
+                  "si": "ඒකට ලෑස්ති වුණේ කොහොමද?"
+                },
+                {
+                  "en": "What was the best moment?",
+                  "si": "හොඳම මොහොත මොකද්ද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.music.03",
+              "level": "open",
+              "title": {
+                "en": "Why music moves us",
+                "si": "සංගීතය අපිට දැනෙන්නේ ඇයි"
+              },
+              "mainPrompt": {
+                "en": "Why do you think music can change how people feel? Give some examples.",
+                "si": "සංගීතයට මිනිස්සුන්ගේ හැඟීම් වෙනස් කරන්න පුළුවන් ඇයි කියලා ඔයා හිතන්නේ? උදාහරණ කීපයක් කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What music would you play to calm down, and why?",
+                  "si": "හිත සන්සුන් කරගන්න ඔයා අහන්නේ මොන සංගීතයද? ඇයි?"
+                },
+                {
+                  "en": "How is music used in films or adverts?",
+                  "si": "චිත්‍රපටවල, දැන්වීම්වල සංගීතය පාවිච්චි කරන්නේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.music.04",
+              "level": "open",
+              "title": {
+                "en": "Traditional and modern music",
+                "si": "සාම්ප්‍රදායික සහ නූතන සංගීතය"
+              },
+              "mainPrompt": {
+                "en": "How is traditional Sri Lankan music, like drumming or folk songs, different from the music young people listen to today?",
+                "si": "බෙර වාදනය, ජන ගී වගේ ලංකාවේ සාම්ප්‍රදායික සංගීතය, අද තරුණ අය අහන සංගීතයට වඩා වෙනස් වෙන්නේ කොහොමද?"
+              },
+              "followUps": [
+                {
+                  "en": "Why is it important to keep traditional music alive?",
+                  "si": "සාම්ප්‍රදායික සංගීතය රැකගන්න එක වැදගත් ඇයි?"
+                },
+                {
+                  "en": "How could old and new music be mixed?",
+                  "si": "පරණ සංගීතයයි අලුත් සංගීතයයි එකතු කරන්න පුළුවන් කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.music.05",
+              "level": "open",
+              "title": {
+                "en": "Writing a song",
+                "si": "සින්දුවක් ලියමු"
+              },
+              "mainPrompt": {
+                "en": "If you wrote a song, what would it be about and what message would it give?",
+                "si": "ඔයා සින්දුවක් ලිව්වොත්, ඒක මොකක් ගැනද? ඒකෙන් දෙන පණිවිඩය මොකද්ද?"
+              },
+              "followUps": [
+                {
+                  "en": "What style of music would it be?",
+                  "si": "ඒක මොන වගේ සංගීතයක්ද?"
+                },
+                {
+                  "en": "Who would you like to sing it?",
+                  "si": "ඒක කියනවා අහන්න ඔයා කැමති කවුද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "movies-and-tv",
+          "title": {
+            "en": "Movies and TV",
+            "si": "චිත්‍රපට සහ ටීවී"
+          },
+          "icon": "🎬",
+          "topics": [
+            {
+              "id": "11-14.movies-and-tv.01",
+              "level": "concrete",
+              "title": {
+                "en": "A film or show I liked",
+                "si": "මම කැමති චිත්‍රපටයක් හෝ වැඩසටහනක්"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a film or TV show you enjoyed. What is the story?",
+                "si": "ඔයා කැමති වුණු චිත්‍රපටයක් හරි ටීවී වැඩසටහනක් හරි ගැන කියන්න. ඒකේ කතාව මොකද්ද?"
+              },
+              "followUps": [
+                {
+                  "en": "Which character did you like most, and why?",
+                  "si": "ඔයා වැඩියෙන්ම කැමති චරිතය කවුද? ඇයි?"
+                },
+                {
+                  "en": "Which scene do you remember best?",
+                  "si": "ඔයාට හොඳටම මතක දර්ශනය මොකද්ද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.movies-and-tv.02",
+              "level": "concrete",
+              "title": {
+                "en": "How I watch",
+                "si": "මම චිත්‍රපට බලන විදිය"
+              },
+              "mainPrompt": {
+                "en": "Describe how and where you usually watch films or shows, and who you watch them with.",
+                "si": "ඔයා වැඩිපුරම චිත්‍රපට, වැඩසටහන් බලන්නේ කොහොමද, කොහෙද, කවුරු එක්කද කියලා විස්තර කරන්න."
+              },
+              "followUps": [
+                {
+                  "en": "Tell me about a time you watched a film at the cinema.",
+                  "si": "ඔයා සිනමා ශාලාවකට ගිහින් චිත්‍රපටයක් බලපු දවසක් ගැන කියන්න."
+                },
+                {
+                  "en": "How do you choose what to watch?",
+                  "si": "බලන්න දේ ඔයා තෝරගන්නේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.movies-and-tv.03",
+              "level": "open",
+              "title": {
+                "en": "Changing the ending",
+                "si": "අවසානය වෙනස් කරමු"
+              },
+              "mainPrompt": {
+                "en": "Think of a film or story you know. If you could change its ending, how would you change it and why?",
+                "si": "ඔයා දන්න චිත්‍රපටයක් හරි කතාවක් හරි ගැන හිතන්න. ඒකේ අවසානය වෙනස් කරන්න පුළුවන් නම්, ඔයා ඒක වෙනස් කරන්නේ කොහොමද? ඇයි?"
+              },
+              "followUps": [
+                {
+                  "en": "How would the characters feel?",
+                  "si": "චරිතවලට කොහොමද දැනෙන්නේ?"
+                },
+                {
+                  "en": "How would the message of the story change?",
+                  "si": "කතාවේ පණිවිඩය වෙනස් වෙන්නේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.movies-and-tv.04",
+              "level": "open",
+              "title": {
+                "en": "Making my own film",
+                "si": "මගේම චිත්‍රපටයක්"
+              },
+              "mainPrompt": {
+                "en": "If you could make a film about Sri Lanka, what would it be about and where would you film it?",
+                "si": "ඔයාට ලංකාව ගැන චිත්‍රපටයක් හදන්න පුළුවන් නම්, ඒක මොකක් ගැනද? ඔයා ඒක රූගත කරන්නේ කොහෙද?"
+              },
+              "followUps": [
+                {
+                  "en": "Who would be the main character?",
+                  "si": "ප්‍රධාන චරිතය කවුද?"
+                },
+                {
+                  "en": "What would you want viewers to feel?",
+                  "si": "බලන අයට මොනවා දැනෙන්න ඕනෙද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.movies-and-tv.05",
+              "level": "open",
+              "title": {
+                "en": "How TV influences us",
+                "si": "ටීවී අපිට බලපාන හැටි"
+              },
+              "mainPrompt": {
+                "en": "How do films and TV shows influence what young people think and do?",
+                "si": "චිත්‍රපට සහ ටීවී වැඩසටහන් තරුණ අය හිතන, කරන දේවල්වලට බලපාන්නේ කොහොමද?"
+              },
+              "followUps": [
+                {
+                  "en": "Tell me about a show that teaches something good.",
+                  "si": "හොඳ දෙයක් උගන්නන වැඩසටහනක් ගැන කියන්න."
+                },
+                {
+                  "en": "How should young people choose what to watch?",
+                  "si": "තරුණ අය බලන්න දේවල් තෝරගන්න ඕනේ කොහොමද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "books-and-stories",
+          "title": {
+            "en": "Books and stories",
+            "si": "පොත් සහ කතා"
+          },
+          "icon": "📖",
+          "topics": [
+            {
+              "id": "11-14.books-and-stories.01",
+              "level": "concrete",
+              "title": {
+                "en": "A book I enjoyed",
+                "si": "මම කැමති වුණු පොතක්"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a book you enjoyed reading. What happens in it?",
+                "si": "ඔයා කියවලා කැමති වුණු පොතක් ගැන කියන්න. ඒකේ මොනවද වෙන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "Who is the main character, and what are they like?",
+                  "si": "ප්‍රධාන චරිතය කවුද? එයා කොහොම කෙනෙක්ද?"
+                },
+                {
+                  "en": "Where and when do you like to read?",
+                  "si": "ඔයා කියවන්න කැමති කොහෙද, කවදද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.books-and-stories.02",
+              "level": "concrete",
+              "title": {
+                "en": "A story from my family",
+                "si": "මගේ පවුලේ කතාවක්"
+              },
+              "mainPrompt": {
+                "en": "Tell me a story an older family member told you, about their childhood or about the old days.",
+                "si": "ඔයාගේ පවුලේ වැඩිහිටියෙක් එයාගේ ළමා කාලේ ගැන, නැත්නම් පරණ කාලේ ගැන ඔයාට කියපු කතාවක් කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "How was life different then?",
+                  "si": "එදා ජීවිතය අදට වඩා වෙනස් වුණේ කොහොමද?"
+                },
+                {
+                  "en": "Why do you remember this story?",
+                  "si": "මේ කතාව ඔයාට මතක ඇයි?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.books-and-stories.03",
+              "level": "open",
+              "title": {
+                "en": "Writing my own story",
+                "si": "මගේම කතාවක්"
+              },
+              "mainPrompt": {
+                "en": "If you wrote a story, what kind would it be and what would happen in it?",
+                "si": "ඔයා කතාවක් ලිව්වොත්, ඒක මොන වගේ කතාවක්ද? ඒකේ මොනවද වෙන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "How would it begin?",
+                  "si": "ඒක පටන් ගන්නේ කොහොමද?"
+                },
+                {
+                  "en": "What problem would the hero have to solve?",
+                  "si": "ප්‍රධාන චරිතයට විසඳන්න වෙන ප්‍රශ්නය මොකද්ද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.books-and-stories.04",
+              "level": "open",
+              "title": {
+                "en": "Books or screens",
+                "si": "පොත්ද තිරද"
+              },
+              "mainPrompt": {
+                "en": "Some people say reading books is better than watching videos. What do you think, and why?",
+                "si": "සමහරු කියනවා වීඩියෝ බලනවට වඩා පොත් කියවන එක හොඳයි කියලා. ඔයා හිතන්නේ මොකද්ද? ඇයි?"
+              },
+              "followUps": [
+                {
+                  "en": "What can a book do that a film can't?",
+                  "si": "චිත්‍රපටයකට කරන්න බැරි, පොතකට කරන්න පුළුවන් දේ මොකද්ද?"
+                },
+                {
+                  "en": "How could more young people be encouraged to read?",
+                  "si": "තවත් තරුණ අයව කියවන්න පොළඹවන්නේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.books-and-stories.05",
+              "level": "open",
+              "title": {
+                "en": "Meeting a character",
+                "si": "චරිතයක් මුණගැහුණොත්"
+              },
+              "mainPrompt": {
+                "en": "If you could meet a character from any book, who would it be and what would you talk about?",
+                "si": "ඕනම පොතක චරිතයක් මුණගැහෙන්න පුළුවන් නම්, ඔයා මුණගැහෙන්නේ කාවද? ඔයාලා කතා කරන්නේ මොනවා ගැනද?"
+              },
+              "followUps": [
+                {
+                  "en": "What advice would you give them?",
+                  "si": "ඔයා එයාට දෙන උපදෙස මොකද්ද?"
+                },
+                {
+                  "en": "What would you want to learn from them?",
+                  "si": "ඔයා එයාගෙන් ඉගෙනගන්න කැමති මොනවද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "science",
+          "title": {
+            "en": "Science",
+            "si": "විද්‍යාව"
+          },
+          "icon": "🔬",
+          "topics": [
+            {
+              "id": "11-14.science.01",
+              "level": "concrete",
+              "title": {
+                "en": "An experiment I did",
+                "si": "මම කරපු පරීක්ෂණයක්"
+              },
+              "mainPrompt": {
+                "en": "Describe a science experiment or activity you did at school or at home. What did you do and what happened?",
+                "si": "ඉස්කෝලේ හරි ගෙදර හරි ඔයා කරපු විද්‍යා පරීක්ෂණයක් ගැන විස්තර කරන්න. ඔයා මොනවද කළේ? මොකද වුණේ?"
+              },
+              "followUps": [
+                {
+                  "en": "What did you expect to happen?",
+                  "si": "වෙයි කියලා ඔයා බලාපොරොත්තු වුණේ මොකද්ද?"
+                },
+                {
+                  "en": "What did you learn from it?",
+                  "si": "ඒකෙන් ඔයා ඉගෙනගත්තේ මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.science.02",
+              "level": "concrete",
+              "title": {
+                "en": "Science in everyday life",
+                "si": "එදිනෙදා ජීවිතයේ විද්‍යාව"
+              },
+              "mainPrompt": {
+                "en": "Choose something you use every day, like a fan, a fridge or a bicycle, and explain how you think it works.",
+                "si": "ෆෑන් එකක්, ෆ්‍රිජ් එකක්, නැත්නම් බයිසිකලයක් වගේ ඔයා හැමදාම පාවිච්චි කරන දෙයක් තෝරලා, ඒක වැඩ කරන්නේ කොහොමද කියලා ඔයා හිතන විදියට පැහැදිලි කරන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What would life be like without it?",
+                  "si": "ඒක නැත්නම් ජීවිතය කොහොම වෙයිද?"
+                },
+                {
+                  "en": "How could it be improved?",
+                  "si": "ඒක තවත් හොඳ කරන්න පුළුවන් කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.science.03",
+              "level": "open",
+              "title": {
+                "en": "A question I wonder about",
+                "si": "මම නිතර හිතන ප්‍රශ්නයක්"
+              },
+              "mainPrompt": {
+                "en": "What is a big science question you wonder about, like why the sky is blue or how the brain works? What do you think the answer is?",
+                "si": "ඔයා නිතර හිතන ලොකු විද්‍යා ප්‍රශ්නයක් මොකද්ද? අහස නිල් ඇයි, නැත්නම් මොළය වැඩ කරන්නේ කොහොමද වගේ. ඔයා හිතන උත්තරය මොකද්ද?"
+              },
+              "followUps": [
+                {
+                  "en": "How could you find out?",
+                  "si": "ඒක හොයාගන්න ඔයාට පුළුවන් කොහොමද?"
+                },
+                {
+                  "en": "Why does this question interest you?",
+                  "si": "මේ ප්‍රශ්නයට ඔයා ආස ඇයි?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.science.04",
+              "level": "open",
+              "title": {
+                "en": "If I were a scientist",
+                "si": "මම විද්‍යාඥයෙක් නම්"
+              },
+              "mainPrompt": {
+                "en": "If you were a scientist, what problem in the world would you try to solve, and how?",
+                "si": "ඔයා විද්‍යාඥයෙක් වුණොත්, ලෝකේ තියෙන මොන ප්‍රශ්නයද විසඳන්න උත්සාහ කරන්නේ? කොහොමද?"
+              },
+              "followUps": [
+                {
+                  "en": "Who would you work with?",
+                  "si": "ඔයා වැඩ කරන්නේ කවුරු එක්කද?"
+                },
+                {
+                  "en": "How would it change people's lives?",
+                  "si": "ඒකෙන් මිනිස්සුන්ගේ ජීවිත වෙනස් වෙන්නේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.science.05",
+              "level": "open",
+              "title": {
+                "en": "Why science matters",
+                "si": "විද්‍යාව වැදගත් ඇයි"
+              },
+              "mainPrompt": {
+                "en": "Why do you think science is important for a country like Sri Lanka?",
+                "si": "ලංකාව වගේ රටකට විද්‍යාව වැදගත් ඇයි කියලා ඔයා හිතන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "How could science help farmers or fishermen?",
+                  "si": "ගොවියන්ට හරි ධීවරයන්ට හරි විද්‍යාවෙන් උදව් වෙන්නේ කොහොමද?"
+                },
+                {
+                  "en": "How can schools make science more interesting?",
+                  "si": "ඉස්කෝලවලට විද්‍යාව තවත් රසවත් කරන්න පුළුවන් කොහොමද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "travel-and-places",
+          "title": {
+            "en": "Travel and places",
+            "si": "සංචාර සහ ස්ථාන"
+          },
+          "icon": "🧭",
+          "topics": [
+            {
+              "id": "11-14.travel-and-places.01",
+              "level": "concrete",
+              "title": {
+                "en": "A place I visited",
+                "si": "මම ගිය තැනක්"
+              },
+              "mainPrompt": {
+                "en": "Describe a place you visited in Sri Lanka or abroad, like Sigiriya, Ella or Galle Fort. What was it like?",
+                "si": "ලංකාවේ හරි පිටරට හරි ඔයා ගිය තැනක් ගැන විස්තර කරන්න. සීගිරිය, ඇල්ල, ගාල්ල කොටුව වගේ. ඒ තැන කොහොමද?"
+              },
+              "followUps": [
+                {
+                  "en": "How did you get there, and how long did it take?",
+                  "si": "ඔයාලා එහෙට ගියේ කොහොමද? කොච්චර වෙලා ගියාද?"
+                },
+                {
+                  "en": "What surprised you there?",
+                  "si": "එතන ඔයාව පුදුම කරපු දේ මොකද්ද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.travel-and-places.02",
+              "level": "concrete",
+              "title": {
+                "en": "My hometown",
+                "si": "මගේ ගම"
+              },
+              "mainPrompt": {
+                "en": "Describe your hometown or the area where you live to someone who has never been there.",
+                "si": "කවදාවත් ආපු නැති කෙනෙකුට ඔයාගේ ගම, නැත්නම් ඔයා ජීවත් වෙන ප්‍රදේශය ගැන විස්තර කරන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What is the best place to visit there?",
+                  "si": "එතන බලන්න යන්න හොඳම තැන මොකද්ද?"
+                },
+                {
+                  "en": "How has it changed over the years?",
+                  "si": "අවුරුදු ගාණක් තිස්සේ ඒක වෙනස් වුණේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.travel-and-places.03",
+              "level": "open",
+              "title": {
+                "en": "Planning a dream trip",
+                "si": "හීනයේ සංචාරයක් සැලසුම් කරමු"
+              },
+              "mainPrompt": {
+                "en": "Plan a one-week dream trip anywhere in the world. Where would you go each day and why?",
+                "si": "ලෝකේ ඕනම තැනකට සතියක හීන සංචාරයක් සැලසුම් කරන්න. හැම දවසකම ඔයා යන්නේ කොහෙද? ඇයි?"
+              },
+              "followUps": [
+                {
+                  "en": "What would you need to prepare?",
+                  "si": "ඒකට ඔයා ලෑස්ති කරගන්න ඕනේ මොනවද?"
+                },
+                {
+                  "en": "What would you want to learn about the people there?",
+                  "si": "එහේ මිනිස්සු ගැන ඔයා දැනගන්න කැමති මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.travel-and-places.04",
+              "level": "open",
+              "title": {
+                "en": "Showing Sri Lanka to a visitor",
+                "si": "අමුත්තෙකුට ලංකාව පෙන්වමු"
+              },
+              "mainPrompt": {
+                "en": "A visitor has three days in Sri Lanka. Where would you take them, and what would you want them to understand about our country?",
+                "si": "අමුත්තෙකුට ලංකාවේ ඉන්න දවස් තුනක් තියෙනවා. ඔයා එයාව එක්කන් යන්නේ කොහෙද? අපේ රට ගැන එයාට තේරුම් ගන්න ඕනේ මොනවද?"
+              },
+              "followUps": [
+                {
+                  "en": "What food would they have to try?",
+                  "si": "එයා අනිවාර්යයෙන්ම කන්න ඕනේ කෑම මොනවද?"
+                },
+                {
+                  "en": "What would you want them to tell people back home?",
+                  "si": "එයා ආපහු ගිහින් එයාගේ රටේ අයට මොනවා කියනවා දකින්නද ඔයා කැමති?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.travel-and-places.05",
+              "level": "open",
+              "title": {
+                "en": "What travel teaches",
+                "si": "සංචාරයෙන් ලැබෙන පාඩම්"
+              },
+              "mainPrompt": {
+                "en": "What can people learn from travelling to new places and meeting different people?",
+                "si": "අලුත් තැන්වලට ගිහින්, වෙනස් මිනිස්සු මුණගැහෙනකොට අපිට ඉගෙනගන්න පුළුවන් මොනවද?"
+              },
+              "followUps": [
+                {
+                  "en": "How can travel change the way someone thinks?",
+                  "si": "සංචාරයකින් කෙනෙක් හිතන විදිය වෙනස් වෙන්නේ කොහොමද?"
+                },
+                {
+                  "en": "How can people learn about other places without travelling?",
+                  "si": "ගමන් නොගිහින් වෙන තැන් ගැන ඉගෙනගන්න පුළුවන් කොහොමද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "food-and-cooking",
+          "title": {
+            "en": "Food and cooking",
+            "si": "කෑම සහ ඉවුම් පිහුම්"
+          },
+          "icon": "🍳",
+          "topics": [
+            {
+              "id": "11-14.food-and-cooking.01",
+              "level": "concrete",
+              "title": {
+                "en": "A dish I can make",
+                "si": "මට හදන්න පුළුවන් කෑමක්"
+              },
+              "mainPrompt": {
+                "en": "Explain how to make a dish or snack you know, like pol sambol, a sandwich or a cup of tea, step by step.",
+                "si": "පොල් සම්බෝල, සැන්ඩ්විච් එකක්, නැත්නම් තේ කෝප්පයක් වගේ ඔයා දන්න කෑමක් හදන හැටි පියවරෙන් පියවර පැහැදිලි කරන්න."
+              },
+              "followUps": [
+                {
+                  "en": "Who taught you?",
+                  "si": "ඔයාට ඒක කියලා දුන්නේ කවුද?"
+                },
+                {
+                  "en": "How could you change it to make it even better?",
+                  "si": "ඒක තවත් රස කරන්න ඔයා කරන වෙනස මොකද්ද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.food-and-cooking.02",
+              "level": "concrete",
+              "title": {
+                "en": "A special family meal",
+                "si": "පවුලේ විශේෂ කෑම වේලක්"
+              },
+              "mainPrompt": {
+                "en": "Describe a special meal your family has, for example at Avurudu, a wedding or a dane.",
+                "si": "අවුරුද්දට, මඟුල් ගෙදරකට, නැත්නම් දානෙකට වගේ ඔයාගේ පවුලේ අය ගන්න විශේෂ කෑම වේලක් ගැන විස්තර කරන්න."
+              },
+              "followUps": [
+                {
+                  "en": "Who helps to prepare it?",
+                  "si": "ඒක හදන්න උදව් කරන්නේ කවුද?"
+                },
+                {
+                  "en": "What makes it special?",
+                  "si": "ඒක විශේෂ වෙන්නේ මොකද නිසාද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.food-and-cooking.03",
+              "level": "open",
+              "title": {
+                "en": "Running a restaurant",
+                "si": "මගේම කෑම කඩේ"
+              },
+              "mainPrompt": {
+                "en": "If you opened your own restaurant, what kind of food would you serve and what would it be like inside?",
+                "si": "ඔයා ඔයාගේම කෑම කඩයක් ඇරියොත්, ඔයා දෙන්නේ මොන වගේ කෑමද? ඒක ඇතුළ කොහොම වෙයිද?"
+              },
+              "followUps": [
+                {
+                  "en": "What would you call it?",
+                  "si": "ඔයා ඒකට දාන නම මොකද්ද?"
+                },
+                {
+                  "en": "How would you attract customers?",
+                  "si": "ගනුදෙනුකරුවන්ව ගෙන්වාගන්න ඔයා කරන්නේ මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.food-and-cooking.04",
+              "level": "open",
+              "title": {
+                "en": "Healthy eating for teenagers",
+                "si": "යෞවනයන්ට හොඳ කෑම"
+              },
+              "mainPrompt": {
+                "en": "Why do you think healthy eating matters for teenagers, and why is it sometimes hard?",
+                "si": "යෞවන වයසේ අයට හොඳ කෑම කන එක වැදගත් ඇයි කියලා ඔයා හිතන්නේ? සමහර වෙලාවට ඒක අමාරු ඇයි?"
+              },
+              "followUps": [
+                {
+                  "en": "How could school canteens help?",
+                  "si": "ඉස්කෝලේ කැන්ටිම්වලට මේකට උදව් කරන්න පුළුවන් කොහොමද?"
+                },
+                {
+                  "en": "What is one change you could make?",
+                  "si": "ඔයාට කරන්න පුළුවන් එක වෙනසක් මොකද්ද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.food-and-cooking.05",
+              "level": "open",
+              "title": {
+                "en": "Food and culture",
+                "si": "කෑම සහ සංස්කෘතිය"
+              },
+              "mainPrompt": {
+                "en": "How does food show the culture of a country? Use Sri Lankan food as an example.",
+                "si": "රටක සංස්කෘතිය කෑමෙන් පේන්නේ කොහොමද? ලංකාවේ කෑම උදාහරණයක් විදියට අරන් කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "Which Sri Lankan food would you introduce to the world, and why?",
+                  "si": "ලෝකෙට හඳුන්වලා දෙන්න ඔයා තෝරන ලංකාවේ කෑම මොකද්ද? ඇයි?"
+                },
+                {
+                  "en": "How has the food we eat changed over time?",
+                  "si": "කාලයත් එක්ක අපි කන කෑම වෙනස් වුණේ කොහොමද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "friends",
+          "title": {
+            "en": "Friends",
+            "si": "යාළුවෝ"
+          },
+          "icon": "👫",
+          "topics": [
+            {
+              "id": "11-14.friends.01",
+              "level": "concrete",
+              "title": {
+                "en": "My friends",
+                "si": "මගේ යාළුවෝ"
+              },
+              "mainPrompt": {
+                "en": "Tell me about your friends. How did you meet, and what do you usually do together?",
+                "si": "ඔයාගේ යාළුවෝ ගැන කියන්න. ඔයාලා මුණගැහුණේ කොහොමද? ඔයාලා වැඩිපුරම එකට කරන්නේ මොනවද?"
+              },
+              "followUps": [
+                {
+                  "en": "Describe a memorable day you spent together.",
+                  "si": "ඔයාලා එකට ගත කරපු අමතක නොවෙන දවසක් ගැන කියන්න."
+                },
+                {
+                  "en": "What makes each friend unique?",
+                  "si": "එක එක යාළුවා වෙනස් වෙන්නේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.friends.02",
+              "level": "concrete",
+              "title": {
+                "en": "A time a friend helped me",
+                "si": "යාළුවෙක් මට උදව් කරපු වෙලාවක්"
+              },
+              "mainPrompt": {
+                "en": "Describe a time a friend helped you, or you helped a friend.",
+                "si": "යාළුවෙක් ඔයාට උදව් කරපු, නැත්නම් ඔයා යාළුවෙකුට උදව් කරපු වෙලාවක් ගැන කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What happened next?",
+                  "si": "ඊට පස්සේ මොකද වුණේ?"
+                },
+                {
+                  "en": "How did it change your friendship?",
+                  "si": "ඒකෙන් ඔයාලගේ යාළුකම වෙනස් වුණේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.friends.03",
+              "level": "open",
+              "title": {
+                "en": "What makes a true friend",
+                "si": "ඇත්තම යාළුවෙක්"
+              },
+              "mainPrompt": {
+                "en": "What qualities do you think a true friend should have? Explain why each one matters.",
+                "si": "ඇත්තම යාළුවෙකුට තියෙන්න ඕනේ ගුණාංග මොනවද කියලා ඔයා හිතන්නේ? ඒ එකින් එක වැදගත් ඇයි කියලා පැහැදිලි කරන්න."
+              },
+              "followUps": [
+                {
+                  "en": "How can friends sort out a disagreement?",
+                  "si": "යාළුවෝ අතර එකඟ නොවීමක් විසඳගන්නේ කොහොමද?"
+                },
+                {
+                  "en": "How do friendships change as we grow older?",
+                  "si": "අපි ලොකු වෙනකොට යාළුකම් වෙනස් වෙන්නේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.friends.04",
+              "level": "open",
+              "title": {
+                "en": "Making new friends",
+                "si": "අලුත් යාළුවෝ හොයාගමු"
+              },
+              "mainPrompt": {
+                "en": "What advice would you give to a student who has just joined a new school and wants to make friends?",
+                "si": "අලුත් ඉස්කෝලෙකට ආපු, යාළුවෝ හොයාගන්න ඕනේ ළමයෙකුට ඔයා දෙන උපදෙස් මොනවද?"
+              },
+              "followUps": [
+                {
+                  "en": "How could the class make them feel welcome?",
+                  "si": "පන්තියට එයාව සාදරයෙන් පිළිගන්න පුළුවන් කොහොමද?"
+                },
+                {
+                  "en": "Why is it sometimes hard to make new friends?",
+                  "si": "සමහර වෙලාවට අලුත් යාළුවෝ හොයාගන්න අමාරු ඇයි?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.friends.05",
+              "level": "open",
+              "title": {
+                "en": "Online and real-life friends",
+                "si": "ඔන්ලයින් යාළුවෝ සහ ඇත්ත යාළුවෝ"
+              },
+              "mainPrompt": {
+                "en": "How are friendships online different from friendships in real life?",
+                "si": "ඔන්ලයින් යාළුකම්, ඇත්ත ජීවිතේ යාළුකම්වලට වඩා වෙනස් වෙන්නේ කොහොමද?"
+              },
+              "followUps": [
+                {
+                  "en": "What are the good and bad sides of each?",
+                  "si": "ඒ දෙකේම හොඳ පැත්තයි නරක පැත්තයි මොනවද?"
+                },
+                {
+                  "en": "How can we stay safe when talking to people online?",
+                  "si": "ඔන්ලයින් කතා කරනකොට ආරක්ෂිතව ඉන්නේ කොහොමද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "school-life",
+          "title": {
+            "en": "School life",
+            "si": "ඉස්කෝලේ ජීවිතය"
+          },
+          "icon": "🎒",
+          "topics": [
+            {
+              "id": "11-14.school-life.01",
+              "level": "concrete",
+              "title": {
+                "en": "A typical school day",
+                "si": "සාමාන්‍ය ඉස්කෝලේ දවසක්"
+              },
+              "mainPrompt": {
+                "en": "Describe a typical day at your school, from the morning assembly to the end of the day.",
+                "si": "උදේ රැස්වීමේ ඉඳන් දවස ඉවර වෙනකම් ඔයාගේ ඉස්කෝලේ සාමාන්‍ය දවසක් ගැන විස්තර කරන්න."
+              },
+              "followUps": [
+                {
+                  "en": "Which period do you look forward to, and why?",
+                  "si": "ඔයා ආසාවෙන් බලාගෙන ඉන්න පීරියඩ් එක මොකද්ද? ඇයි?"
+                },
+                {
+                  "en": "What do you do after school?",
+                  "si": "ඉස්කෝලේ ඇරුණාට පස්සේ ඔයා මොනවද කරන්නේ?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.school-life.02",
+              "level": "concrete",
+              "title": {
+                "en": "A school event",
+                "si": "ඉස්කෝලේ වැඩසටහනක්"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a school event you remember, like a sports meet, prize giving, trip or concert.",
+                "si": "ඔයාට මතක ඉස්කෝලේ වැඩසටහනක් ගැන කියන්න. ක්‍රීඩා උත්සවය, ත්‍යාග ප්‍රදානය, චාරිකාවක්, නැත්නම් ප්‍රසංගයක් වගේ."
+              },
+              "followUps": [
+                {
+                  "en": "What was your role?",
+                  "si": "ඔයාගේ කොටස මොකද්ද?"
+                },
+                {
+                  "en": "What would you do differently next time?",
+                  "si": "ඊළඟ පාර ඔයා වෙනස් විදියට කරන්නේ මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.school-life.03",
+              "level": "open",
+              "title": {
+                "en": "Changing one thing about school",
+                "si": "ඉස්කෝලේ එක දෙයක් වෙනස් කරමු"
+              },
+              "mainPrompt": {
+                "en": "If you could change one thing about how schools work, what would it be and why?",
+                "si": "ඉස්කෝල වැඩ කරන විදියේ එක දෙයක් වෙනස් කරන්න ඔයාට පුළුවන් නම්, ඒ මොකද්ද? ඇයි?"
+              },
+              "followUps": [
+                {
+                  "en": "How would students benefit?",
+                  "si": "ඒකෙන් ළමයින්ට ලැබෙන වාසිය මොකද්ද?"
+                },
+                {
+                  "en": "What might teachers think about it?",
+                  "si": "ගුරුවරු ඒ ගැන මොනවා හිතයි කියලද ඔයා හිතන්නේ?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.school-life.04",
+              "level": "open",
+              "title": {
+                "en": "What school should teach",
+                "si": "ඉස්කෝලෙන් උගන්වන්න ඕනේ දේ"
+              },
+              "mainPrompt": {
+                "en": "What is something that is not taught at school but you think should be? Why?",
+                "si": "දැනට ඉස්කෝලේ උගන්වන්නේ නැති, ඒත් උගන්වන්න ඕනේ කියලා ඔයා හිතන දෙයක් මොකද්ද? ඇයි?"
+              },
+              "followUps": [
+                {
+                  "en": "How would you teach it?",
+                  "si": "ඔයා ඒක උගන්වන්නේ කොහොමද?"
+                },
+                {
+                  "en": "How would it help students later in life?",
+                  "si": "ඒක ළමයින්ට පස්සේ ජීවිතේට උදව් වෙන්නේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.school-life.05",
+              "level": "open",
+              "title": {
+                "en": "Exams and learning",
+                "si": "විභාග සහ ඉගෙනීම"
+              },
+              "mainPrompt": {
+                "en": "How well do you think exams show what a student has really learned? Explain your view.",
+                "si": "ළමයෙක් ඇත්තටම ඉගෙනගත්ත දේ විභාගවලින් කොච්චර දුරට පෙන්නනවා කියලද ඔයා හිතන්නේ? ඔයාගේ අදහස පැහැදිලි කරන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What other ways could schools check learning?",
+                  "si": "ඉගෙනීම බලන්න ඉස්කෝලවලට පාවිච්චි කරන්න පුළුවන් වෙන ක්‍රම මොනවද?"
+                },
+                {
+                  "en": "How do you like to prepare for a test?",
+                  "si": "විභාගයකට ලෑස්ති වෙන්න ඔයා කැමති කොහොමද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "environment",
+          "title": {
+            "en": "Environment",
+            "si": "පරිසරය"
+          },
+          "icon": "🌍",
+          "topics": [
+            {
+              "id": "11-14.environment.01",
+              "level": "concrete",
+              "title": {
+                "en": "Nature near me",
+                "si": "මා අවට පරිසරය"
+              },
+              "mainPrompt": {
+                "en": "Describe the natural environment around your home or school: the trees, water, animals and birds.",
+                "si": "ඔයාගේ ගෙදර, නැත්නම් ඉස්කෝලේ අවට තියෙන ගස්, වතුර, සතුන්, කුරුල්ලෝ වගේ ස්වභාවික පරිසරය ගැන විස්තර කරන්න."
+              },
+              "followUps": [
+                {
+                  "en": "How has it changed since you were small?",
+                  "si": "ඔයා පොඩි කාලේ ඉඳන් ඒක වෙනස් වුණේ කොහොමද?"
+                },
+                {
+                  "en": "What is your favourite outdoor spot there?",
+                  "si": "එතන ඔයා වැඩියෙන්ම කැමති තැන මොකද්ද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.environment.02",
+              "level": "concrete",
+              "title": {
+                "en": "Waste at home and school",
+                "si": "ගෙදර සහ ඉස්කෝලේ කුණු"
+              },
+              "mainPrompt": {
+                "en": "What happens to the rubbish at your home and school? Describe how it is sorted or thrown away.",
+                "si": "ඔයාගේ ගෙදරයි ඉස්කෝලෙයි කුණුවලට මොකද වෙන්නේ? ඒවා වෙන් කරන්නේ, නැත්නම් ඉවත් කරන්නේ කොහොමද කියලා විස්තර කරන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What could be reused or recycled?",
+                  "si": "ආයේ පාවිච්චි කරන්න, නැත්නම් ප්‍රතිචක්‍රීකරණය කරන්න පුළුවන් දේවල් මොනවද?"
+                },
+                {
+                  "en": "What plastic things do you use in a normal day?",
+                  "si": "සාමාන්‍ය දවසක ඔයා පාවිච්චි කරන ප්ලාස්ටික් දේවල් මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.environment.03",
+              "level": "open",
+              "title": {
+                "en": "Protecting Sri Lanka's nature",
+                "si": "ලංකාවේ සොබාදහම රැකගමු"
+              },
+              "mainPrompt": {
+                "en": "What do you think are the biggest environmental problems in Sri Lanka, and how could we solve them?",
+                "si": "ලංකාවේ තියෙන ලොකුම පරිසර ප්‍රශ්න මොනවද කියලා ඔයා හිතන්නේ? අපිට ඒවා විසඳන්න පුළුවන් කොහොමද?"
+              },
+              "followUps": [
+                {
+                  "en": "What can young people do?",
+                  "si": "තරුණ අයට කරන්න පුළුවන් මොනවද?"
+                },
+                {
+                  "en": "Who else should take responsibility?",
+                  "si": "මේකට වගකියන්න ඕනේ වෙන කවුද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.environment.04",
+              "level": "open",
+              "title": {
+                "en": "A green city",
+                "si": "හරිත නගරයක්"
+              },
+              "mainPrompt": {
+                "en": "Imagine you are designing an eco-friendly city. What would it look like and how would people live there?",
+                "si": "ඔයා පරිසර හිතකාමී නගරයක් නිර්මාණය කරනවා කියලා හිතන්න. ඒක කොහොම එකක්ද? එතන මිනිස්සු ජීවත් වෙන්නේ කොහොමද?"
+              },
+              "followUps": [
+                {
+                  "en": "How would people travel?",
+                  "si": "මිනිස්සු ගමන් යන්නේ කොහොමද?"
+                },
+                {
+                  "en": "Where would the energy come from?",
+                  "si": "බලශක්තිය එන්නේ කොහෙන්ද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.environment.05",
+              "level": "open",
+              "title": {
+                "en": "Caring for our planet",
+                "si": "අපේ ලෝකය රැකගමු"
+              },
+              "mainPrompt": {
+                "en": "What do you know about climate change, and why do you think people should care about it?",
+                "si": "දේශගුණ විපර්යාස ගැන ඔයා දන්නේ මොනවද? මිනිස්සු ඒ ගැන හිතන්න ඕනේ ඇයි කියලා ඔයා හිතන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "What small actions can make a difference?",
+                  "si": "වෙනසක් කරන්න පුළුවන් පොඩි පොඩි දේවල් මොනවද?"
+                },
+                {
+                  "en": "What good news have you heard about protecting the planet?",
+                  "si": "ලෝකය රැකගන්න ගැන ඔයාට ඇහුණු හොඳ ආරංචියක් මොකද්ද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "history-and-heritage",
+          "title": {
+            "en": "History and heritage",
+            "si": "ඉතිහාසය සහ උරුමය"
+          },
+          "icon": "📜",
+          "topics": [
+            {
+              "id": "11-14.history-and-heritage.01",
+              "level": "concrete",
+              "title": {
+                "en": "A historical place I visited",
+                "si": "මම ගිය ඓතිහාසික තැනක්"
+              },
+              "mainPrompt": {
+                "en": "Describe a historical place you have visited or learned about, like Sigiriya, Polonnaruwa or the Temple of the Tooth.",
+                "si": "ඔයා ගිය, නැත්නම් ඉගෙනගත්ත සීගිරිය, පොළොන්නරුව, දළදා මාළිගාව වගේ ඓතිහාසික තැනක් ගැන විස්තර කරන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What impressed you most about it?",
+                  "si": "ඒකේ ඔයාට වැඩියෙන්ම පුදුම හිතුණු දේ මොකද්ද?"
+                },
+                {
+                  "en": "Who built it, and why?",
+                  "si": "ඒක හැදුවේ කවුද? ඇයි?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.history-and-heritage.02",
+              "level": "concrete",
+              "title": {
+                "en": "An old object at home",
+                "si": "ගෙදර තියෙන පරණ බඩුවක්"
+              },
+              "mainPrompt": {
+                "en": "Describe an old object in your home or a relative's home, like a photo, a tool or a piece of jewellery. What is its story?",
+                "si": "ඔයාගේ ගෙදර, නැත්නම් නෑදෑයෙකුගේ ගෙදර තියෙන පරණ ෆොටෝ එකක්, උපකරණයක්, නැත්නම් ආභරණයක් වගේ දෙයක් ගැන විස්තර කරන්න. ඒකේ කතාව මොකද්ද?"
+              },
+              "followUps": [
+                {
+                  "en": "Who did it belong to?",
+                  "si": "ඒක අයිති වුණේ කාටද?"
+                },
+                {
+                  "en": "Why is it still kept?",
+                  "si": "ඒක තාම තියාගෙන ඉන්නේ ඇයි?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.history-and-heritage.03",
+              "level": "open",
+              "title": {
+                "en": "Living in ancient times",
+                "si": "පුරාණ කාලේ ජීවත් වුණා නම්"
+              },
+              "mainPrompt": {
+                "en": "Imagine you lived in ancient Anuradhapura. Describe what a day in your life would be like.",
+                "si": "ඔයා පුරාණ අනුරාධපුර කාලේ ජීවත් වුණා කියලා හිතන්න. ඔයාගේ දවසක් කොහොම වෙයිද කියලා විස්තර කරන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What would you eat and wear?",
+                  "si": "ඔයා කන්නේ, අඳින්නේ මොනවද?"
+                },
+                {
+                  "en": "Which modern thing would you miss most?",
+                  "si": "අද කාලේ තියෙන දේවල් අතරින් ඔයාට වැඩියෙන්ම මතක් වෙන්නේ මොකද්ද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.history-and-heritage.04",
+              "level": "open",
+              "title": {
+                "en": "Why history matters",
+                "si": "ඉතිහාසය වැදගත් ඇයි"
+              },
+              "mainPrompt": {
+                "en": "Why do you think it is important to learn history and protect old buildings?",
+                "si": "ඉතිහාසය ඉගෙනගන්න එකයි, පරණ ගොඩනැගිලි රැකගන්න එකයි වැදගත් ඇයි කියලා ඔයා හිතන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "What can history teach us about today?",
+                  "si": "ඉතිහාසයෙන් අපිට අද ගැන ඉගෙනගන්න පුළුවන් මොනවද?"
+                },
+                {
+                  "en": "How could history lessons be more interesting?",
+                  "si": "ඉතිහාස පාඩම් තවත් රසවත් කරන්න පුළුවන් කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.history-and-heritage.05",
+              "level": "open",
+              "title": {
+                "en": "Meeting a historical figure",
+                "si": "ඓතිහාසික චරිතයක් මුණගැහුණොත්"
+              },
+              "mainPrompt": {
+                "en": "If you could meet a person from history, who would it be and what would you ask them?",
+                "si": "ඉතිහාසයේ ඉන්න කෙනෙක්ව මුණගැහෙන්න පුළුවන් නම්, ඔයා මුණගැහෙන්නේ කාවද? ඔයා එයාගෙන් අහන්නේ මොනවද?"
+              },
+              "followUps": [
+                {
+                  "en": "What would you show them about today's world?",
+                  "si": "අද ලෝකේ ගැන ඔයා එයාට පෙන්නන්නේ මොනවද?"
+                },
+                {
+                  "en": "What do you think they would say?",
+                  "si": "එයා මොනවා කියයි කියලද ඔයා හිතන්නේ?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "festivals-and-culture",
+          "title": {
+            "en": "Festivals and culture",
+            "si": "උත්සව සහ සංස්කෘතිය"
+          },
+          "icon": "🪔",
+          "topics": [
+            {
+              "id": "11-14.festivals-and-culture.01",
+              "level": "concrete",
+              "title": {
+                "en": "How my family celebrates",
+                "si": "අපේ පවුල උත්සව සමරන හැටි"
+              },
+              "mainPrompt": {
+                "en": "Describe how your family celebrates a festival such as Avurudu, Vesak, Deepavali, Ramazan or Christmas.",
+                "si": "අවුරුද්ද, වෙසක්, දීපවාලි, රාමසාන්, නැත්නම් නත්තල වගේ උත්සවයක් ඔයාගේ පවුල සමරන හැටි විස්තර කරන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What preparations happen beforehand?",
+                  "si": "ඒකට කලින් කරන ලෑස්තිවීම් මොනවද?"
+                },
+                {
+                  "en": "What is your favourite tradition, and why?",
+                  "si": "ඔයා වැඩියෙන්ම කැමති සිරිත මොකද්ද? ඇයි?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.festivals-and-culture.02",
+              "level": "concrete",
+              "title": {
+                "en": "Avurudu games and customs",
+                "si": "අවුරුදු සෙල්ලම් සහ චාරිත්‍ර"
+              },
+              "mainPrompt": {
+                "en": "Describe the Avurudu customs and games you know, like the auspicious times, kiribath, kotta pora or climbing the greasy pole.",
+                "si": "නැකැත්, කිරිබත්, කොට්ට පොර, ලිස්සන ගහ නගින එක වගේ ඔයා දන්න අවුරුදු චාරිත්‍ර සහ සෙල්ලම් ගැන විස්තර කරන්න."
+              },
+              "followUps": [
+                {
+                  "en": "Which game are you best at?",
+                  "si": "ඔයාට හොඳටම කරන්න පුළුවන් සෙල්ලම මොකද්ද?"
+                },
+                {
+                  "en": "How do people in your area celebrate?",
+                  "si": "ඔයාගේ ප්‍රදේශයේ අය ඒක සමරන්නේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.festivals-and-culture.03",
+              "level": "open",
+              "title": {
+                "en": "Keeping traditions alive",
+                "si": "සිරිත් විරිත් රැකගමු"
+              },
+              "mainPrompt": {
+                "en": "Why do you think traditions are important, and how can young people keep them alive?",
+                "si": "සිරිත් විරිත් වැදගත් ඇයි කියලා ඔයා හිතන්නේ? තරුණ අයට ඒවා රැකගන්න පුළුවන් කොහොමද?"
+              },
+              "followUps": [
+                {
+                  "en": "Which tradition might disappear, and why?",
+                  "si": "නැති වෙලා යන්න පුළුවන් සිරිතක් මොකද්ද? ඇයි?"
+                },
+                {
+                  "en": "How has technology changed the way we celebrate?",
+                  "si": "තාක්ෂණය නිසා අපි උත්සව සමරන විදිය වෙනස් වුණේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.festivals-and-culture.04",
+              "level": "open",
+              "title": {
+                "en": "Learning about other cultures",
+                "si": "වෙනත් සංස්කෘතීන් ගැන ඉගෙනගමු"
+              },
+              "mainPrompt": {
+                "en": "Sri Lanka has many cultures and religions. Why is it good to learn about festivals that are different from your own?",
+                "si": "ලංකාවේ සංස්කෘතීන් සහ ආගම් ගොඩක් තියෙනවා. ඔයාගේ උත්සවවලට වඩා වෙනස් උත්සව ගැන ඉගෙනගන්න එක හොඳ ඇයි?"
+              },
+              "followUps": [
+                {
+                  "en": "Tell me about a festival from another culture that you know about.",
+                  "si": "ඔයා දන්න වෙනත් සංස්කෘතියක උත්සවයක් ගැන කියන්න."
+                },
+                {
+                  "en": "How can schools bring different cultures together?",
+                  "si": "විවිධ සංස්කෘතීන් එකතු කරන්න ඉස්කෝලවලට පුළුවන් කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.festivals-and-culture.05",
+              "level": "open",
+              "title": {
+                "en": "A festival of the future",
+                "si": "අනාගතයේ උත්සවයක්"
+              },
+              "mainPrompt": {
+                "en": "Imagine a new national festival for Sri Lanka in the future. What would it celebrate, and how?",
+                "si": "අනාගතයේ ලංකාවට අලුත් ජාතික උත්සවයක් ගැන හිතන්න. ඒකෙන් සමරන්නේ මොකද්ද? කොහොමද සමරන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "What food, music and activities would there be?",
+                  "si": "එතන තියෙන කෑම, සංගීතය, වැඩ මොනවද?"
+                },
+                {
+                  "en": "How would it bring people together?",
+                  "si": "ඒකෙන් මිනිස්සු එකතු කරන්නේ කොහොමද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "animals-and-wildlife",
+          "title": {
+            "en": "Animals and wildlife",
+            "si": "සතුන් සහ වනජීවීන්"
+          },
+          "icon": "🐘",
+          "topics": [
+            {
+              "id": "11-14.animals-and-wildlife.01",
+              "level": "concrete",
+              "title": {
+                "en": "Seeing wild animals",
+                "si": "වන සතුන් දැකපු වෙලාවක්"
+              },
+              "mainPrompt": {
+                "en": "Describe a time you saw wild animals, for example at Yala, Udawalawe, Pinnawala or in your village.",
+                "si": "ඔයා වන සතුන් දැකපු වෙලාවක් ගැන විස්තර කරන්න. යාල, උඩවලව, පින්නවල, නැත්නම් ඔයාගේ ගමේ වගේ."
+              },
+              "followUps": [
+                {
+                  "en": "Which animal impressed you most, and why?",
+                  "si": "ඔයාව වැඩියෙන්ම පුදුම කරපු සතා කවුද? ඇයි?"
+                },
+                {
+                  "en": "How did the animals behave?",
+                  "si": "සතුන් හැසිරුණේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.animals-and-wildlife.02",
+              "level": "concrete",
+              "title": {
+                "en": "An animal I know well",
+                "si": "මම හොඳට දන්න සතෙක්"
+              },
+              "mainPrompt": {
+                "en": "Choose an animal you know a lot about and explain how it lives, what it eats and how it behaves.",
+                "si": "ඔයා හොඳට දන්න සතෙක් තෝරලා, ඒ සතා ජීවත් වෙන හැටි, කන දේවල්, හැසිරෙන හැටි පැහැදිලි කරන්න."
+              },
+              "followUps": [
+                {
+                  "en": "How did you learn about it?",
+                  "si": "ඔයා ඒ සතා ගැන ඉගෙනගත්තේ කොහොමද?"
+                },
+                {
+                  "en": "What is one surprising fact about it?",
+                  "si": "ඒ සතා ගැන පුදුම හිතෙන කාරණයක් මොකද්ද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.animals-and-wildlife.03",
+              "level": "open",
+              "title": {
+                "en": "People and elephants",
+                "si": "මිනිස්සු සහ අලි ඇතුන්"
+              },
+              "mainPrompt": {
+                "en": "In some parts of Sri Lanka, people and elephants share the same land. How do you think both could live peacefully?",
+                "si": "ලංකාවේ සමහර ප්‍රදේශවල මිනිස්සුයි අලි ඇතුයි එකම ඉඩමේ ජීවත් වෙනවා. දෙගොල්ලන්ටම සාමයෙන් ජීවත් වෙන්න පුළුවන් කොහොමද කියලා ඔයා හිතන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "What can farmers do?",
+                  "si": "ගොවියන්ට කරන්න පුළුවන් මොනවද?"
+                },
+                {
+                  "en": "Why are elephants important to Sri Lanka?",
+                  "si": "අලි ඇතුන් ලංකාවට වැදගත් ඇයි?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.animals-and-wildlife.04",
+              "level": "open",
+              "title": {
+                "en": "Animals in zoos",
+                "si": "සත්තු වත්තේ සතුන්"
+              },
+              "mainPrompt": {
+                "en": "Some people think zoos protect animals and others think animals should stay in the wild. What is your view?",
+                "si": "සමහරු හිතනවා සත්තු වත්තෙන් සතුන්ව ආරක්ෂා කරනවා කියලා. තව සමහරු හිතනවා සතුන් ඉන්න ඕනේ කැලේ කියලා. ඔයාගේ අදහස මොකද්ද?"
+              },
+              "followUps": [
+                {
+                  "en": "What would a perfect home for a wild animal look like?",
+                  "si": "වන සතෙකුට හොඳම නිවහන කොහොම එකක්ද?"
+                },
+                {
+                  "en": "How can zoos help animals that are disappearing?",
+                  "si": "වඳවෙලා යන සතුන්ට සත්තු වත්තවලින් උදව් වෙන්නේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.animals-and-wildlife.05",
+              "level": "open",
+              "title": {
+                "en": "Speaking for an animal",
+                "si": "සතෙක් වෙනුවෙන් කතා කරමු"
+              },
+              "mainPrompt": {
+                "en": "If an endangered animal could give a speech to the world, what do you think it would say?",
+                "si": "වඳවෙලා යන සතෙකුට ලෝකෙටම කතාවක් කරන්න පුළුවන් නම්, ඒ සතා මොනවා කියයි කියලද ඔයා හිතන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "Which animal did you choose, and why?",
+                  "si": "ඔයා තෝරගත්තේ මොන සතාද? ඇයි?"
+                },
+                {
+                  "en": "What would it ask people to do?",
+                  "si": "ඒ සතා මිනිස්සුන්ගෙන් ඉල්ලන්නේ මොනවද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hobbies-and-crafts",
+          "title": {
+            "en": "Hobbies and crafts",
+            "si": "විනෝදාංශ සහ අත්කම්"
+          },
+          "icon": "🧶",
+          "topics": [
+            {
+              "id": "11-14.hobbies-and-crafts.01",
+              "level": "concrete",
+              "title": {
+                "en": "My hobby",
+                "si": "මගේ විනෝදාංශය"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a hobby you enjoy. How did you start, and what do you do?",
+                "si": "ඔයා කැමති විනෝදාංශයක් ගැන කියන්න. ඔයා ඒක පටන් ගත්තේ කොහොමද? ඔයා කරන්නේ මොනවද?"
+              },
+              "followUps": [
+                {
+                  "en": "What equipment or materials do you need?",
+                  "si": "ඒකට ඕනේ කරන බඩු මොනවද?"
+                },
+                {
+                  "en": "What have you made or achieved with it?",
+                  "si": "ඒකෙන් ඔයා හදපු, නැත්නම් කරපු දේවල් මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.hobbies-and-crafts.02",
+              "level": "concrete",
+              "title": {
+                "en": "Something I made",
+                "si": "මම හදපු දෙයක්"
+              },
+              "mainPrompt": {
+                "en": "Describe something you made with your hands, like a Vesak lantern, a model, a drawing or a craft, and explain how you made it.",
+                "si": "ඔයා අතින් හදපු දෙයක් ගැන විස්තර කරන්න. වෙසක් කූඩුවක්, මොඩලයක්, චිත්‍රයක්, නැත්නම් අත්කමක් වගේ. ඒක හැදුවේ කොහොමද කියලත් පැහැදිලි කරන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What was the hardest step?",
+                  "si": "අමාරුම පියවර මොකද්ද?"
+                },
+                {
+                  "en": "What would you improve next time?",
+                  "si": "ඊළඟ පාර ඔයා හොඳ කරන්නේ මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.hobbies-and-crafts.03",
+              "level": "open",
+              "title": {
+                "en": "A hobby I want to try",
+                "si": "මම කරලා බලන්න කැමති විනෝදාංශයක්"
+              },
+              "mainPrompt": {
+                "en": "What is a hobby you have never tried but would like to? Why does it interest you?",
+                "si": "ඔයා කවදාවත් කරලා නැති, ඒත් කරලා බලන්න කැමති විනෝදාංශයක් මොකද්ද? ඒකට ඔයා ආස ඇයි?"
+              },
+              "followUps": [
+                {
+                  "en": "How would you get started?",
+                  "si": "ඔයා ඒක පටන් ගන්නේ කොහොමද?"
+                },
+                {
+                  "en": "What might be difficult about it?",
+                  "si": "ඒකේ අමාරු වෙන්න පුළුවන් දේවල් මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.hobbies-and-crafts.04",
+              "level": "open",
+              "title": {
+                "en": "Why hobbies matter",
+                "si": "විනෝදාංශ වැදගත් ඇයි"
+              },
+              "mainPrompt": {
+                "en": "Why do you think hobbies are important for young people, especially when school is busy?",
+                "si": "ඉස්කෝලේ වැඩ ගොඩක් තියෙනකොට පවා, තරුණ අයට විනෝදාංශ වැදගත් ඇයි කියලා ඔයා හිතන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "How can a hobby become a career?",
+                  "si": "විනෝදාංශයක් රැකියාවක් වෙන්නේ කොහොමද?"
+                },
+                {
+                  "en": "How do you make time for your hobbies?",
+                  "si": "ඔයා විනෝදාංශවලට වෙලාව හොයාගන්නේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.hobbies-and-crafts.05",
+              "level": "open",
+              "title": {
+                "en": "Traditional crafts",
+                "si": "සාම්ප්‍රදායික අත්කම්"
+              },
+              "mainPrompt": {
+                "en": "Sri Lanka is known for crafts like masks, batik and pottery. Why are these crafts worth keeping, and how could young people learn them?",
+                "si": "ලංකාව වෙස් මුහුණු, බතික්, මැටි බඩු වගේ අත්කම්වලට ප්‍රසිද්ධයි. මේ අත්කම් රැකගන්න වටින්නේ ඇයි? තරුණ අයට ඒවා ඉගෙනගන්න පුළුවන් කොහොමද?"
+              },
+              "followUps": [
+                {
+                  "en": "Which craft would you like to learn?",
+                  "si": "ඔයා ඉගෙනගන්න කැමති අත්කම මොකද්ද?"
+                },
+                {
+                  "en": "How could these crafts be sold around the world?",
+                  "si": "මේ අත්කම් ලෝකෙටම විකුණන්න පුළුවන් කොහොමද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "future-and-careers",
+          "title": {
+            "en": "Future and careers",
+            "si": "අනාගතය සහ රැකියා"
+          },
+          "icon": "💼",
+          "topics": [
+            {
+              "id": "11-14.future-and-careers.01",
+              "level": "concrete",
+              "title": {
+                "en": "A job I know about",
+                "si": "මම දන්න රැකියාවක්"
+              },
+              "mainPrompt": {
+                "en": "Describe a job that someone you know does. What do they do every day?",
+                "si": "ඔයා දන්න කෙනෙක් කරන රැකියාවක් ගැන විස්තර කරන්න. එයා හැමදාම කරන්නේ මොනවද?"
+              },
+              "followUps": [
+                {
+                  "en": "What skills does that job need?",
+                  "si": "ඒ රැකියාවට ඕනේ කරන හැකියාවන් මොනවද?"
+                },
+                {
+                  "en": "What do you find interesting about it?",
+                  "si": "ඒකේ ඔයාට ආස හිතෙන දේ මොකද්ද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.future-and-careers.02",
+              "level": "concrete",
+              "title": {
+                "en": "Things I'm good at",
+                "si": "මම දක්ෂ දේවල්"
+              },
+              "mainPrompt": {
+                "en": "Tell me about the things you are good at or enjoy doing, at school or outside.",
+                "si": "ඉස්කෝලේ හරි එළියේ හරි ඔයා දක්ෂ, නැත්නම් කරන්න කැමති දේවල් ගැන කියන්න."
+              },
+              "followUps": [
+                {
+                  "en": "How did you discover this?",
+                  "si": "ඔයා ඒක දැනගත්තේ කොහොමද?"
+                },
+                {
+                  "en": "How would you like to improve?",
+                  "si": "ඔයා ඒක තවත් දියුණු කරගන්න කැමති කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.future-and-careers.03",
+              "level": "open",
+              "title": {
+                "en": "My future job",
+                "si": "මගේ අනාගත රැකියාව"
+              },
+              "mainPrompt": {
+                "en": "What job would you like to do in the future, and why? Describe a day in that job.",
+                "si": "අනාගතයේ ඔයා කරන්න කැමති රැකියාව මොකද්ද? ඇයි? ඒ රැකියාවේ දවසක් ගැන විස්තර කරන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What will you need to study?",
+                  "si": "ඒකට ඔයා ඉගෙනගන්න ඕනේ මොනවද?"
+                },
+                {
+                  "en": "How could that job help other people?",
+                  "si": "ඒ රැකියාවෙන් අනිත් අයට උදව් වෙන්නේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.future-and-careers.04",
+              "level": "open",
+              "title": {
+                "en": "Jobs that don't exist yet",
+                "si": "තාම නැති රැකියා"
+              },
+              "mainPrompt": {
+                "en": "Many future jobs do not exist yet. What new jobs do you think there will be in 20 years?",
+                "si": "අනාගතයේ තියෙන ගොඩක් රැකියා තාම නැහැ. අවුරුදු 20කින් මොන වගේ අලුත් රැකියා තියෙයි කියලද ඔයා හිතන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "How will robots and AI change work?",
+                  "si": "රොබෝ සහ කෘත්‍රිම බුද්ධිය නිසා වැඩ කරන විදිය වෙනස් වෙන්නේ කොහොමද?"
+                },
+                {
+                  "en": "Which of these jobs would you like?",
+                  "si": "ඒ අතරින් ඔයා කැමති රැකියාව මොකද්ද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.future-and-careers.05",
+              "level": "open",
+              "title": {
+                "en": "What success means",
+                "si": "සාර්ථකත්වය කියන්නේ"
+              },
+              "mainPrompt": {
+                "en": "What does being successful mean to you? Is it about money, happiness or something else?",
+                "si": "සාර්ථක වෙනවා කියන්නේ ඔයාට මොකද්ද? ඒ සල්ලිද, සතුටද, නැත්නම් වෙන දෙයක්ද?"
+              },
+              "followUps": [
+                {
+                  "en": "Who is someone you think is successful, and why?",
+                  "si": "ඔයා සාර්ථකයි කියලා හිතන කෙනෙක් කවුද? ඇයි?"
+                },
+                {
+                  "en": "What would you like people to remember you for?",
+                  "si": "මිනිස්සු ඔයාව මතක තියාගන්න ඕනේ මොකක් නිසාද කියලද ඔයා කැමති?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "inventions",
+          "title": {
+            "en": "Inventions",
+            "si": "නව නිපැයුම්"
+          },
+          "icon": "💡",
+          "topics": [
+            {
+              "id": "11-14.inventions.01",
+              "level": "concrete",
+              "title": {
+                "en": "An invention I use every day",
+                "si": "මම හැමදාම පාවිච්චි කරන නිපැයුමක්"
+              },
+              "mainPrompt": {
+                "en": "Choose an invention you use every day and explain how it makes your life easier.",
+                "si": "ඔයා හැමදාම පාවිච්චි කරන නිපැයුමක් තෝරලා, ඒකෙන් ඔයාගේ ජීවිතය ලේසි වෙන්නේ කොහොමද කියලා පැහැදිලි කරන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What did people do before it existed?",
+                  "si": "ඒක හොයාගන්න කලින් මිනිස්සු මොනවද කළේ?"
+                },
+                {
+                  "en": "How could it be improved?",
+                  "si": "ඒක තවත් හොඳ කරන්න පුළුවන් කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.inventions.02",
+              "level": "concrete",
+              "title": {
+                "en": "Building or fixing something",
+                "si": "මොකක් හරි හදපු වෙලාවක්"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a time you built, repaired or took apart something. What did you do?",
+                "si": "ඔයා මොකක් හරි හදපු, අලුත්වැඩියා කරපු, නැත්නම් ගලවලා බලපු වෙලාවක් ගැන කියන්න. ඔයා මොනවද කළේ?"
+              },
+              "followUps": [
+                {
+                  "en": "What tools did you use?",
+                  "si": "ඔයා පාවිච්චි කළේ මොන ආයුධද?"
+                },
+                {
+                  "en": "What did you learn?",
+                  "si": "ඒකෙන් ඔයා ඉගෙනගත්තේ මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.inventions.03",
+              "level": "open",
+              "title": {
+                "en": "My invention",
+                "si": "මගේ නිපැයුම"
+              },
+              "mainPrompt": {
+                "en": "If you could invent something to solve a problem in your daily life, what would it be and how would it work?",
+                "si": "ඔයාගේ එදිනෙදා ජීවිතේ ප්‍රශ්නයක් විසඳන්න ඔයාට මොකක් හරි නිපදවන්න පුළුවන් නම්, ඒ මොකද්ද? ඒක වැඩ කරන්නේ කොහොමද?"
+              },
+              "followUps": [
+                {
+                  "en": "Who would use it?",
+                  "si": "ඒක පාවිච්චි කරන්නේ කවුද?"
+                },
+                {
+                  "en": "What would you name it?",
+                  "si": "ඔයා ඒකට දාන නම මොකද්ද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.inventions.04",
+              "level": "open",
+              "title": {
+                "en": "The greatest invention",
+                "si": "ලොකුම නිපැයුම"
+              },
+              "mainPrompt": {
+                "en": "What do you think is the most important invention in history, and why?",
+                "si": "ඉතිහාසයේ වැදගත්ම නිපැයුම මොකද්ද කියලා ඔයා හිතන්නේ? ඇයි?"
+              },
+              "followUps": [
+                {
+                  "en": "How would life be different without it?",
+                  "si": "ඒක නැත්නම් ජීවිතය කොහොම වෙනස් වෙයිද?"
+                },
+                {
+                  "en": "Which invention has brought problems as well as benefits?",
+                  "si": "වාසි වගේම ප්‍රශ්නත් ඇති කරපු නිපැයුමක් මොකද්ද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.inventions.05",
+              "level": "open",
+              "title": {
+                "en": "Inventions for Sri Lanka",
+                "si": "ලංකාවට ඕනේ නිපැයුම්"
+              },
+              "mainPrompt": {
+                "en": "What invention do you think Sri Lanka needs most, for example for farming, transport or health?",
+                "si": "ගොවිතැන, ප්‍රවාහනය, නැත්නම් සෞඛ්‍යය වගේ දේවල්වලට ලංකාවට වැඩියෙන්ම ඕනේ නිපැයුම මොකද්ද කියලා ඔයා හිතන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "How would it work?",
+                  "si": "ඒක වැඩ කරන්නේ කොහොමද?"
+                },
+                {
+                  "en": "Who would benefit most?",
+                  "si": "වැඩියෙන්ම වාසි ලැබෙන්නේ කාටද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "social-media-and-internet",
+          "title": {
+            "en": "Social media and the internet",
+            "si": "සමාජ මාධ්‍ය සහ අන්තර්ජාලය"
+          },
+          "icon": "🌐",
+          "topics": [
+            {
+              "id": "11-14.social-media-and-internet.01",
+              "level": "concrete",
+              "title": {
+                "en": "How I use the internet",
+                "si": "මම අන්තර්ජාලය පාවිච්චි කරන හැටි"
+              },
+              "mainPrompt": {
+                "en": "Describe how you use the internet in a normal week, for school, for fun or for talking to family.",
+                "si": "ඉස්කෝලේ වැඩවලට, විනෝදයට, නැත්නම් පවුලේ අය එක්ක කතා කරන්න, සාමාන්‍ය සතියක ඔයා අන්තර්ජාලය පාවිච්චි කරන හැටි විස්තර කරන්න."
+              },
+              "followUps": [
+                {
+                  "en": "Which website or app is most useful to you?",
+                  "si": "ඔයාට වැඩියෙන්ම ප්‍රයෝජනවත් වෙබ් අඩවිය, නැත්නම් ඇප් එක මොකද්ද?"
+                },
+                {
+                  "en": "What have you learned online recently?",
+                  "si": "ළඟදී ඔයා ඔන්ලයින් ඉගෙනගත්ත දෙයක් මොකද්ද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.social-media-and-internet.02",
+              "level": "concrete",
+              "title": {
+                "en": "A channel I like",
+                "si": "මම කැමති චැනල් එකක්"
+              },
+              "mainPrompt": {
+                "en": "Tell me about a video, channel or online creator you like. What kind of content do they make?",
+                "si": "ඔයා කැමති වීඩියෝවක්, චැනල් එකක්, නැත්නම් ඔන්ලයින් නිර්මාණකරුවෙක් ගැන කියන්න. එයාලා හදන්නේ මොන වගේ දේවල්ද?"
+              },
+              "followUps": [
+                {
+                  "en": "Why do you enjoy it?",
+                  "si": "ඔයා ඒකට කැමති ඇයි?"
+                },
+                {
+                  "en": "What would you change about it?",
+                  "si": "ඔයා ඒකේ වෙනස් කරන්නේ මොනවද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.social-media-and-internet.03",
+              "level": "open",
+              "title": {
+                "en": "Staying safe and kind online",
+                "si": "ඔන්ලයින් ආරක්ෂිතව ඉමු"
+              },
+              "mainPrompt": {
+                "en": "What advice would you give a younger child about staying safe and kind on the internet?",
+                "si": "අන්තර්ජාලයේ ආරක්ෂිතව සහ කරුණාවන්තව ඉන්න ගැන ඔයාට වඩා බාල ළමයෙකුට ඔයා දෙන උපදෙස් මොනවද?"
+              },
+              "followUps": [
+                {
+                  "en": "How can you tell if information online is true?",
+                  "si": "ඔන්ලයින් තියෙන තොරතුරක් ඇත්තද කියලා දැනගන්නේ කොහොමද?"
+                },
+                {
+                  "en": "Why is it important to think before posting?",
+                  "si": "මොනවා හරි පෝස්ට් කරන්න කලින් හිතන එක වැදගත් ඇයි?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.social-media-and-internet.04",
+              "level": "open",
+              "title": {
+                "en": "Social media: good and bad",
+                "si": "සමාජ මාධ්‍ය: හොඳ සහ නරක"
+              },
+              "mainPrompt": {
+                "en": "What are the good and bad effects of social media on young people?",
+                "si": "සමාජ මාධ්‍යවලින් තරුණ අයට වෙන හොඳ සහ නරක බලපෑම් මොනවද?"
+              },
+              "followUps": [
+                {
+                  "en": "What age do you think is right to start using it, and why?",
+                  "si": "ඒක පාවිච්චි කරන්න පටන් ගන්න හොඳ වයස මොකද්ද කියලා ඔයා හිතන්නේ? ඇයි?"
+                },
+                {
+                  "en": "How can people use it in a healthy way?",
+                  "si": "ඒක හොඳ විදියට පාවිච්චි කරන්න පුළුවන් කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.social-media-and-internet.05",
+              "level": "open",
+              "title": {
+                "en": "Life without the internet",
+                "si": "අන්තර්ජාලය නැති ජීවිතයක්"
+              },
+              "mainPrompt": {
+                "en": "Imagine the internet stopped working for one month. How would your life and your family's life change?",
+                "si": "මාසයකට අන්තර්ජාලය නැවතුණා කියලා හිතන්න. ඔයාගේ, ඔයාගේ පවුලේ ජීවිතය වෙනස් වෙන්නේ කොහොමද?"
+              },
+              "followUps": [
+                {
+                  "en": "What would you miss most?",
+                  "si": "ඔයාට වැඩියෙන්ම නැති පාඩුව දැනෙන්නේ මොකටද?"
+                },
+                {
+                  "en": "What might get better?",
+                  "si": "හොඳ වෙන්න පුළුවන් දේවල් මොනවද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "art-and-design",
+          "title": {
+            "en": "Art and design",
+            "si": "කලාව සහ නිර්මාණ"
+          },
+          "icon": "🎨",
+          "topics": [
+            {
+              "id": "11-14.art-and-design.01",
+              "level": "concrete",
+              "title": {
+                "en": "A piece of art I like",
+                "si": "මම කැමති කලා නිර්මාණයක්"
+              },
+              "mainPrompt": {
+                "en": "Describe a painting, drawing, sculpture or design you like. What does it show and how was it made?",
+                "si": "ඔයා කැමති සිතුවමක්, චිත්‍රයක්, මූර්තියක්, නැත්නම් නිර්මාණයක් ගැන විස්තර කරන්න. ඒකෙන් පෙන්නන්නේ මොකද්ද? ඒක හදලා තියෙන්නේ කොහොමද?"
+              },
+              "followUps": [
+                {
+                  "en": "Where did you see it?",
+                  "si": "ඔයා ඒක දැක්කේ කොහෙදිද?"
+                },
+                {
+                  "en": "How does it make you feel?",
+                  "si": "ඒක බලනකොට ඔයාට කොහොමද දැනෙන්නේ?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.art-and-design.02",
+              "level": "concrete",
+              "title": {
+                "en": "Redesigning my room",
+                "si": "මගේ කාමරේ අලුතින් හදමු"
+              },
+              "mainPrompt": {
+                "en": "Describe your room or a space at home, and explain how you would redesign it.",
+                "si": "ඔයාගේ කාමරේ, නැත්නම් ගෙදර තැනක් ගැන විස්තර කරලා, ඔයා ඒක අලුතින් සකස් කරන්නේ කොහොමද කියලා පැහැදිලි කරන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What colours and furniture would you choose?",
+                  "si": "ඔයා තෝරන පාට සහ ගෘහ භාණ්ඩ මොනවද?"
+                },
+                {
+                  "en": "Why would that work better?",
+                  "si": "ඒක වඩා හොඳ වෙන්නේ ඇයි?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.art-and-design.03",
+              "level": "open",
+              "title": {
+                "en": "What makes something beautiful",
+                "si": "ලස්සන කියන්නේ මොකද්ද"
+              },
+              "mainPrompt": {
+                "en": "What do you think makes a picture, a building or an object beautiful? Why do people disagree about what is beautiful?",
+                "si": "පින්තූරයක්, ගොඩනැගිල්ලක්, නැත්නම් බඩුවක් ලස්සන වෙන්නේ මොකද නිසා කියලද ඔයා හිතන්නේ? ලස්සන ගැන මිනිස්සුන්ගේ අදහස් වෙනස් වෙන්නේ ඇයි?"
+              },
+              "followUps": [
+                {
+                  "en": "What is the most beautiful place you have seen?",
+                  "si": "ඔයා දැකපු ලස්සනම තැන මොකද්ද?"
+                },
+                {
+                  "en": "Give an example of something that is both useful and beautiful.",
+                  "si": "ප්‍රයෝජනවත් වගේම ලස්සන දෙයකට උදාහරණයක් කියන්න."
+                }
+              ]
+            },
+            {
+              "id": "11-14.art-and-design.04",
+              "level": "open",
+              "title": {
+                "en": "Designing a poster",
+                "si": "පෝස්ටරයක් නිර්මාණය කරමු"
+              },
+              "mainPrompt": {
+                "en": "If you had to design a poster for an event at your school, what would it look like and why?",
+                "si": "ඔයාගේ ඉස්කෝලේ වැඩසටහනකට පෝස්ටරයක් නිර්මාණය කරන්න වුණොත්, ඒක කොහොම වෙයිද? ඇයි?"
+              },
+              "followUps": [
+                {
+                  "en": "What message would it give?",
+                  "si": "ඒකෙන් දෙන පණිවිඩය මොකද්ද?"
+                },
+                {
+                  "en": "How would you make people notice it?",
+                  "si": "මිනිස්සුන්ගේ ඇස ඒකට යොමු කරන්නේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.art-and-design.05",
+              "level": "open",
+              "title": {
+                "en": "Art in public places",
+                "si": "පොදු තැන්වල කලාව"
+              },
+              "mainPrompt": {
+                "en": "Many cities have murals and art on their walls. How does art change a place and the people who live there?",
+                "si": "ගොඩක් නගරවල බිත්තිවල සිතුවම් තියෙනවා. කලාව නිසා තැනක් සහ එතන ජීවත් වෙන මිනිස්සු වෙනස් වෙන්නේ කොහොමද?"
+              },
+              "followUps": [
+                {
+                  "en": "What would you paint on a wall in your town?",
+                  "si": "ඔයාගේ නගරයේ බිත්තියක ඔයා අඳින්නේ මොනවද?"
+                },
+                {
+                  "en": "Who should decide what art goes in public places?",
+                  "si": "පොදු තැන්වල තියන්න ඕනේ කලාව තීරණය කරන්න ඕනේ කවුද?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "adventures-and-challenges",
+          "title": {
+            "en": "Adventures and challenges",
+            "si": "වික්‍රම සහ අභියෝග"
+          },
+          "icon": "🧗",
+          "topics": [
+            {
+              "id": "11-14.adventures-and-challenges.01",
+              "level": "concrete",
+              "title": {
+                "en": "An adventure I had",
+                "si": "මම ගිය වික්‍රමාන්විත ගමනක්"
+              },
+              "mainPrompt": {
+                "en": "Tell me about an adventure you had, like a hike, a camp or exploring somewhere new.",
+                "si": "ඔයා ගිය වික්‍රමාන්විත ගමනක් ගැන කියන්න. කඳු නැගීමක්, කඳවුරක්, නැත්නම් අලුත් තැනක් ගවේෂණය කරපු වෙලාවක් වගේ."
+              },
+              "followUps": [
+                {
+                  "en": "What was the most exciting moment?",
+                  "si": "වැඩියෙන්ම ආසාවෙන් හිටපු වෙලාව මොකද්ද?"
+                },
+                {
+                  "en": "Who was with you?",
+                  "si": "ඔයා එක්ක හිටියේ කවුද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.adventures-and-challenges.02",
+              "level": "concrete",
+              "title": {
+                "en": "Something I learned to do",
+                "si": "මම ඉගෙනගත්ත අලුත් දෙයක්"
+              },
+              "mainPrompt": {
+                "en": "Describe something that was hard for you at first but you learned to do, like swimming or riding a bike.",
+                "si": "මුලින් ඔයාට අමාරු වුණු, ඒත් පස්සේ කරන්න ඉගෙනගත්ත දෙයක් ගැන විස්තර කරන්න. පීනන එක, නැත්නම් බයිසිකල් පදින එක වගේ."
+              },
+              "followUps": [
+                {
+                  "en": "What helped you keep going?",
+                  "si": "දිගටම උත්සාහ කරන්න ඔයාට උදව් වුණේ මොකද්ද?"
+                },
+                {
+                  "en": "How did you feel when you could finally do it?",
+                  "si": "අන්තිමට ඒක කරන්න පුළුවන් වුණාම ඔයාට කොහොමද දැනුණේ?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.adventures-and-challenges.03",
+              "level": "open",
+              "title": {
+                "en": "Climbing Sri Pada",
+                "si": "ශ්‍රී පාදය නගිමු"
+              },
+              "mainPrompt": {
+                "en": "Imagine you are climbing Sri Pada (Adam's Peak) at night to see the sunrise. Describe the journey.",
+                "si": "ඉර පායන හැටි බලන්න ඔයා රෑ ශ්‍රී පාදය නගිනවා කියලා හිතන්න. ඒ ගමන විස්තර කරන්න."
+              },
+              "followUps": [
+                {
+                  "en": "What would you need to bring?",
+                  "si": "ඔයාට අරන් යන්න ඕනේ මොනවද?"
+                },
+                {
+                  "en": "How would you encourage a tired friend?",
+                  "si": "මහන්සි වුණු යාළුවෙක්ව ඔයා දිරිමත් කරන්නේ කොහොමද?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.adventures-and-challenges.04",
+              "level": "open",
+              "title": {
+                "en": "A dream adventure",
+                "si": "මගේ හීනයේ වික්‍රමය"
+              },
+              "mainPrompt": {
+                "en": "If you could go on any adventure, like sailing around the world or exploring a rainforest, what would you choose and why?",
+                "si": "ලෝකේ වටේ නැවෙන් යන එක, වැසි වනාන්තරයක් ගවේෂණය කරන එක වගේ ඕනම වික්‍රමයක් ඔයාට තෝරන්න පුළුවන් නම්, ඔයා තෝරන්නේ මොකද්ද? ඇයි?"
+              },
+              "followUps": [
+                {
+                  "en": "How would you prepare?",
+                  "si": "ඔයා ලෑස්ති වෙන්නේ කොහොමද?"
+                },
+                {
+                  "en": "Who would be in your team, and why?",
+                  "si": "ඔයාගේ කණ්ඩායමේ ඉන්නේ කවුද? ඇයි?"
+                }
+              ]
+            },
+            {
+              "id": "11-14.adventures-and-challenges.05",
+              "level": "open",
+              "title": {
+                "en": "How challenges help us grow",
+                "si": "අභියෝග අපිව දියුණු කරන හැටි"
+              },
+              "mainPrompt": {
+                "en": "Why do you think facing challenges can help people grow?",
+                "si": "අභියෝගවලට මුහුණ දෙන එකෙන් මිනිස්සු දියුණු වෙන්නේ ඇයි කියලා ඔයා හිතන්නේ?"
+              },
+              "followUps": [
+                {
+                  "en": "What advice would you give someone facing a new challenge?",
+                  "si": "අලුත් අභියෝගයකට මුහුණ දෙන කෙනෙකුට ඔයා දෙන උපදෙස මොකද්ද?"
+                },
+                {
+                  "en": "Tell me about a famous person who overcame a challenge.",
+                  "si": "අභියෝගයක් ජයගත්ත ප්‍රසිද්ධ කෙනෙක් ගැන කියන්න."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

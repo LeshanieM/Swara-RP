@@ -6,4 +6,3 @@ class _Activity extends StatefulWidget {
   @override
   State<_Activity> createState() => _ActivityState();
 }
-

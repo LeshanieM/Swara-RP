@@ -1,0 +1,44 @@
+{
+  "sessionId": "6ad79a84338cfca60658d567",
+  "status": "completed",
+  "questionnaire": {
+    "version": "c3-questionnaire-0.1",
+    "answers": {
+      "interest": 4,
+      "willing_participation": 4,
+      "enthusiasm": 3,
+      "staying_involved": 4,
+      "comfort": 5,
+      "confidence": 4
+    },
+    "meanScore": 4,
+    "q": 0.75,
+    "engaged": true,
+    "respondent": "parent",
+    "language": "si",
+    "submittedAt": "2026-10-20T16:44:53.900Z"
+  },
+  "outcome": {
+    "activitiesCompleted": 5,
+    "activitiesSkipped": 0,
+    "activitiesAbandoned": 0,
+    "meanPerformance": 1,
+    "meanEngagement": 0.899,
+    "questionnaireScore": 0.75,
+    "weights": {
+      "performance": 0.5,
+      "engagement": 0.3,
+      "questionnaire": 0.2
+    },
+    "tss": 92,
+    "engagementModes": {
+      "camera_logs": 5
+    },
+    "fluency": {
+      "available": false,
+      "status": "missing",
+      "includedInTss": false
+    },
+    "computedAt": "2026-10-20T16:44:53.904Z"
+  }
+}

@@ -1,0 +1,260 @@
+{
+  "attemptId": "6ad79a84338cfca60658d578",
+  "sessionId": "6ad79a84338cfca60658d567",
+  "sequence": 1,
+  "activity": {
+    "armId": "11-14:word_phrase_practice:easy",
+    "type": "word_phrase_practice",
+    "difficulty": "easy",
+    "ageBand": "11-14",
+    "title": {
+      "en": "Word and phrase practice",
+      "si": "වචන සහ වාක්‍ය ඛණ්ඩ පුහුණුව"
+    },
+    "targetSkill": "easy_onset",
+    "durationMin": 3,
+    "appActivityId": "word-phrase-practice",
+    "parentLed": false
+  },
+  "item": {
+    "id": "WP-E-03",
+    "type": "word_phrase_practice",
+    "ageBand": "11-14",
+    "difficulty": "easy",
+    "contentKind": "word_list",
+    "contentRef": "assets/c3/wp/WP-E-03",
+    "prompt": {
+      "en": "always, every, open, under",
+      "si": "හැමදාම, ඕනෑම, අරින්න, යට"
+    },
+    "targets": 5,
+    "slpApproved": true,
+    "placeholder": true,
+    "targetWords": {
+      "si": [
+        "හැමදාම",
+        "ඕනෑම",
+        "අරින්න",
+        "යට"
+      ],
+      "en": [
+        "always",
+        "every",
+        "open",
+        "under"
+      ]
+    }
+  },
+  "advice": {
+    "advice": "continue",
+    "reason": null,
+    "elapsedMinutes": 0,
+    "plannedMinutes": 25,
+    "activitiesDone": 0,
+    "maxActivities": 5,
+    "lowStreak": {
+      "activities": 0,
+      "minutes": 0
+    }
+  },
+  "context": {
+    "featureNames": [
+      "bias",
+      "band11to14",
+      "c1Severity",
+      "c1Missing",
+      "c1PercentSS",
+      "c1Repetition",
+      "c1BlockProlong",
+      "c2Yes",
+      "c2Missing",
+      "c2FG",
+      "c2HM",
+      "cameraOn",
+      "parentHelp",
+      "engagementTrend",
+      "typeRecentScore",
+      "sessionsCompleted",
+      "sessionElapsed"
+    ],
+    "values": {
+      "bias": 1,
+      "band11to14": 1,
+      "c1Severity": 0,
+      "c1Missing": 1,
+      "c1PercentSS": 0,
+      "c1Repetition": 0,
+      "c1BlockProlong": 0,
+      "c2Yes": 0,
+      "c2Missing": 1,
+      "c2FG": 0,
+      "c2HM": 0,
+      "cameraOn": 0,
+      "parentHelp": 0,
+      "engagementTrend": 0.5,
+      "sessionsCompleted": 0,
+      "sessionElapsed": 0,
+      "typeRecentScore": 0.5
+    },
+    "sources": {
+      "c1": {
+        "status": "missing"
+      },
+      "c2": {
+        "flag": "missing",
+        "source": "none",
+        "analysisId": null,
+        "behaviourTypes": []
+      },
+      "parentHelp": {
+        "activities": 0
+      },
+      "engagementTrend": {
+        "sessions": 0,
+        "prior": true
+      },
+      "sessionsCompleted": 0,
+      "elapsedMinutes": 0,
+      "plannedMinutes": 25
+    }
+  },
+  "selection": {
+    "policy": "hybrid",
+    "alpha": 0.6,
+    "epsilon": 0,
+    "explored": false,
+    "propensity": 1,
+    "candidates": 18,
+    "scores": [
+      {
+        "armId": "11-14:word_phrase_practice:easy",
+        "mean": 0.8813,
+        "bonus": 0.7373,
+        "ucb": 1.6186,
+        "n": 0
+      },
+      {
+        "armId": "11-14:passage_reading:easy",
+        "mean": 0.9076,
+        "bonus": 0.6888,
+        "ucb": 1.5964,
+        "n": 0
+      },
+      {
+        "armId": "11-14:word_phrase_practice:moderate",
+        "mean": 0.5596,
+        "bonus": 0.9717,
+        "ucb": 1.5312,
+        "n": 0
+      },
+      {
+        "armId": "11-14:passage_reading:moderate",
+        "mean": 0.5859,
+        "bonus": 0.9411,
+        "ucb": 1.527,
+        "n": 0
+      },
+      {
+        "armId": "11-14:syllable_practice:easy",
+        "mean": 0.8365,
+        "bonus": 0.688,
+        "ucb": 1.5244,
+        "n": 0
+      },
+      {
+        "armId": "11-14:word_phrase_practice:difficult",
+        "mean": 0.5547,
+        "bonus": 0.9558,
+        "ucb": 1.5105,
+        "n": 0
+      },
+      {
+        "armId": "11-14:passage_reading:difficult",
+        "mean": 0.581,
+        "bonus": 0.9246,
+        "ucb": 1.5056,
+        "n": 0
+      },
+      {
+        "armId": "11-14:picture_naming:easy",
+        "mean": 0.7893,
+        "bonus": 0.7026,
+        "ucb": 1.4918,
+        "n": 0
+      },
+      {
+        "armId": "11-14:breathing:easy",
+        "mean": 0.7847,
+        "bonus": 0.6809,
+        "ucb": 1.4656,
+        "n": 0
+      },
+      {
+        "armId": "11-14:picture_description:easy",
+        "mean": 0.7526,
+        "bonus": 0.7015,
+        "ucb": 1.4541,
+        "n": 0
+      },
+      {
+        "armId": "11-14:syllable_practice:moderate",
+        "mean": 0.5148,
+        "bonus": 0.9153,
+        "ucb": 1.43,
+        "n": 0
+      },
+      {
+        "armId": "11-14:syllable_practice:difficult",
+        "mean": 0.5098,
+        "bonus": 0.9023,
+        "ucb": 1.4122,
+        "n": 0
+      },
+      {
+        "armId": "11-14:picture_naming:moderate",
+        "mean": 0.4675,
+        "bonus": 0.9306,
+        "ucb": 1.3981,
+        "n": 0
+      },
+      {
+        "armId": "11-14:breathing:moderate",
+        "mean": 0.4629,
+        "bonus": 0.9021,
+        "ucb": 1.365,
+        "n": 0
+      },
+      {
+        "armId": "11-14:picture_naming:difficult",
+        "mean": 0.4626,
+        "bonus": 0.8957,
+        "ucb": 1.3584,
+        "n": 0
+      },
+      {
+        "armId": "11-14:breathing:difficult",
+        "mean": 0.458,
+        "bonus": 0.8906,
+        "ucb": 1.3486,
+        "n": 0
+      },
+      {
+        "armId": "11-14:picture_description:moderate",
+        "mean": 0.4309,
+        "bonus": 0.9091,
+        "ucb": 1.34,
+        "n": 0
+      },
+      {
+        "armId": "11-14:picture_description:difficult",
+        "mean": 0.426,
+        "bonus": 0.8936,
+        "ucb": 1.3196,
+        "n": 0
+      }
+    ]
+  },
+  "links": {
+    "result": "/api/c3/sessions/6ad79a84338cfca60658d567/activities/6ad79a84338cfca60658d578/result"
+  }
+}

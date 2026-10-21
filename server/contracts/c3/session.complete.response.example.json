@@ -1,0 +1,1144 @@
+{
+  "childId": "CH-FHCKR4",
+  "ageAtSession": 12,
+  "ageBand": "11-14",
+  "language": "si",
+  "cameraOn": false,
+  "plannedMinutes": 25,
+  "maxActivities": 5,
+  "c2Flag": "missing",
+  "c2FlagSource": "none",
+  "c2AnalysisId": null,
+  "c2BehaviourTypes": [],
+  "c2FlagClient": null,
+  "status": "completed",
+  "policy": "hybrid",
+  "rewardMode": "fused",
+  "breaks": [],
+  "contextAtStart": {
+    "values": {
+      "bias": 1,
+      "band11to14": 1,
+      "c1Severity": 0,
+      "c1Missing": 1,
+      "c1PercentSS": 0,
+      "c1Repetition": 0,
+      "c1BlockProlong": 0,
+      "c2Yes": 0,
+      "c2Missing": 1,
+      "c2FG": 0,
+      "c2HM": 0,
+      "cameraOn": 0,
+      "parentHelp": 0,
+      "engagementTrend": 0.5,
+      "sessionsCompleted": 0,
+      "sessionElapsed": 0
+    },
+    "sources": {
+      "c1": {
+        "status": "missing"
+      },
+      "c2": {
+        "flag": "missing",
+        "source": "none",
+        "analysisId": null,
+        "behaviourTypes": []
+      },
+      "parentHelp": {
+        "activities": 0
+      },
+      "engagementTrend": {
+        "sessions": 0,
+        "prior": true
+      },
+      "sessionsCompleted": 0,
+      "elapsedMinutes": 0,
+      "plannedMinutes": 25
+    }
+  },
+  "createdAt": "2026-10-20T16:44:52.752Z",
+  "updatedAt": "2026-10-20T16:44:53.809Z",
+  "completedAt": "2026-10-20T16:44:53.809Z",
+  "outcome": {
+    "weights": {
+      "performance": 0.625,
+      "engagement": 0.375,
+      "questionnaire": 0
+    },
+    "activitiesCompleted": 5,
+    "activitiesSkipped": 0,
+    "activitiesAbandoned": 0,
+    "meanPerformance": 1,
+    "meanEngagement": 0.899,
+    "questionnaireScore": null,
+    "tss": 96.2,
+    "engagementModes": {
+      "camera_logs": 5
+    },
+    "fluency": {
+      "available": false,
+      "status": "missing",
+      "includedInTss": false
+    },
+    "computedAt": "2026-10-20T16:44:53.808Z"
+  },
+  "id": "6ad79a84338cfca60658d567",
+  "advice": null,
+  "activities": [
+    {
+      "context": {
+        "featureNames": [
+          "bias",
+          "band11to14",
+          "c1Severity",
+          "c1Missing",
+          "c1PercentSS",
+          "c1Repetition",
+          "c1BlockProlong",
+          "c2Yes",
+          "c2Missing",
+          "c2FG",
+          "c2HM",
+          "cameraOn",
+          "parentHelp",
+          "engagementTrend",
+          "typeRecentScore",
+          "sessionsCompleted",
+          "sessionElapsed"
+        ],
+        "values": {
+          "bias": 1,
+          "band11to14": 1,
+          "c1Severity": 0,
+          "c1Missing": 1,
+          "c1PercentSS": 0,
+          "c1Repetition": 0,
+          "c1BlockProlong": 0,
+          "c2Yes": 0,
+          "c2Missing": 1,
+          "c2FG": 0,
+          "c2HM": 0,
+          "cameraOn": 0,
+          "parentHelp": 0,
+          "engagementTrend": 0.5,
+          "sessionsCompleted": 0,
+          "sessionElapsed": 0,
+          "typeRecentScore": 0.5
+        },
+        "candidates": [
+          {
+            "armId": "11-14:breathing:easy",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:breathing:moderate",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:breathing:difficult",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_description:easy",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_description:moderate",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_description:difficult",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_naming:easy",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_naming:moderate",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_naming:difficult",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:syllable_practice:easy",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:syllable_practice:moderate",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:syllable_practice:difficult",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:word_phrase_practice:easy",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:word_phrase_practice:moderate",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:word_phrase_practice:difficult",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:passage_reading:easy",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:passage_reading:moderate",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:passage_reading:difficult",
+            "typeRecentScore": 0.5
+          }
+        ]
+      },
+      "engagement": {
+        "score": 0.8966,
+        "mode": "camera_logs",
+        "source": "server",
+        "modelVersion": "c3-engagement-provisional-0.1",
+        "faceMissing": false,
+        "features": {
+          "completion": 1,
+          "skipped": 0,
+          "earlyExit": 0,
+          "zAttemptsPerTarget": 0.4,
+          "zResponseLatency": -0.25,
+          "zTapsPerMin": -0.45,
+          "cameraScore": 0.8213,
+          "windowsUsed": 3,
+          "windowsTotal": 3,
+          "cameraModelVersion": "c3-engagement-camera-provisional-0.1",
+          "cameraLogit": 1.525,
+          "normsSource": {
+            "responseLatencyMs": "population",
+            "attemptsPerTarget": "population",
+            "tapsPerMin": "population"
+          }
+        }
+      },
+      "verification": {
+        "source": "reported",
+        "words": 4,
+        "checked": 0,
+        "matched": 0,
+        "mismatched": 0,
+        "unclear": 0
+      },
+      "rewards": {
+        "fused": 0.9586,
+        "performance": 1,
+        "engagement": 0.8966,
+        "tap": 1
+      },
+      "sessionId": "6ad79a84338cfca60658d567",
+      "childId": "CH-FHCKR4",
+      "ageBand": "11-14",
+      "sequence": 1,
+      "status": "completed",
+      "armId": "11-14:word_phrase_practice:easy",
+      "type": "word_phrase_practice",
+      "difficulty": "easy",
+      "itemId": "WP-E-03",
+      "parentLed": false,
+      "elapsedMinAtStart": 0,
+      "policy": "hybrid",
+      "alpha": 0.6,
+      "epsilon": 0,
+      "explored": false,
+      "propensity": 1,
+      "candidates": 18,
+      "advice": "continue",
+      "banditUpdated": true,
+      "wordChecks": [],
+      "createdAt": "2026-10-20T16:44:52.878Z",
+      "updatedAt": "2026-10-20T16:44:53.100Z",
+      "completedAt": "2026-10-20T16:44:52.912Z",
+      "performance": 1,
+      "result": {
+        "camera": {
+          "windows": [
+            {
+              "durationSec": 10,
+              "facePresentRatio": 0.95,
+              "yawStdDeg": 4,
+              "pitchStdDeg": 3,
+              "yawAbsMeanDeg": 5,
+              "pitchAbsMeanDeg": 4,
+              "lookAwayRatio": 0.02,
+              "eyeOpenMean": 0.85,
+              "eyesClosedRatio": 0.03,
+              "smileMean": 0.3
+            },
+            {
+              "durationSec": 10,
+              "facePresentRatio": 0.95,
+              "yawStdDeg": 4,
+              "pitchStdDeg": 3,
+              "yawAbsMeanDeg": 5,
+              "pitchAbsMeanDeg": 4,
+              "lookAwayRatio": 0.02,
+              "eyeOpenMean": 0.85,
+              "eyesClosedRatio": 0.03,
+              "smileMean": 0.3
+            },
+            {
+              "durationSec": 6,
+              "facePresentRatio": 0.95,
+              "yawStdDeg": 4,
+              "pitchStdDeg": 3,
+              "yawAbsMeanDeg": 5,
+              "pitchAbsMeanDeg": 4,
+              "lookAwayRatio": 0.02,
+              "eyeOpenMean": 0.85,
+              "eyesClosedRatio": 0.03,
+              "smileMean": 0.3
+            }
+          ]
+        },
+        "skipped": false,
+        "targets": 2,
+        "successes": 2,
+        "completedShare": 1,
+        "attempts": 3,
+        "responseLatencyMs": 2200,
+        "taps": 14,
+        "durationSec": 200,
+        "earlyExit": false,
+        "parentHelp": 1,
+        "parentFeedback": "just_right"
+      },
+      "reward": 0.9586,
+      "rewardMode": "fused",
+      "id": "6ad79a84338cfca60658d578"
+    },
+    {
+      "context": {
+        "featureNames": [
+          "bias",
+          "band11to14",
+          "c1Severity",
+          "c1Missing",
+          "c1PercentSS",
+          "c1Repetition",
+          "c1BlockProlong",
+          "c2Yes",
+          "c2Missing",
+          "c2FG",
+          "c2HM",
+          "cameraOn",
+          "parentHelp",
+          "engagementTrend",
+          "typeRecentScore",
+          "sessionsCompleted",
+          "sessionElapsed"
+        ],
+        "values": {
+          "bias": 1,
+          "band11to14": 1,
+          "c1Severity": 0,
+          "c1Missing": 1,
+          "c1PercentSS": 0,
+          "c1Repetition": 0,
+          "c1BlockProlong": 0,
+          "c2Yes": 0,
+          "c2Missing": 1,
+          "c2FG": 0,
+          "c2HM": 0,
+          "cameraOn": 0,
+          "parentHelp": 0.3333,
+          "engagementTrend": 0.5,
+          "sessionsCompleted": 0,
+          "sessionElapsed": 0.1333,
+          "typeRecentScore": 0.5
+        },
+        "candidates": [
+          {
+            "armId": "11-14:breathing:easy",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:breathing:moderate",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:breathing:difficult",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_description:easy",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_description:moderate",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_description:difficult",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_naming:easy",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_naming:moderate",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_naming:difficult",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:syllable_practice:easy",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:syllable_practice:moderate",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:syllable_practice:difficult",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:passage_reading:easy",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:passage_reading:moderate",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:passage_reading:difficult",
+            "typeRecentScore": 0.5
+          }
+        ]
+      },
+      "engagement": {
+        "score": 0.8966,
+        "mode": "camera_logs",
+        "source": "server",
+        "modelVersion": "c3-engagement-provisional-0.1",
+        "faceMissing": false,
+        "features": {
+          "completion": 1,
+          "skipped": 0,
+          "earlyExit": 0,
+          "zAttemptsPerTarget": 0.4,
+          "zResponseLatency": -0.25,
+          "zTapsPerMin": -0.45,
+          "cameraScore": 0.8213,
+          "windowsUsed": 3,
+          "windowsTotal": 3,
+          "cameraModelVersion": "c3-engagement-camera-provisional-0.1",
+          "cameraLogit": 1.525,
+          "normsSource": {
+            "responseLatencyMs": "population",
+            "attemptsPerTarget": "population",
+            "tapsPerMin": "population"
+          }
+        }
+      },
+      "verification": {
+        "source": "reported",
+        "words": 0,
+        "checked": 0,
+        "matched": 0,
+        "mismatched": 0,
+        "unclear": 0
+      },
+      "rewards": {
+        "fused": 0.9586,
+        "performance": 1,
+        "engagement": 0.8966,
+        "tap": 1
+      },
+      "sessionId": "6ad79a84338cfca60658d567",
+      "childId": "CH-FHCKR4",
+      "ageBand": "11-14",
+      "sequence": 2,
+      "status": "completed",
+      "armId": "11-14:passage_reading:easy",
+      "type": "passage_reading",
+      "difficulty": "easy",
+      "itemId": "PR-E-01",
+      "parentLed": false,
+      "elapsedMinAtStart": 3.33,
+      "policy": "hybrid",
+      "alpha": 0.6,
+      "epsilon": 0,
+      "explored": false,
+      "propensity": 1,
+      "candidates": 15,
+      "advice": "continue",
+      "banditUpdated": true,
+      "wordChecks": [],
+      "createdAt": "2026-10-20T16:44:53.148Z",
+      "updatedAt": "2026-10-20T16:44:53.253Z",
+      "completedAt": "2026-10-20T16:44:53.167Z",
+      "performance": 1,
+      "result": {
+        "camera": {
+          "windows": [
+            {
+              "durationSec": 10,
+              "facePresentRatio": 0.95,
+              "yawStdDeg": 4,
+              "pitchStdDeg": 3,
+              "yawAbsMeanDeg": 5,
+              "pitchAbsMeanDeg": 4,
+              "lookAwayRatio": 0.02,
+              "eyeOpenMean": 0.85,
+              "eyesClosedRatio": 0.03,
+              "smileMean": 0.3
+            },
+            {
+              "durationSec": 10,
+              "facePresentRatio": 0.95,
+              "yawStdDeg": 4,
+              "pitchStdDeg": 3,
+              "yawAbsMeanDeg": 5,
+              "pitchAbsMeanDeg": 4,
+              "lookAwayRatio": 0.02,
+              "eyeOpenMean": 0.85,
+              "eyesClosedRatio": 0.03,
+              "smileMean": 0.3
+            },
+            {
+              "durationSec": 6,
+              "facePresentRatio": 0.95,
+              "yawStdDeg": 4,
+              "pitchStdDeg": 3,
+              "yawAbsMeanDeg": 5,
+              "pitchAbsMeanDeg": 4,
+              "lookAwayRatio": 0.02,
+              "eyeOpenMean": 0.85,
+              "eyesClosedRatio": 0.03,
+              "smileMean": 0.3
+            }
+          ]
+        },
+        "skipped": false,
+        "targets": 2,
+        "successes": 2,
+        "completedShare": 1,
+        "attempts": 3,
+        "responseLatencyMs": 2200,
+        "taps": 14,
+        "durationSec": 200,
+        "earlyExit": false,
+        "parentHelp": 1,
+        "parentFeedback": "just_right"
+      },
+      "reward": 0.9586,
+      "rewardMode": "fused",
+      "id": "6ad79a85338cfca60658d590"
+    },
+    {
+      "context": {
+        "featureNames": [
+          "bias",
+          "band11to14",
+          "c1Severity",
+          "c1Missing",
+          "c1PercentSS",
+          "c1Repetition",
+          "c1BlockProlong",
+          "c2Yes",
+          "c2Missing",
+          "c2FG",
+          "c2HM",
+          "cameraOn",
+          "parentHelp",
+          "engagementTrend",
+          "typeRecentScore",
+          "sessionsCompleted",
+          "sessionElapsed"
+        ],
+        "values": {
+          "bias": 1,
+          "band11to14": 1,
+          "c1Severity": 0,
+          "c1Missing": 1,
+          "c1PercentSS": 0,
+          "c1Repetition": 0,
+          "c1BlockProlong": 0,
+          "c2Yes": 0,
+          "c2Missing": 1,
+          "c2FG": 0,
+          "c2HM": 0,
+          "cameraOn": 0,
+          "parentHelp": 0.3333,
+          "engagementTrend": 0.5,
+          "sessionsCompleted": 0,
+          "sessionElapsed": 0.2667,
+          "typeRecentScore": 0.5
+        },
+        "candidates": [
+          {
+            "armId": "11-14:breathing:easy",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:breathing:moderate",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:breathing:difficult",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_description:easy",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_description:moderate",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_description:difficult",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_naming:easy",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_naming:moderate",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_naming:difficult",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:syllable_practice:easy",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:syllable_practice:moderate",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:syllable_practice:difficult",
+            "typeRecentScore": 0.5
+          }
+        ]
+      },
+      "engagement": {
+        "score": 0.8966,
+        "mode": "camera_logs",
+        "source": "server",
+        "modelVersion": "c3-engagement-provisional-0.1",
+        "faceMissing": false,
+        "features": {
+          "completion": 1,
+          "skipped": 0,
+          "earlyExit": 0,
+          "zAttemptsPerTarget": 0.4,
+          "zResponseLatency": -0.25,
+          "zTapsPerMin": -0.45,
+          "cameraScore": 0.8213,
+          "windowsUsed": 3,
+          "windowsTotal": 3,
+          "cameraModelVersion": "c3-engagement-camera-provisional-0.1",
+          "cameraLogit": 1.525,
+          "normsSource": {
+            "responseLatencyMs": "population",
+            "attemptsPerTarget": "population",
+            "tapsPerMin": "population"
+          }
+        }
+      },
+      "verification": {
+        "source": "reported",
+        "words": 2,
+        "checked": 0,
+        "matched": 0,
+        "mismatched": 0,
+        "unclear": 0
+      },
+      "rewards": {
+        "fused": 0.9586,
+        "performance": 1,
+        "engagement": 0.8966,
+        "tap": 1
+      },
+      "sessionId": "6ad79a84338cfca60658d567",
+      "childId": "CH-FHCKR4",
+      "ageBand": "11-14",
+      "sequence": 3,
+      "status": "completed",
+      "armId": "11-14:syllable_practice:easy",
+      "type": "syllable_practice",
+      "difficulty": "easy",
+      "itemId": "SP-E-03",
+      "parentLed": false,
+      "elapsedMinAtStart": 6.67,
+      "policy": "hybrid",
+      "alpha": 0.6,
+      "epsilon": 0,
+      "explored": false,
+      "propensity": 1,
+      "candidates": 12,
+      "advice": "continue",
+      "banditUpdated": true,
+      "wordChecks": [],
+      "createdAt": "2026-10-20T16:44:53.342Z",
+      "updatedAt": "2026-10-20T16:44:53.444Z",
+      "completedAt": "2026-10-20T16:44:53.371Z",
+      "performance": 1,
+      "result": {
+        "camera": {
+          "windows": [
+            {
+              "durationSec": 10,
+              "facePresentRatio": 0.95,
+              "yawStdDeg": 4,
+              "pitchStdDeg": 3,
+              "yawAbsMeanDeg": 5,
+              "pitchAbsMeanDeg": 4,
+              "lookAwayRatio": 0.02,
+              "eyeOpenMean": 0.85,
+              "eyesClosedRatio": 0.03,
+              "smileMean": 0.3
+            },
+            {
+              "durationSec": 10,
+              "facePresentRatio": 0.95,
+              "yawStdDeg": 4,
+              "pitchStdDeg": 3,
+              "yawAbsMeanDeg": 5,
+              "pitchAbsMeanDeg": 4,
+              "lookAwayRatio": 0.02,
+              "eyeOpenMean": 0.85,
+              "eyesClosedRatio": 0.03,
+              "smileMean": 0.3
+            },
+            {
+              "durationSec": 6,
+              "facePresentRatio": 0.95,
+              "yawStdDeg": 4,
+              "pitchStdDeg": 3,
+              "yawAbsMeanDeg": 5,
+              "pitchAbsMeanDeg": 4,
+              "lookAwayRatio": 0.02,
+              "eyeOpenMean": 0.85,
+              "eyesClosedRatio": 0.03,
+              "smileMean": 0.3
+            }
+          ]
+        },
+        "skipped": false,
+        "targets": 2,
+        "successes": 2,
+        "completedShare": 1,
+        "attempts": 3,
+        "responseLatencyMs": 2200,
+        "taps": 14,
+        "durationSec": 200,
+        "earlyExit": false,
+        "parentHelp": 1,
+        "parentFeedback": "just_right"
+      },
+      "reward": 0.9586,
+      "rewardMode": "fused",
+      "id": "6ad79a85338cfca60658d5a6"
+    },
+    {
+      "context": {
+        "featureNames": [
+          "bias",
+          "band11to14",
+          "c1Severity",
+          "c1Missing",
+          "c1PercentSS",
+          "c1Repetition",
+          "c1BlockProlong",
+          "c2Yes",
+          "c2Missing",
+          "c2FG",
+          "c2HM",
+          "cameraOn",
+          "parentHelp",
+          "engagementTrend",
+          "typeRecentScore",
+          "sessionsCompleted",
+          "sessionElapsed"
+        ],
+        "values": {
+          "bias": 1,
+          "band11to14": 1,
+          "c1Severity": 0,
+          "c1Missing": 1,
+          "c1PercentSS": 0,
+          "c1Repetition": 0,
+          "c1BlockProlong": 0,
+          "c2Yes": 0,
+          "c2Missing": 1,
+          "c2FG": 0,
+          "c2HM": 0,
+          "cameraOn": 0,
+          "parentHelp": 0.3333,
+          "engagementTrend": 0.5,
+          "sessionsCompleted": 0,
+          "sessionElapsed": 0.4,
+          "typeRecentScore": 0.5
+        },
+        "candidates": [
+          {
+            "armId": "11-14:breathing:easy",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:breathing:moderate",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:breathing:difficult",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_description:easy",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_description:moderate",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_description:difficult",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_naming:easy",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_naming:moderate",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_naming:difficult",
+            "typeRecentScore": 0.5
+          }
+        ]
+      },
+      "engagement": {
+        "score": 0.9025,
+        "mode": "camera_logs",
+        "source": "server",
+        "modelVersion": "c3-engagement-provisional-0.1",
+        "faceMissing": false,
+        "features": {
+          "completion": 1,
+          "skipped": 0,
+          "earlyExit": 0,
+          "zAttemptsPerTarget": 0,
+          "zResponseLatency": 0,
+          "zTapsPerMin": 0,
+          "cameraScore": 0.8213,
+          "windowsUsed": 3,
+          "windowsTotal": 3,
+          "cameraModelVersion": "c3-engagement-camera-provisional-0.1",
+          "cameraLogit": 1.525,
+          "normsSource": {
+            "responseLatencyMs": "child",
+            "attemptsPerTarget": "child",
+            "tapsPerMin": "child"
+          }
+        }
+      },
+      "verification": {
+        "source": "reported",
+        "words": 1,
+        "checked": 0,
+        "matched": 0,
+        "mismatched": 0,
+        "unclear": 0
+      },
+      "rewards": {
+        "fused": 0.961,
+        "performance": 1,
+        "engagement": 0.9025,
+        "tap": 1
+      },
+      "sessionId": "6ad79a84338cfca60658d567",
+      "childId": "CH-FHCKR4",
+      "ageBand": "11-14",
+      "sequence": 4,
+      "status": "completed",
+      "armId": "11-14:picture_naming:easy",
+      "type": "picture_naming",
+      "difficulty": "easy",
+      "itemId": "PN-E-03",
+      "parentLed": false,
+      "elapsedMinAtStart": 10,
+      "policy": "hybrid",
+      "alpha": 0.6,
+      "epsilon": 0,
+      "explored": false,
+      "propensity": 1,
+      "candidates": 9,
+      "advice": "continue",
+      "banditUpdated": true,
+      "wordChecks": [],
+      "createdAt": "2026-10-20T16:44:53.479Z",
+      "updatedAt": "2026-10-20T16:44:53.570Z",
+      "completedAt": "2026-10-20T16:44:53.494Z",
+      "performance": 1,
+      "result": {
+        "camera": {
+          "windows": [
+            {
+              "durationSec": 10,
+              "facePresentRatio": 0.95,
+              "yawStdDeg": 4,
+              "pitchStdDeg": 3,
+              "yawAbsMeanDeg": 5,
+              "pitchAbsMeanDeg": 4,
+              "lookAwayRatio": 0.02,
+              "eyeOpenMean": 0.85,
+              "eyesClosedRatio": 0.03,
+              "smileMean": 0.3
+            },
+            {
+              "durationSec": 10,
+              "facePresentRatio": 0.95,
+              "yawStdDeg": 4,
+              "pitchStdDeg": 3,
+              "yawAbsMeanDeg": 5,
+              "pitchAbsMeanDeg": 4,
+              "lookAwayRatio": 0.02,
+              "eyeOpenMean": 0.85,
+              "eyesClosedRatio": 0.03,
+              "smileMean": 0.3
+            },
+            {
+              "durationSec": 6,
+              "facePresentRatio": 0.95,
+              "yawStdDeg": 4,
+              "pitchStdDeg": 3,
+              "yawAbsMeanDeg": 5,
+              "pitchAbsMeanDeg": 4,
+              "lookAwayRatio": 0.02,
+              "eyeOpenMean": 0.85,
+              "eyesClosedRatio": 0.03,
+              "smileMean": 0.3
+            }
+          ]
+        },
+        "skipped": false,
+        "targets": 2,
+        "successes": 2,
+        "completedShare": 1,
+        "attempts": 3,
+        "responseLatencyMs": 2200,
+        "taps": 14,
+        "durationSec": 200,
+        "earlyExit": false,
+        "parentHelp": 1,
+        "parentFeedback": "just_right"
+      },
+      "reward": 0.961,
+      "rewardMode": "fused",
+      "id": "6ad79a85338cfca60658d5bc"
+    },
+    {
+      "context": {
+        "featureNames": [
+          "bias",
+          "band11to14",
+          "c1Severity",
+          "c1Missing",
+          "c1PercentSS",
+          "c1Repetition",
+          "c1BlockProlong",
+          "c2Yes",
+          "c2Missing",
+          "c2FG",
+          "c2HM",
+          "cameraOn",
+          "parentHelp",
+          "engagementTrend",
+          "typeRecentScore",
+          "sessionsCompleted",
+          "sessionElapsed"
+        ],
+        "values": {
+          "bias": 1,
+          "band11to14": 1,
+          "c1Severity": 0,
+          "c1Missing": 1,
+          "c1PercentSS": 0,
+          "c1Repetition": 0,
+          "c1BlockProlong": 0,
+          "c2Yes": 0,
+          "c2Missing": 1,
+          "c2FG": 0,
+          "c2HM": 0,
+          "cameraOn": 0,
+          "parentHelp": 0.3333,
+          "engagementTrend": 0.5,
+          "sessionsCompleted": 0,
+          "sessionElapsed": 0.5333,
+          "typeRecentScore": 0.5
+        },
+        "candidates": [
+          {
+            "armId": "11-14:breathing:easy",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:breathing:moderate",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:breathing:difficult",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_description:easy",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_description:moderate",
+            "typeRecentScore": 0.5
+          },
+          {
+            "armId": "11-14:picture_description:difficult",
+            "typeRecentScore": 0.5
+          }
+        ]
+      },
+      "engagement": {
+        "score": 0.9025,
+        "mode": "camera_logs",
+        "source": "server",
+        "modelVersion": "c3-engagement-provisional-0.1",
+        "faceMissing": false,
+        "features": {
+          "completion": 1,
+          "skipped": 0,
+          "earlyExit": 0,
+          "zAttemptsPerTarget": 0,
+          "zResponseLatency": 0,
+          "zTapsPerMin": 0,
+          "cameraScore": 0.8213,
+          "windowsUsed": 3,
+          "windowsTotal": 3,
+          "cameraModelVersion": "c3-engagement-camera-provisional-0.1",
+          "cameraLogit": 1.525,
+          "normsSource": {
+            "responseLatencyMs": "child",
+            "attemptsPerTarget": "child",
+            "tapsPerMin": "child"
+          }
+        }
+      },
+      "verification": {
+        "source": "reported",
+        "words": 0,
+        "checked": 0,
+        "matched": 0,
+        "mismatched": 0,
+        "unclear": 0
+      },
+      "rewards": {
+        "fused": 0.961,
+        "performance": 1,
+        "engagement": 0.9025,
+        "tap": 1
+      },
+      "sessionId": "6ad79a84338cfca60658d567",
+      "childId": "CH-FHCKR4",
+      "ageBand": "11-14",
+      "sequence": 5,
+      "status": "completed",
+      "armId": "11-14:breathing:easy",
+      "type": "breathing",
+      "difficulty": "easy",
+      "itemId": "BR-E-03",
+      "parentLed": false,
+      "elapsedMinAtStart": 13.33,
+      "policy": "hybrid",
+      "alpha": 0.6,
+      "epsilon": 0,
+      "explored": false,
+      "propensity": 1,
+      "candidates": 6,
+      "advice": "continue",
+      "banditUpdated": true,
+      "wordChecks": [],
+      "createdAt": "2026-10-20T16:44:53.681Z",
+      "updatedAt": "2026-10-20T16:44:53.769Z",
+      "completedAt": "2026-10-20T16:44:53.709Z",
+      "performance": 1,
+      "result": {
+        "camera": {
+          "windows": [
+            {
+              "durationSec": 10,
+              "facePresentRatio": 0.95,
+              "yawStdDeg": 4,
+              "pitchStdDeg": 3,
+              "yawAbsMeanDeg": 5,
+              "pitchAbsMeanDeg": 4,
+              "lookAwayRatio": 0.02,
+              "eyeOpenMean": 0.85,
+              "eyesClosedRatio": 0.03,
+              "smileMean": 0.3
+            },
+            {
+              "durationSec": 10,
+              "facePresentRatio": 0.95,
+              "yawStdDeg": 4,
+              "pitchStdDeg": 3,
+              "yawAbsMeanDeg": 5,
+              "pitchAbsMeanDeg": 4,
+              "lookAwayRatio": 0.02,
+              "eyeOpenMean": 0.85,
+              "eyesClosedRatio": 0.03,
+              "smileMean": 0.3
+            },
+            {
+              "durationSec": 6,
+              "facePresentRatio": 0.95,
+              "yawStdDeg": 4,
+              "pitchStdDeg": 3,
+              "yawAbsMeanDeg": 5,
+              "pitchAbsMeanDeg": 4,
+              "lookAwayRatio": 0.02,
+              "eyeOpenMean": 0.85,
+              "eyesClosedRatio": 0.03,
+              "smileMean": 0.3
+            }
+          ]
+        },
+        "skipped": false,
+        "targets": 2,
+        "successes": 2,
+        "completedShare": 1,
+        "attempts": 3,
+        "responseLatencyMs": 2200,
+        "taps": 14,
+        "durationSec": 200,
+        "earlyExit": false,
+        "parentHelp": 1,
+        "parentFeedback": "just_right"
+      },
+      "reward": 0.961,
+      "rewardMode": "fused",
+      "id": "6ad79a85338cfca60658d5d2"
+    }
+  ]
+}

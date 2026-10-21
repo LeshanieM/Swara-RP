@@ -5,4 +5,3 @@ class _ThemeSelection extends StatefulWidget {
   @override
   State<_ThemeSelection> createState() => _ThemeSelectionState();
 }
-

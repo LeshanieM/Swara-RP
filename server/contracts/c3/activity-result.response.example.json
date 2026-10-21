@@ -1,0 +1,66 @@
+{
+  "attemptId": "6ad79a84338cfca60658d578",
+  "status": "completed",
+  "armId": "11-14:word_phrase_practice:easy",
+  "itemId": "WP-E-03",
+  "performance": 1,
+  "verification": {
+    "source": "reported",
+    "words": 4,
+    "checked": 0,
+    "matched": 0,
+    "mismatched": 0,
+    "unclear": 0
+  },
+  "engagement": {
+    "score": 0.8966,
+    "mode": "camera_logs",
+    "source": "server",
+    "modelVersion": "c3-engagement-provisional-0.1",
+    "faceMissing": false,
+    "features": {
+      "completion": 1,
+      "skipped": 0,
+      "earlyExit": 0,
+      "zAttemptsPerTarget": 0.4,
+      "zResponseLatency": -0.25,
+      "zTapsPerMin": -0.45,
+      "cameraScore": 0.8213,
+      "windowsUsed": 3,
+      "windowsTotal": 3,
+      "cameraModelVersion": "c3-engagement-camera-provisional-0.1",
+      "cameraLogit": 1.525,
+      "normsSource": {
+        "responseLatencyMs": "population",
+        "attemptsPerTarget": "population",
+        "tapsPerMin": "population"
+      }
+    }
+  },
+  "rewards": {
+    "fused": 0.9586,
+    "performance": 1,
+    "engagement": 0.8966,
+    "tap": 1
+  },
+  "reward": 0.9586,
+  "rewardMode": "fused",
+  "bandit": {
+    "updated": true,
+    "armId": "11-14:word_phrase_practice:easy",
+    "n": 1,
+    "meanReward": 0.9586
+  },
+  "advice": {
+    "advice": "continue",
+    "reason": null,
+    "elapsedMinutes": 3.33,
+    "plannedMinutes": 25,
+    "activitiesDone": 1,
+    "maxActivities": 5,
+    "lowStreak": {
+      "activities": 0,
+      "minutes": 0
+    }
+  }
+}
