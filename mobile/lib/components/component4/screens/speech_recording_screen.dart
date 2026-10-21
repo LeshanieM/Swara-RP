@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swara/core/theme/app_theme.dart';
 import 'package:swara/components/component4/widgets/c4_header.dart';
+import 'package:swara/components/component4/services/c4_flow.dart';
+import 'package:swara/core/audio/wav_recorder.dart';
+import 'package:swara/core/network/api_exception.dart';
 
 enum RecordingState { initial, recording, paused, completed }
 
@@ -18,6 +21,8 @@ class _SpeechRecordingScreenState extends State<SpeechRecordingScreen> with Sing
   int _seconds = 0;
   Timer? _timer;
   late AnimationController _pulseController;
+  final WavRecorder _recorder = WavRecorder();
+  bool _nextBusy = false;
 
   @override
   void initState() {
@@ -31,11 +36,20 @@ class _SpeechRecordingScreenState extends State<SpeechRecordingScreen> with Sing
   @override
   void dispose() {
     _timer?.cancel();
+    _recorder.dispose();
     _pulseController.dispose();
     super.dispose();
   }
 
-  void _startRecording() {
+  Future<void> _startRecording() async {
+    if (C4Flow.isLive) {
+      if (_state == RecordingState.paused) {
+        await _recorder.resume();
+      } else if (!await _recorder.start(prefix: 'c4')) {
+        _showError('Microphone permission is needed to record.');
+        return;
+      }
+    }
     Future.microtask(() {
       if (mounted) {
         setState(() {
@@ -51,6 +65,7 @@ class _SpeechRecordingScreenState extends State<SpeechRecordingScreen> with Sing
   }
 
   void _pauseRecording() {
+    if (C4Flow.isLive) _recorder.pause();
     Future.microtask(() {
       if (mounted) {
         setState(() {
@@ -61,33 +76,73 @@ class _SpeechRecordingScreenState extends State<SpeechRecordingScreen> with Sing
     _timer?.cancel();
   }
 
-  void _stopRecording() {
-    _timer?.cancel();
-    Future.microtask(() {
-      if (mounted) {
-        setState(() {
-          _state = RecordingState.completed;
-        });
-        // Automatically navigate to processing screen as requested
-        Future.delayed(const Duration(milliseconds: 500), () {
-          if (mounted) {
-            context.push('/c4/speech_processing');
-          }
-        });
-      }
-    });
-  }
+  /// Below this, the answer is unlikely to hold the 5 sentences the sample needs.
+  static const _minAnswerSec = 30;
 
-  void _resetRecording() {
-    Future.microtask(() {
-      if (mounted) {
+  Future<void> _stopRecording() async {
+    if (_seconds < _minAnswerSec) {
+      final stop = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('තව ටිකක් කියමුද?'),
+          content: const Text('Try to say at least 5 sentences. Keep going, or answer the next question?'),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Keep going')),
+            TextButton(onPressed: () => Navigator.pop(context, true), child: const Text('Stop anyway')),
+          ],
+        ),
+      );
+      if (stop != true || !mounted) return;
+    }
+    _timer?.cancel();
+    setState(() => _state = RecordingState.completed);
+    if (C4Flow.isLive) {
+      final audio = await _recorder.stop();
+      try {
+        if (audio == null) throw const ApiException('no_audio', 'Nothing was recorded. Please try again.');
+        await C4Flow.upload(audio);
+      } catch (e) {
+        if (!mounted) return;
+        _showError(ApiException.from(e).message);
         setState(() {
           _state = RecordingState.initial;
           _seconds = 0;
         });
+        return;
       }
-    });
-    _timer?.cancel();
+    } else {
+      await Future.delayed(const Duration(milliseconds: 500));
+    }
+    if (mounted) context.push('/c4/speech_processing');
+  }
+
+  /// The child answered: show the topic's next follow-up question (the recording keeps going).
+  Future<void> _nextQuestion() async {
+    setState(() => _nextBusy = true);
+    try {
+      await C4Flow.nextPrompt();
+    } catch (e) {
+      _showError(ApiException.from(e).message);
+    } finally {
+      if (mounted) setState(() => _nextBusy = false);
+    }
+  }
+
+  /// The child didn't understand the follow-up: the skip is logged and the next follow-up shows.
+  Future<void> _skipQuestion() async {
+    setState(() => _nextBusy = true);
+    try {
+      await C4Flow.skipFollowUp();
+    } catch (e) {
+      _showError(ApiException.from(e).message);
+    } finally {
+      if (mounted) setState(() => _nextBusy = false);
+    }
+  }
+
+  void _showError(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message), backgroundColor: AppColors.error));
   }
 
   String _formatTime(int seconds) {
@@ -98,25 +153,28 @@ class _SpeechRecordingScreenState extends State<SpeechRecordingScreen> with Sing
 
   @override
   Widget build(BuildContext context) {
+    final question = C4Flow.view.questionSi;
+    final followUpsLeft = (C4Flow.session?['prompts']?['followUpsRemaining'] as num?)?.toInt() ?? 0;
+    final onFollowUp = C4Flow.session?['prompts']?['current']?['kind'] == 'follow_up';
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
-            const C4Header(currentStep: 8, totalSteps: 12),
+            const C4Header(currentStep: 8, totalSteps: 14),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(24.0),
                 child: Column(
                   children: [
                     Text(
-                      'ඔයාගේ ප්‍රියතම බල්ලා එක්ක දවසක්ම ගත කරන්න පුළුවන් නම්, ඔයා දෙන්නා මොනවා කරයිද?',
+                      question,
                       style: AppTextStyles.heading3.copyWith(color: AppColors.text, height: 1.5),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'කාලය අරගෙන ස්වභාවිකව කතා කරන්න.',
+                      'කාලය අරගෙන ස්වභාවිකව කතා කරන්න. අඩුම තරමින් වාක්‍ය 5ක් කියන්න.\nTake your time and say at least 5 sentences.',
                       style: AppTextStyles.bodySmall,
                       textAlign: TextAlign.center,
                     ),
@@ -180,6 +238,22 @@ class _SpeechRecordingScreenState extends State<SpeechRecordingScreen> with Sing
                           const SizedBox(height: 16),
                           Text('Saving recording...', style: AppTextStyles.body),
                     ],
+                    if (C4Flow.isLive && followUpsLeft > 0 &&
+                        (_state == RecordingState.recording || _state == RecordingState.paused)) ...[
+                      const SizedBox(height: 24),
+                      OutlinedButton.icon(
+                        onPressed: _nextBusy ? null : _nextQuestion,
+                        icon: const Icon(Icons.forum_outlined),
+                        label: const Text('ඊළඟ ප්‍රශ්නය (Next question)'),
+                      ),
+                    ],
+                    if (C4Flow.isLive && onFollowUp &&
+                        (_state == RecordingState.recording || _state == RecordingState.paused))
+                      TextButton.icon(
+                        onPressed: _nextBusy ? null : _skipQuestion,
+                        icon: const Icon(Icons.help_outline),
+                        label: const Text("මට තේරෙන්නේ නැහැ · Skip this question"),
+                      ),
                     const SizedBox(height: 48),
                   ],
                 ),

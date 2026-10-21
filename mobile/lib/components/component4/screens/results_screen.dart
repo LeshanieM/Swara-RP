@@ -2,18 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swara/core/theme/app_theme.dart';
 import 'package:swara/components/component4/widgets/c4_header.dart';
+import 'package:swara/components/component4/services/c4_flow.dart';
 
 class ResultsScreen extends StatelessWidget {
   const ResultsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final v = C4Flow.view;
+    final duration = fmtClock(v.durationSec);
+    final mlu = v.mlu == null ? '—' : v.mlu!.toStringAsFixed(1);
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
-            const C4Header(currentStep: 12, totalSteps: 12),
+            const C4Header(currentStep: 12, totalSteps: 14),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(24.0),
@@ -33,7 +37,7 @@ class ResultsScreen extends StatelessWidget {
                     const SizedBox(height: 32),
 
                     _buildResultCard(
-                      value: '5.2',
+                      value: mlu,
                       unit: 'words / utterance',
                       titleEn: 'Mean Length of Utterance',
                       titleSi: 'සාමාන්‍ය ප්‍රකාශන දිග',
@@ -42,7 +46,7 @@ class ResultsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     _buildResultCard(
-                      value: '37',
+                      value: '${v.ndw}',
                       unit: 'different words',
                       titleEn: 'Number of Different Words',
                       titleSi: 'වෙනස් වචන ගණන',
@@ -51,7 +55,16 @@ class ResultsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     _buildResultCard(
-                      value: '01:24',
+                      value: v.percentSS == null ? '—' : v.percentSS!.toStringAsFixed(1),
+                      unit: v.percentSS == null ? 'not assessed' : '% of syllables',
+                      titleEn: 'Stuttered Syllables (%SS)',
+                      titleSi: 'පැකිළුණු අක්ෂර ප්‍රතිශතය',
+                      description: 'Stuttered syllables per 100 syllables in this answer, from the C1 stuttering model.',
+                      icon: Icons.graphic_eq,
+                    ),
+                    const SizedBox(height: 16),
+                    _buildResultCard(
+                      value: duration,
                       unit: '',
                       titleEn: 'Response Duration',
                       titleSi: 'පිළිතුරු කාලය',
@@ -60,6 +73,24 @@ class ResultsScreen extends StatelessWidget {
                     ),
 
                     const SizedBox(height: 32),
+                    if (v.utterances < 5)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: Text(
+                          'Fewer than 5 sentences this time: next time, try to say a little more.',
+                          style: AppTextStyles.caption.copyWith(color: AppColors.warning),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    if (v.flags.contains('unreliable_sample') || v.flags.contains('short_sample'))
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: Text(
+                          'A short answer (under 50 words): these numbers are less reliable.',
+                          style: AppTextStyles.caption.copyWith(color: AppColors.warning),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                     Text('This Session', style: AppTextStyles.titleLarge),
                     const SizedBox(height: 16),
                     
@@ -75,11 +106,11 @@ class ResultsScreen extends StatelessWidget {
                         runSpacing: 24,
                         alignment: WrapAlignment.center,
                         children: [
-                          _buildStatItem('12', 'Utterances'),
-                          _buildStatItem('62', 'Total Words'),
-                          _buildStatItem('37', 'Different Words'),
-                          _buildStatItem('5.2', 'MLU'),
-                          _buildStatItem('01:24', 'Duration'),
+                          _buildStatItem('${v.utterances}${v.utterances < 5 ? ' / 5' : ''}', 'Utterances'),
+                          _buildStatItem('${v.totalWords}', 'Total Words'),
+                          _buildStatItem('${v.ndw}', 'Different Words'),
+                          _buildStatItem(mlu, 'MLU'),
+                          _buildStatItem(duration, 'Duration'),
                         ],
                       ),
                     ),

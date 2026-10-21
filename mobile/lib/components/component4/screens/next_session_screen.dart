@@ -1,13 +1,117 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swara/core/theme/app_theme.dart';
 import 'package:swara/components/component4/widgets/c4_header.dart';
+import 'package:swara/components/component4/screens/interest_selection.dart';
+import 'package:swara/components/component4/services/c4_flow.dart';
+import 'package:swara/components/component4/services/c4_service.dart';
+import 'package:swara/core/network/api_exception.dart';
+import 'package:swara/core/widgets/parent_pin_dialog.dart';
 
-class NextSessionScreen extends StatelessWidget {
+class NextSessionScreen extends ConsumerStatefulWidget {
   const NextSessionScreen({super.key});
 
   @override
+  ConsumerState<NextSessionScreen> createState() => _NextSessionScreenState();
+}
+
+class _NextSessionScreenState extends ConsumerState<NextSessionScreen> {
+  Map<String, dynamic>? _summary;
+  bool _savingBand = false;
+
+  static const _bands = {
+    'gaining': 'Gaining',
+    'stable': 'Stable',
+    'below': 'Below the usual level',
+    'baseline_building': 'Building the starting level',
+    'not_reliable': 'Answer too short to judge',
+  };
+
+  // The bands a parent can confirm or choose; the others (baseline, too short) are not judgements.
+  static const _comparable = ['below', 'stable', 'gaining'];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSummary();
+  }
+
+  void _loadSummary() {
+    final child = C4Flow.child;
+    if (C4Flow.isLive && child != null) {
+      C4Service.summary(child.childId).then((s) {
+        if (mounted) setState(() => _summary = s);
+      }).catchError((_) {});
+    }
+  }
+
+  /// The parent agrees with the band, or picks another one; an override becomes the band shown everywhere.
+  Future<void> _reviewBand(String sampleId, String decision, {String? band}) async {
+    if (!await ensureParentMode(context, ref)) return;
+    setState(() => _savingBand = true);
+    try {
+      await C4Service.confirmBand(sampleId, decision, band: band);
+      _loadSummary();
+    } catch (e) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(ApiException.from(e).message)));
+    } finally {
+      if (mounted) setState(() => _savingBand = false);
+    }
+  }
+
+  Widget _bandReview() {
+    final latest = _summary?['latest'] as Map?;
+    final sampleId = latest?['sampleId'] as String?;
+    final computed = latest?['bandComputed'] as String?;
+    if (sampleId == null || !_comparable.contains(computed)) return const SizedBox.shrink();
+    final current = latest?['band'] as String?;
+    final confirmed = latest?['bandConfirmed'] == true;
+    return Container(
+      margin: const EdgeInsets.only(top: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceRaised,
+        borderRadius: AppRadii.lgAll,
+        border: Border.all(color: AppColors.divider),
+      ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text('For the parent: does this sound right?', style: AppTextStyles.label),
+        const SizedBox(height: 4),
+        Text(
+          confirmed
+              ? 'Saved: ${_bands[current]}.'
+              : "Compared with your child's own starting level, today looks: ${_bands[computed]}.",
+          style: AppTextStyles.caption,
+        ),
+        const SizedBox(height: 12),
+        Wrap(spacing: 8, runSpacing: 8, children: [
+          for (final b in _comparable)
+            ChoiceChip(
+              label: Text(_bands[b]!),
+              selected: current == b,
+              onSelected: _savingBand
+                  ? null
+                  : (_) => b == computed ? _reviewBand(sampleId, 'confirm') : _reviewBand(sampleId, 'override', band: b),
+            ),
+        ]),
+      ]),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final v = C4Flow.view;
+    final live = C4Flow.isLive;
+    final currentId = C4Flow.session?['topic']?['categoryId'] as String?;
+    // Another of the child's favourite categories: the next topic is drawn from these.
+    final nextId = C4Flow.rankedIds.where((id) => id != currentId).firstOrNull;
+    final nextTitle = live
+        ? (C4Flow.categories.where((c) => c.id == nextId).map((c) => c.en).firstOrNull ?? (nextId ?? '—'))
+        : 'Sports';
+    final nextRank = live ? (nextId == null ? null : C4Flow.rankedIds.indexOf(nextId) + 1) : 2;
+    final concrete = C4Flow.session?['progressSignal']?['preferConcrete'] == true;
+    final band = _bands[_summary?['band']];
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -57,7 +161,9 @@ class NextSessionScreen extends StatelessWidget {
                           ClipRRect(
                             borderRadius: AppRadii.mdAll,
                             child: Image.asset(
-                              'assets/images/component3/lion_mascot.jpg',
+                              live
+                                  ? InterestCategory.images[currentId] ?? 'assets/images/spontaneous_friends.png'
+                                  : 'assets/images/component3/lion_mascot.jpg',
                               width: 80,
                               height: 80,
                               fit: BoxFit.cover,
@@ -68,14 +174,14 @@ class NextSessionScreen extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Animals', style: AppTextStyles.titleLarge),
+                                Text(v.categoryEn, style: AppTextStyles.titleLarge),
                                 Text('Previous Topic', style: AppTextStyles.caption),
                                 const SizedBox(height: 8),
                                 Row(
                                   children: [
                                     const Icon(Icons.star, size: 14, color: AppColors.warning),
                                     const SizedBox(width: 4),
-                                    Text('Familiarity: 5 / 5', style: AppTextStyles.caption),
+                                    Text('Favourite no. ${v.categoryRank ?? '—'} of 5', style: AppTextStyles.caption),
                                   ],
                                 ),
                                 const SizedBox(height: 4),
@@ -130,7 +236,9 @@ class NextSessionScreen extends StatelessWidget {
                               ClipRRect(
                                 borderRadius: AppRadii.mdAll,
                                 child: Image.asset(
-                                  'assets/images/component3/milo_trophy.jpg',
+                                  live
+                                      ? InterestCategory.images[nextId] ?? 'assets/images/spontaneous_friends.png'
+                                      : 'assets/images/component3/milo_trophy.jpg',
                                   width: 80,
                                   height: 80,
                                   fit: BoxFit.cover,
@@ -141,21 +249,31 @@ class NextSessionScreen extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('Sports', style: AppTextStyles.titleLarge),
+                                    Text(nextTitle, style: AppTextStyles.titleLarge),
                                     const SizedBox(height: 8),
                                     Row(
                                       children: [
                                         const Icon(Icons.star_half, size: 14, color: AppColors.warning),
                                         const SizedBox(width: 4),
-                                        Text('Familiarity: 4 / 5', style: AppTextStyles.caption),
+                                        Text('Favourite no. ${nextRank ?? '—'} of 5', style: AppTextStyles.caption),
                                       ],
                                     ),
                                     const SizedBox(height: 8),
                                     Text('Question style:', style: AppTextStyles.caption),
                                     Text(
-                                      'Simple → More open-ended',
+                                      concrete ? 'Kept simple and concrete' : 'Simple → More open-ended',
                                       style: AppTextStyles.bodySmall.copyWith(color: AppColors.primaryDeep, fontWeight: FontWeight.bold),
                                     ),
+                                    if (band != null) ...[
+                                      const SizedBox(height: 8),
+                                      Text('Language band: $band', style: AppTextStyles.caption),
+                                    ],
+                                    if (_summary?['stuttering']?['spontaneousPercentSS'] is num) ...[
+                                      const SizedBox(height: 4),
+                                      Text(
+                                          'Stuttering in this answer: ${(_summary!['stuttering']['spontaneousPercentSS'] as num).toStringAsFixed(1)} %SS',
+                                          style: AppTextStyles.caption),
+                                    ],
                                   ],
                                 ),
                               ),
@@ -165,6 +283,7 @@ class NextSessionScreen extends StatelessWidget {
                       ),
                     ),
 
+                    if (live) _bandReview(),
                     const SizedBox(height: 48),
                     ElevatedButton(
                       onPressed: () => context.go('/'),

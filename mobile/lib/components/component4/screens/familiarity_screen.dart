@@ -83,11 +83,12 @@ class _FamiliarityScreenState extends State<FamiliarityScreen> {
                       decoration: BoxDecoration(
                         borderRadius: AppRadii.lgAll,
                         boxShadow: AppElevation.card,
-                        image: DecorationImage(
-                          image: AssetImage(currentCategory.imagePath),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                        image: currentCategory.imagePath == null
+                            ? null
+                            : DecorationImage(
+                                image: AssetImage(currentCategory.imagePath!),
+                                fit: BoxFit.cover,
+                              ),
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: AppRadii.lgAll,

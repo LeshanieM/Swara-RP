@@ -1,116 +1,99 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:swara/core/audio/wav_recorder.dart';
 import 'package:swara/core/network/api_client.dart';
+import 'package:swara/core/network/api_exception.dart';
 import 'package:swara/core/storage/storage_service.dart';
-import 'package:swara/features/child/data/models/demo_data.dart';
+import '../models/speech_assessment.dart';
 
-enum SpeechRecordState { idle, recording, stopped, uploading, analyzing, done, error }
-
-class SpeechAnalysisState {
-  final SpeechRecordState recordState;
-  final String? audioPath;
-  final Map<String, dynamic>? result;
-  final String? error;
-  final int recordDuration;
-
-  const SpeechAnalysisState({
-    this.recordState = SpeechRecordState.idle,
-    this.audioPath,
-    this.result,
-    this.error,
-    this.recordDuration = 0,
-  });
-
-  SpeechAnalysisState copyWith({
-    SpeechRecordState? recordState,
-    String? audioPath,
-    Map<String, dynamic>? result,
-    String? error,
-    int? recordDuration,
-  }) {
-    return SpeechAnalysisState(
-      recordState: recordState ?? this.recordState,
-      audioPath: audioPath ?? this.audioPath,
-      result: result ?? this.result,
-      error: error,
-      recordDuration: recordDuration ?? this.recordDuration,
-    );
-  }
-}
-
-class SpeechNotifier extends StateNotifier<SpeechAnalysisState> {
+/// Component 1 on the Swara API (/api/c1): the task for an age, the assessment upload,
+/// polling until the background analysis finishes, and the child's history and summary.
+class SpeechService {
   final ApiClient _api;
-  final String childId;
+  SpeechService(this._api);
 
-  SpeechNotifier(this._api, this.childId) : super(const SpeechAnalysisState());
+  static const _pollEvery = Duration(seconds: 2);
+  static const _pollFor = Duration(minutes: 10);
 
-  void setAudioPath(String path) {
-    state = state.copyWith(audioPath: path, recordState: SpeechRecordState.stopped);
-  }
-
-  void setRecording() {
-    state = state.copyWith(recordState: SpeechRecordState.recording, recordDuration: 0);
-  }
-
-  void setStopped() {
-    state = state.copyWith(recordState: SpeechRecordState.stopped);
-  }
-
-  void updateDuration(int seconds) {
-    state = state.copyWith(recordDuration: seconds);
-  }
-
-  void reset() {
-    state = const SpeechAnalysisState();
-  }
-
-  Future<Map<String, dynamic>?> analyze() async {
-    if (state.audioPath == null && !StorageService.isDemoMode()) return null;
-    state = state.copyWith(recordState: SpeechRecordState.analyzing);
-
+  Future<SpeechTask> task(int age) async {
     try {
-      if (StorageService.isDemoMode()) {
-        await Future.delayed(const Duration(seconds: 2));
-        final result = DemoData.speechResult(childId);
-        state = state.copyWith(
-          recordState: SpeechRecordState.done,
-          result: result,
-        );
-        return result;
-      }
-
-      final formData = await _buildFormData();
-      final response = await _api.postMultipart('/api/speech/analyze', formData);
-      final result = response.data as Map<String, dynamic>;
-      state = state.copyWith(recordState: SpeechRecordState.done, result: result);
-      return result;
-    } catch (e) {
-      state = state.copyWith(
-        recordState: SpeechRecordState.error,
-        error: 'Analysis failed. Please try again.',
-      );
-      return null;
+      final res = await _api.get('/api/c1/tasks', queryParameters: {'age': age, 'language': 'si'});
+      return SpeechTask.fromJson(res.data);
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
     }
   }
 
-  Future<dynamic> _buildFormData() async {
-    // Return FormData for real upload
-    // For now build minimal form
-    return {};
+  /// Uploads the recording; returns the assessment id (the API answers 202 and analyses in the background).
+  Future<String> submit({
+    required RecordedAudio audio,
+    required String childId,
+    required int age,
+    required SpeechTask task,
+    SpeechPassage? passage,
+    SpeechPicture? picture,
+  }) async {
+    final form = FormData.fromMap({
+      'audio': await audio.toMultipart(audio.name),
+      'childId': childId,
+      'age': age,
+      'taskType': task.taskType,
+      'language': 'si',
+      if (task.isReading && passage != null) 'passageId': passage.id,
+      if (!task.isReading && picture != null) 'pictureId': picture.id,
+    });
+    try {
+      final res = await _api.postMultipart('/api/c1/assessments', form);
+      return res.data['assessmentId'] as String;
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
+
+  /// Polls GET /assessments/:id until it is completed (returns the result) or failed (throws).
+  Future<SpeechResult> waitForResult(String assessmentId) async {
+    final deadline = DateTime.now().add(_pollFor);
+    while (DateTime.now().isBefore(deadline)) {
+      final Map<String, dynamic> doc;
+      try {
+        doc = (await _api.get('/api/c1/assessments/$assessmentId')).data;
+      } on DioException catch (e) {
+        throw ApiException.fromDio(e);
+      }
+      switch (doc['status']) {
+        case 'completed':
+          return SpeechResult.fromResult(doc['result']);
+        case 'failed':
+          throw ApiException(
+            doc['error']?['code'] ?? 'analysis_failed',
+            doc['error']?['message'] ?? 'The analysis failed.',
+          );
+      }
+      await Future.delayed(_pollEvery);
+    }
+    throw const ApiException('timeout', 'The analysis is taking too long. Try again later.');
+  }
+
+  Future<Map<String, dynamic>> summary(String childId) async {
+    try {
+      return (await _api.get('/api/c1/children/$childId/summary')).data;
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
   }
 }
 
-final speechNotifierProvider =
-    StateNotifierProvider.family<SpeechNotifier, SpeechAnalysisState, String>(
-  (ref, childId) => SpeechNotifier(ref.read(apiClientProvider), childId),
-);
+final speechServiceProvider = Provider<SpeechService>((ref) => SpeechService(ref.read(apiClientProvider)));
 
-final speechHistoryProvider = FutureProvider.family<List<Map<String, dynamic>>, String>(
-  (ref, childId) async {
-    if (StorageService.isDemoMode()) {
-      return [DemoData.speechResult(childId)];
-    }
-    final api = ref.read(apiClientProvider);
-    final response = await api.get('/api/speech/$childId');
-    return List<Map<String, dynamic>>.from(response.data);
-  },
-);
+/// The result for one submission; demo mode returns the sample result.
+final speechResultProvider = FutureProvider.autoDispose.family<SpeechResult, String?>((ref, assessmentId) async {
+  if (StorageService.isDemoMode() || assessmentId == null) return SpeechResult.demo;
+  return ref.read(speechServiceProvider).waitForResult(assessmentId);
+});
+
+final speechTaskProvider = FutureProvider.autoDispose.family<SpeechTask, int>((ref, age) async {
+  if (StorageService.isDemoMode()) {
+    return SpeechTask(taskType: age <= 10 ? 'picture_description' : 'reading', ageBand: age <= 10 ? '5-10' : '11-14');
+  }
+  return ref.read(speechServiceProvider).task(age);
+});
