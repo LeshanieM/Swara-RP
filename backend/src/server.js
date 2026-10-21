@@ -6,6 +6,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 
 const authRoutes = require('./routes/auth');
+const profileRoutes = require('./routes/profile');
 const childRoutes = require('./routes/children');
 const speechRoutes = require('./routes/speech');
 const psychologyRoutes = require('./routes/psychology');
@@ -28,6 +29,7 @@ app.use(morgan('dev'));
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/profile', profileRoutes);
 app.use('/api/children', childRoutes);
 app.use('/api/speech', speechRoutes);
 app.use('/api/psychology', psychologyRoutes);

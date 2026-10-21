@@ -49,11 +49,26 @@ async function overall(childId) {
     safe(() => require('../modules/c4/services/childService').summary(childId)),
   ]);
   /* eslint-enable global-require */
+  const c4Band = c4.band?.effective ?? c4.band ?? null;
   const evidence = {
-    c1: { latestPercentSS: c1.latest?.percentSS ?? null, severity: c1.latest?.severity ?? null, assessments: c1.completedAssessments ?? 0 },
-    c2: { flag: c2.c2Flag ?? 'missing', trend: c2.trend ?? 'insufficient_data' },
-    c3: { tssLatest: c3.tss?.latest ?? null, tssTrend: c3.tss?.trend ?? 'insufficient_data', sessions: c3.sessionsCompleted ?? 0 },
-    c4: { band: c4.band?.effective ?? null, trend: c4.trend ?? 'insufficient_data', samples: c4.completedSamples ?? 0 },
+    c1: { available: !c1.error, latestPercentSS: c1.latest?.percentSS ?? null, severity: c1.latest?.severity ?? null, assessments: c1.completedAssessments ?? 0 },
+    c2: {
+      available: !c2.error,
+      flag: c2.c2Flag ?? 'missing',
+      hasVideo: c2.hasVideo ?? false,
+      completedAnalyses: c2.completedAnalyses ?? 0,
+      notAssessedCount: c2.notAssessedCount ?? 0,
+      latest: c2.latest ?? null,
+      trend: c2.trend ?? 'insufficient_data',
+    },
+    c3: { available: !c3.error, tssLatest: c3.tss?.latest ?? null, tssTrend: c3.tss?.trend ?? 'insufficient_data', sessions: c3.sessionsCompleted ?? 0 },
+    c4: {
+      available: !c4.error,
+      band: c4Band,
+      latestPercentSS: c4.stuttering?.spontaneousPercentSS ?? null,
+      trend: c4.trend ?? 'insufficient_data',
+      samples: c4.completedSamples ?? 0,
+    },
   };
 
   const pss = { series: series.map((p) => ({ ...p, percentSS: r2(p.percentSS) })), points: series.length };

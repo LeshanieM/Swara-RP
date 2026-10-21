@@ -16,59 +16,58 @@ class C4Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    final titleSize = width < 360 ? 18.0 : 22.0;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
           child: Row(
             children: [
-              IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new, size: 20),
-                onPressed: onBackPressed ?? () {
-                  Future.microtask(() {
-                    if (context.mounted) {
-                      if (context.canPop()) {
-                        context.pop();
-                      } else {
-                        context.go('/');
-                      }
-                    }
-                  });
-                },
-                color: AppColors.primaryDeep,
+              SizedBox(
+                width: 48,
+                height: 48,
+                child: Material(
+                  color: AppColors.surfaceRaised,
+                  shape: const CircleBorder(),
+                  child: IconButton(
+                    tooltip: 'ආපසු',
+                    icon: const Icon(Icons.chevron_left_rounded, size: 28),
+                    onPressed: onBackPressed ??
+                        () {
+                          Future.microtask(() {
+                            if (context.mounted) {
+                              if (context.canPop()) {
+                                context.pop();
+                              } else {
+                                context.go('/');
+                              }
+                            }
+                          });
+                        },
+                    color: AppColors.text,
+                  ),
+                ),
               ),
               Expanded(
                 child: Column(
                   children: [
                     Text(
-                      'Component 4',
-                      style: AppTextStyles.bodySmall.copyWith(
-                        color: AppColors.primaryDeep,
-                        fontWeight: FontWeight.w700,
-                      ),
+                      'කථන ක්‍රියාකාරකම',
+                      style: AppTextStyles.heading3
+                          .copyWith(fontSize: titleSize, color: AppColors.text),
                       textAlign: TextAlign.center,
                     ),
                     Text(
-                      'පුද්ගලීකරණය කළ කථන ක්‍රියාකාරකම',
-                      style: AppTextStyles.caption.copyWith(
-                        fontSize: 10,
-                      ),
+                      'පියවර $currentStep / $totalSteps',
+                      style: AppTextStyles.caption.copyWith(color: AppColors.textLight),
                       textAlign: TextAlign.center,
                     ),
                   ],
                 ),
               ),
-              SizedBox(
-                width: 48,
-                child: Text(
-                  '$currentStep / $totalSteps',
-                  style: AppTextStyles.label.copyWith(
-                    color: AppColors.primaryDeep,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
+              const SizedBox(width: 48),
             ],
           ),
         ),
@@ -76,7 +75,7 @@ class C4Header extends StatelessWidget {
           value: currentStep / totalSteps,
           backgroundColor: AppColors.primaryWash,
           color: AppColors.primary,
-          minHeight: 2,
+          minHeight: 3,
         ),
       ],
     );
