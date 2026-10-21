@@ -1,6 +1,6 @@
 """Clip features for the C1 heads: acoustic (MFCC / pitch / energy, the same function the detector uses) and
 mean-pooled XLS-R hidden states for several layers. Both are cached in chunks, so a long extraction resumes."""
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import numpy as np
@@ -42,7 +42,9 @@ def _chunked(paths: list[str], cache: Path, name: str, compute):
 
 def acoustic(paths: list[str], cache: Path, workers: int = 4) -> np.ndarray:
     def compute(chunk):
-        with ProcessPoolExecutor(max_workers=workers) as pool:
+        # librosa's heavy numerical work runs in NumPy/SciPy native code, while
+        # threads avoid spawning fresh Python interpreters for every chunk.
+        with ThreadPoolExecutor(max_workers=workers) as pool:
             return np.stack(list(pool.map(_acoustic_one, chunk, chunksize=16)))
     return _chunked(paths, Path(cache), "acoustic", compute)
 
