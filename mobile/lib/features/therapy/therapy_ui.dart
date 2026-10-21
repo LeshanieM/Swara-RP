@@ -6,6 +6,7 @@
 // ============================================================================
 
 import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -147,6 +148,10 @@ class _TherapyJourneyShellState extends State<_TherapyJourneyShell> {
               _screenForRoute(),
               const Positioned(
                   top: 8, right: 8, child: SafeArea(child: _CameraOnBadge())),
+              const Positioned(
+                  top: 44,
+                  left: 8,
+                  child: SafeArea(child: _CameraPreviewTile())),
             ]),
           ),
         ),

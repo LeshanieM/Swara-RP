@@ -18,14 +18,18 @@ class EngagementCamera {
   EngagementCamera._();
   static final instance = EngagementCamera._();
 
-  /// ML Kit runs on Android and iOS only; elsewhere engagement comes from the activity logs.
+  /// Android and iOS support on-device features; web supports preview only.
+  /// Other platforms keep using the activity-log engagement signals.
   static bool get isSupported =>
-      !kIsWeb &&
-      (defaultTargetPlatform == TargetPlatform.android ||
-          defaultTargetPlatform == TargetPlatform.iOS);
+      kIsWeb ||
+      defaultTargetPlatform == TargetPlatform.android ||
+      defaultTargetPlatform == TargetPlatform.iOS;
 
-  /// True while the camera is reading frames, for the "camera on" badge.
+  /// True while the camera is reading frames, for the preview and camera-on badge.
   final ValueNotifier<bool> running = ValueNotifier(false);
+
+  /// Live controller for the in-activity preview. It is null when the camera is off.
+  CameraController? get previewController => running.value ? _controller : null;
 
   static const _frameInterval =
       Duration(milliseconds: 200); // about 5 frames a second, as in training
@@ -59,8 +63,10 @@ class EngagementCamera {
     try {
       final cameras = await availableCameras();
       final front = cameras
-          .where((c) => c.lensDirection == CameraLensDirection.front)
-          .firstOrNull;
+              .where((c) => c.lensDirection == CameraLensDirection.front)
+              .firstOrNull ??
+          // Some browsers report webcams as external when facingMode is unavailable.
+          (kIsWeb ? cameras.firstOrNull : null);
       if (front == null) return;
       final controller = CameraController(
         front,
@@ -71,17 +77,21 @@ class EngagementCamera {
             : ImageFormatGroup.bgra8888,
       );
       await controller.initialize();
-      _detector = FaceDetector(
-        options: FaceDetectorOptions(
-            enableClassification: true,
-            performanceMode: FaceDetectorMode.fast,
-            minFaceSize: 0.15),
-      );
+      // The web camera plugin provides a browser preview, but ML Kit face detection
+      // is native-only. On web, keep the preview live and use log-based scoring.
+      if (!kIsWeb) {
+        _detector = FaceDetector(
+          options: FaceDetectorOptions(
+              enableClassification: true,
+              performanceMode: FaceDetectorMode.fast,
+              minFaceSize: 0.15),
+        );
+      }
       _camera = front;
       _controller = controller;
       _samples.clear();
       _startedAt = DateTime.now();
-      await controller.startImageStream(_onFrame);
+      if (!kIsWeb) await controller.startImageStream(_onFrame);
       _limit = Timer(_maxRun, () => stop());
       running.value = true;
     } catch (error) {

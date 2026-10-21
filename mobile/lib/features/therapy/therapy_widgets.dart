@@ -1342,6 +1342,110 @@ class _PathPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter o) => false;
 }
 
+/// A small live preview stays visible while the camera is actively monitoring an activity.
+/// Camera frames are analyzed locally and are never uploaded.
+class _CameraPreviewTile extends StatefulWidget {
+  const _CameraPreviewTile();
+
+  @override
+  State<_CameraPreviewTile> createState() => _CameraPreviewTileState();
+}
+
+class _CameraPreviewTileState extends State<_CameraPreviewTile> {
+  final ValueListenable<bool> _running = EngagementCamera.instance.running;
+
+  @override
+  void initState() {
+    super.initState();
+    _running.addListener(_onCameraChanged);
+    if (_running.value) _resumeBrowserPreviewAfterMount();
+  }
+
+  void _onCameraChanged() {
+    if (_running.value) _resumeBrowserPreviewAfterMount();
+  }
+
+  void _resumeBrowserPreviewAfterMount() {
+    if (!kIsWeb) return;
+    // The web plugin starts video before HtmlElementView is attached. Resume it
+    // after Flutter mounts that view so the child sees moving video, not its first frame.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        if (!mounted || !_running.value) return;
+        final controller = EngagementCamera.instance.previewController;
+        if (controller == null || !controller.value.isInitialized) return;
+        try {
+          await controller.pausePreview();
+          if (mounted && _running.value) await controller.resumePreview();
+        } catch (error) {
+          debugPrint('Could not resume browser camera preview: $error');
+        }
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _running.removeListener(_onCameraChanged);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => ValueListenableBuilder<bool>(
+        valueListenable: _running,
+        builder: (context, on, _) {
+          final controller = EngagementCamera.instance.previewController;
+          if (!on || controller == null || !controller.value.isInitialized) {
+            return const SizedBox.shrink();
+          }
+          return Semantics(
+            label:
+                'Live front camera preview. Camera frames are analyzed on this device and are not uploaded.',
+            child: Container(
+              width: 104,
+              height: 138,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.white, width: 2),
+                boxShadow: const [
+                  BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 8,
+                      offset: Offset(0, 3)),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Stack(fit: StackFit.expand, children: [
+                  CameraPreview(controller),
+                  const Align(
+                    alignment: Alignment.bottomCenter,
+                    child: ColoredBox(
+                      color: Colors.black54,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 4),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.videocam_rounded,
+                                  size: 13, color: Colors.white),
+                              SizedBox(width: 4),
+                              Text('Preview',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 10)),
+                            ]),
+                      ),
+                    ),
+                  ),
+                ]),
+              ),
+            ),
+          );
+        },
+      );
+}
+
 /// Shown while the engagement camera is on, so the parent and child can see it.
 class _CameraOnBadge extends StatelessWidget {
   const _CameraOnBadge();
