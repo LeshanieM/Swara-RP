@@ -78,6 +78,26 @@ def _legacy_summary(counts: Counter, moments: list, events: list, max_stutter_pr
     }
 
 
+def _primary_type(stutter_counts: dict, events: list) -> str | None:
+    """The most frequent stutter label, chosen by group first: sound and word repetitions count together
+    (as in summary.stutterType), so two kinds of repetition are not outvoted by one block. Ties go to the
+    longer total duration, not to label order."""
+    if not stutter_counts:
+        return None
+    seconds = Counter()
+    for e in events:
+        seconds[e.type] += e.duration
+    groups = Counter()
+    for label, n in stutter_counts.items():
+        groups[LEGACY_TYPE[label]] += n
+    group_seconds = Counter()
+    for label in stutter_counts:
+        group_seconds[LEGACY_TYPE[label]] += seconds[label]
+    best = max(groups, key=lambda g: (groups[g], group_seconds[g]))
+    members = [label for label in stutter_counts if LEGACY_TYPE[label] == best]
+    return max(members, key=lambda label: (stutter_counts[label], seconds[label]))
+
+
 def analyze(
     data: bytes,
     task_type: str,
@@ -139,7 +159,7 @@ def analyze(
             {"start": round(m.start, 2), "end": round(m.end, 2), "duration": round(m.duration, 2), "types": m.types} for m in moments
         ],
         "counts": {COUNT_KEYS[label]: counts[label] for label in LABELS},
-        "primaryType": max(stutter_counts, key=stutter_counts.get) if stutter_counts else None,
+        "primaryType": _primary_type(stutter_counts, events),
         "syllables": syllables,
         "stutteredSyllables": len(moments),
         "percentSS": pss,

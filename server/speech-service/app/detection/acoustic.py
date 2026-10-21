@@ -45,6 +45,11 @@ class AcousticThresholds:
     block_max_gap_sec: float = 3.0
     block_abrupt_db: float = -3.0  # drop at offset >= this -> fully abrupt
     block_gradual_db: float = -12.0  # drop at offset <= this -> natural decay
+    # A block cuts speech off while it is still loud: the last 30 ms before the gap must stand this far above the
+    # gap's floor, both in dB and as a share of the speech-to-floor range. Without it, background noise makes the
+    # soft tail of an ordinary pause look "abrupt" (it sits flat on the noise floor), and pauses became blocks.
+    block_min_cliff_db: float = 10.0
+    block_min_cliff_share: float = 0.5
     # Interjection
     interj_min_sec: float = 0.15
     interj_max_sec: float = 0.9
@@ -67,7 +72,7 @@ def _mostly_inside(c: Candidate, others: list[Candidate]) -> bool:
 
 class AcousticDetector(Detector):
     name = "acoustic-b0"
-    version = "0.1.0-provisional"
+    version = "0.1.1-provisional"
 
     def availability(self) -> dict:
         return {"status": "available"}
@@ -164,10 +169,15 @@ class AcousticDetector(Detector):
     def _blocks(self, fa: FrameAnalysis) -> list[Candidate]:
         level, out = fa.level_db, []
         edge, ctx = 3, int(0.3 / fa.hop_sec)  # 30 ms edge vs 300 ms context
+        speech_level = float(np.percentile(level[fa.active], 90)) if fa.active.any() else float(level.max())
         for (a0, a1), (b0, b1) in zip(fa.segments, fa.segments[1:]):
             gap = (b0 - a1) * fa.hop_sec
             if not T.block_min_gap_sec <= gap <= T.block_max_gap_sec:
                 continue
+            floor = float(np.median(level[a1:b0]))
+            cliff = float(level[a1 - edge : a1].max()) - floor
+            if cliff < max(T.block_min_cliff_db, T.block_min_cliff_share * (speech_level - floor)):
+                continue  # speech had already faded to the floor: a pause, not a block
             off_drop = level[a1 - edge : a1].max() - level[max(a0, a1 - ctx) : a1].max()
             on_drop = level[b0 : b0 + edge].max() - level[b0 : min(b1, b0 + ctx)].max()
             abrupt_off = _ramp(off_drop, T.block_gradual_db, T.block_abrupt_db)
@@ -181,7 +191,7 @@ class AcousticDetector(Detector):
                     start=fa.t(a1),
                     end=fa.t(b0),
                     score=round(score, 3),
-                    detail={"offsetDropDb": round(float(off_drop), 1), "onsetDropDb": round(float(on_drop), 1)},
+                    detail={"offsetDropDb": round(float(off_drop), 1), "onsetDropDb": round(float(on_drop), 1), "cliffDb": round(cliff, 1)},
                 )
             )
         return out
