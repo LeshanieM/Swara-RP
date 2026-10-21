@@ -23,8 +23,8 @@ class _ActivityState extends State<_Activity> {
                 style: const TextStyle(fontSize: 14, color: Colors.black54)),
           ),
         const SizedBox(height: 14),
-        // The item's picture; the theme's scene when there is none.
-        _ItemPicture(asset: attempt?.image, height: 220),
+        // Use only picture-description assets; never substitute the theme scene.
+        _PictureDescriptionImage(asset: attempt?.image, height: 220),
         const SizedBox(height: 20),
         Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
           _TherapyMicButton(

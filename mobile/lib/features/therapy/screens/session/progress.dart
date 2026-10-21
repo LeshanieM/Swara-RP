@@ -65,10 +65,6 @@ class _Progress extends StatelessWidget {
         ]),
         const SizedBox(height: 24),
         _Btn(
-            text: 'ගමන් සිතියම බලන්න',
-            onTap: () => nav?.go(_TherapyRoute.journeyMap)),
-        const SizedBox(height: 12),
-        _Btn(
             text: 'මුල් පිටුවට යන්න', onTap: () => nav?.go(_TherapyRoute.home)),
         const SizedBox(height: 20),
       ]),

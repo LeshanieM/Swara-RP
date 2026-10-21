@@ -390,11 +390,20 @@ class _AdaptiveNextState extends State<_AdaptiveNext> {
                   text: _isSaving ? 'Saving...' : 'අරඹමු!',
                   onTap: _isSaving ? () {} : _startRecommendedActivity,
                 ),
-              TextButton(
+              const SizedBox(height: 12),
+              OutlinedButton.icon(
                 onPressed: _isSaving ? null : _finishSession,
-                child: const Text(
-                  'Finish today\'s session',
-                  style: TextStyle(color: Colors.black54),
+                icon: const Icon(Icons.flag_outlined, size: 18),
+                label: const Text('Finish today\'s session',
+                    style: TextStyle(fontSize: 14)),
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: _C.blue,
+                  side: BorderSide(color: _C.blue.withValues(alpha: 0.45)),
+                  minimumSize: const Size(0, 42),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                 ),
               ),
             ],
