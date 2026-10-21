@@ -111,7 +111,7 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
         const SizedBox(height: AppSpacing.md),
         SwaraCard(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('Tracking · ලුහුබැඳීම', style: AppTextStyles.titleMedium),
+            Text('Tracking · නිරීක්ෂණය', style: AppTextStyles.titleMedium),
             const SizedBox(height: AppSpacing.sm),
             Text(
               '${meta.framesAnalysed ?? 0} frames analyzed · රාමු විශ්ලේෂණය කළා'

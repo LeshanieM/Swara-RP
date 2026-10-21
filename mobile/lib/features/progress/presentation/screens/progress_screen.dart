@@ -3,21 +3,38 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swara/core/theme/app_theme.dart';
 import 'package:swara/features/auth/data/providers/auth_provider.dart';
+import '../../data/download_report.dart';
 import '../../data/providers/progress_provider.dart';
 
-/// The active child's progress; the clinical summary reads each component's summary on the API.
+/// The active child's combined progress and component conclusion status.
 class ProgressScreen extends ConsumerWidget {
   const ProgressScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final summary = ref.watch(clinicalSummaryProvider).valueOrNull;
-    final overall = ref.watch(overallProgressProvider).valueOrNull;
+    final progressState = ref.watch(overallProgressProvider);
+    final overall = progressState.valueOrNull;
     final (verdictEmoji, verdictSi, verdictEn) = switch (overall?.status) {
-      'improved' => ('🌟', 'ඔයා දියුණු වෙලා!', 'Improved: stuttering is going down'),
-      'needs_attention' => ('💛', 'අපි තව ටිකක් පුහුණු වෙමු', 'Needs attention: stuttering went up lately'),
-      'no_clear_change' => ('🌱', 'ඔයා දිගටම පුහුණු වෙනවා', 'No clear change yet'),
-      'insufficient_data' => ('🌱', 'තව කතා කරමු!', 'Not enough sessions yet to tell'),
+      'improved' => (
+          '🌟',
+          'ඔයා දියුණු වෙලා!',
+          'Improved: stuttering is going down'
+        ),
+      'needs_attention' => (
+          '💛',
+          'අපි තව ටිකක් පුහුණු වෙමු',
+          'Needs attention: stuttering went up lately'
+        ),
+      'no_clear_change' => (
+          '🌱',
+          'ඔයා දිගටම පුහුණු වෙනවා',
+          'No clear change yet'
+        ),
+      'insufficient_data' => (
+          '🌱',
+          'තව කතා කරමු!',
+          'Not enough sessions yet to tell'
+        ),
       _ => ('🌱', 'ප්‍රගතිය', 'Progress could not be loaded'),
     };
     return Scaffold(
@@ -54,6 +71,12 @@ class ProgressScreen extends ConsumerWidget {
                       ),
                     ),
                     IconButton(
+                      tooltip: 'Refresh progress · ප්‍රගතිය නැවුම් කරන්න',
+                      icon: const Icon(Icons.refresh_rounded,
+                          color: AppColors.primary),
+                      onPressed: () => ref.invalidate(overallProgressProvider),
+                    ),
+                    IconButton(
                       tooltip: 'Sign out',
                       icon: const Icon(Icons.logout_rounded,
                           color: AppColors.primary),
@@ -72,7 +95,7 @@ class ProgressScreen extends ConsumerWidget {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.softYellow.withOpacity(0.5),
+                        color: AppColors.softYellow.withValues(alpha: 0.5),
                         blurRadius: 15,
                       ),
                     ],
@@ -100,7 +123,8 @@ class ProgressScreen extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(28),
                     boxShadow: [
                       BoxShadow(
-                          color: Colors.black.withOpacity(0.2), blurRadius: 12)
+                          color: Colors.black.withValues(alpha: 0.2),
+                          blurRadius: 12)
                     ],
                   ),
                   // The overall verdict from all four components (GET /api/children/:id/progress).
@@ -120,14 +144,23 @@ class ProgressScreen extends ConsumerWidget {
                                   color: AppColors.text),
                             ),
                             Text(
-                              verdictEn,
+                              overall == null
+                                  ? (progressState.isLoading
+                                      ? 'ප්‍රතිඵල ලබාගනිමින්...'
+                                      : verdictEn)
+                                  : overall.allFinalized
+                                      ? 'සියලු අංගවල අවසන් ප්‍රතිඵල ලැබී ඇත (${overall.finalizedCount}/4)'
+                                      : 'අවසන් ප්‍රතිඵල ${overall.finalizedCount}/4 · තවත් ${4 - overall.finalizedCount}ක් ඉතිරියි',
                               style: const TextStyle(
                                   fontSize: 12, color: AppColors.textLight),
                             ),
-                            for (final r in overall?.reasons ?? const <String>[])
+                            for (final r
+                                in overall?.reasons ?? const <String>[])
                               Padding(
                                 padding: const EdgeInsets.only(top: 4),
-                                child: Text('• $r', style: const TextStyle(fontSize: 12, color: AppColors.text)),
+                                child: Text('• $r',
+                                    style: const TextStyle(
+                                        fontSize: 12, color: AppColors.text)),
                               ),
                           ],
                         ),
@@ -162,13 +195,57 @@ class ProgressScreen extends ConsumerWidget {
                   earned: overall?.speechBuddy ?? false,
                 ),
                 const SizedBox(height: 32),
-                const Text('සායනික ප්‍රගති සාරාංශය (Clinical Summary)',
+                const Text('අංගවල ප්‍රතිඵල සහ අවසන් තත්ත්වය',
                     style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                         color: AppColors.text)),
                 const SizedBox(height: 16),
-                _buildComponentsSummary(summary),
+                _buildComponentsSummary(
+                  overall,
+                  loading: progressState.isLoading,
+                  failed: progressState.hasError,
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: overall == null
+                        ? null
+                        : () async {
+                            try {
+                              final safeId = overall.childId.replaceAll(
+                                RegExp(r'[^a-zA-Z0-9_-]'),
+                                '_',
+                              );
+                              final saved = await downloadProgressReport(
+                                fileName: 'swara-progress-$safeId.txt',
+                                contents: overall.toReport(),
+                              );
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(saved
+                                        ? 'ප්‍රගති වාර්තාව සුරැකීමට සූදානම්'
+                                        : 'වාර්තාව සුරැකීම අවලංගු කළා'),
+                                  ),
+                                );
+                              }
+                            } catch (_) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'වාර්තාව බාගත කළ නොහැක. නැවත උත්සාහ කරන්න.'),
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                    icon: const Icon(Icons.download_rounded),
+                    label: const Text('ප්‍රගති වාර්තාව බාගත කරන්න'),
+                  ),
+                ),
                 const SizedBox(height: 32),
                 SizedBox(
                   width: double.infinity,
@@ -205,59 +282,67 @@ class ProgressScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildAchievement(String titleSi, String titleEn, String descSi,
-      String emoji, Color color, {bool earned = true}) {
-    return Opacity(opacity: earned ? 1 : 0.4, child: Container(
-      margin: const EdgeInsets.only(bottom: 14),
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: AppColors.cardCream,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: color, width: 2.5),
-        boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.15), blurRadius: 8)
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                color: color.withOpacity(0.2), shape: BoxShape.circle),
-            child: Text(emoji, style: const TextStyle(fontSize: 28)),
+  Widget _buildAchievement(
+      String titleSi, String titleEn, String descSi, String emoji, Color color,
+      {bool earned = true}) {
+    return Opacity(
+        opacity: earned ? 1 : 0.4,
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 14),
+          padding: const EdgeInsets.all(18),
+          decoration: BoxDecoration(
+            color: AppColors.cardCream,
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(color: color, width: 2.5),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.15), blurRadius: 8)
+            ],
           ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.2),
+                    shape: BoxShape.circle),
+                child: Text(emoji, style: const TextStyle(fontSize: 28)),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(titleSi,
+                    Row(
+                      children: [
+                        Text(titleSi,
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.text)),
+                        const SizedBox(width: 6),
+                        Text('($titleEn)',
+                            style: const TextStyle(
+                                fontSize: 12, color: AppColors.textLight)),
+                      ],
+                    ),
+                    const SizedBox(height: 2),
+                    Text(descSi,
                         style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.text)),
-                    const SizedBox(width: 6),
-                    Text('($titleEn)',
-                        style: const TextStyle(
-                            fontSize: 12, color: AppColors.textLight)),
+                            fontSize: 13, color: AppColors.textLight)),
                   ],
                 ),
-                const SizedBox(height: 2),
-                Text(descSi,
-                    style: const TextStyle(
-                        fontSize: 13, color: AppColors.textLight)),
-              ],
-            ),
-          )
-        ],
-      ),
-    ));
+              )
+            ],
+          ),
+        ));
   }
 
-  Widget _buildComponentsSummary(ClinicalSummary? s) {
-    const loading = '...';
+  Widget _buildComponentsSummary(
+    OverallProgress? progress, {
+    required bool loading,
+    required bool failed,
+  }) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -265,32 +350,42 @@ class ProgressScreen extends ConsumerWidget {
         borderRadius: BorderRadius.circular(28),
         border: Border.all(color: AppColors.primaryLight, width: 2),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 12)
+          BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 12)
         ],
       ),
       child: Column(
         children: [
-          _buildComponentRow('Component 1', 'Fluency / Stuttering', s?.c1 ?? loading),
-          const Divider(height: 24),
-          _buildComponentRow(
-              'Component 2', 'Secondary behaviours', s?.c2 ?? loading),
-          const Divider(height: 24),
-          _buildComponentRow('Component 3', 'Therapy Activity', s?.c3 ?? loading),
-          const Divider(height: 24),
-          _buildComponentRow('Component 4', 'Language Characteristics',
-              s?.c4 ?? loading),
+          if (progress == null)
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Text(
+                failed
+                    ? 'ප්‍රගති දත්ත ලබාගත නොහැක.'
+                    : loading
+                        ? 'ප්‍රගති දත්ත ලබාගනිමින්...'
+                        : 'දරුවෙකු තෝරා ප්‍රගතිය බලන්න.',
+                style: const TextStyle(color: AppColors.textLight),
+              ),
+            )
+          else
+            for (var index = 0;
+                index < progress.components.length;
+                index++) ...[
+              if (index > 0) const Divider(height: 24),
+              _buildComponentRow(progress.components[index]),
+            ],
         ],
       ),
     );
   }
 
-  Widget _buildComponentRow(String comp, String label, String value) {
+  Widget _buildComponentRow(ProgressComponent component) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          width: 100,
-          child: Text(comp,
+          width: 40,
+          child: Text(component.id,
               style: const TextStyle(
                   fontWeight: FontWeight.bold, color: AppColors.primaryDeep)),
         ),
@@ -298,12 +393,31 @@ class ProgressScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(label,
+              Text(component.title,
                   style: const TextStyle(
-                      fontSize: 12, color: AppColors.textLight)),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.text)),
               const SizedBox(height: 2),
-              Text(value,
+              Text(component.conclusion,
                   style: const TextStyle(fontSize: 14, color: AppColors.text)),
+              const SizedBox(height: 5),
+              Text(
+                !component.available
+                    ? 'දත්ත ලබාගත නොහැක'
+                    : component.finalized
+                        ? 'අවසන් ප්‍රතිඵලය තිබේ'
+                        : 'අවසන් ප්‍රතිඵලයක් බලාපොරොත්තුවෙන්',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: !component.available
+                      ? Colors.redAccent
+                      : component.finalized
+                          ? Colors.green.shade700
+                          : AppColors.textLight,
+                ),
+              ),
             ],
           ),
         ),

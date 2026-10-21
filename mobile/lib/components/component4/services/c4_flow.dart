@@ -25,6 +25,7 @@ class C4Category {
 class C4View {
   final String topicSi;
   final String topicEn;
+  final String categorySi;
   final String categoryEn;
   final String ageBand;
   final String level;
@@ -50,6 +51,7 @@ class C4View {
   const C4View({
     required this.topicSi,
     required this.topicEn,
+    required this.categorySi,
     required this.categoryEn,
     required this.ageBand,
     required this.level,
@@ -73,9 +75,10 @@ class C4View {
   static const demo = C4View(
     topicSi: 'මගේ ප්‍රියතම සත්වයා',
     topicEn: 'My Favourite Animal',
+    categorySi: 'සතුන්',
     categoryEn: 'Animals',
     ageBand: '7–12',
-    level: 'Easy',
+    level: 'පහසු',
     categoryRank: 1,
     questionSi: 'ඔයාගේ ප්‍රියතම බල්ලා එක්ක දවසක්ම ගත කරන්න පුළුවන් නම්, ඔයා දෙන්නා මොනවා කරයිද?',
     transcript:
@@ -206,7 +209,10 @@ class C4Flow {
       categories.where((c) => c.id == id).map((c) => c.en).firstOrNull ??
       (id ?? '').split('-').map((w) => w.isEmpty ? w : '${w[0].toUpperCase()}${w.substring(1)}').join(' ');
 
-  static const _levels = {'emerging': 'Easy', 'developing': 'Medium', 'established': 'Open-ended'};
+  static String _categoryTitleSi(String? id) =>
+      categories.where((c) => c.id == id).map((c) => c.si).firstOrNull ?? 'කැමති මාතෘකාව';
+
+  static const _levels = {'emerging': 'පහසු', 'developing': 'මධ්‍යම', 'established': 'විවෘත ප්‍රශ්න'};
 
   /// The current session (and sample, once analysed) in the shape the screens show.
   static C4View get view {
@@ -227,6 +233,7 @@ class C4Flow {
     return C4View(
       topicSi: topic['title']?['si'] ?? '',
       topicEn: topic['title']?['en'] ?? '',
+      categorySi: _categoryTitleSi(categoryId),
       categoryEn: _categoryTitle(categoryId),
       ageBand: (s['ageBand'] as String? ?? '').replaceAll('-', '–'),
       level: _levels[topic['level']] ?? (topic['level'] ?? '').toString(),

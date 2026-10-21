@@ -8,9 +8,9 @@ class PersonalizationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.groundHome,
       appBar: AppBar(
-        title: const Text('Swara Speech'),
+        title: const Text('ස්වරා කථනය'),
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: AppColors.primaryDeep,
@@ -44,13 +44,6 @@ class PersonalizationScreen extends StatelessWidget {
                   color: AppColors.white,
                   borderRadius: BorderRadius.circular(32),
                   border: Border.all(color: AppColors.primaryLight, width: 2),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.primaryLight.withOpacity(0.3),
-                      blurRadius: 24,
-                      offset: const Offset(0, 12),
-                    ),
-                  ],
                 ),
                 child: Column(
                   children: [

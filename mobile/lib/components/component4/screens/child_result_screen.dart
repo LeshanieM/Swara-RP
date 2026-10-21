@@ -8,9 +8,9 @@ class ChildResultScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.groundHome,
       appBar: AppBar(
-        title: const Text('Swara Speech'),
+        title: const Text('ස්වරා කථනය'),
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: AppColors.primaryDeep,
@@ -22,7 +22,7 @@ class ChildResultScreen extends StatelessWidget {
             onPressed: () {
               context.push('/c4/report');
             },
-            tooltip: 'SLP / Professional Dashboard',
+            tooltip: 'කථන චිකිත්සක උපකරණ පුවරුව',
           ),
         ],
       ),
@@ -69,7 +69,7 @@ class ChildResultScreen extends StatelessWidget {
               _buildJourneyCard(
                 '💬',
                 'අද මම කතා කළා',
-                'Activity completed',
+                'ක්‍රියාකාරකම සම්පූර්ණ කළා',
                 AppColors.primary,
               ),
               const SizedBox(height: 16),
@@ -77,7 +77,7 @@ class ChildResultScreen extends StatelessWidget {
               _buildJourneyCard(
                 '📖',
                 'මගේ කතාව',
-                'You shared your ideas with Swara',
+                'ඔයාගේ අදහස් ස්වරා සමඟ බෙදාගත්තා',
                 AppColors.primary,
               ),
               const SizedBox(height: 16),
@@ -85,7 +85,7 @@ class ChildResultScreen extends StatelessWidget {
               _buildJourneyCard(
                 '⭐',
                 'අදගේ තරුව',
-                'You completed today\'s talking activity',
+                'අද කතා කිරීමේ ක්‍රියාකාරකම අවසන් කළා',
                 AppColors.warning,
               ),
               const SizedBox(height: 16),
@@ -93,7 +93,7 @@ class ChildResultScreen extends StatelessWidget {
               _buildJourneyCard(
                 '🌱',
                 'දිගටම කතා කරමු',
-                'Every conversation is a chance to share your ideas.',
+                'හැම කතාබහකින්ම ඔයාගේ අදහස් බෙදාගන්න පුළුවන්.',
                 AppColors.success,
               ),
               
@@ -136,13 +136,6 @@ class ChildResultScreen extends StatelessWidget {
         color: color.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: color.withValues(alpha: 0.2), width: 2),
-        boxShadow: [
-          BoxShadow(
-            color: color.withValues(alpha: 0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          )
-        ],
       ),
       child: Row(
         children: [

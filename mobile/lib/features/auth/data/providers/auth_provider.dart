@@ -1,5 +1,8 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
 import '../models/user_model.dart';
 import 'package:swara/core/network/api_client.dart';
 import 'package:swara/core/network/api_exception.dart';
@@ -215,6 +218,43 @@ class AuthNotifier extends StateNotifier<AuthState> {
       }
       await StorageService.saveString(
           AppConstants.userKey, jsonEncode(updated.toJson()));
+      state = AuthState(user: updated, isInitialized: true);
+      return true;
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: _parseError(e));
+      return false;
+    }
+  }
+
+  Future<bool> updateProfilePhoto(XFile image) async {
+    final current = state.user;
+    if (current == null) return false;
+    state = state.copyWith(isLoading: true, error: null);
+    try {
+      final bytes = await image.readAsBytes();
+      final lowerName = image.name.toLowerCase();
+      final mimeType = image.mimeType ??
+          (lowerName.endsWith('.png')
+              ? 'image/png'
+              : lowerName.endsWith('.webp')
+                  ? 'image/webp'
+                  : 'image/jpeg');
+      String photoUrl;
+      if (StorageService.isDemoMode()) {
+        photoUrl = 'data:$mimeType;base64,${base64Encode(bytes)}';
+      } else {
+        final form = FormData.fromMap({
+          'photo': MultipartFile.fromBytes(
+            bytes,
+            filename: image.name,
+            contentType: MediaType.parse(mimeType),
+          ),
+        });
+        final response = await _apiClient.postMultipart('/api/profile/photo', form);
+        photoUrl = response.data['photoUrl'] as String;
+      }
+      final updated = current.copyWith(photoUrl: photoUrl);
+      await StorageService.saveString(AppConstants.userKey, jsonEncode(updated.toJson()));
       state = AuthState(user: updated, isInitialized: true);
       return true;
     } catch (e) {

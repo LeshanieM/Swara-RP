@@ -9,7 +9,7 @@ class SpeechPreparationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.groundRead,
       body: SafeArea(
         child: Column(
           children: [
@@ -20,13 +20,13 @@ class SpeechPreparationScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      'කතා කරන්න සූදානම්ද?',
+                      'ඔයාට පුළුවන් විදිහට සෙමින් සහ ස්වභාවිකව කතා කරන්න.',
                       style: AppTextStyles.heading2.copyWith(color: AppColors.primaryDeep),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Ready to talk?',
+                      'කතා කරන්න සූදානම්ද?',
                       style: AppTextStyles.body.copyWith(color: AppColors.textLight),
                       textAlign: TextAlign.center,
                     ),
@@ -55,19 +55,16 @@ class SpeechPreparationScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 32),
-                    _buildTip('ඔයාගේ පිළිතුර ගැන ටිකක් හිතන්න.', 'Think about your answer.', Icons.lightbulb_outline),
+                    _buildTip('ඔයාගේ පිළිතුර ගැන ටිකක් හිතන්න.', Icons.lightbulb_outline),
                     const SizedBox(height: 16),
-                    _buildTip('ස්වභාවිකව කතා කරන්න.', 'Speak naturally.', Icons.chat_bubble_outline),
+                    _buildTip('ස්වභාවිකව කතා කරන්න.', Icons.chat_bubble_outline),
                     const SizedBox(height: 16),
-                    _buildTip('කාලය අරගෙන කතා කරන්න.', 'Take your time.', Icons.timer_outlined),
+                    _buildTip('කාලය අරගෙන කතා කරන්න.', Icons.timer_outlined),
                     const SizedBox(height: 48),
                     ElevatedButton.icon(
                       onPressed: () => context.push('/c4/record'),
                       icon: const Icon(Icons.mic, color: AppColors.white),
-                      label: const Text('Start Recording'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.error,
-                      ),
+                      label: const Text('පටිගත කිරීම අරඹන්න'),
                     ),
                   ],
                 ),
@@ -79,7 +76,7 @@ class SpeechPreparationScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTip(String sinhala, String english, IconData icon) {
+  Widget _buildTip(String sinhala, IconData icon) {
     return Row(
       children: [
         Container(
@@ -98,10 +95,6 @@ class SpeechPreparationScreen extends StatelessWidget {
               Text(
                 sinhala,
                 style: AppTextStyles.titleMedium,
-              ),
-              Text(
-                english,
-                style: AppTextStyles.caption,
               ),
             ],
           ),

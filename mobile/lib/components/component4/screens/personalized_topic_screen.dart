@@ -39,7 +39,7 @@ class _PersonalizedTopicScreenState extends State<PersonalizedTopicScreen> {
         ? InterestCategory.images[C4Flow.session?['topic']?['categoryId']] ?? 'assets/images/spontaneous_friends.png'
         : 'assets/images/component3/lion_mascot.jpg';
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.groundHome,
       body: SafeArea(
         child: Column(
           children: [
@@ -69,7 +69,7 @@ class _PersonalizedTopicScreenState extends State<PersonalizedTopicScreen> {
                         borderRadius: AppRadii.xsAll,
                       ),
                       child: Text(
-                        'YOUR TOPIC',
+                        'ඔයාගේ මාතෘකාව',
                         style: AppTextStyles.caption.copyWith(
                           color: AppColors.white,
                           fontWeight: FontWeight.w800,
@@ -90,7 +90,7 @@ class _PersonalizedTopicScreenState extends State<PersonalizedTopicScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      v.topicEn,
+                      v.topicSi,
                       style: AppTextStyles.heading3.copyWith(color: AppColors.textLight),
                       textAlign: TextAlign.center,
                     ),
@@ -100,10 +100,10 @@ class _PersonalizedTopicScreenState extends State<PersonalizedTopicScreen> {
                       runSpacing: 8,
                       alignment: WrapAlignment.center,
                       children: [
-                        _buildChip(v.categoryEn),
-                        _buildChip('Age ${v.ageBand}'),
+                        _buildChip(v.categorySi),
+                        _buildChip('වයස ${v.ageBand}'),
                         _buildChip(v.level),
-                        if (v.categoryRank != null) _buildChip('Favourite no. ${v.categoryRank}'),
+                        if (v.categoryRank != null) _buildChip('කැමතිම ${v.categoryRank}'),
                       ],
                     ),
                     const SizedBox(height: 48),

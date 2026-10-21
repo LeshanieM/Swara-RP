@@ -85,7 +85,6 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(item['text']?['si'] ?? '', style: AppTextStyles.titleMedium.copyWith(color: AppColors.text)),
         const SizedBox(height: 4),
-        Text(item['text']?['en'] ?? '', style: AppTextStyles.caption),
         const SizedBox(height: 12),
         Row(children: [choice(true, 'ඔව් · Yes'), const SizedBox(width: 12), choice(false, 'නැහැ · Not yet')]),
       ]),
@@ -96,7 +95,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
   Widget build(BuildContext context) {
     final complete = _items.isNotEmpty && _items.every((i) => _answers.containsKey(i['id']));
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.groundAdult,
       body: SafeArea(
         child: Column(children: [
           const C4Header(currentStep: 4, totalSteps: 14),
@@ -106,7 +105,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
                 : ListView(padding: const EdgeInsets.all(24), children: [
                     Text('දෙමාපිය ප්‍රශ්න', style: AppTextStyles.heading2.copyWith(color: AppColors.primaryDeep), textAlign: TextAlign.center),
                     const SizedBox(height: 4),
-                    Text('For the parent: what does your child already do?',
+                    Text('දෙමාපියන් සඳහා: ඔබේ දරුවාට දැනට කළ හැක්කේ මොනවාද?',
                         style: AppTextStyles.body.copyWith(color: AppColors.textLight), textAlign: TextAlign.center),
                     const SizedBox(height: 24),
                     if (_error != null)
@@ -126,10 +125,10 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
             child: Column(mainAxisSize: MainAxisSize.min, children: [
               ElevatedButton(
                 onPressed: complete && !_saving ? _submit : null,
-                child: Text(_saving ? 'Saving...' : 'Save answers'),
+                child: Text(_saving ? 'සුරකිමින්...' : 'පිළිතුරු සුරකින්න'),
               ),
               // The child can start today's topic while the parent answers later.
-              TextButton(onPressed: _saving ? null : _continue, child: const Text('Answer later')),
+              TextButton(onPressed: _saving ? null : _continue, child: const Text('පසුව පිළිතුරු දෙන්න')),
             ]),
           ),
         ]),

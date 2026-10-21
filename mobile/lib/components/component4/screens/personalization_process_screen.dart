@@ -22,11 +22,11 @@ class _PersonalizationProcessScreenState extends State<PersonalizationProcessScr
     final ready = !C4Flow.isLive || C4Flow.session != null;
     final v = C4Flow.view;
     return [
-      {'title': ready ? v.categoryEn : '...', 'subtitle': 'Your Interests'},
-      {'title': ready && v.categoryRank != null ? 'Favourite no. ${v.categoryRank} of 5' : 'Ranking', 'subtitle': 'Your Ranking'},
-      {'title': C4Flow.isLive ? 'Age: ${C4Flow.child?.age ?? ''}' : 'Age: 9', 'subtitle': 'Child Profile'},
-      {'title': 'Matching validated topics...', 'subtitle': 'SLP Topic Bank'},
-      {'title': ready ? (v.topicEn.isEmpty ? v.topicSi : v.topicEn) : '...', 'subtitle': v.isFixed ? "Today's Topic" : 'Personalized Topic'},
+      {'title': ready ? v.categorySi : '...', 'subtitle': 'ඔයාගේ කැමති දේවල්'},
+      {'title': ready && v.categoryRank != null ? 'කැමතිම ${v.categoryRank} වන වර්ගය' : 'පිළිවෙළ සකසමින්', 'subtitle': 'ඔයාගේ කැමැත්තේ පිළිවෙළ'},
+      {'title': C4Flow.isLive ? 'වයස: ${C4Flow.child?.age ?? ''}' : 'වයස: 9', 'subtitle': 'දරුවාගේ තොරතුරු'},
+      {'title': 'සුදුසු මාතෘකා තෝරමින්...', 'subtitle': 'චිකිත්සක මාතෘකා එකතුව'},
+      {'title': ready ? v.topicSi : '...', 'subtitle': v.isFixed ? 'අද මාතෘකාව' : 'ඔයාට ගැළපෙන මාතෘකාව'},
     ];
   }
 
@@ -73,7 +73,7 @@ class _PersonalizationProcessScreenState extends State<PersonalizationProcessScr
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.groundHome,
       body: SafeArea(
         child: Column(
           children: [
@@ -85,13 +85,13 @@ class _PersonalizationProcessScreenState extends State<PersonalizationProcessScr
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'ඔයාට ගැළපෙන මාතෘකාවක් සොයමින්...',
+                      'අපි ඔයාට ගැළපෙන මාතෘකාවක් හොයමු.',
                       style: AppTextStyles.heading2.copyWith(color: AppColors.primaryDeep),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Finding a topic just for you...',
+                      'ඔයාට ගැළපෙන මාතෘකාවක් සොයමින්...',
                       style: AppTextStyles.body.copyWith(color: AppColors.textLight),
                       textAlign: TextAlign.center,
                     ),
@@ -107,7 +107,7 @@ class _PersonalizationProcessScreenState extends State<PersonalizationProcessScr
                           });
                           _startAnimation();
                         },
-                        child: const Text('Try again'),
+                        child: const Text('නැවත උත්සාහ කරන්න'),
                       ),
                     ],
                     for (int i = 0; i < _stages.length; i++) ...[
@@ -140,13 +140,11 @@ class _PersonalizationProcessScreenState extends State<PersonalizationProcessScr
       duration: const Duration(milliseconds: 500),
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       decoration: BoxDecoration(
-        color: isActive
-            ? AppColors.primaryWash
-            : (isCompleted ? AppColors.surfaceRaised : AppColors.surface),
-        borderRadius: AppRadii.lgAll,
+        color: AppColors.surfaceRaised,
+        borderRadius: AppRadii.mdAll,
         border: Border.all(
-          color: isActive ? AppColors.primary : (isCompleted ? AppColors.divider : Colors.transparent),
-          width: isActive ? 2 : 1,
+          color: isActive ? AppColors.primary : AppColors.primaryLight,
+          width: isActive ? 3 : 2,
         ),
         boxShadow: isActive ? AppElevation.card : [],
       ),
@@ -176,11 +174,7 @@ class _PersonalizationProcessScreenState extends State<PersonalizationProcessScr
             ),
           ),
           if (isActive)
-            const SizedBox(
-              width: 16,
-              height: 16,
-              child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
-            ),
+            const Icon(Icons.more_time_rounded, color: AppColors.primary, size: 22),
           if (isCompleted)
             const Icon(Icons.check_circle, color: AppColors.success, size: 20),
         ],

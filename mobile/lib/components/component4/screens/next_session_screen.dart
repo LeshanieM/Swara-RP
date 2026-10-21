@@ -21,11 +21,11 @@ class _NextSessionScreenState extends ConsumerState<NextSessionScreen> {
   bool _savingBand = false;
 
   static const _bands = {
-    'gaining': 'Gaining',
-    'stable': 'Stable',
-    'below': 'Below the usual level',
-    'baseline_building': 'Building the starting level',
-    'not_reliable': 'Answer too short to judge',
+    'gaining': 'දියුණු වෙමින්',
+    'stable': 'ස්ථාවර',
+    'below': 'සාමාන්‍ය මට්ටමට වඩා පහළ',
+    'baseline_building': 'ආරම්භක මට්ටම සකසමින්',
+    'not_reliable': 'තීරණය කිරීමට පිළිතුර ඉතා කෙටියි',
   };
 
   // The bands a parent can confirm or choose; the others (baseline, too short) are not judgements.
@@ -76,12 +76,12 @@ class _NextSessionScreenState extends ConsumerState<NextSessionScreen> {
         border: Border.all(color: AppColors.divider),
       ),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text('For the parent: does this sound right?', style: AppTextStyles.label),
+        Text('දෙමාපියන් සඳහා: මෙය නිවැරදි ලෙස පෙනෙනවාද?', style: AppTextStyles.label),
         const SizedBox(height: 4),
         Text(
           confirmed
-              ? 'Saved: ${_bands[current]}.'
-              : "Compared with your child's own starting level, today looks: ${_bands[computed]}.",
+              ? 'සුරකින ලදී: ${_bands[current]}.'
+              : 'දරුවාගේ ආරම්භක මට්ටම සමඟ සැසඳූ විට අද මට්ටම: ${_bands[computed]}.',
           style: AppTextStyles.caption,
         ),
         const SizedBox(height: 12),
@@ -107,13 +107,13 @@ class _NextSessionScreenState extends ConsumerState<NextSessionScreen> {
     // Another of the child's favourite categories: the next topic is drawn from these.
     final nextId = C4Flow.rankedIds.where((id) => id != currentId).firstOrNull;
     final nextTitle = live
-        ? (C4Flow.categories.where((c) => c.id == nextId).map((c) => c.en).firstOrNull ?? (nextId ?? '—'))
-        : 'Sports';
+        ? (C4Flow.categories.where((c) => c.id == nextId).map((c) => c.si).firstOrNull ?? 'වෙනත් මාතෘකාවක්')
+        : 'ක්‍රීඩා';
     final nextRank = live ? (nextId == null ? null : C4Flow.rankedIds.indexOf(nextId) + 1) : 2;
     final concrete = C4Flow.session?['progressSignal']?['preferConcrete'] == true;
     final band = _bands[_summary?['band']];
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.groundHome,
       body: SafeArea(
         child: Column(
           children: [
@@ -130,7 +130,7 @@ class _NextSessionScreenState extends ConsumerState<NextSessionScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Next Time',
+                      'ඊළඟ වතාවේ',
                       style: AppTextStyles.body.copyWith(color: AppColors.textLight),
                       textAlign: TextAlign.center,
                     ),
@@ -142,7 +142,7 @@ class _NextSessionScreenState extends ConsumerState<NextSessionScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Your next speaking activity can be personalized using information from your previous session.',
+                      'පෙර සැසියේ තොරතුරු අනුව ඊළඟ කථන ක්‍රියාකාරකම සකසමු.',
                       style: AppTextStyles.caption,
                       textAlign: TextAlign.center,
                     ),
@@ -174,14 +174,14 @@ class _NextSessionScreenState extends ConsumerState<NextSessionScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(v.categoryEn, style: AppTextStyles.titleLarge),
-                                Text('Previous Topic', style: AppTextStyles.caption),
+                                Text(v.categorySi, style: AppTextStyles.titleLarge),
+                                Text('පෙර මාතෘකාව', style: AppTextStyles.caption),
                                 const SizedBox(height: 8),
                                 Row(
                                   children: [
                                     const Icon(Icons.star, size: 14, color: AppColors.warning),
                                     const SizedBox(width: 4),
-                                    Text('Favourite no. ${v.categoryRank ?? '—'} of 5', style: AppTextStyles.caption),
+                                    Text('කැමතිම ${v.categoryRank ?? '—'} වන වර්ගය · 5න්', style: AppTextStyles.caption),
                                   ],
                                 ),
                                 const SizedBox(height: 4),
@@ -189,7 +189,7 @@ class _NextSessionScreenState extends ConsumerState<NextSessionScreen> {
                                   children: [
                                     const Icon(Icons.check_circle, size: 14, color: AppColors.success),
                                     const SizedBox(width: 4),
-                                    Text('Status: Completed', style: AppTextStyles.caption.copyWith(color: AppColors.success)),
+                                    Text('තත්ත්වය: සම්පූර්ණයි', style: AppTextStyles.caption.copyWith(color: AppColors.success)),
                                   ],
                                 ),
                               ],
@@ -223,7 +223,7 @@ class _NextSessionScreenState extends ConsumerState<NextSessionScreen> {
                               borderRadius: AppRadii.xsAll,
                             ),
                             child: Text(
-                              'NEXT PERSONALIZED ACTIVITY',
+                              'ඊළඟට ගැළපෙන ක්‍රියාකාරකම',
                               style: AppTextStyles.caption.copyWith(
                                 color: AppColors.white,
                                 fontWeight: FontWeight.w800,
@@ -255,23 +255,23 @@ class _NextSessionScreenState extends ConsumerState<NextSessionScreen> {
                                       children: [
                                         const Icon(Icons.star_half, size: 14, color: AppColors.warning),
                                         const SizedBox(width: 4),
-                                        Text('Favourite no. ${nextRank ?? '—'} of 5', style: AppTextStyles.caption),
+                                        Text('කැමතිම ${nextRank ?? '—'} වන වර්ගය · 5න්', style: AppTextStyles.caption),
                                       ],
                                     ),
                                     const SizedBox(height: 8),
-                                    Text('Question style:', style: AppTextStyles.caption),
+                                    Text('ප්‍රශ්න ආකාරය:', style: AppTextStyles.caption),
                                     Text(
-                                      concrete ? 'Kept simple and concrete' : 'Simple → More open-ended',
+                                      concrete ? 'සරල සහ පැහැදිලි' : 'සරල සිට විවෘත ප්‍රශ්න දක්වා',
                                       style: AppTextStyles.bodySmall.copyWith(color: AppColors.primaryDeep, fontWeight: FontWeight.bold),
                                     ),
                                     if (band != null) ...[
                                       const SizedBox(height: 8),
-                                      Text('Language band: $band', style: AppTextStyles.caption),
+                                      Text('භාෂා මට්ටම: $band', style: AppTextStyles.caption),
                                     ],
                                     if (_summary?['stuttering']?['spontaneousPercentSS'] is num) ...[
                                       const SizedBox(height: 4),
                                       Text(
-                                          'Stuttering in this answer: ${(_summary!['stuttering']['spontaneousPercentSS'] as num).toStringAsFixed(1)} %SS',
+                                          'මෙම පිළිතුරේ පැකිළීම්: ${(_summary!['stuttering']['spontaneousPercentSS'] as num).toStringAsFixed(1)} %SS',
                                           style: AppTextStyles.caption),
                                     ],
                                   ],
@@ -287,7 +287,7 @@ class _NextSessionScreenState extends ConsumerState<NextSessionScreen> {
                     const SizedBox(height: 48),
                     ElevatedButton(
                       onPressed: () => context.go('/'),
-                      child: const Text('Finish Activity'),
+                      child: const Text('ක්‍රියාකාරකම අවසන් කරන්න'),
                     ),
                   ],
                 ),

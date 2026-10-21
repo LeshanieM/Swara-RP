@@ -40,7 +40,7 @@ class _Component4IntroState extends ConsumerState<Component4Intro> {
   Widget build(BuildContext context) {
     C4Flow.child = ref.watch(activeChildProvider);
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.groundHome,
       body: SafeArea(
         child: Column(
           children: [
@@ -73,7 +73,7 @@ class _Component4IntroState extends ConsumerState<Component4Intro> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      "Let's Talk About Things You Like!",
+                      'ඔයා කැමති දේවල් ගැන කතා කරමු!',
                       style: AppTextStyles.body.copyWith(color: AppColors.textLight),
                       textAlign: TextAlign.center,
                     ),
@@ -85,7 +85,7 @@ class _Component4IntroState extends ConsumerState<Component4Intro> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      "Choose things you enjoy, and we'll find a topic that is interesting and comfortable for you.",
+                      'ඔයා රසවිඳින දේවල් තෝරන්න. ඔයාට රසවත් සහ පහසු මාතෘකාවක් අපි සොයා දෙන්නම්.',
                       style: AppTextStyles.bodySmall,
                       textAlign: TextAlign.center,
                     ),
@@ -93,15 +93,15 @@ class _Component4IntroState extends ConsumerState<Component4Intro> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _buildStepIcon(Icons.touch_app_rounded, 'Choose'),
+                        _buildStepIcon(Icons.touch_app_rounded, 'තෝරන්න'),
                         const SizedBox(width: 8),
                         const Icon(Icons.arrow_forward_rounded, color: AppColors.divider, size: 16),
                         const SizedBox(width: 8),
-                        _buildStepIcon(Icons.record_voice_over_rounded, 'Talk'),
+                        _buildStepIcon(Icons.record_voice_over_rounded, 'කතා කරන්න'),
                         const SizedBox(width: 8),
                         const Icon(Icons.arrow_forward_rounded, color: AppColors.divider, size: 16),
                         const SizedBox(width: 8),
-                        _buildStepIcon(Icons.lightbulb_rounded, 'Discover'),
+                        _buildStepIcon(Icons.lightbulb_rounded, 'අලුත් දේ දැනගන්න'),
                       ],
                     ),
                     const SizedBox(height: 48),
@@ -109,7 +109,7 @@ class _Component4IntroState extends ConsumerState<Component4Intro> {
                       onPressed: _checking ? null : _start,
                       child: _checking
                           ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2.5))
-                          : const Text('Start'),
+                          : const Text('අරඹමු'),
                     ),
                     if (C4Flow.isLive)
                       TextButton(

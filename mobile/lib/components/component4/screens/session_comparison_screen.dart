@@ -15,7 +15,7 @@ class _SessionComparisonScreenState extends State<SessionComparisonScreen> {
   late final Future<C4Comparison> _comparison = C4Flow.comparison();
 
   static String _change(num? before, num? now, String up, String down, String same) {
-    if (before == null || now == null) return 'The first session to compare with';
+    if (before == null || now == null) return 'සසඳීමට පෙර සැසියක් තවම නැහැ';
     if (now > before) return up;
     if (now < before) return down;
     return same;
@@ -38,7 +38,7 @@ class _SessionComparisonScreenState extends State<SessionComparisonScreen> {
   Widget _build(BuildContext context, C4Comparison c, {Object? error}) {
     String num1(double? x) => x == null ? '—' : x.toStringAsFixed(1);
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.groundHome,
       body: SafeArea(
         child: Column(
           children: [
@@ -55,7 +55,7 @@ class _SessionComparisonScreenState extends State<SessionComparisonScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Your Communication Over Time',
+                      'කාලයත් සමඟ සන්නිවේදනය',
                       style: AppTextStyles.body.copyWith(color: AppColors.textLight),
                       textAlign: TextAlign.center,
                     ),
@@ -65,7 +65,7 @@ class _SessionComparisonScreenState extends State<SessionComparisonScreen> {
                       title: 'MLU',
                       val1: num1(c.mluBefore),
                       val2: num1(c.mluNow),
-                      description: _change(c.mluBefore, c.mluNow, 'Increased from Session 1', 'Lower than Session 1', 'Same as Session 1'),
+                      description: _change(c.mluBefore, c.mluNow, 'පළමු සැසියට වඩා වැඩි වී ඇත', 'පළමු සැසියට වඩා අඩු වී ඇත', 'පළමු සැසියට සමානයි'),
                       icon: Icons.show_chart,
                     ),
                     const SizedBox(height: 16),
@@ -73,30 +73,30 @@ class _SessionComparisonScreenState extends State<SessionComparisonScreen> {
                       title: 'NDW',
                       val1: c.ndwBefore?.toString() ?? '—',
                       val2: c.ndwNow?.toString() ?? '—',
-                      description: _change(c.ndwBefore, c.ndwNow, 'More different words were used', 'Fewer different words this time', 'The same number of different words'),
+                      description: _change(c.ndwBefore, c.ndwNow, 'වෙනස් වචන වැඩියෙන් භාවිත කළා', 'මෙවර වෙනස් වචන අඩුවෙන් භාවිත කළා', 'වෙනස් වචන ගණන සමානයි'),
                       icon: Icons.bar_chart,
                     ),
                     const SizedBox(height: 16),
                     _buildComparisonCard(
-                      title: 'Stuttering (%SS)',
+                      title: 'පැකිළුණු අක්ෂර (%SS)',
                       val1: num1(c.percentSSBefore),
                       val2: num1(c.percentSSNow),
-                      description: _change(c.percentSSBefore, c.percentSSNow, 'More stuttering than last time', 'Less stuttering than last time', 'About the same'),
+                      description: _change(c.percentSSBefore, c.percentSSNow, 'පසුගිය වතාවට වඩා පැකිළීම් වැඩියි', 'පසුගිය වතාවට වඩා පැකිළීම් අඩුයි', 'පසුගිය වතාවට ආසන්නව සමානයි'),
                       icon: Icons.graphic_eq,
                     ),
                     const SizedBox(height: 16),
                     _buildComparisonCard(
-                      title: 'Response Duration',
+                      title: 'පිළිතුරු කාලය',
                       val1: fmtClock(c.durationBefore),
                       val2: fmtClock(c.durationNow),
-                      description: _change(c.durationBefore, c.durationNow, 'Longer spontaneous response', 'A shorter response this time', 'About the same length'),
+                      description: _change(c.durationBefore, c.durationNow, 'ස්වභාවික කථන පිළිතුර දිගුයි', 'මෙවර පිළිතුර කෙටියි', 'කාලය ආසන්නව සමානයි'),
                       icon: Icons.timer,
                     ),
 
                     const SizedBox(height: 48),
                     ElevatedButton(
                       onPressed: () => context.push('/c4/next_session'),
-                      child: const Text('View Next Step'),
+                      child: const Text('ඊළඟ පියවර බලන්න'),
                     ),
                   ],
                 ),
@@ -120,7 +120,7 @@ class _SessionComparisonScreenState extends State<SessionComparisonScreen> {
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: AppColors.surfaceRaised,
-        borderRadius: AppRadii.lgAll,
+        borderRadius: AppRadii.mdAll,
         boxShadow: AppElevation.card,
         border: Border.all(color: AppColors.divider),
       ),
@@ -140,7 +140,7 @@ class _SessionComparisonScreenState extends State<SessionComparisonScreen> {
             children: [
               Column(
                 children: [
-                  Text('Session 1', style: AppTextStyles.caption),
+                  Text('සැසිය 1', style: AppTextStyles.caption),
                   const SizedBox(height: 4),
                   Text(val1, style: AppTextStyles.heading2.copyWith(color: AppColors.textLight)),
                 ],
@@ -151,7 +151,7 @@ class _SessionComparisonScreenState extends State<SessionComparisonScreen> {
               ),
               Column(
                 children: [
-                  Text('Session 2', style: AppTextStyles.label.copyWith(color: AppColors.primary)),
+                  Text('සැසිය 2', style: AppTextStyles.label.copyWith(color: AppColors.primary)),
                   const SizedBox(height: 4),
                   Text(val2, style: AppTextStyles.heading2.copyWith(color: AppColors.primaryDeep)),
                 ],

@@ -12,15 +12,15 @@ class CommunicationMetricsScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: const [
-          MetricCard(title: 'Topic Relevance', value: '88%', icon: Icons.track_changes),
+          MetricCard(title: 'මාතෘකාවට අදාළ බව', value: '88%', icon: Icons.track_changes),
           SizedBox(height: 8),
-          MetricCard(title: 'Information Content', value: '82%', icon: Icons.extension),
+          MetricCard(title: 'තොරතුරු අන්තර්ගතය', value: '82%', icon: Icons.extension),
           SizedBox(height: 8),
-          MetricCard(title: 'Story Organization', value: '78%', icon: Icons.menu_book),
+          MetricCard(title: 'කතාවේ පිළිවෙළ', value: '78%', icon: Icons.menu_book),
           SizedBox(height: 8),
-          MetricCard(title: 'Response Completeness', value: '90%', icon: Icons.done_all),
+          MetricCard(title: 'පිළිතුරේ සම්පූර්ණ බව', value: '90%', icon: Icons.done_all),
           SizedBox(height: 8),
-          MetricCard(title: 'Participation', value: '86%', icon: Icons.record_voice_over),
+          MetricCard(title: 'සහභාගීත්වය', value: '86%', icon: Icons.record_voice_over),
         ],
       ),
     );
