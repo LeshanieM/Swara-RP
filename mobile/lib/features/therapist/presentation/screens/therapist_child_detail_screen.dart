@@ -95,7 +95,7 @@ class TherapistChildDetailScreen extends ConsumerWidget {
               _ActionTile(
                 icon: Icons.trending_up,
                 label: 'Progress Dashboard',
-                onTap: () => _open(context, ref, child, '/profile'),
+                onTap: () => _open(context, ref, child, '/progress'),
               ),
               const SizedBox(height: 32),
             ],

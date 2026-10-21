@@ -36,7 +36,8 @@ class MainScaffold extends StatelessWidget {
     int currentIndex = 0;
     if (location.startsWith('/activities') || location.startsWith('/c3')) {
       currentIndex = 2;
-    } else if (location.startsWith('/profile')) {
+    } else if (location.startsWith('/profile') ||
+        location.startsWith('/commercialization')) {
       currentIndex = 3;
     } else if (location.startsWith('/c1') ||
         location.startsWith('/c2') ||

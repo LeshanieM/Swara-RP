@@ -65,7 +65,7 @@ class ChildHomeScreen extends ConsumerWidget {
                           imageAsset: 'images/home/talk_card.png',
                           titleSi: 'කතා කරමු',
                           titleEn: "Let's Talk",
-                          subtitle: 'Reading and picture practice',
+                          subtitle: 'Reading and picture practice · කියවීම සහ පින්තූර පුහුණුව',
                           accentColor: AppColors.primary,
                           onAccentColor: Colors.white,
                           onTap: () => context.push('/c1/record'),
@@ -75,7 +75,7 @@ class ChildHomeScreen extends ConsumerWidget {
                           imageAsset: 'images/home/camera_card.png',
                           titleSi: 'කතා කරන විදිහ',
                           titleEn: 'Behavior Analysis',
-                          subtitle: 'Explore movement features in a video',
+                          subtitle: 'Explore movement features in a video · වීඩියෝවක චලන බලමු',
                           accentColor: AppColors.coralDeep,
                           onAccentColor: Colors.white,
                           onTap: () => context.push('/c2/video/upload'),
@@ -85,7 +85,7 @@ class ChildHomeScreen extends ConsumerWidget {
                           imageAsset: 'images/home/story_card.png',
                           titleSi: 'කතා පුහුණුව',
                           titleEn: 'Therapy Journey',
-                          subtitle: 'Guided speech practice',
+                          subtitle: 'Guided speech practice · මඟ පෙන්වන කථන පුහුණුව',
                           accentColor: AppColors.sun,
                           onAccentColor: AppColors.text,
                           onTap: () => context.push('/c3/forest-therapy'),
@@ -95,7 +95,7 @@ class ChildHomeScreen extends ConsumerWidget {
                           imageAsset: 'images/home/free_talk_card.png',
                           titleSi: 'නිදහසේ කතා',
                           titleEn: 'Free Talk',
-                          subtitle: 'Speak on a topic you like',
+                          subtitle: 'Speak on a topic you like · කැමති මාතෘකාවක් ගැන කතා කරමු',
                           accentColor: AppColors.lilacTint,
                           onAccentColor: AppColors.text,
                           onTap: () => context.push('/c4'),
@@ -169,7 +169,9 @@ class ChildHomeScreen extends ConsumerWidget {
                   children: [
                     Flexible(
                       child: Text(
-                        childName == null ? 'Hi! 👋' : 'Hi, $childName! 👋',
+                        childName == null
+                            ? 'Hi! · ආයුබෝවන්!'
+                            : 'Hi, $childName! · ආයුබෝවන්, $childName!',
                         style: AppTextStyles.heading3.copyWith(
                           color: AppColors.primaryDeep,
                         ),
@@ -193,7 +195,7 @@ class ChildHomeScreen extends ConsumerWidget {
                     ),
                     Flexible(
                       child: Text(
-                        '· Ready to practice?',
+                        'Ready to practice? · පුහුණුවට සූදානම්ද?',
                         style: AppTextStyles.caption,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -270,7 +272,7 @@ class ChildHomeScreen extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('අද ගවේෂණය', style: AppTextStyles.heading3),
-              Text('Pick a practice for today', style: AppTextStyles.bodySmall),
+              Text('Pick a practice for today · අද පුහුණුවක් තෝරන්න', style: AppTextStyles.bodySmall),
             ],
           ),
         ),
@@ -286,7 +288,7 @@ class ChildHomeScreen extends ConsumerWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: () => context.push('/profile'),
+        onTap: () => context.push('/progress'),
         borderRadius: BorderRadius.circular(AppRadii.lg),
         child: Container(
           padding: const EdgeInsets.all(16),
@@ -324,7 +326,7 @@ class ChildHomeScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'My progress',
+                      'My progress · මගේ ගමන',
                       style: AppTextStyles.label.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w700,
@@ -332,7 +334,7 @@ class ChildHomeScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'See how far you\'ve come!',
+                      'See how far you\'ve come! · ඔබ පැමිණි දුර බලන්න!',
                       style: AppTextStyles.caption.copyWith(
                         color: AppColors.textLight,
                       ),
@@ -370,7 +372,7 @@ class ChildHomeScreen extends ConsumerWidget {
           const SizedBox(width: 10),
           Expanded(
             child: Text(
-              'ඔබට ඕනෑම ක්‍රියාකාරකමක් තෝරා ගත හැකියි.',
+              'Choose any activity you like · ඔබ කැමති ඕනෑම ක්‍රියාකාරකමක් තෝරන්න.',
               style: AppTextStyles.bodySmall,
             ),
           ),

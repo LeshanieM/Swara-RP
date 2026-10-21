@@ -50,11 +50,11 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
     }
     final child = ref.read(activeChildProvider);
     if (child == null) {
-      setState(() => _localError = 'Choose a child on the therapist home first.');
+      setState(() => _localError = 'Choose a child on the therapist home first. · පළමුව චිකිත්සක මුල් පිටුවෙන් දරුවෙකු තෝරන්න.');
       return;
     }
     if (!_consent) {
-      setState(() => _localError = 'A parent needs to give consent before the video is analysed.');
+      setState(() => _localError = 'A parent needs to give consent before the video is analysed. · වීඩියෝව විශ්ලේෂණය කිරීමට පෙර දෙමාපිය අනුමැතිය අවශ්‍යයි.');
       return;
     }
     if (!await ensureParentMode(context, ref)) return;
@@ -68,7 +68,7 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
           passageId = passages.firstWhere((p) => p.language == 'si', orElse: () => passages.first).id;
         }
       } catch (e) {
-        setState(() => _localError = ApiException.from(e).message);
+        setState(() => _localError = '${ApiException.from(e).message} · කරුණාකර නැවත උත්සාහ කරන්න.');
         return;
       }
     }
@@ -90,7 +90,7 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
     return Scaffold(
       backgroundColor: AppColors.groundAdult,
       appBar: AppBar(
-        title: const Text('Video analysis'),
+        title: const Text('Video analysis · වීඩියෝ විශ්ලේෂණය'),
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
       ),
@@ -100,11 +100,10 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
           child: ListView(
             padding: const EdgeInsets.all(AppSpacing.lg),
             children: [
-              const ResearchNote(
-                'For each stutter moment in the video, Swara checks whether the face (eye, lip, jaw, cheek) '
-                'or the head moved unusually compared with the child\'s own fluent speech.\n'
-                'It is a research estimate, not a diagnosis. Use one front-facing video of one child, 2 s to 3 min.',
-                icon: Icons.timeline_rounded,
+              Text(
+                'එක් දරුවෙකුගේ ඉදිරිපස වීඩියෝවක් තෝරන්න (තත්පර 2–3 මිනිත්තු).',
+                style: AppTextStyles.bodySmall,
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: AppSpacing.lg),
               if (video == null) _emptyPicker(busy) else _selectedCard(video, busy),
@@ -120,7 +119,7 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
                   child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     const Icon(Icons.error_outline, color: AppColors.error, size: 20),
                     const SizedBox(width: AppSpacing.sm),
-                    Expanded(child: Text(error, style: AppTextStyles.bodySmall.copyWith(color: AppColors.text))),
+                    Expanded(child: Text('$error · කරුණාකර විස්තර පරීක්ෂා කර නැවත උත්සාහ කරන්න.', style: AppTextStyles.bodySmall.copyWith(color: AppColors.text))),
                   ]),
                 ),
               ],
@@ -136,8 +135,8 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
                 const SizedBox(height: AppSpacing.sm),
                 Text(
                   start.progress >= 1
-                      ? 'Upload complete - creating the analysis...'
-                      : 'Uploading video${start.progress > 0 ? ' - ${(start.progress * 100).toStringAsFixed(0)}%' : '...'}',
+                      ? 'Upload complete - creating the analysis... · උඩුගත කිරීම සම්පූර්ණයි; විශ්ලේෂණය සකසමින්'
+                      : 'Uploading video${start.progress > 0 ? ' - ${(start.progress * 100).toStringAsFixed(0)}%' : '...'} · වීඩියෝව උඩුගත කරමින්',
                   style: AppTextStyles.caption,
                   textAlign: TextAlign.center,
                 ),
@@ -146,7 +145,7 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
               SizedBox(
                 width: double.infinity,
                 child: SwaraButton(
-                  label: 'Start Analysis',
+                  label: 'Start analysis · විශ්ලේෂණය අරඹන්න',
                   icon: Icons.play_arrow_rounded,
                   isLoading: busy,
                   onPressed: _start, // validates: shows "select a video" when none is chosen
@@ -170,10 +169,9 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
         onChanged: busy ? null : _toggleConsent,
         controlAffinity: ListTileControlAffinity.leading,
         contentPadding: EdgeInsets.zero,
-        title: Text('Parent consent', style: AppTextStyles.titleMedium),
+        title: Text('Parent consent · දෙමාපිය අනුමැතිය', style: AppTextStyles.titleMedium),
         subtitle: Text(
-          'I am the parent or guardian and agree to this video being analysed. '
-          'Only the measurements are kept; the video is deleted after the analysis.',
+          'මම දෙමාපියෙකු/භාරකරුවෙකු ලෙස විශ්ලේෂණයට එකඟ වෙමි. මිනුම් පමණක් සුරැකේ; විශ්ලේෂණයෙන් පසු වීඩියෝව මකා දමනු ලැබේ.',
           style: AppTextStyles.caption,
         ),
       ),
@@ -191,9 +189,9 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
           child: Icon(Icons.video_library_outlined, size: 30, color: AppColors.primaryDeep),
         ),
         const SizedBox(height: AppSpacing.md),
-        Text('Select video', style: AppTextStyles.heading3),
+        Text('Select video · වීඩියෝව තෝරන්න', style: AppTextStyles.heading3),
         const SizedBox(height: AppSpacing.xs),
-        Text('Tap to choose one video from this device\n(${kAllowedVideoExtensions.join(', ')})',
+        Text('Tap to choose one video from this device · මෙම උපාංගයෙන් වීඩියෝවක් තෝරන්න\n(${kAllowedVideoExtensions.join(', ')})',
             style: AppTextStyles.bodySmall, textAlign: TextAlign.center),
       ]),
     );
@@ -231,7 +229,7 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
             padding: const EdgeInsets.all(AppSpacing.lg),
             decoration: BoxDecoration(color: AppColors.surface, borderRadius: AppRadii.mdAll),
             child: Text(
-              'Video preview is not available in the browser. The file will still be analyzed.',
+              'බ්‍රවුසරයේ පෙරදසුන නොපෙනේ. ගොනුව විශ්ලේෂණය කළ හැකියි.',
               style: AppTextStyles.bodySmall,
               textAlign: TextAlign.center,
             ),
@@ -240,7 +238,7 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
         Row(children: [
           Expanded(
             child: SwaraButton(
-              label: 'Replace',
+              label: 'Replace · වෙනස් කරන්න',
               icon: Icons.swap_horiz_rounded,
               outlined: true,
               onPressed: busy ? null : notifier.pick,
@@ -249,7 +247,7 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
           const SizedBox(width: AppSpacing.md),
           Expanded(
             child: SwaraButton(
-              label: 'Remove',
+              label: 'Remove · ඉවත් කරන්න',
               icon: Icons.delete_outline,
               outlined: true,
               color: AppColors.error,
@@ -265,7 +263,7 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
     final async = ref.watch(videoAnalysisHistoryProvider(_childId));
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       SectionTitle(
-        'Previous analyses',
+        'Previous analyses · පෙර විශ්ලේෂණ',
         trailing: IconButton(
           tooltip: 'Refresh',
           icon: const Icon(Icons.refresh, size: 20),
@@ -275,17 +273,17 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
       async.when(
         loading: () => const Padding(
           padding: EdgeInsets.all(AppSpacing.lg),
-          child: SwaraLoadingWidget(message: 'Loading analyses...'),
+          child: SwaraLoadingWidget(message: 'Loading analyses... · විශ්ලේෂණ පූරණය වෙමින් පවතී'),
         ),
         error: (e, _) => Text(
-          VideoAnalysisException.from(e).message,
+          '${VideoAnalysisException.from(e).message} · සම්බන්ධතාව පරීක්ෂා කර නැවත උත්සාහ කරන්න.',
           style: AppTextStyles.bodySmall,
         ),
         data: (items) {
           if (items.isEmpty) {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
-              child: Text('No video analysis has been performed yet.', style: AppTextStyles.bodySmall),
+              child: Text('No video analysis has been performed yet. · තවම වීඩියෝ විශ්ලේෂණයක් කර නැත.', style: AppTextStyles.bodySmall),
             );
           }
           return Column(children: [for (final s in items.take(10)) _historyTile(s)]);
@@ -296,11 +294,11 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
 
   Widget _historyTile(VideoAnalysis s) {
     final (label, color) = switch (s.status) {
-      'completed' => ('Completed', AppColors.success),
-      'failed' => ('Failed', AppColors.error),
-      'not_assessed' => ('Not assessed', AppColors.textLight),
-      'processing' || 'awaiting_stutter_events' => ('Processing', AppColors.primary),
-      _ => ('Queued', AppColors.textLight),
+      'completed' => ('Completed · සම්පූර්ණයි', AppColors.success),
+      'failed' => ('Failed · අසාර්ථකයි', AppColors.error),
+      'not_assessed' => ('Not assessed · තක්සේරු කර නැත', AppColors.textLight),
+      'processing' || 'awaiting_stutter_events' => ('Processing · සැකසෙමින් පවතී', AppColors.primary),
+      _ => ('Queued · පෝලිමේ', AppColors.textLight),
     };
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.sm),
@@ -314,7 +312,7 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
           const SizedBox(width: AppSpacing.md),
           Expanded(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(s.filename ?? 'Video', maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.label),
+              Text(s.filename ?? 'Video · වීඩියෝව', maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.label),
               Text(fmtDate(s.createdAt), style: AppTextStyles.caption),
             ]),
           ),
