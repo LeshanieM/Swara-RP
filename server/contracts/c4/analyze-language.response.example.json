@@ -1,0 +1,1943 @@
+{
+ "transcription": {
+  "engine": {
+   "name": "ctc",
+   "model": "SpideyDLK/wav2vec2-large-xls-r-300m-sinhala-low-LR-part1",
+   "repetitionPreserving": true
+  },
+  "text": "ඇඳුම් පැළරදුම් තිබෙන පෙරුපෙරටු කරගෙන එරට ආණ්ඩු ප්‍රම විවස්ථා අධිකරණය විසිවසි විසින් අරහත් පලයට පත් ඇත්තටම ඇය ඒවරද කළත් කෙලෙසක කෙලෙසකද ඒය ඔප්පු කරන්නේ තව එකක් තින් තියෙන් තියෙනවා ඉන්ලද පන් නරය බුද්ධිය දියුණු කරන්න පුළුවන්වා පුළුවන් කෙනෙකුට විතරයි වැළපෙන්නට විය ඔහොම බබාල හැමතැන මින්නවා සියල නව වන අවතා ඉදිරියට දුව එති එක් අංශයා අද කොටස බැලුවම තමයි තේරුණේ අප එවැනි බලයක් දන්නේ",
+  "words": [
+   {
+    "word": "ඇඳුම්",
+    "start": 1.381,
+    "end": 1.581,
+    "confidence": 0.997
+   },
+   {
+    "word": "පැළරදුම්",
+    "start": 1.621,
+    "end": 1.941,
+    "confidence": 0.9559
+   },
+   {
+    "word": "තිබෙන",
+    "start": 1.961,
+    "end": 2.202,
+    "confidence": 0.9997
+   },
+   {
+    "word": "පෙරුපෙරටු",
+    "start": 4.983,
+    "end": 5.624,
+    "confidence": 0.9956
+   },
+   {
+    "word": "කරගෙන",
+    "start": 5.644,
+    "end": 5.964,
+    "confidence": 0.9994
+   },
+   {
+    "word": "එරට",
+    "start": 9.747,
+    "end": 9.927,
+    "confidence": 0.9993
+   },
+   {
+    "word": "ආණ්ඩු",
+    "start": 10.087,
+    "end": 10.287,
+    "confidence": 0.9991
+   },
+   {
+    "word": "ප්‍රම",
+    "start": 10.307,
+    "end": 10.487,
+    "confidence": 0.9973
+   },
+   {
+    "word": "විවස්ථා",
+    "start": 10.627,
+    "end": 11.108,
+    "confidence": 0.8911
+   },
+   {
+    "word": "අධිකරණය",
+    "start": 11.148,
+    "end": 11.588,
+    "confidence": 0.9476
+   },
+   {
+    "word": "විසිවසි",
+    "start": 11.668,
+    "end": 12.068,
+    "confidence": 0.9346
+   },
+   {
+    "word": "විසින්",
+    "start": 12.128,
+    "end": 12.449,
+    "confidence": 0.9379
+   },
+   {
+    "word": "අරහත්",
+    "start": 15.391,
+    "end": 15.731,
+    "confidence": 0.9998
+   },
+   {
+    "word": "පලයට",
+    "start": 15.791,
+    "end": 16.091,
+    "confidence": 0.9503
+   },
+   {
+    "word": "පත්",
+    "start": 16.491,
+    "end": 16.732,
+    "confidence": 0.9818
+   },
+   {
+    "word": "ඇත්තටම",
+    "start": 20.195,
+    "end": 20.555,
+    "confidence": 0.9959
+   },
+   {
+    "word": "ඇය",
+    "start": 20.695,
+    "end": 20.755,
+    "confidence": 0.7873
+   },
+   {
+    "word": "ඒවරද",
+    "start": 20.915,
+    "end": 21.215,
+    "confidence": 0.9955
+   },
+   {
+    "word": "කළත්",
+    "start": 21.316,
+    "end": 21.616,
+    "confidence": 0.9997
+   },
+   {
+    "word": "කෙලෙසක",
+    "start": 21.676,
+    "end": 22.016,
+    "confidence": 0.9549
+   },
+   {
+    "word": "කෙලෙසකද",
+    "start": 22.236,
+    "end": 22.677,
+    "confidence": 0.9971
+   },
+   {
+    "word": "ඒය",
+    "start": 22.837,
+    "end": 22.877,
+    "confidence": 0.8415
+   },
+   {
+    "word": "ඔප්පු",
+    "start": 23.037,
+    "end": 23.217,
+    "confidence": 0.9996
+   },
+   {
+    "word": "කරන්නේ",
+    "start": 23.257,
+    "end": 23.658,
+    "confidence": 0.9997
+   },
+   {
+    "word": "තව",
+    "start": 26.721,
+    "end": 26.901,
+    "confidence": 0.9998
+   },
+   {
+    "word": "එකක්",
+    "start": 27.001,
+    "end": 27.261,
+    "confidence": 0.9996
+   },
+   {
+    "word": "තින්",
+    "start": 27.301,
+    "end": 27.521,
+    "confidence": 0.7088
+   },
+   {
+    "word": "තියෙන්",
+    "start": 27.541,
+    "end": 27.741,
+    "confidence": 0.8798
+   },
+   {
+    "word": "තියෙනවා",
+    "start": 27.762,
+    "end": 28.162,
+    "confidence": 0.9998
+   },
+   {
+    "word": "ඉන්ලද",
+    "start": 31.265,
+    "end": 31.545,
+    "confidence": 0.9984
+   },
+   {
+    "word": "පන්",
+    "start": 31.645,
+    "end": 31.905,
+    "confidence": 0.9332
+   },
+   {
+    "word": "නරය",
+    "start": 32.346,
+    "end": 32.606,
+    "confidence": 0.9995
+   },
+   {
+    "word": "බුද්ධිය",
+    "start": 35.449,
+    "end": 35.809,
+    "confidence": 0.9997
+   },
+   {
+    "word": "දියුණු",
+    "start": 35.869,
+    "end": 36.109,
+    "confidence": 0.9982
+   },
+   {
+    "word": "කරන්න",
+    "start": 36.149,
+    "end": 36.45,
+    "confidence": 0.9998
+   },
+   {
+    "word": "පුළුවන්වා",
+    "start": 36.53,
+    "end": 36.95,
+    "confidence": 0.8791
+   },
+   {
+    "word": "පුළුවන්",
+    "start": 37.03,
+    "end": 37.391,
+    "confidence": 0.9387
+   },
+   {
+    "word": "කෙනෙකුට",
+    "start": 37.971,
+    "end": 38.312,
+    "confidence": 0.9635
+   },
+   {
+    "word": "විතරයි",
+    "start": 38.412,
+    "end": 38.772,
+    "confidence": 0.9994
+   },
+   {
+    "word": "වැළපෙන්නට",
+    "start": 41.535,
+    "end": 42.036,
+    "confidence": 0.9997
+   },
+   {
+    "word": "විය",
+    "start": 42.136,
+    "end": 42.276,
+    "confidence": 0.9999
+   },
+   {
+    "word": "ඔහොම",
+    "start": 45.54,
+    "end": 45.74,
+    "confidence": 0.9949
+   },
+   {
+    "word": "බබාල",
+    "start": 45.82,
+    "end": 46.201,
+    "confidence": 0.9984
+   },
+   {
+    "word": "හැමතැන",
+    "start": 46.281,
+    "end": 46.581,
+    "confidence": 0.9994
+   },
+   {
+    "word": "මින්නවා",
+    "start": 46.681,
+    "end": 47.062,
+    "confidence": 0.9924
+   },
+   {
+    "word": "සියල",
+    "start": 49.605,
+    "end": 49.885,
+    "confidence": 0.9989
+   },
+   {
+    "word": "නව",
+    "start": 49.985,
+    "end": 50.085,
+    "confidence": 0.9966
+   },
+   {
+    "word": "වන",
+    "start": 50.285,
+    "end": 50.386,
+    "confidence": 0.7783
+   },
+   {
+    "word": "අවතා",
+    "start": 50.446,
+    "end": 50.726,
+    "confidence": 0.9875
+   },
+   {
+    "word": "ඉදිරියට",
+    "start": 50.786,
+    "end": 51.066,
+    "confidence": 0.9939
+   },
+   {
+    "word": "දුව",
+    "start": 51.146,
+    "end": 51.267,
+    "confidence": 0.9998
+   },
+   {
+    "word": "එති",
+    "start": 51.367,
+    "end": 51.567,
+    "confidence": 0.9996
+   },
+   {
+    "word": "එක්",
+    "start": 55.051,
+    "end": 55.191,
+    "confidence": 0.9969
+   },
+   {
+    "word": "අංශයා",
+    "start": 55.311,
+    "end": 55.712,
+    "confidence": 0.9548
+   },
+   {
+    "word": "අද",
+    "start": 58.495,
+    "end": 58.595,
+    "confidence": 0.9959
+   },
+   {
+    "word": "කොටස",
+    "start": 58.675,
+    "end": 58.915,
+    "confidence": 0.9985
+   },
+   {
+    "word": "බැලුවම",
+    "start": 58.995,
+    "end": 59.355,
+    "confidence": 0.9983
+   },
+   {
+    "word": "තමයි",
+    "start": 59.515,
+    "end": 59.796,
+    "confidence": 0.8567
+   },
+   {
+    "word": "තේරුණේ",
+    "start": 59.836,
+    "end": 60.216,
+    "confidence": 0.9996
+   },
+   {
+    "word": "අප",
+    "start": 62.558,
+    "end": 62.678,
+    "confidence": 0.9998
+   },
+   {
+    "word": "එවැනි",
+    "start": 62.798,
+    "end": 62.979,
+    "confidence": 0.9953
+   },
+   {
+    "word": "බලයක්",
+    "start": 63.019,
+    "end": 63.439,
+    "confidence": 0.9962
+   },
+   {
+    "word": "දන්නේ",
+    "start": 63.519,
+    "end": 63.839,
+    "confidence": 0.9983
+   }
+  ],
+  "wordTimings": "ctc",
+  "audio": {
+   "durationSec": 65.721,
+   "sampleRate": 16000,
+   "originalSampleRate": 16000,
+   "channels": 1,
+   "format": "WAV"
+  },
+  "processingSec": 4.0,
+  "chunks": 4
+ },
+ "analysis": {
+  "methodVersion": "c4-language-0.1",
+  "source": "asr",
+  "normalisedText": "ඇඳුම් පැළරදුම් තිබෙන පෙරුපෙරටු කරගෙන එරට ආණ්ඩු ප්‍රම විවස්ථා අධිකරණය විසිවසි විසින් අරහත් පලයට පත් ඇත්තටම ඇය ඒවරද කළත් කෙලෙසක කෙලෙසකද ඒය ඔප්පු කරන්නේ තව එකක් තින් තියෙන් තියෙනවා ඉන්ලද පන් නරය බුද්ධිය දියුණු කරන්න පුළුවන්වා පුළුවන් කෙනෙකුට විතරයි වැළපෙන්නට විය ඔහොම බබාල හැමතැන මින්නවා සියල නව වන අවතා ඉදිරියට දුව එති එක් අංශයා අද කොටස බැලුවම තමයි තේරුණේ අප එවැනි බලයක් දන්නේ",
+  "cleanText": "ඇඳුම් පැළරදුම් තිබෙන පෙරුපෙරටු කරගෙන එරට ආණ්ඩු ප්‍රම විවස්ථා අධිකරණය විසිවසි විසින් අරහත් පලයට පත් ඇත්තටම ඇය ඒවරද කළත් කෙලෙසක කෙලෙසකද ඒය ඔප්පු කරන්නේ තව එකක් තින් තියෙන් තියෙනවා ඉන්ලද පන් නරය බුද්ධිය දියුණු කරන්න පුළුවන්වා පුළුවන් කෙනෙකුට විතරයි වැළපෙන්නට විය ඔහොම බබාල හැමතැන මින්නවා සියල නව වන අවතා ඉදිරියට දුව එති එක් අංශයා අද කොටස බැලුවම තමයි තේරුණේ අප එවැනි බලයක් දන්නේ",
+  "tokens": [
+   {
+    "index": 0,
+    "text": "ඇඳුම්",
+    "norm": "ඇඳුම්",
+    "stem": "ඇඳුම්",
+    "start": 1.381,
+    "end": 1.581,
+    "confidence": 0.997,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 0,
+    "syllables": 2
+   },
+   {
+    "index": 1,
+    "text": "පැළරදුම්",
+    "norm": "පැළරදුම්",
+    "stem": "පැළරදුම්",
+    "start": 1.621,
+    "end": 1.941,
+    "confidence": 0.9559,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 0,
+    "syllables": 4
+   },
+   {
+    "index": 2,
+    "text": "තිබෙන",
+    "norm": "තිබෙන",
+    "stem": "තිබෙන",
+    "start": 1.961,
+    "end": 2.202,
+    "confidence": 0.9997,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 0,
+    "syllables": 3
+   },
+   {
+    "index": 3,
+    "text": "පෙරුපෙරටු",
+    "norm": "පෙරුපෙරටු",
+    "stem": "පෙරුපෙරටු",
+    "start": 4.983,
+    "end": 5.624,
+    "confidence": 0.9956,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 1,
+    "syllables": 5
+   },
+   {
+    "index": 4,
+    "text": "කරගෙන",
+    "norm": "කරගෙන",
+    "stem": "කරගෙන",
+    "start": 5.644,
+    "end": 5.964,
+    "confidence": 0.9994,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 1,
+    "syllables": 4
+   },
+   {
+    "index": 5,
+    "text": "එරට",
+    "norm": "එරට",
+    "stem": "එර",
+    "start": 9.747,
+    "end": 9.927,
+    "confidence": 0.9993,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 2,
+    "syllables": 3
+   },
+   {
+    "index": 6,
+    "text": "ආණ්ඩු",
+    "norm": "ආණ්ඩු",
+    "stem": "ආණ්ඩු",
+    "start": 10.087,
+    "end": 10.287,
+    "confidence": 0.9991,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 2,
+    "syllables": 2
+   },
+   {
+    "index": 7,
+    "text": "ප්‍රම",
+    "norm": "ප්‍රම",
+    "stem": "ප්‍රම",
+    "start": 10.307,
+    "end": 10.487,
+    "confidence": 0.9973,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 2,
+    "syllables": 2
+   },
+   {
+    "index": 8,
+    "text": "විවස්ථා",
+    "norm": "විවස්ථා",
+    "stem": "විවස්ථ",
+    "start": 10.627,
+    "end": 11.108,
+    "confidence": 0.8911,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 2,
+    "syllables": 3
+   },
+   {
+    "index": 9,
+    "text": "අධිකරණය",
+    "norm": "අධිකරණය",
+    "stem": "අධිකරණය",
+    "start": 11.148,
+    "end": 11.588,
+    "confidence": 0.9476,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 2,
+    "syllables": 6
+   },
+   {
+    "index": 10,
+    "text": "විසිවසි",
+    "norm": "විසිවසි",
+    "stem": "විසිවසි",
+    "start": 11.668,
+    "end": 12.068,
+    "confidence": 0.9346,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 2,
+    "syllables": 4
+   },
+   {
+    "index": 11,
+    "text": "විසින්",
+    "norm": "විසින්",
+    "stem": "විස",
+    "start": 12.128,
+    "end": 12.449,
+    "confidence": 0.9379,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 2,
+    "syllables": 2
+   },
+   {
+    "index": 12,
+    "text": "අරහත්",
+    "norm": "අරහත්",
+    "stem": "අරහ",
+    "start": 15.391,
+    "end": 15.731,
+    "confidence": 0.9998,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 3,
+    "syllables": 3
+   },
+   {
+    "index": 13,
+    "text": "පලයට",
+    "norm": "පලයට",
+    "stem": "පලය",
+    "start": 15.791,
+    "end": 16.091,
+    "confidence": 0.9503,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 3,
+    "syllables": 4
+   },
+   {
+    "index": 14,
+    "text": "පත්",
+    "norm": "පත්",
+    "stem": "පත්",
+    "start": 16.491,
+    "end": 16.732,
+    "confidence": 0.9818,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 3,
+    "syllables": 1
+   },
+   {
+    "index": 15,
+    "text": "ඇත්තටම",
+    "norm": "ඇත්තටම",
+    "stem": "ඇත්තටම",
+    "start": 20.195,
+    "end": 20.555,
+    "confidence": 0.9959,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 4,
+    "syllables": 4
+   },
+   {
+    "index": 16,
+    "text": "ඇය",
+    "norm": "ඇය",
+    "stem": "ඇය",
+    "start": 20.695,
+    "end": 20.755,
+    "confidence": 0.7873,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 4,
+    "syllables": 2
+   },
+   {
+    "index": 17,
+    "text": "ඒවරද",
+    "norm": "ඒවරද",
+    "stem": "ඒවරද",
+    "start": 20.915,
+    "end": 21.215,
+    "confidence": 0.9955,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 4,
+    "syllables": 4
+   },
+   {
+    "index": 18,
+    "text": "කළත්",
+    "norm": "කළත්",
+    "stem": "කළ",
+    "start": 21.316,
+    "end": 21.616,
+    "confidence": 0.9997,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 4,
+    "syllables": 2
+   },
+   {
+    "index": 19,
+    "text": "කෙලෙසක",
+    "norm": "කෙලෙසක",
+    "stem": "කෙලෙසක",
+    "start": 21.676,
+    "end": 22.016,
+    "confidence": 0.9549,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 4,
+    "syllables": 4
+   },
+   {
+    "index": 20,
+    "text": "කෙලෙසකද",
+    "norm": "කෙලෙසකද",
+    "stem": "කෙලෙසකද",
+    "start": 22.236,
+    "end": 22.677,
+    "confidence": 0.9971,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 4,
+    "syllables": 5
+   },
+   {
+    "index": 21,
+    "text": "ඒය",
+    "norm": "ඒය",
+    "stem": "ඒය",
+    "start": 22.837,
+    "end": 22.877,
+    "confidence": 0.8415,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 4,
+    "syllables": 2
+   },
+   {
+    "index": 22,
+    "text": "ඔප්පු",
+    "norm": "ඔප්පු",
+    "stem": "ඔප්",
+    "start": 23.037,
+    "end": 23.217,
+    "confidence": 0.9996,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 4,
+    "syllables": 2
+   },
+   {
+    "index": 23,
+    "text": "කරන්නේ",
+    "norm": "කරන්නේ",
+    "stem": "කර",
+    "start": 23.257,
+    "end": 23.658,
+    "confidence": 0.9997,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 4,
+    "syllables": 3
+   },
+   {
+    "index": 24,
+    "text": "තව",
+    "norm": "තව",
+    "stem": "තව",
+    "start": 26.721,
+    "end": 26.901,
+    "confidence": 0.9998,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 5,
+    "syllables": 2
+   },
+   {
+    "index": 25,
+    "text": "එකක්",
+    "norm": "එකක්",
+    "stem": "එක",
+    "start": 27.001,
+    "end": 27.261,
+    "confidence": 0.9996,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 5,
+    "syllables": 2
+   },
+   {
+    "index": 26,
+    "text": "තින්",
+    "norm": "තින්",
+    "stem": "තින්",
+    "start": 27.301,
+    "end": 27.521,
+    "confidence": 0.7088,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 5,
+    "syllables": 1
+   },
+   {
+    "index": 27,
+    "text": "තියෙන්",
+    "norm": "තියෙන්",
+    "stem": "තිය",
+    "start": 27.541,
+    "end": 27.741,
+    "confidence": 0.8798,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 5,
+    "syllables": 2
+   },
+   {
+    "index": 28,
+    "text": "තියෙනවා",
+    "norm": "තියෙනවා",
+    "stem": "තියෙ",
+    "start": 27.762,
+    "end": 28.162,
+    "confidence": 0.9998,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 5,
+    "syllables": 4
+   },
+   {
+    "index": 29,
+    "text": "ඉන්ලද",
+    "norm": "ඉන්ලද",
+    "stem": "ඉන්ලද",
+    "start": 31.265,
+    "end": 31.545,
+    "confidence": 0.9984,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 6,
+    "syllables": 3
+   },
+   {
+    "index": 30,
+    "text": "පන්",
+    "norm": "පන්",
+    "stem": "පන්",
+    "start": 31.645,
+    "end": 31.905,
+    "confidence": 0.9332,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 6,
+    "syllables": 1
+   },
+   {
+    "index": 31,
+    "text": "නරය",
+    "norm": "නරය",
+    "stem": "නරය",
+    "start": 32.346,
+    "end": 32.606,
+    "confidence": 0.9995,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 6,
+    "syllables": 3
+   },
+   {
+    "index": 32,
+    "text": "බුද්ධිය",
+    "norm": "බුද්ධිය",
+    "stem": "බුද්ධිය",
+    "start": 35.449,
+    "end": 35.809,
+    "confidence": 0.9997,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 7,
+    "syllables": 3
+   },
+   {
+    "index": 33,
+    "text": "දියුණු",
+    "norm": "දියුණු",
+    "stem": "දියුණු",
+    "start": 35.869,
+    "end": 36.109,
+    "confidence": 0.9982,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 7,
+    "syllables": 3
+   },
+   {
+    "index": 34,
+    "text": "කරන්න",
+    "norm": "කරන්න",
+    "stem": "කර",
+    "start": 36.149,
+    "end": 36.45,
+    "confidence": 0.9998,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 7,
+    "syllables": 3
+   },
+   {
+    "index": 35,
+    "text": "පුළුවන්වා",
+    "norm": "පුළුවන්වා",
+    "stem": "පුළුවන්ව",
+    "start": 36.53,
+    "end": 36.95,
+    "confidence": 0.8791,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 7,
+    "syllables": 4
+   },
+   {
+    "index": 36,
+    "text": "පුළුවන්",
+    "norm": "පුළුවන්",
+    "stem": "පුළුවන්",
+    "start": 37.03,
+    "end": 37.391,
+    "confidence": 0.9387,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 7,
+    "syllables": 3
+   },
+   {
+    "index": 37,
+    "text": "කෙනෙකුට",
+    "norm": "කෙනෙකුට",
+    "stem": "කෙනෙකු",
+    "start": 37.971,
+    "end": 38.312,
+    "confidence": 0.9635,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 7,
+    "syllables": 4
+   },
+   {
+    "index": 38,
+    "text": "විතරයි",
+    "norm": "විතරයි",
+    "stem": "විතර",
+    "start": 38.412,
+    "end": 38.772,
+    "confidence": 0.9994,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 7,
+    "syllables": 4
+   },
+   {
+    "index": 39,
+    "text": "වැළපෙන්නට",
+    "norm": "වැළපෙන්නට",
+    "stem": "වැළපෙ",
+    "start": 41.535,
+    "end": 42.036,
+    "confidence": 0.9997,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 8,
+    "syllables": 5
+   },
+   {
+    "index": 40,
+    "text": "විය",
+    "norm": "විය",
+    "stem": "විය",
+    "start": 42.136,
+    "end": 42.276,
+    "confidence": 0.9999,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 8,
+    "syllables": 2
+   },
+   {
+    "index": 41,
+    "text": "ඔහොම",
+    "norm": "ඔහොම",
+    "stem": "ඔහොම",
+    "start": 45.54,
+    "end": 45.74,
+    "confidence": 0.9949,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 9,
+    "syllables": 3
+   },
+   {
+    "index": 42,
+    "text": "බබාල",
+    "norm": "බබාල",
+    "stem": "බබාල",
+    "start": 45.82,
+    "end": 46.201,
+    "confidence": 0.9984,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 9,
+    "syllables": 3
+   },
+   {
+    "index": 43,
+    "text": "හැමතැන",
+    "norm": "හැමතැන",
+    "stem": "හැමතැන",
+    "start": 46.281,
+    "end": 46.581,
+    "confidence": 0.9994,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 9,
+    "syllables": 4
+   },
+   {
+    "index": 44,
+    "text": "මින්නවා",
+    "norm": "මින්නවා",
+    "stem": "මින්",
+    "start": 46.681,
+    "end": 47.062,
+    "confidence": 0.9924,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 9,
+    "syllables": 3
+   },
+   {
+    "index": 45,
+    "text": "සියල",
+    "norm": "සියල",
+    "stem": "සියල",
+    "start": 49.605,
+    "end": 49.885,
+    "confidence": 0.9989,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 10,
+    "syllables": 3
+   },
+   {
+    "index": 46,
+    "text": "නව",
+    "norm": "නව",
+    "stem": "නව",
+    "start": 49.985,
+    "end": 50.085,
+    "confidence": 0.9966,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 10,
+    "syllables": 2
+   },
+   {
+    "index": 47,
+    "text": "වන",
+    "norm": "වන",
+    "stem": "වන",
+    "start": 50.285,
+    "end": 50.386,
+    "confidence": 0.7783,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 10,
+    "syllables": 2
+   },
+   {
+    "index": 48,
+    "text": "අවතා",
+    "norm": "අවතා",
+    "stem": "අවත",
+    "start": 50.446,
+    "end": 50.726,
+    "confidence": 0.9875,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 10,
+    "syllables": 3
+   },
+   {
+    "index": 49,
+    "text": "ඉදිරියට",
+    "norm": "ඉදිරියට",
+    "stem": "ඉදිරිය",
+    "start": 50.786,
+    "end": 51.066,
+    "confidence": 0.9939,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 10,
+    "syllables": 5
+   },
+   {
+    "index": 50,
+    "text": "දුව",
+    "norm": "දුව",
+    "stem": "දුව",
+    "start": 51.146,
+    "end": 51.267,
+    "confidence": 0.9998,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 10,
+    "syllables": 2
+   },
+   {
+    "index": 51,
+    "text": "එති",
+    "norm": "එති",
+    "stem": "එති",
+    "start": 51.367,
+    "end": 51.567,
+    "confidence": 0.9996,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 10,
+    "syllables": 2
+   },
+   {
+    "index": 52,
+    "text": "එක්",
+    "norm": "එක්",
+    "stem": "එක්",
+    "start": 55.051,
+    "end": 55.191,
+    "confidence": 0.9969,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 11,
+    "syllables": 1
+   },
+   {
+    "index": 53,
+    "text": "අංශයා",
+    "norm": "අංශයා",
+    "stem": "අංශය",
+    "start": 55.311,
+    "end": 55.712,
+    "confidence": 0.9548,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 11,
+    "syllables": 3
+   },
+   {
+    "index": 54,
+    "text": "අද",
+    "norm": "අද",
+    "stem": "අද",
+    "start": 58.495,
+    "end": 58.595,
+    "confidence": 0.9959,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 12,
+    "syllables": 2
+   },
+   {
+    "index": 55,
+    "text": "කොටස",
+    "norm": "කොටස",
+    "stem": "කොටස",
+    "start": 58.675,
+    "end": 58.915,
+    "confidence": 0.9985,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 12,
+    "syllables": 3
+   },
+   {
+    "index": 56,
+    "text": "බැලුවම",
+    "norm": "බැලුවම",
+    "stem": "බැලුවම",
+    "start": 58.995,
+    "end": 59.355,
+    "confidence": 0.9983,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 12,
+    "syllables": 4
+   },
+   {
+    "index": 57,
+    "text": "තමයි",
+    "norm": "තමයි",
+    "stem": "තම",
+    "start": 59.515,
+    "end": 59.796,
+    "confidence": 0.8567,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 12,
+    "syllables": 3
+   },
+   {
+    "index": 58,
+    "text": "තේරුණේ",
+    "norm": "තේරුණේ",
+    "stem": "තේරුණ",
+    "start": 59.836,
+    "end": 60.216,
+    "confidence": 0.9996,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 12,
+    "syllables": 3
+   },
+   {
+    "index": 59,
+    "text": "අප",
+    "norm": "අප",
+    "stem": "අප",
+    "start": 62.558,
+    "end": 62.678,
+    "confidence": 0.9998,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 13,
+    "syllables": 2
+   },
+   {
+    "index": 60,
+    "text": "එවැනි",
+    "norm": "එවැනි",
+    "stem": "එවැනි",
+    "start": 62.798,
+    "end": 62.979,
+    "confidence": 0.9953,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 13,
+    "syllables": 3
+   },
+   {
+    "index": 61,
+    "text": "බලයක්",
+    "norm": "බලයක්",
+    "stem": "බලය",
+    "start": 63.019,
+    "end": 63.439,
+    "confidence": 0.9962,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 13,
+    "syllables": 3
+   },
+   {
+    "index": 62,
+    "text": "දන්නේ",
+    "norm": "දන්නේ",
+    "stem": "දන්",
+    "start": 63.519,
+    "end": 63.839,
+    "confidence": 0.9983,
+    "maze": false,
+    "mazeReason": null,
+    "unintelligible": false,
+    "utterance": 13,
+    "syllables": 2
+   }
+  ],
+  "utterances": [
+   {
+    "index": 0,
+    "start": 1.381,
+    "end": 2.202,
+    "text": "ඇඳුම් පැළරදුම් තිබෙන",
+    "wordCount": 3,
+    "complexity": 1,
+    "mazeOnly": false,
+    "stutter": null,
+    "cleanText": "ඇඳුම් පැළරදුම් තිබෙන",
+    "mazeCount": 0,
+    "stutterMoments": null
+   },
+   {
+    "index": 1,
+    "start": 4.983,
+    "end": 5.964,
+    "text": "පෙරුපෙරටු කරගෙන",
+    "wordCount": 2,
+    "complexity": 1,
+    "mazeOnly": false,
+    "stutter": null,
+    "cleanText": "පෙරුපෙරටු කරගෙන",
+    "mazeCount": 0,
+    "stutterMoments": null
+   },
+   {
+    "index": 2,
+    "start": 9.747,
+    "end": 12.449,
+    "text": "එරට ආණ්ඩු ප්‍රම විවස්ථා අධිකරණය විසිවසි විසින්",
+    "wordCount": 7,
+    "complexity": 1,
+    "mazeOnly": false,
+    "stutter": null,
+    "cleanText": "එරට ආණ්ඩු ප්‍රම විවස්ථා අධිකරණය විසිවසි විසින්",
+    "mazeCount": 0,
+    "stutterMoments": null
+   },
+   {
+    "index": 3,
+    "start": 15.391,
+    "end": 16.732,
+    "text": "අරහත් පලයට පත්",
+    "wordCount": 3,
+    "complexity": 1,
+    "mazeOnly": false,
+    "stutter": null,
+    "cleanText": "අරහත් පලයට පත්",
+    "mazeCount": 0,
+    "stutterMoments": null
+   },
+   {
+    "index": 4,
+    "start": 20.195,
+    "end": 23.658,
+    "text": "ඇත්තටම ඇය ඒවරද කළත් කෙලෙසක කෙලෙසකද ඒය ඔප්පු කරන්නේ",
+    "wordCount": 9,
+    "complexity": 1,
+    "mazeOnly": false,
+    "stutter": null,
+    "cleanText": "ඇත්තටම ඇය ඒවරද කළත් කෙලෙසක කෙලෙසකද ඒය ඔප්පු කරන්නේ",
+    "mazeCount": 0,
+    "stutterMoments": null
+   },
+   {
+    "index": 5,
+    "start": 26.721,
+    "end": 28.162,
+    "text": "තව එකක් තින් තියෙන් තියෙනවා",
+    "wordCount": 5,
+    "complexity": 1,
+    "mazeOnly": false,
+    "stutter": null,
+    "cleanText": "තව එකක් තින් තියෙන් තියෙනවා",
+    "mazeCount": 0,
+    "stutterMoments": null
+   },
+   {
+    "index": 6,
+    "start": 31.265,
+    "end": 32.606,
+    "text": "ඉන්ලද පන් නරය",
+    "wordCount": 3,
+    "complexity": 1,
+    "mazeOnly": false,
+    "stutter": null,
+    "cleanText": "ඉන්ලද පන් නරය",
+    "mazeCount": 0,
+    "stutterMoments": null
+   },
+   {
+    "index": 7,
+    "start": 35.449,
+    "end": 38.772,
+    "text": "බුද්ධිය දියුණු කරන්න පුළුවන්වා පුළුවන් කෙනෙකුට විතරයි",
+    "wordCount": 7,
+    "complexity": 1,
+    "mazeOnly": false,
+    "stutter": null,
+    "cleanText": "බුද්ධිය දියුණු කරන්න පුළුවන්වා පුළුවන් කෙනෙකුට විතරයි",
+    "mazeCount": 0,
+    "stutterMoments": null
+   },
+   {
+    "index": 8,
+    "start": 41.535,
+    "end": 42.276,
+    "text": "වැළපෙන්නට විය",
+    "wordCount": 2,
+    "complexity": 1,
+    "mazeOnly": false,
+    "stutter": null,
+    "cleanText": "වැළපෙන්නට විය",
+    "mazeCount": 0,
+    "stutterMoments": null
+   },
+   {
+    "index": 9,
+    "start": 45.54,
+    "end": 47.062,
+    "text": "ඔහොම බබාල හැමතැන මින්නවා",
+    "wordCount": 4,
+    "complexity": 1,
+    "mazeOnly": false,
+    "stutter": null,
+    "cleanText": "ඔහොම බබාල හැමතැන මින්නවා",
+    "mazeCount": 0,
+    "stutterMoments": null
+   },
+   {
+    "index": 10,
+    "start": 49.605,
+    "end": 51.567,
+    "text": "සියල නව වන අවතා ඉදිරියට දුව එති",
+    "wordCount": 7,
+    "complexity": 1,
+    "mazeOnly": false,
+    "stutter": null,
+    "cleanText": "සියල නව වන අවතා ඉදිරියට දුව එති",
+    "mazeCount": 0,
+    "stutterMoments": null
+   },
+   {
+    "index": 11,
+    "start": 55.051,
+    "end": 55.712,
+    "text": "එක් අංශයා",
+    "wordCount": 2,
+    "complexity": 1,
+    "mazeOnly": false,
+    "stutter": null,
+    "cleanText": "එක් අංශයා",
+    "mazeCount": 0,
+    "stutterMoments": null
+   },
+   {
+    "index": 12,
+    "start": 58.495,
+    "end": 60.216,
+    "text": "අද කොටස බැලුවම තමයි තේරුණේ",
+    "wordCount": 5,
+    "complexity": 1,
+    "mazeOnly": false,
+    "stutter": null,
+    "cleanText": "අද කොටස බැලුවම තමයි තේරුණේ",
+    "mazeCount": 0,
+    "stutterMoments": null
+   },
+   {
+    "index": 13,
+    "start": 62.558,
+    "end": 63.839,
+    "text": "අප එවැනි බලයක් දන්නේ",
+    "wordCount": 4,
+    "complexity": 1,
+    "mazeOnly": false,
+    "stutter": null,
+    "cleanText": "අප එවැනි බලයක් දන්නේ",
+    "mazeCount": 0,
+    "stutterMoments": null
+   }
+  ],
+  "measures": {
+   "mluWords": 4.5,
+   "ndw50": 49,
+   "ndwAll": 62,
+   "mattr25": 0.986,
+   "ttr": 0.984,
+   "totalWords": 63,
+   "totalTokens": 63,
+   "mazeTokens": 0,
+   "utteranceCount": 14,
+   "mluLabel": "words",
+   "mazeRatio": 0.0,
+   "unintelligibleTokens": 0,
+   "mazeOnlyUtterances": 0,
+   "meanComplexity": 1.0,
+   "wordsPerMinute": 57.5
+  },
+  "syllables": {
+   "total": 186,
+   "words": 186
+  },
+  "lexicon": [
+   {
+    "stem": "අංශය",
+    "count": 1,
+    "forms": [
+     "අංශයා"
+    ]
+   },
+   {
+    "stem": "අද",
+    "count": 1,
+    "forms": [
+     "අද"
+    ]
+   },
+   {
+    "stem": "අධිකරණය",
+    "count": 1,
+    "forms": [
+     "අධිකරණය"
+    ]
+   },
+   {
+    "stem": "අප",
+    "count": 1,
+    "forms": [
+     "අප"
+    ]
+   },
+   {
+    "stem": "අරහ",
+    "count": 1,
+    "forms": [
+     "අරහත්"
+    ]
+   },
+   {
+    "stem": "අවත",
+    "count": 1,
+    "forms": [
+     "අවතා"
+    ]
+   },
+   {
+    "stem": "ආණ්ඩු",
+    "count": 1,
+    "forms": [
+     "ආණ්ඩු"
+    ]
+   },
+   {
+    "stem": "ඇත්තටම",
+    "count": 1,
+    "forms": [
+     "ඇත්තටම"
+    ]
+   },
+   {
+    "stem": "ඇඳුම්",
+    "count": 1,
+    "forms": [
+     "ඇඳුම්"
+    ]
+   },
+   {
+    "stem": "ඇය",
+    "count": 1,
+    "forms": [
+     "ඇය"
+    ]
+   },
+   {
+    "stem": "ඉදිරිය",
+    "count": 1,
+    "forms": [
+     "ඉදිරියට"
+    ]
+   },
+   {
+    "stem": "ඉන්ලද",
+    "count": 1,
+    "forms": [
+     "ඉන්ලද"
+    ]
+   },
+   {
+    "stem": "එක",
+    "count": 1,
+    "forms": [
+     "එකක්"
+    ]
+   },
+   {
+    "stem": "එක්",
+    "count": 1,
+    "forms": [
+     "එක්"
+    ]
+   },
+   {
+    "stem": "එති",
+    "count": 1,
+    "forms": [
+     "එති"
+    ]
+   },
+   {
+    "stem": "එර",
+    "count": 1,
+    "forms": [
+     "එරට"
+    ]
+   },
+   {
+    "stem": "එවැනි",
+    "count": 1,
+    "forms": [
+     "එවැනි"
+    ]
+   },
+   {
+    "stem": "ඒය",
+    "count": 1,
+    "forms": [
+     "ඒය"
+    ]
+   },
+   {
+    "stem": "ඒවරද",
+    "count": 1,
+    "forms": [
+     "ඒවරද"
+    ]
+   },
+   {
+    "stem": "ඔප්",
+    "count": 1,
+    "forms": [
+     "ඔප්පු"
+    ]
+   },
+   {
+    "stem": "ඔහොම",
+    "count": 1,
+    "forms": [
+     "ඔහොම"
+    ]
+   },
+   {
+    "stem": "කර",
+    "count": 2,
+    "forms": [
+     "කරන්න",
+     "කරන්නේ"
+    ]
+   },
+   {
+    "stem": "කරගෙන",
+    "count": 1,
+    "forms": [
+     "කරගෙන"
+    ]
+   },
+   {
+    "stem": "කළ",
+    "count": 1,
+    "forms": [
+     "කළත්"
+    ]
+   },
+   {
+    "stem": "කෙනෙකු",
+    "count": 1,
+    "forms": [
+     "කෙනෙකුට"
+    ]
+   },
+   {
+    "stem": "කෙලෙසක",
+    "count": 1,
+    "forms": [
+     "කෙලෙසක"
+    ]
+   },
+   {
+    "stem": "කෙලෙසකද",
+    "count": 1,
+    "forms": [
+     "කෙලෙසකද"
+    ]
+   },
+   {
+    "stem": "කොටස",
+    "count": 1,
+    "forms": [
+     "කොටස"
+    ]
+   },
+   {
+    "stem": "තම",
+    "count": 1,
+    "forms": [
+     "තමයි"
+    ]
+   },
+   {
+    "stem": "තව",
+    "count": 1,
+    "forms": [
+     "තව"
+    ]
+   },
+   {
+    "stem": "තින්",
+    "count": 1,
+    "forms": [
+     "තින්"
+    ]
+   },
+   {
+    "stem": "තිබෙන",
+    "count": 1,
+    "forms": [
+     "තිබෙන"
+    ]
+   },
+   {
+    "stem": "තිය",
+    "count": 1,
+    "forms": [
+     "තියෙන්"
+    ]
+   },
+   {
+    "stem": "තියෙ",
+    "count": 1,
+    "forms": [
+     "තියෙනවා"
+    ]
+   },
+   {
+    "stem": "තේරුණ",
+    "count": 1,
+    "forms": [
+     "තේරුණේ"
+    ]
+   },
+   {
+    "stem": "දන්",
+    "count": 1,
+    "forms": [
+     "දන්නේ"
+    ]
+   },
+   {
+    "stem": "දියුණු",
+    "count": 1,
+    "forms": [
+     "දියුණු"
+    ]
+   },
+   {
+    "stem": "දුව",
+    "count": 1,
+    "forms": [
+     "දුව"
+    ]
+   },
+   {
+    "stem": "නරය",
+    "count": 1,
+    "forms": [
+     "නරය"
+    ]
+   },
+   {
+    "stem": "නව",
+    "count": 1,
+    "forms": [
+     "නව"
+    ]
+   },
+   {
+    "stem": "පත්",
+    "count": 1,
+    "forms": [
+     "පත්"
+    ]
+   },
+   {
+    "stem": "පන්",
+    "count": 1,
+    "forms": [
+     "පන්"
+    ]
+   },
+   {
+    "stem": "පලය",
+    "count": 1,
+    "forms": [
+     "පලයට"
+    ]
+   },
+   {
+    "stem": "ප්‍රම",
+    "count": 1,
+    "forms": [
+     "ප්‍රම"
+    ]
+   },
+   {
+    "stem": "පැළරදුම්",
+    "count": 1,
+    "forms": [
+     "පැළරදුම්"
+    ]
+   },
+   {
+    "stem": "පුළුවන්",
+    "count": 1,
+    "forms": [
+     "පුළුවන්"
+    ]
+   },
+   {
+    "stem": "පුළුවන්ව",
+    "count": 1,
+    "forms": [
+     "පුළුවන්වා"
+    ]
+   },
+   {
+    "stem": "පෙරුපෙරටු",
+    "count": 1,
+    "forms": [
+     "පෙරුපෙරටු"
+    ]
+   },
+   {
+    "stem": "බබාල",
+    "count": 1,
+    "forms": [
+     "බබාල"
+    ]
+   },
+   {
+    "stem": "බලය",
+    "count": 1,
+    "forms": [
+     "බලයක්"
+    ]
+   },
+   {
+    "stem": "බැලුවම",
+    "count": 1,
+    "forms": [
+     "බැලුවම"
+    ]
+   },
+   {
+    "stem": "බුද්ධිය",
+    "count": 1,
+    "forms": [
+     "බුද්ධිය"
+    ]
+   },
+   {
+    "stem": "මින්",
+    "count": 1,
+    "forms": [
+     "මින්නවා"
+    ]
+   },
+   {
+    "stem": "වන",
+    "count": 1,
+    "forms": [
+     "වන"
+    ]
+   },
+   {
+    "stem": "වැළපෙ",
+    "count": 1,
+    "forms": [
+     "වැළපෙන්නට"
+    ]
+   },
+   {
+    "stem": "විතර",
+    "count": 1,
+    "forms": [
+     "විතරයි"
+    ]
+   },
+   {
+    "stem": "විය",
+    "count": 1,
+    "forms": [
+     "විය"
+    ]
+   },
+   {
+    "stem": "විවස්ථ",
+    "count": 1,
+    "forms": [
+     "විවස්ථා"
+    ]
+   },
+   {
+    "stem": "විස",
+    "count": 1,
+    "forms": [
+     "විසින්"
+    ]
+   },
+   {
+    "stem": "විසිවසි",
+    "count": 1,
+    "forms": [
+     "විසිවසි"
+    ]
+   },
+   {
+    "stem": "සියල",
+    "count": 1,
+    "forms": [
+     "සියල"
+    ]
+   },
+   {
+    "stem": "හැමතැන",
+    "count": 1,
+    "forms": [
+     "හැමතැන"
+    ]
+   }
+  ],
+  "flags": [],
+  "segmentation": {
+   "method": "pause",
+   "pauseSec": 1.0
+  },
+  "mazes": {
+   "total": 0,
+   "byReason": {}
+  },
+  "alignment": null,
+  "c1EventsUsed": false
+ }
+}

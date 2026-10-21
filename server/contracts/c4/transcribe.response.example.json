@@ -1,0 +1,398 @@
+{
+ "engine": {
+  "name": "ctc",
+  "model": "SpideyDLK/wav2vec2-large-xls-r-300m-sinhala-low-LR-part1",
+  "repetitionPreserving": true
+ },
+ "text": "ඇඳුම් පැළරදුම් තිබෙන පෙරුපෙරටු කරගෙන එරට ආණ්ඩු ප්‍රම විවස්ථා අධිකරණය විසිවසි විසින් අරහත් පලයට පත් ඇත්තටම ඇය ඒවරද කළත් කෙලෙසක කෙලෙසකද ඒය ඔප්පු කරන්නේ තව එකක් තින් තියෙන් තියෙනවා ඉන්ලද පන් නරය බුද්ධිය දියුණු කරන්න පුළුවන්වා පුළුවන් කෙනෙකුට විතරයි වැළපෙන්නට විය ඔහොම බබාල හැමතැන මින්නවා සියල නව වන අවතා ඉදිරියට දුව එති එක් අංශයා අද කොටස බැලුවම තමයි තේරුණේ අප එවැනි බලයක් දන්නේ",
+ "words": [
+  {
+   "word": "ඇඳුම්",
+   "start": 1.381,
+   "end": 1.581,
+   "confidence": 0.997
+  },
+  {
+   "word": "පැළරදුම්",
+   "start": 1.621,
+   "end": 1.941,
+   "confidence": 0.9559
+  },
+  {
+   "word": "තිබෙන",
+   "start": 1.961,
+   "end": 2.202,
+   "confidence": 0.9997
+  },
+  {
+   "word": "පෙරුපෙරටු",
+   "start": 4.983,
+   "end": 5.624,
+   "confidence": 0.9956
+  },
+  {
+   "word": "කරගෙන",
+   "start": 5.644,
+   "end": 5.964,
+   "confidence": 0.9994
+  },
+  {
+   "word": "එරට",
+   "start": 9.747,
+   "end": 9.927,
+   "confidence": 0.9993
+  },
+  {
+   "word": "ආණ්ඩු",
+   "start": 10.087,
+   "end": 10.287,
+   "confidence": 0.9991
+  },
+  {
+   "word": "ප්‍රම",
+   "start": 10.307,
+   "end": 10.487,
+   "confidence": 0.9973
+  },
+  {
+   "word": "විවස්ථා",
+   "start": 10.627,
+   "end": 11.108,
+   "confidence": 0.8911
+  },
+  {
+   "word": "අධිකරණය",
+   "start": 11.148,
+   "end": 11.588,
+   "confidence": 0.9476
+  },
+  {
+   "word": "විසිවසි",
+   "start": 11.668,
+   "end": 12.068,
+   "confidence": 0.9346
+  },
+  {
+   "word": "විසින්",
+   "start": 12.128,
+   "end": 12.449,
+   "confidence": 0.9379
+  },
+  {
+   "word": "අරහත්",
+   "start": 15.391,
+   "end": 15.731,
+   "confidence": 0.9998
+  },
+  {
+   "word": "පලයට",
+   "start": 15.791,
+   "end": 16.091,
+   "confidence": 0.9503
+  },
+  {
+   "word": "පත්",
+   "start": 16.491,
+   "end": 16.732,
+   "confidence": 0.9818
+  },
+  {
+   "word": "ඇත්තටම",
+   "start": 20.195,
+   "end": 20.555,
+   "confidence": 0.9959
+  },
+  {
+   "word": "ඇය",
+   "start": 20.695,
+   "end": 20.755,
+   "confidence": 0.7873
+  },
+  {
+   "word": "ඒවරද",
+   "start": 20.915,
+   "end": 21.215,
+   "confidence": 0.9955
+  },
+  {
+   "word": "කළත්",
+   "start": 21.316,
+   "end": 21.616,
+   "confidence": 0.9997
+  },
+  {
+   "word": "කෙලෙසක",
+   "start": 21.676,
+   "end": 22.016,
+   "confidence": 0.9549
+  },
+  {
+   "word": "කෙලෙසකද",
+   "start": 22.236,
+   "end": 22.677,
+   "confidence": 0.9971
+  },
+  {
+   "word": "ඒය",
+   "start": 22.837,
+   "end": 22.877,
+   "confidence": 0.8415
+  },
+  {
+   "word": "ඔප්පු",
+   "start": 23.037,
+   "end": 23.217,
+   "confidence": 0.9996
+  },
+  {
+   "word": "කරන්නේ",
+   "start": 23.257,
+   "end": 23.658,
+   "confidence": 0.9997
+  },
+  {
+   "word": "තව",
+   "start": 26.721,
+   "end": 26.901,
+   "confidence": 0.9998
+  },
+  {
+   "word": "එකක්",
+   "start": 27.001,
+   "end": 27.261,
+   "confidence": 0.9996
+  },
+  {
+   "word": "තින්",
+   "start": 27.301,
+   "end": 27.521,
+   "confidence": 0.7088
+  },
+  {
+   "word": "තියෙන්",
+   "start": 27.541,
+   "end": 27.741,
+   "confidence": 0.8798
+  },
+  {
+   "word": "තියෙනවා",
+   "start": 27.762,
+   "end": 28.162,
+   "confidence": 0.9998
+  },
+  {
+   "word": "ඉන්ලද",
+   "start": 31.265,
+   "end": 31.545,
+   "confidence": 0.9984
+  },
+  {
+   "word": "පන්",
+   "start": 31.645,
+   "end": 31.905,
+   "confidence": 0.9332
+  },
+  {
+   "word": "නරය",
+   "start": 32.346,
+   "end": 32.606,
+   "confidence": 0.9995
+  },
+  {
+   "word": "බුද්ධිය",
+   "start": 35.449,
+   "end": 35.809,
+   "confidence": 0.9997
+  },
+  {
+   "word": "දියුණු",
+   "start": 35.869,
+   "end": 36.109,
+   "confidence": 0.9982
+  },
+  {
+   "word": "කරන්න",
+   "start": 36.149,
+   "end": 36.45,
+   "confidence": 0.9998
+  },
+  {
+   "word": "පුළුවන්වා",
+   "start": 36.53,
+   "end": 36.95,
+   "confidence": 0.8791
+  },
+  {
+   "word": "පුළුවන්",
+   "start": 37.03,
+   "end": 37.391,
+   "confidence": 0.9387
+  },
+  {
+   "word": "කෙනෙකුට",
+   "start": 37.971,
+   "end": 38.312,
+   "confidence": 0.9635
+  },
+  {
+   "word": "විතරයි",
+   "start": 38.412,
+   "end": 38.772,
+   "confidence": 0.9994
+  },
+  {
+   "word": "වැළපෙන්නට",
+   "start": 41.535,
+   "end": 42.036,
+   "confidence": 0.9997
+  },
+  {
+   "word": "විය",
+   "start": 42.136,
+   "end": 42.276,
+   "confidence": 0.9999
+  },
+  {
+   "word": "ඔහොම",
+   "start": 45.54,
+   "end": 45.74,
+   "confidence": 0.9949
+  },
+  {
+   "word": "බබාල",
+   "start": 45.82,
+   "end": 46.201,
+   "confidence": 0.9984
+  },
+  {
+   "word": "හැමතැන",
+   "start": 46.281,
+   "end": 46.581,
+   "confidence": 0.9994
+  },
+  {
+   "word": "මින්නවා",
+   "start": 46.681,
+   "end": 47.062,
+   "confidence": 0.9924
+  },
+  {
+   "word": "සියල",
+   "start": 49.605,
+   "end": 49.885,
+   "confidence": 0.9989
+  },
+  {
+   "word": "නව",
+   "start": 49.985,
+   "end": 50.085,
+   "confidence": 0.9966
+  },
+  {
+   "word": "වන",
+   "start": 50.285,
+   "end": 50.386,
+   "confidence": 0.7783
+  },
+  {
+   "word": "අවතා",
+   "start": 50.446,
+   "end": 50.726,
+   "confidence": 0.9875
+  },
+  {
+   "word": "ඉදිරියට",
+   "start": 50.786,
+   "end": 51.066,
+   "confidence": 0.9939
+  },
+  {
+   "word": "දුව",
+   "start": 51.146,
+   "end": 51.267,
+   "confidence": 0.9998
+  },
+  {
+   "word": "එති",
+   "start": 51.367,
+   "end": 51.567,
+   "confidence": 0.9996
+  },
+  {
+   "word": "එක්",
+   "start": 55.051,
+   "end": 55.191,
+   "confidence": 0.9969
+  },
+  {
+   "word": "අංශයා",
+   "start": 55.311,
+   "end": 55.712,
+   "confidence": 0.9548
+  },
+  {
+   "word": "අද",
+   "start": 58.495,
+   "end": 58.595,
+   "confidence": 0.9959
+  },
+  {
+   "word": "කොටස",
+   "start": 58.675,
+   "end": 58.915,
+   "confidence": 0.9985
+  },
+  {
+   "word": "බැලුවම",
+   "start": 58.995,
+   "end": 59.355,
+   "confidence": 0.9983
+  },
+  {
+   "word": "තමයි",
+   "start": 59.515,
+   "end": 59.796,
+   "confidence": 0.8567
+  },
+  {
+   "word": "තේරුණේ",
+   "start": 59.836,
+   "end": 60.216,
+   "confidence": 0.9996
+  },
+  {
+   "word": "අප",
+   "start": 62.558,
+   "end": 62.678,
+   "confidence": 0.9998
+  },
+  {
+   "word": "එවැනි",
+   "start": 62.798,
+   "end": 62.979,
+   "confidence": 0.9953
+  },
+  {
+   "word": "බලයක්",
+   "start": 63.019,
+   "end": 63.439,
+   "confidence": 0.9962
+  },
+  {
+   "word": "දන්නේ",
+   "start": 63.519,
+   "end": 63.839,
+   "confidence": 0.9983
+  }
+ ],
+ "wordTimings": "ctc",
+ "audio": {
+  "durationSec": 65.721,
+  "sampleRate": 16000,
+  "originalSampleRate": 16000,
+  "channels": 1,
+  "format": "WAV"
+ },
+ "processingSec": 4.0,
+ "chunks": 4
+}

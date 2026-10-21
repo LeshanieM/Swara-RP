@@ -1,0 +1,327 @@
+{
+ "methodVersion": "c4-language-0.1",
+ "source": "asr",
+ "normalisedText": "මම ම මම ගියා පාසලට ඉතින් අපි බලල් බල්ලා දැක්කා ගෙදර ආවා",
+ "cleanText": "මම ගියා පාසලට ඉතින් අපි බල්ලා දැක්කා ගෙදර ආවා",
+ "tokens": [
+  {
+   "index": 0,
+   "text": "මම",
+   "norm": "මම",
+   "stem": "මම",
+   "start": 0.2,
+   "end": 0.45,
+   "confidence": 0.9,
+   "maze": true,
+   "mazeReason": "word_repetition",
+   "unintelligible": false,
+   "utterance": 0,
+   "syllables": 2
+  },
+  {
+   "index": 1,
+   "text": "ම",
+   "norm": "ම",
+   "stem": "ම",
+   "start": 0.6,
+   "end": 0.7,
+   "confidence": 0.6,
+   "maze": true,
+   "mazeReason": "part_word_repetition",
+   "unintelligible": false,
+   "utterance": 0,
+   "syllables": 1
+  },
+  {
+   "index": 2,
+   "text": "මම",
+   "norm": "මම",
+   "stem": "මම",
+   "start": 0.8,
+   "end": 1.05,
+   "confidence": 0.9,
+   "maze": false,
+   "mazeReason": null,
+   "unintelligible": false,
+   "utterance": 0,
+   "syllables": 2
+  },
+  {
+   "index": 3,
+   "text": "ගියා",
+   "norm": "ගියා",
+   "stem": "ගිය",
+   "start": 1.1,
+   "end": 1.5,
+   "confidence": 0.9,
+   "maze": false,
+   "mazeReason": null,
+   "unintelligible": false,
+   "utterance": 0,
+   "syllables": 2
+  },
+  {
+   "index": 4,
+   "text": "පාසලට",
+   "norm": "පාසලට",
+   "stem": "පාසල",
+   "start": 1.55,
+   "end": 2.1,
+   "confidence": 0.8,
+   "maze": false,
+   "mazeReason": null,
+   "unintelligible": false,
+   "utterance": 0,
+   "syllables": 4
+  },
+  {
+   "index": 5,
+   "text": "ඉතින්",
+   "norm": "ඉතින්",
+   "stem": "ඉත",
+   "start": 3.4,
+   "end": 3.7,
+   "confidence": 0.7,
+   "maze": false,
+   "mazeReason": null,
+   "unintelligible": false,
+   "utterance": 1,
+   "syllables": 2
+  },
+  {
+   "index": 6,
+   "text": "අපි",
+   "norm": "අපි",
+   "stem": "අපි",
+   "start": 3.75,
+   "end": 4.0,
+   "confidence": 0.9,
+   "maze": false,
+   "mazeReason": null,
+   "unintelligible": false,
+   "utterance": 1,
+   "syllables": 2
+  },
+  {
+   "index": 7,
+   "text": "බලල්",
+   "norm": "බලල්",
+   "stem": "බලල්",
+   "start": 4.05,
+   "end": 4.35,
+   "confidence": 0.5,
+   "maze": true,
+   "mazeReason": "c1_repetition",
+   "unintelligible": false,
+   "utterance": 1,
+   "syllables": 2,
+   "c1Events": [
+    "word_repetition"
+   ]
+  },
+  {
+   "index": 8,
+   "text": "බල්ලා",
+   "norm": "බල්ලා",
+   "stem": "බල්ල",
+   "start": 4.4,
+   "end": 4.8,
+   "confidence": 0.9,
+   "maze": false,
+   "mazeReason": null,
+   "unintelligible": false,
+   "utterance": 1,
+   "syllables": 2,
+   "c1Events": [
+    "word_repetition"
+   ]
+  },
+  {
+   "index": 9,
+   "text": "දැක්කා",
+   "norm": "දැක්කා",
+   "stem": "දැක්ක",
+   "start": 4.85,
+   "end": 5.3,
+   "confidence": 0.9,
+   "maze": false,
+   "mazeReason": null,
+   "unintelligible": false,
+   "utterance": 1,
+   "syllables": 2
+  },
+  {
+   "index": 10,
+   "text": "ගෙදර",
+   "norm": "ගෙදර",
+   "stem": "ගෙදර",
+   "start": 7.0,
+   "end": 7.4,
+   "confidence": 0.9,
+   "maze": false,
+   "mazeReason": null,
+   "unintelligible": false,
+   "utterance": 2,
+   "syllables": 3
+  },
+  {
+   "index": 11,
+   "text": "ආවා",
+   "norm": "ආවා",
+   "stem": "ආව",
+   "start": 7.45,
+   "end": 7.9,
+   "confidence": 0.9,
+   "maze": false,
+   "mazeReason": null,
+   "unintelligible": false,
+   "utterance": 2,
+   "syllables": 2
+  }
+ ],
+ "utterances": [
+  {
+   "index": 0,
+   "start": 0.2,
+   "end": 2.1,
+   "text": "මම ම මම ගියා පාසලට",
+   "cleanText": "මම ගියා පාසලට",
+   "wordCount": 3,
+   "mazeCount": 2,
+   "complexity": 1,
+   "mazeOnly": false,
+   "stutter": true,
+   "stutterMoments": 1
+  },
+  {
+   "index": 1,
+   "start": 3.4,
+   "end": 5.3,
+   "text": "ඉතින් අපි බලල් බල්ලා දැක්කා",
+   "cleanText": "ඉතින් අපි බල්ලා දැක්කා",
+   "wordCount": 4,
+   "mazeCount": 1,
+   "complexity": 1,
+   "mazeOnly": false,
+   "stutter": true,
+   "stutterMoments": 1
+  },
+  {
+   "index": 2,
+   "start": 7.0,
+   "end": 7.9,
+   "text": "ගෙදර ආවා",
+   "cleanText": "ගෙදර ආවා",
+   "wordCount": 2,
+   "mazeCount": 0,
+   "complexity": 1,
+   "mazeOnly": false,
+   "stutter": false,
+   "stutterMoments": 0
+  }
+ ],
+ "segmentation": {
+  "method": "pause",
+  "pauseSec": 1.0
+ },
+ "mazes": {
+  "total": 3,
+  "byReason": {
+   "word_repetition": 1,
+   "part_word_repetition": 1,
+   "c1_repetition": 1
+  }
+ },
+ "measures": {
+  "mluWords": 3.0,
+  "ndw50": null,
+  "ndwAll": 9,
+  "mattr25": null,
+  "ttr": 1.0,
+  "totalWords": 9,
+  "totalTokens": 12,
+  "mazeTokens": 3,
+  "mazeRatio": 0.25,
+  "unintelligibleTokens": 0,
+  "utteranceCount": 3,
+  "mazeOnlyUtterances": 0,
+  "meanComplexity": 1.0,
+  "wordsPerMinute": 60.0,
+  "mluLabel": "words"
+ },
+ "syllables": {
+  "total": 26,
+  "words": 21
+ },
+ "lexicon": [
+  {
+   "stem": "අපි",
+   "count": 1,
+   "forms": [
+    "අපි"
+   ]
+  },
+  {
+   "stem": "ආව",
+   "count": 1,
+   "forms": [
+    "ආවා"
+   ]
+  },
+  {
+   "stem": "ඉත",
+   "count": 1,
+   "forms": [
+    "ඉතින්"
+   ]
+  },
+  {
+   "stem": "ගිය",
+   "count": 1,
+   "forms": [
+    "ගියා"
+   ]
+  },
+  {
+   "stem": "ගෙදර",
+   "count": 1,
+   "forms": [
+    "ගෙදර"
+   ]
+  },
+  {
+   "stem": "දැක්ක",
+   "count": 1,
+   "forms": [
+    "දැක්කා"
+   ]
+  },
+  {
+   "stem": "පාසල",
+   "count": 1,
+   "forms": [
+    "පාසලට"
+   ]
+  },
+  {
+   "stem": "බල්ල",
+   "count": 1,
+   "forms": [
+    "බල්ලා"
+   ]
+  },
+  {
+   "stem": "මම",
+   "count": 1,
+   "forms": [
+    "මම"
+   ]
+  }
+ ],
+ "alignment": null,
+ "c1EventsUsed": true,
+ "flags": [
+  "unreliable_sample",
+  "short_sample"
+ ]
+}
