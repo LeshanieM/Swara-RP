@@ -276,3 +276,6 @@ node_modules
 
 
 .vscode/
+
+# Local DAiSEE archive, licensed videos, extracted features, and resumable caches (never commit).
+/server/vision-service/training/data/

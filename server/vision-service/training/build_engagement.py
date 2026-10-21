@@ -9,7 +9,7 @@ Label: engaged = 1, not engaged = 0 for Engagement level 0 or 1 (about 6 % of cl
 
 Extraction is slow (about 9,000 clips), so per-clip results go to a JSONL cache and a rerun skips them.
 
-    .venv/bin/python -m training.build_engagement --daisee ~/data/DAiSEE --out data/daisee_engagement.npz --workers 6
+    python -m training.build_engagement --daisee training/data/daisee --out training/data/daisee/daisee_engagement.npz --workers 6
 """
 import argparse
 import csv

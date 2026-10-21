@@ -6,11 +6,12 @@ Both models correct for the imbalance (about 6 % not engaged) with balanced clas
 
 Evaluation: subject-grouped cross-validation over Train + Validation (no subject in both train and
 test), then the official Test split, keeping only Test subjects that never appear in training.
-Reported: balanced accuracy, macro-F1, ROC-AUC and the confusion matrix; plain accuracy is not used,
-because always guessing "engaged" already scores about 94 %. The model with the higher CV macro-F1 is
-fitted on Train + Validation and exported as the JSON file the API loads.
+Reported: plain accuracy beside the majority-class baseline, plus balanced accuracy, macro-F1,
+ROC-AUC and the confusion matrix. The class-aware scores help interpret the imbalanced labels. The model
+with the higher CV macro-F1 is written as a provisional candidate under training/artifacts; it does not
+overwrite the API model.
 
-    .venv/bin/python -m training.train_engagement --data data/daisee_engagement.npz
+    python -m training.train_engagement --data training/data/daisee/daisee_engagement.npz
 
 Needs scikit-learn (requirements-learned.txt).
 """
@@ -32,7 +33,7 @@ from app.config import SERVICE_ROOT
 from app.engagement.features import FEATURES
 
 FACE_ABSENT_BELOW = 0.3  # same as faceAbsentBelow in the API's engagementModel.json
-DEFAULT_OUT = SERVICE_ROOT.parent / "api" / "src" / "modules" / "c3" / "data" / "engagementCameraModel.json"
+DEFAULT_OUT = SERVICE_ROOT / "training" / "artifacts" / "engagementCameraModel.candidate.json"
 MODELS = ("logistic", "gbdt")
 
 
@@ -78,6 +79,8 @@ def metrics(y, p) -> dict:
     tn, fp, fn, tp = confusion_matrix(y, pred, labels=[0, 1]).ravel()
     return {
         "n": int(len(y)), "notEngaged": int((y == 0).sum()),
+        "accuracy": round(float(np.mean(pred == y)), 4),
+        "majorityBaselineAccuracy": round(float(max(np.mean(y == 0), np.mean(y == 1))), 4),
         "balancedAccuracy": round(float(balanced_accuracy_score(y, pred)), 4),
         "macroF1": round(float(f1_score(y, pred, average="macro", zero_division=0)), 4),
         "rocAuc": round(float(roc_auc_score(y, p)), 4) if len(set(y.tolist())) == 2 else None,
@@ -135,12 +138,12 @@ def export(m, X_check) -> dict:
 def report_md(r: dict) -> str:
     lines = [f"# C3 engagement camera model: {r['version']}", "", f"Trained {r['trainedAt']} on `{r['data']}`. {r['note']}".strip(), "",
              f"Rows (face visible ≥ {FACE_ABSENT_BELOW:.0%} of frames): {r['rows']}, dropped for no face: {r['droppedNoFace']}.", "",
-             "| Model | CV balanced acc. | CV macro-F1 | Test balanced acc. | Test macro-F1 | Test ROC-AUC |", "|---|---|---|---|---|---|"]
+             "| Model | CV balanced acc. | CV macro-F1 | Test accuracy | Majority baseline | Test balanced acc. | Test macro-F1 | Test ROC-AUC |", "|---|---|---|---|---|---|---|---|"]
     for kind in MODELS:
         cv, test = r["cv"][kind]["summary"], r["test"].get(kind)
         fmt = lambda s: f"{s['mean']:.3f} ± {s['sd']:.3f}"
-        t = (f"{test['balancedAccuracy']:.3f} | {test['macroF1']:.3f} | {test['rocAuc'] if test['rocAuc'] is not None else '–'}"
-             if test else "– | – | –")
+        t = (f"{test['accuracy']:.3f} | {test['majorityBaselineAccuracy']:.3f} | {test['balancedAccuracy']:.3f} | {test['macroF1']:.3f} | {test['rocAuc'] if test['rocAuc'] is not None else '–'}"
+             if test else "– | – | – | – | –")
         lines.append(f"| {kind} | {fmt(cv['balancedAccuracy'])} | {fmt(cv['macroF1'])} | {t} |")
     lines += ["", f"Exported: **{r['exported']}**. Test subjects kept: {r['testSubjects']}, removed for appearing in training: {r['testSubjectsOverlap']}.", ""]
     return "\n".join(lines)
@@ -194,18 +197,18 @@ def main() -> int:
         "cv": cv, "test": test_metrics,
     }
     model_json = {
-        "_note": "Trained by vision-service/training/train_engagement.py on DAiSEE camera features; see training.",
-        "version": version, "provisional": False, **export(fitted[chosen], X[dev][:: max(1, int(dev.sum()) // 8)][:8]),
+        "_note": "DAiSEE-trained research candidate; validate on the target SWARA population before deployment.",
+        "version": version, "provisional": True, **export(fitted[chosen], X[dev][:: max(1, int(dev.sum()) // 8)][:8]),
         "training": {k: record[k] for k in ("trainedAt", "data", "note", "rows", "droppedNoFace", "testSubjects", "testSubjectsOverlap")}
         | {"label": "engaged = DAiSEE Engagement level 2 or 3", "classWeights": "balanced",
            "cv": {k: cv[k]["summary"] for k in MODELS}, "test": test_metrics},
     }
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(json.dumps(model_json, indent=1) + "\n")
+    args.out.write_text(json.dumps(model_json, indent=1) + "\n", encoding="utf-8")
     report = args.report or SERVICE_ROOT / "training" / "reports" / f"{version}.md"
     report.parent.mkdir(parents=True, exist_ok=True)
-    report.write_text(report_md(record))
-    report.with_suffix(".json").write_text(json.dumps(record, indent=1) + "\n")
+    report.write_text(report_md(record), encoding="utf-8")
+    report.with_suffix(".json").write_text(json.dumps(record, indent=1) + "\n", encoding="utf-8")
     print(f"saved {args.out} ({chosen}) and {report}")
     return 0
 
