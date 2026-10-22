@@ -332,6 +332,7 @@ class SelectedVideo {
   final int sizeBytes;
   final String? path;
   final List<int>? bytes;
+  final Stream<List<int>>? readStream;
   final Duration? duration;
 
   const SelectedVideo({
@@ -339,6 +340,7 @@ class SelectedVideo {
     required this.sizeBytes,
     this.path,
     this.bytes,
+    this.readStream,
     this.duration,
   });
 
@@ -347,6 +349,7 @@ class SelectedVideo {
         sizeBytes: sizeBytes,
         path: path,
         bytes: bytes,
+        readStream: readStream,
         duration: duration ?? this.duration,
       );
 }

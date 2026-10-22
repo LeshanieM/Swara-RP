@@ -40,7 +40,7 @@ class _ProcessingState extends ConsumerState<VideoAnalysisProcessingScreen> {
     return Scaffold(
       backgroundColor: AppColors.groundAdult,
       appBar: AppBar(
-        title: const Text('Movement analysis · චලන විශ්ලේෂණය'),
+        title: Text('Movement analysis · චලන විශ්ලේෂණය', style: AppTextStyles.titleMedium),
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
       ),
@@ -119,12 +119,28 @@ class _ProcessingState extends ConsumerState<VideoAnalysisProcessingScreen> {
       padding: const EdgeInsets.only(bottom: AppSpacing.sm),
       child: SwaraCard(
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
-        child: Row(children: [
-          TechStatusIcon(st),
-          const SizedBox(width: AppSpacing.md),
-          Expanded(child: Text(name, style: AppTextStyles.titleMedium)),
-          Text(st.label, style: AppTextStyles.label.copyWith(color: st.color)),
-        ]),
+        child: LayoutBuilder(builder: (context, constraints) {
+          final status = Text(st.label, style: AppTextStyles.label.copyWith(color: st.color));
+          final title = Text(name, style: AppTextStyles.titleMedium, softWrap: true);
+          if (constraints.maxWidth < 360) {
+            return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              TechStatusIcon(st),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                title,
+                const SizedBox(height: AppSpacing.xs),
+                status,
+              ])),
+            ]);
+          }
+          return Row(children: [
+            TechStatusIcon(st),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(child: title),
+            const SizedBox(width: AppSpacing.sm),
+            status,
+          ]);
+        }),
       ),
     );
   }
