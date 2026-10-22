@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb, TargetPlatform;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swara/core/constants/app_constants.dart';
 import 'package:swara/core/network/api_client.dart';
@@ -128,6 +128,8 @@ class VideoAnalysisService {
         file = await MultipartFile.fromFile(video.path!, filename: video.name);
       } else if (video.bytes != null) {
         file = MultipartFile.fromBytes(video.bytes!, filename: video.name);
+      } else if (video.readStream != null) {
+        file = MultipartFile.fromStream(() => video.readStream!, video.sizeBytes, filename: video.name);
       } else {
         throw const VideoAnalysisException(
           VideoAnalysisErrorKind.badRequest,
@@ -229,19 +231,22 @@ class SelectedVideoNotifier extends StateNotifier<SelectedVideoState> {
       final res = await FilePicker.platform.pickFiles(
         type: FileType.video,
         allowMultiple: false,
-        withData: kIsWeb, // web has no file path; native streams from disk
+        withData: kIsWeb, // Web needs in-memory bytes; native platforms prefer a path or stream.
+        withReadStream: !kIsWeb &&
+            (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS),
       );
       if (res == null || res.files.isEmpty) return;
       final f = res.files.first;
       final ext = (f.extension ?? f.name.split('.').last).toLowerCase();
       final path = kIsWeb ? null : f.path;
+      final readStream = kIsWeb ? null : f.readStream;
 
       String? err;
       if (!kAllowedVideoExtensions.contains(ext)) {
         err = 'Unsupported format (.$ext). Use: ${kAllowedVideoExtensions.join(', ')}. · සහාය නොදක්වන ආකෘතියකි. ලැයිස්තුවෙන් ආකෘතියක් තෝරන්න.';
       } else if (f.size <= 0) {
         err = 'The selected file is empty or unreadable. · තෝරාගත් ගොනුව හිස් හෝ කියවිය නොහැක.';
-      } else if (path == null && f.bytes == null) {
+      } else if (path == null && f.bytes == null && readStream == null) {
         err = 'Could not read the file from the device. · උපාංගයෙන් ගොනුව කියවිය නොහැක.';
       } else if (f.size > AppConstants.maxVideoSizeMb * 1024 * 1024) {
         err = 'The video is larger than ${AppConstants.maxVideoSizeMb} MB. Please choose a shorter clip. · වීඩියෝව ${AppConstants.maxVideoSizeMb} MB ට වඩා විශාලයි. කෙටි වීඩියෝවක් තෝරන්න.';
@@ -249,7 +254,7 @@ class SelectedVideoNotifier extends StateNotifier<SelectedVideoState> {
       state = err != null
           ? SelectedVideoState(video: state.video, error: err)
           : SelectedVideoState(
-              video: SelectedVideo(name: f.name, sizeBytes: f.size, path: path, bytes: f.bytes),
+              video: SelectedVideo(name: f.name, sizeBytes: f.size, path: path, bytes: f.bytes, readStream: readStream),
             );
     } catch (_) {
       state = SelectedVideoState(video: state.video, error: 'Could not open the file picker. · ගොනු තේරීම විවෘත කළ නොහැකි විය.');
