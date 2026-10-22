@@ -90,7 +90,7 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
     return Scaffold(
       backgroundColor: AppColors.groundAdult,
       appBar: AppBar(
-        title: const Text('Video analysis · වීඩියෝ විශ්ලේෂණය'),
+        title: Text('Video analysis · වීඩියෝ විශ්ලේෂණය', style: AppTextStyles.titleMedium),
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
       ),
@@ -98,10 +98,10 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
         child: SafeArea(
         child: ResponsiveBody(
           child: ListView(
-            padding: const EdgeInsets.all(AppSpacing.lg),
+            padding: EdgeInsets.all(MediaQuery.sizeOf(context).width < 380 ? AppSpacing.md : AppSpacing.lg),
             children: [
               Text(
-                'එක් දරුවෙකුගේ ඉදිරිපස වීඩියෝවක් තෝරන්න (තත්පර 2–3 මිනිත්තු).',
+                'දරුවාගේ වීඩියෝව තෝරන්න · Select a child video',
                 style: AppTextStyles.bodySmall,
                 textAlign: TextAlign.center,
               ),
@@ -145,7 +145,7 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
               SizedBox(
                 width: double.infinity,
                 child: SwaraButton(
-                  label: 'Start analysis · විශ්ලේෂණය අරඹන්න',
+                  label: 'Analyze · විශ්ලේෂණය',
                   icon: Icons.play_arrow_rounded,
                   isLoading: busy,
                   onPressed: _start, // validates: shows "select a video" when none is chosen
@@ -170,10 +170,6 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
         controlAffinity: ListTileControlAffinity.leading,
         contentPadding: EdgeInsets.zero,
         title: Text('Parent consent · දෙමාපිය අනුමැතිය', style: AppTextStyles.titleMedium),
-        subtitle: Text(
-          'මම දෙමාපියෙකු/භාරකරුවෙකු ලෙස විශ්ලේෂණයට එකඟ වෙමි. මිනුම් පමණක් සුරැකේ; විශ්ලේෂණයෙන් පසු වීඩියෝව මකා දමනු ලැබේ.',
-          style: AppTextStyles.caption,
-        ),
       ),
     );
   }
@@ -235,26 +231,38 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
             ),
           ),
         const SizedBox(height: AppSpacing.md),
-        Row(children: [
+        LayoutBuilder(builder: (context, constraints) {
+          final stacked = constraints.maxWidth < 360;
+          final replace = SwaraButton(
+            label: 'Replace · වෙනස් කරන්න',
+            icon: Icons.swap_horiz_rounded,
+            outlined: true,
+            onPressed: busy ? null : notifier.pick,
+          );
+          final remove = SwaraButton(
+            label: 'Remove · ඉවත් කරන්න',
+            icon: Icons.delete_outline,
+            outlined: true,
+            color: AppColors.error,
+            onPressed: busy ? null : notifier.clear,
+          );
+          if (stacked) {
+            return Column(children: [
+              SizedBox(width: double.infinity, child: replace),
+              const SizedBox(height: AppSpacing.sm),
+              SizedBox(width: double.infinity, child: remove),
+            ]);
+          }
+          return Row(children: [
           Expanded(
-            child: SwaraButton(
-              label: 'Replace · වෙනස් කරන්න',
-              icon: Icons.swap_horiz_rounded,
-              outlined: true,
-              onPressed: busy ? null : notifier.pick,
-            ),
+            child: replace,
           ),
           const SizedBox(width: AppSpacing.md),
           Expanded(
-            child: SwaraButton(
-              label: 'Remove · ඉවත් කරන්න',
-              icon: Icons.delete_outline,
-              outlined: true,
-              color: AppColors.error,
-              onPressed: busy ? null : notifier.clear,
-            ),
+            child: remove,
           ),
-        ]),
+          ]);
+        }),
       ]),
     );
   }
