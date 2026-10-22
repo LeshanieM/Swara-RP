@@ -145,7 +145,7 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
               SizedBox(
                 width: double.infinity,
                 child: SwaraButton(
-                  label: 'Start analysis · විශ්ලේෂණය අරඹන්න',
+                  label: 'Analyze · විශ්ලේෂණය',
                   icon: Icons.play_arrow_rounded,
                   isLoading: busy,
                   onPressed: _start, // validates: shows "select a video" when none is chosen

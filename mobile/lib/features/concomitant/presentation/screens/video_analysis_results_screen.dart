@@ -253,63 +253,97 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
 
   Widget _channelGrid(C2Result r) {
     final channels = const [
-      ('eye', 'Eye movement · ඇස් චලනය', Icons.remove_red_eye_outlined),
-      ('lip', 'Lip movement · තොල් චලනය', Icons.sentiment_satisfied_alt_outlined),
-      ('jaw', 'Jaw movement · හකු චලනය', Icons.face_outlined),
-      ('cheek', 'Cheek movement · කම්මුල් චලනය', Icons.mood_outlined),
-      ('head', 'Head movement · හිස චලනය', Icons.accessibility_new_outlined),
+      ('eye', 'Eyes · ඇස්', Icons.remove_red_eye_outlined),
+      ('lip', 'Lips · තොල්', Icons.sentiment_satisfied_alt_outlined),
+      ('jaw', 'Jaw · හකු', Icons.face_outlined),
+      ('cheek', 'Cheeks · කම්මුල්', Icons.mood_outlined),
+      ('head', 'Head · හිස', Icons.accessibility_new_outlined),
     ];
-    return LayoutBuilder(builder: (context, constraints) {
-      final columns = constraints.maxWidth >= 360 ? 2 : 1;
-      final width = columns == 2 ? (constraints.maxWidth - AppSpacing.sm) / 2 : constraints.maxWidth;
-      return Wrap(
-        spacing: AppSpacing.sm,
-        runSpacing: AppSpacing.sm,
-        children: [
-          for (final (key, label, icon) in channels)
-            SizedBox(
-              width: width,
-              child: _channelCard(r, key, label, icon),
-            ),
-        ],
-      );
-    });
-  }
-
-  Widget _channelCard(C2Result r, String key, String label, IconData icon) {
-    final (mean, peak) = r.deviationOf(key);
-    final exceeded = r.exceedCount(key);
+    final values = [
+      for (final (key, label, icon) in channels)
+        (
+          label: label,
+          icon: icon,
+          mean: r.deviationOf(key).$1,
+          peak: r.deviationOf(key).$2,
+        ),
+    ];
+    final maxPeak = values.fold<double>(
+      0,
+      (maximum, item) => item.peak != null && item.peak! > maximum ? item.peak! : maximum,
+    );
     return SwaraCard(
-      padding: const EdgeInsets.all(AppSpacing.sm),
+      padding: const EdgeInsets.all(AppSpacing.md),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Icon(icon, color: AppColors.primaryDeep, size: 19),
-          const SizedBox(width: AppSpacing.xs),
-          Expanded(child: Text(label, style: AppTextStyles.label)),
-          if (exceeded > 0) Text('$exceeded', style: AppTextStyles.caption.copyWith(color: AppColors.warning)),
+        Row(children: [
+          Expanded(child: Text('Movement profile · චලන සාරාංශය', style: AppTextStyles.titleMedium)),
+          const Icon(Icons.insights_rounded, color: AppColors.primaryDeep),
         ]),
-        const SizedBox(height: AppSpacing.sm),
-        _metricLine('Mean deviation · සාමාන්‍ය අපගමනය', mean == null ? '—' : '${mean.toStringAsFixed(1)} SD'),
         const SizedBox(height: AppSpacing.xs),
-        _metricLine('Peak deviation · ඉහළම අපගමනය', peak == null ? '—' : '${peak.toStringAsFixed(1)} SD'),
+        Text('Mean / peak deviation (SD) · සාමාන්‍ය / උපරිම අපගමනය', style: AppTextStyles.caption),
+        const SizedBox(height: AppSpacing.xs),
+        Wrap(spacing: AppSpacing.md, children: [
+          _profileLegend(AppColors.primaryDeep, 'Mean · සාමාන්‍ය'),
+          _profileLegend(AppColors.primaryLight, 'Peak · උපරිම'),
+        ]),
+        const SizedBox(height: AppSpacing.md),
+        for (var i = 0; i < values.length; i++) ...[
+          _channelProfileRow(values[i], maxPeak),
+          if (i < values.length - 1) const SizedBox(height: AppSpacing.md),
+        ],
       ]),
     );
   }
 
-  Widget _metricLine(String label, String value) => LayoutBuilder(builder: (context, constraints) {
-        if (constraints.maxWidth < 300) {
-          return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(label, style: AppTextStyles.caption),
-            const SizedBox(height: AppSpacing.xs),
-            Text(value, style: AppTextStyles.label),
-          ]);
-        }
-        return Row(children: [
-          Expanded(child: Text(label, style: AppTextStyles.caption)),
-          const SizedBox(width: AppSpacing.sm),
-          Flexible(child: Text(value, style: AppTextStyles.label, textAlign: TextAlign.end)),
-        ]);
-      });
+  Widget _profileLegend(Color color, String label) => Row(mainAxisSize: MainAxisSize.min, children: [
+        Container(width: 9, height: 9, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
+        const SizedBox(width: AppSpacing.xs),
+        Text(label, style: AppTextStyles.caption),
+      ]);
+
+  Widget _channelProfileRow(({String label, IconData icon, double? mean, double? peak}) item, double maxPeak) {
+    final peakFraction = maxPeak <= 0 || item.peak == null
+        ? 0.0
+        : (item.peak! / maxPeak).clamp(0.0, 1.0).toDouble();
+    final meanFraction = maxPeak <= 0 || item.mean == null
+        ? 0.0
+        : (item.mean! / maxPeak).clamp(0.0, 1.0).toDouble();
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Row(children: [
+        Icon(item.icon, color: AppColors.primaryDeep, size: 18),
+        const SizedBox(width: AppSpacing.xs),
+        Expanded(child: Text(item.label, style: AppTextStyles.label)),
+        Text(
+          '${item.mean?.toStringAsFixed(1) ?? '—'} / ${item.peak?.toStringAsFixed(1) ?? '—'} SD',
+          style: AppTextStyles.caption,
+        ),
+      ]),
+      const SizedBox(height: AppSpacing.xs),
+      ClipRRect(
+        borderRadius: AppRadii.pillAll,
+        child: SizedBox(
+          height: 10,
+          child: Stack(fit: StackFit.expand, children: [
+            const ColoredBox(color: AppColors.divider),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: FractionallySizedBox(
+                widthFactor: peakFraction,
+                child: const ColoredBox(color: AppColors.primaryLight),
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: FractionallySizedBox(
+                widthFactor: meanFraction,
+                child: const ColoredBox(color: AppColors.primaryDeep),
+              ),
+            ),
+          ]),
+        ),
+      ),
+    ]);
+  }
 
   Widget _momentList(C2Result r) {
     return SwaraCard(
