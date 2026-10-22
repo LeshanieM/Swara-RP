@@ -145,10 +145,10 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
               SizedBox(
                 width: double.infinity,
                 child: SwaraButton(
-                  label: 'Analyze · විශ්ලේෂණය',
+                  label: 'Upload & analyze · උඩුගත කර විශ්ලේෂණය',
                   icon: Icons.play_arrow_rounded,
                   isLoading: busy,
-                  onPressed: _start, // validates: shows "select a video" when none is chosen
+                  onPressed: busy || video == null ? null : _start,
                 ),
               ),
               _history(),
@@ -225,7 +225,7 @@ class _VideoAnalysisUploadScreenState extends ConsumerState<VideoAnalysisUploadS
             padding: const EdgeInsets.all(AppSpacing.lg),
             decoration: BoxDecoration(color: AppColors.surface, borderRadius: AppRadii.mdAll),
             child: Text(
-              'බ්‍රවුසරයේ පෙරදසුන නොපෙනේ. ගොනුව විශ්ලේෂණය කළ හැකියි.',
+              'පෙරදසුන නොපෙනේ. ගොනුව උඩුගත කර විශ්ලේෂණය කළ හැකියි.',
               style: AppTextStyles.bodySmall,
               textAlign: TextAlign.center,
             ),
