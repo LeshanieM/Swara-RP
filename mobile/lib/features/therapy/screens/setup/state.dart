@@ -15,7 +15,8 @@ class _ThemeSelectionState extends State<_ThemeSelection> {
     final ts = _InheritedTheme.of(context);
     setState(() => _saving = true);
     ts?.onChanged(theme);
-    await StorageService.saveString(AppConstants.c3PreferredThemeKey, theme.storageId);
+    await StorageService.saveString(
+        AppConstants.c3PreferredThemeKey, theme.storageId);
     if (!mounted) return;
     setState(() => _saving = false);
     ScaffoldMessenger.of(context).showSnackBar(
@@ -45,7 +46,8 @@ class _ThemeSelectionState extends State<_ThemeSelection> {
             const _BackHeader(title: ''),
             const _Plaque(text: 'ඔබේ ලෝකය තෝරන්න 🗺️', fontSize: 18),
             const SizedBox(height: 4),
-            const Text('ඔබ කැමති කතා පුහුණු ලෝකය තෝරා Save කරන්න. මෙය පෙනුම පමණි — ක්‍රියාකාරකම් එලෙසම පවතී.',
+            const Text(
+                'ඔබ කැමති කතා පුහුණු ලෝකය තෝරා Save කරන්න. මෙය පෙනුම පමණි — ක්‍රියාකාරකම් එලෙසම පවතී.',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.black54, fontSize: 13)),
             const SizedBox(height: 14),

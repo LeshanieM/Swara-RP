@@ -6,20 +6,25 @@
 // ============================================================================
 
 import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
 import 'package:record/record.dart';
-import 'package:path_provider/path_provider.dart';
-import 'engagement/camera_engagement_activity.dart';
-import 'engagement/camera_engagement_metrics.dart';
 import 'package:swara/core/constants/app_constants.dart';
+import 'package:swara/core/audio/wav_recorder.dart';
+import 'package:swara/core/engagement/engagement_camera.dart';
+import 'package:swara/core/network/api_exception.dart';
 import 'package:swara/core/storage/storage_service.dart';
+import 'package:swara/core/widgets/parent_pin_dialog.dart';
+import 'package:swara/features/auth/data/models/user_model.dart';
+import 'package:swara/features/child/data/providers/child_provider.dart';
 import 'therapy_api_service.dart';
-import 'audio_file_cleanup.dart';
-part 'linucb_activity_selector.dart';
+part 'c3_session.dart';
+part 'demo_plan.dart';
 part 'therapy_state.dart';
 part 'therapy_widgets.dart';
 part 'screens/setup/welcome.dart';
@@ -27,14 +32,11 @@ part 'screens/setup/home.dart';
 part 'screens/setup/theme_selection.dart';
 part 'screens/setup/state.dart';
 part 'screens/setup/adventure_plan.dart';
-part 'screens/session/journey_map.dart';
-part 'screens/activities/milestone_intro.dart';
 part 'screens/activities/activity.dart';
 part 'screens/activities/activity_state.dart';
 part 'screens/activities/feedback.dart';
 part 'screens/activities/adaptive_next.dart';
 part 'screens/activities/adaptive_next_state.dart';
-part 'screens/activities/guided_conv.dart';
 part 'screens/session/session_complete.dart';
 part 'screens/session/progress.dart';
 part 'screens/setup/character.dart';
@@ -45,6 +47,7 @@ part 'screens/activities/breathing.dart';
 part 'screens/activities/practice_activities.dart';
 part 'screens/dashboard/engagement.dart';
 part 'screens/dashboard/therapy_history.dart';
+part 'screens/session/questionnaire.dart';
 
 class _TherapyJourneyShell extends StatefulWidget {
   final String screen;
@@ -90,8 +93,6 @@ class _TherapyJourneyShellState extends State<_TherapyJourneyShell> {
         return const _Character();
       case _TherapyRoute.adventurePlan:
         return const _AdventurePlan();
-      case _TherapyRoute.journeyMap:
-        return const _JourneyMap();
       case _TherapyRoute.breathing:
         return const _Breathing();
       case _TherapyRoute.adaptiveSyllable:
@@ -100,14 +101,10 @@ class _TherapyJourneyShellState extends State<_TherapyJourneyShell> {
         return const _SyllablePractice();
       case _TherapyRoute.adaptivePicture:
         return const _AdaptiveNext();
-      case _TherapyRoute.pictureIntro:
-        return const _MilestoneIntro();
       case _TherapyRoute.pictureActivity:
         return const _Activity();
       case _TherapyRoute.adaptiveConversation:
         return const _AdaptiveNext();
-      case _TherapyRoute.guidedConversation:
-        return const _GuidedConv();
       case _TherapyRoute.sessionComplete:
         return const _SessionComplete();
       case _TherapyRoute.progress:
@@ -122,6 +119,8 @@ class _TherapyJourneyShellState extends State<_TherapyJourneyShell> {
         return const _Detail();
       case _TherapyRoute.feedback:
         return const _Feedback();
+      case _TherapyRoute.questionnaire:
+        return const _Questionnaire();
       default:
         return const _Home();
     }
@@ -129,6 +128,18 @@ class _TherapyJourneyShellState extends State<_TherapyJourneyShell> {
 
   @override
   Widget build(BuildContext context) {
+    // Therapy uses pushed routes for its internal screens. Only the visible route
+    // may mount the camera's texture/HTML video surface.
+    final isCurrentRoute = ModalRoute.of(context)?.isCurrent ?? true;
+    // A voice recorder is a PopupRoute: keep this activity's camera tile in its
+    // original top-left position behind the sheet. GoRouter's location stays
+    // on this activity while the popup is open, and changes for page navigation.
+    final location =
+        GoRouter.of(context).routeInformationProvider.value.uri.path;
+    final screenLocation = widget.screen.startsWith('practice:')
+        ? '/c3/therapy/activity/${widget.screen.substring('practice:'.length)}'
+        : '/c3/therapy/${widget.screen}';
+    final showActivityOverlay = isCurrentRoute || location == screenLocation;
     return ValueListenableBuilder<_AppTheme>(
       valueListenable: _therapyTheme,
       builder: (context, theme, _) => _InheritedTheme(
@@ -136,7 +147,21 @@ class _TherapyJourneyShellState extends State<_TherapyJourneyShell> {
         onChanged: (theme) => _therapyTheme.value = theme,
         child: _InheritedNav(
           go: (route) => context.push('/c3/therapy/$route'),
-          child: _screenForRoute(),
+          // Every touch during a live activity counts towards its tap rate (an engagement signal).
+          child: Listener(
+            onPointerDown: (_) => _C3Session.tapped(),
+            child: Stack(fit: StackFit.expand, children: [
+              _screenForRoute(),
+              if (showActivityOverlay)
+                const Positioned(
+                    top: 8, right: 8, child: SafeArea(child: _CameraOnBadge())),
+              if (showActivityOverlay)
+                const Positioned(
+                    top: 44,
+                    left: 8,
+                    child: SafeArea(child: _CameraPreviewTile())),
+            ]),
+          ),
         ),
       ),
     );
@@ -152,15 +177,12 @@ class _TherapyRoute {
   static const welcome = 'welcome';
   static const character = 'character';
   static const adventurePlan = 'adventure-plan';
-  static const journeyMap = 'journey-map';
   static const breathing = 'breathing';
   static const adaptiveSyllable = 'adaptive-syllable';
   static const syllablePractice = 'syllable-practice';
   static const adaptivePicture = 'adaptive-picture';
-  static const pictureIntro = 'picture-intro';
   static const pictureActivity = 'picture-activity';
   static const adaptiveConversation = 'adaptive-conversation';
-  static const guidedConversation = 'guided-conversation';
   static const sessionComplete = 'session-complete';
   static const progress = 'progress';
   static const history = 'history';
@@ -169,4 +191,5 @@ class _TherapyRoute {
   static const activityDetail = 'activity-detail';
   static const practiceActivity = 'activity';
   static const feedback = 'feedback';
+  static const questionnaire = 'questionnaire';
 }

@@ -8,9 +8,9 @@ class PreparationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.groundRead,
       appBar: AppBar(
-        title: const Text('Swara Speech'),
+        title: const Text('ස්වරා කථනය'),
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: AppColors.primaryDeep,
@@ -31,7 +31,7 @@ class PreparationScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                'Ready to tell your story?',
+                'ඔයාගේ කතාව කියන්න සූදානම්ද?',
                 textAlign: TextAlign.center,
                 style: AppTextStyles.heading3.copyWith(color: AppColors.textLight),
               ),
@@ -41,7 +41,6 @@ class PreparationScreen extends StatelessWidget {
                 '1',
                 '🎤',
                 'මයික් එක ළඟින් කතා කරන්න.',
-                'Speak near the microphone.',
                 AppColors.primary,
               ),
               const SizedBox(height: 16),
@@ -50,7 +49,6 @@ class PreparationScreen extends StatelessWidget {
                 '2',
                 '💬',
                 'ඔයාට පහසු විදිහට කතා කරන්න.',
-                'Speak comfortably in your own way.',
                 AppColors.primary,
               ),
               const SizedBox(height: 16),
@@ -59,14 +57,13 @@ class PreparationScreen extends StatelessWidget {
                 '3',
                 '🌱',
                 'ඉක්මන් වෙන්න ඕනේ නැහැ.',
-                'Take your time, no need to rush.',
                 AppColors.success,
               ),
               
               const SizedBox(height: 48),
               
               Text(
-                'මම ලෑස්තියි! (I\'m ready!)',
+                'මම ලෑස්තියි!',
                 textAlign: TextAlign.center,
                 style: AppTextStyles.heading3.copyWith(color: AppColors.primaryDeep),
               ),
@@ -95,7 +92,7 @@ class PreparationScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                'Let\'s start speaking',
+                'කතා කරන්න පටන් ගමු',
                 textAlign: TextAlign.center,
                 style: AppTextStyles.caption.copyWith(color: AppColors.primaryDeep),
               ),
@@ -107,20 +104,13 @@ class PreparationScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStepCard(String number, String emoji, String titleSi, String titleEn, Color color) {
+  Widget _buildStepCard(String number, String emoji, String titleSi, Color color) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.05),
+        color: AppColors.surfaceRaised,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: color.withValues(alpha: 0.2), width: 2),
-        boxShadow: [
-          BoxShadow(
-            color: color.withValues(alpha: 0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          )
-        ],
+        border: Border.all(color: AppColors.primaryLight, width: 2),
       ),
       child: Row(
         children: [
@@ -147,10 +137,6 @@ class PreparationScreen extends StatelessWidget {
                   style: AppTextStyles.heading3.copyWith(color: color, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  titleEn,
-                  style: AppTextStyles.caption.copyWith(color: color.withValues(alpha: 0.8)),
-                ),
               ],
             ),
           ),

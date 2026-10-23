@@ -1,0 +1,2304 @@
+{
+ "_note": "Placeholder pool (version 0.2): the six activity types the team chose, in both age bands. An SLP must check every difficulty label, prompt, passage, keyword list and Sinhala wording, and confirm slpApproved, before use with children. targetWords: what the word check compares (picture naming, syllable practice, word and phrase practice); keywords: what a picture description should mention (keyword check); text: the passage to read (reading check); image: the picture shown (replace the placeholder PNGs in mobile/assets/images/component3/items/ with the team's pictures, same file names). `check` on each type says how answers are checked.",
+ "version": "c3-catalog-0.2",
+ "difficulties": [
+  "easy",
+  "moderate",
+  "difficult"
+ ],
+ "types": [
+  {
+   "type": "breathing",
+   "code": "BR",
+   "targetSkill": "breathing",
+   "appActivityId": "breathing-body-awareness",
+   "title": {
+    "en": "Breathing and relaxation",
+    "si": "හුස්ම සහ ලිහිල් වීම"
+   },
+   "contentKind": "prompt",
+   "check": "completion",
+   "ageBands": [
+    "5-10",
+    "11-14"
+   ]
+  },
+  {
+   "type": "picture_description",
+   "code": "PD",
+   "targetSkill": "slow_rate",
+   "appActivityId": "picture-description",
+   "title": {
+    "en": "Picture description",
+    "si": "පින්තූර විස්තර කිරීම"
+   },
+   "contentKind": "picture",
+   "check": "keywords",
+   "ageBands": [
+    "5-10",
+    "11-14"
+   ]
+  },
+  {
+   "type": "picture_naming",
+   "code": "PN",
+   "targetSkill": "easy_onset",
+   "appActivityId": "picture-naming",
+   "title": {
+    "en": "Picture naming",
+    "si": "පින්තූර නම් කිරීම"
+   },
+   "contentKind": "picture",
+   "check": "word",
+   "ageBands": [
+    "5-10",
+    "11-14"
+   ]
+  },
+  {
+   "type": "syllable_practice",
+   "code": "SP",
+   "targetSkill": "syllable_timing",
+   "appActivityId": "syllable-practice",
+   "title": {
+    "en": "Syllable practice",
+    "si": "අක්ෂර පුහුණුව"
+   },
+   "contentKind": "word_list",
+   "check": "word",
+   "ageBands": [
+    "5-10",
+    "11-14"
+   ]
+  },
+  {
+   "type": "word_phrase_practice",
+   "code": "WP",
+   "targetSkill": "easy_onset",
+   "appActivityId": "word-phrase-practice",
+   "title": {
+    "en": "Word and phrase practice",
+    "si": "වචන සහ වාක්‍ය ඛණ්ඩ පුහුණුව"
+   },
+   "contentKind": "word_list",
+   "check": "word",
+   "ageBands": [
+    "5-10",
+    "11-14"
+   ]
+  },
+  {
+   "type": "passage_reading",
+   "code": "PR",
+   "targetSkill": "slow_rate",
+   "appActivityId": "reading-aloud",
+   "title": {
+    "en": "Paragraph reading",
+    "si": "ඡේද කියවීම"
+   },
+   "contentKind": "passage",
+   "check": "reading",
+   "ageBands": [
+    "5-10",
+    "11-14"
+   ]
+  }
+ ],
+ "arms": [
+  {
+   "id": "5-10:breathing:easy",
+   "type": "breathing",
+   "ageBand": "5-10",
+   "difficulty": "easy",
+   "targetSkill": "breathing",
+   "durationMin": 3,
+   "appActivityId": "breathing-body-awareness",
+   "title": {
+    "en": "Breathing and relaxation",
+    "si": "හුස්ම සහ ලිහිල් වීම"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "5-10:breathing:moderate",
+   "type": "breathing",
+   "ageBand": "5-10",
+   "difficulty": "moderate",
+   "targetSkill": "breathing",
+   "durationMin": 4,
+   "appActivityId": "breathing-body-awareness",
+   "title": {
+    "en": "Breathing and relaxation",
+    "si": "හුස්ම සහ ලිහිල් වීම"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "5-10:breathing:difficult",
+   "type": "breathing",
+   "ageBand": "5-10",
+   "difficulty": "difficult",
+   "targetSkill": "breathing",
+   "durationMin": 5,
+   "appActivityId": "breathing-body-awareness",
+   "title": {
+    "en": "Breathing and relaxation",
+    "si": "හුස්ම සහ ලිහිල් වීම"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "5-10:picture_description:easy",
+   "type": "picture_description",
+   "ageBand": "5-10",
+   "difficulty": "easy",
+   "targetSkill": "slow_rate",
+   "durationMin": 3,
+   "appActivityId": "picture-description",
+   "title": {
+    "en": "Picture description",
+    "si": "පින්තූර විස්තර කිරීම"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "5-10:picture_description:moderate",
+   "type": "picture_description",
+   "ageBand": "5-10",
+   "difficulty": "moderate",
+   "targetSkill": "slow_rate",
+   "durationMin": 4,
+   "appActivityId": "picture-description",
+   "title": {
+    "en": "Picture description",
+    "si": "පින්තූර විස්තර කිරීම"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "5-10:picture_description:difficult",
+   "type": "picture_description",
+   "ageBand": "5-10",
+   "difficulty": "difficult",
+   "targetSkill": "slow_rate",
+   "durationMin": 5,
+   "appActivityId": "picture-description",
+   "title": {
+    "en": "Picture description",
+    "si": "පින්තූර විස්තර කිරීම"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "5-10:picture_naming:easy",
+   "type": "picture_naming",
+   "ageBand": "5-10",
+   "difficulty": "easy",
+   "targetSkill": "easy_onset",
+   "durationMin": 3,
+   "appActivityId": "picture-naming",
+   "title": {
+    "en": "Picture naming",
+    "si": "පින්තූර නම් කිරීම"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "5-10:picture_naming:moderate",
+   "type": "picture_naming",
+   "ageBand": "5-10",
+   "difficulty": "moderate",
+   "targetSkill": "easy_onset",
+   "durationMin": 4,
+   "appActivityId": "picture-naming",
+   "title": {
+    "en": "Picture naming",
+    "si": "පින්තූර නම් කිරීම"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "5-10:picture_naming:difficult",
+   "type": "picture_naming",
+   "ageBand": "5-10",
+   "difficulty": "difficult",
+   "targetSkill": "easy_onset",
+   "durationMin": 5,
+   "appActivityId": "picture-naming",
+   "title": {
+    "en": "Picture naming",
+    "si": "පින්තූර නම් කිරීම"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "5-10:syllable_practice:easy",
+   "type": "syllable_practice",
+   "ageBand": "5-10",
+   "difficulty": "easy",
+   "targetSkill": "syllable_timing",
+   "durationMin": 3,
+   "appActivityId": "syllable-practice",
+   "title": {
+    "en": "Syllable practice",
+    "si": "අක්ෂර පුහුණුව"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "5-10:syllable_practice:moderate",
+   "type": "syllable_practice",
+   "ageBand": "5-10",
+   "difficulty": "moderate",
+   "targetSkill": "syllable_timing",
+   "durationMin": 4,
+   "appActivityId": "syllable-practice",
+   "title": {
+    "en": "Syllable practice",
+    "si": "අක්ෂර පුහුණුව"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "5-10:syllable_practice:difficult",
+   "type": "syllable_practice",
+   "ageBand": "5-10",
+   "difficulty": "difficult",
+   "targetSkill": "syllable_timing",
+   "durationMin": 5,
+   "appActivityId": "syllable-practice",
+   "title": {
+    "en": "Syllable practice",
+    "si": "අක්ෂර පුහුණුව"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "5-10:word_phrase_practice:easy",
+   "type": "word_phrase_practice",
+   "ageBand": "5-10",
+   "difficulty": "easy",
+   "targetSkill": "easy_onset",
+   "durationMin": 3,
+   "appActivityId": "word-phrase-practice",
+   "title": {
+    "en": "Word and phrase practice",
+    "si": "වචන සහ වාක්‍ය ඛණ්ඩ පුහුණුව"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "5-10:word_phrase_practice:moderate",
+   "type": "word_phrase_practice",
+   "ageBand": "5-10",
+   "difficulty": "moderate",
+   "targetSkill": "easy_onset",
+   "durationMin": 4,
+   "appActivityId": "word-phrase-practice",
+   "title": {
+    "en": "Word and phrase practice",
+    "si": "වචන සහ වාක්‍ය ඛණ්ඩ පුහුණුව"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "5-10:word_phrase_practice:difficult",
+   "type": "word_phrase_practice",
+   "ageBand": "5-10",
+   "difficulty": "difficult",
+   "targetSkill": "easy_onset",
+   "durationMin": 5,
+   "appActivityId": "word-phrase-practice",
+   "title": {
+    "en": "Word and phrase practice",
+    "si": "වචන සහ වාක්‍ය ඛණ්ඩ පුහුණුව"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "5-10:passage_reading:easy",
+   "type": "passage_reading",
+   "ageBand": "5-10",
+   "difficulty": "easy",
+   "targetSkill": "slow_rate",
+   "durationMin": 3,
+   "appActivityId": "reading-aloud",
+   "title": {
+    "en": "Paragraph reading",
+    "si": "ඡේද කියවීම"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "5-10:passage_reading:moderate",
+   "type": "passage_reading",
+   "ageBand": "5-10",
+   "difficulty": "moderate",
+   "targetSkill": "slow_rate",
+   "durationMin": 4,
+   "appActivityId": "reading-aloud",
+   "title": {
+    "en": "Paragraph reading",
+    "si": "ඡේද කියවීම"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "5-10:passage_reading:difficult",
+   "type": "passage_reading",
+   "ageBand": "5-10",
+   "difficulty": "difficult",
+   "targetSkill": "slow_rate",
+   "durationMin": 5,
+   "appActivityId": "reading-aloud",
+   "title": {
+    "en": "Paragraph reading",
+    "si": "ඡේද කියවීම"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "11-14:breathing:easy",
+   "type": "breathing",
+   "ageBand": "11-14",
+   "difficulty": "easy",
+   "targetSkill": "breathing",
+   "durationMin": 3,
+   "appActivityId": "breathing-body-awareness",
+   "title": {
+    "en": "Breathing and relaxation",
+    "si": "හුස්ම සහ ලිහිල් වීම"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "11-14:breathing:moderate",
+   "type": "breathing",
+   "ageBand": "11-14",
+   "difficulty": "moderate",
+   "targetSkill": "breathing",
+   "durationMin": 4,
+   "appActivityId": "breathing-body-awareness",
+   "title": {
+    "en": "Breathing and relaxation",
+    "si": "හුස්ම සහ ලිහිල් වීම"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "11-14:breathing:difficult",
+   "type": "breathing",
+   "ageBand": "11-14",
+   "difficulty": "difficult",
+   "targetSkill": "breathing",
+   "durationMin": 5,
+   "appActivityId": "breathing-body-awareness",
+   "title": {
+    "en": "Breathing and relaxation",
+    "si": "හුස්ම සහ ලිහිල් වීම"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "11-14:picture_description:easy",
+   "type": "picture_description",
+   "ageBand": "11-14",
+   "difficulty": "easy",
+   "targetSkill": "slow_rate",
+   "durationMin": 3,
+   "appActivityId": "picture-description",
+   "title": {
+    "en": "Picture description",
+    "si": "පින්තූර විස්තර කිරීම"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "11-14:picture_description:moderate",
+   "type": "picture_description",
+   "ageBand": "11-14",
+   "difficulty": "moderate",
+   "targetSkill": "slow_rate",
+   "durationMin": 4,
+   "appActivityId": "picture-description",
+   "title": {
+    "en": "Picture description",
+    "si": "පින්තූර විස්තර කිරීම"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "11-14:picture_description:difficult",
+   "type": "picture_description",
+   "ageBand": "11-14",
+   "difficulty": "difficult",
+   "targetSkill": "slow_rate",
+   "durationMin": 5,
+   "appActivityId": "picture-description",
+   "title": {
+    "en": "Picture description",
+    "si": "පින්තූර විස්තර කිරීම"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "11-14:picture_naming:easy",
+   "type": "picture_naming",
+   "ageBand": "11-14",
+   "difficulty": "easy",
+   "targetSkill": "easy_onset",
+   "durationMin": 3,
+   "appActivityId": "picture-naming",
+   "title": {
+    "en": "Picture naming",
+    "si": "පින්තූර නම් කිරීම"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "11-14:picture_naming:moderate",
+   "type": "picture_naming",
+   "ageBand": "11-14",
+   "difficulty": "moderate",
+   "targetSkill": "easy_onset",
+   "durationMin": 4,
+   "appActivityId": "picture-naming",
+   "title": {
+    "en": "Picture naming",
+    "si": "පින්තූර නම් කිරීම"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "11-14:picture_naming:difficult",
+   "type": "picture_naming",
+   "ageBand": "11-14",
+   "difficulty": "difficult",
+   "targetSkill": "easy_onset",
+   "durationMin": 5,
+   "appActivityId": "picture-naming",
+   "title": {
+    "en": "Picture naming",
+    "si": "පින්තූර නම් කිරීම"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "11-14:syllable_practice:easy",
+   "type": "syllable_practice",
+   "ageBand": "11-14",
+   "difficulty": "easy",
+   "targetSkill": "syllable_timing",
+   "durationMin": 3,
+   "appActivityId": "syllable-practice",
+   "title": {
+    "en": "Syllable practice",
+    "si": "අක්ෂර පුහුණුව"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "11-14:syllable_practice:moderate",
+   "type": "syllable_practice",
+   "ageBand": "11-14",
+   "difficulty": "moderate",
+   "targetSkill": "syllable_timing",
+   "durationMin": 4,
+   "appActivityId": "syllable-practice",
+   "title": {
+    "en": "Syllable practice",
+    "si": "අක්ෂර පුහුණුව"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "11-14:syllable_practice:difficult",
+   "type": "syllable_practice",
+   "ageBand": "11-14",
+   "difficulty": "difficult",
+   "targetSkill": "syllable_timing",
+   "durationMin": 5,
+   "appActivityId": "syllable-practice",
+   "title": {
+    "en": "Syllable practice",
+    "si": "අක්ෂර පුහුණුව"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "11-14:word_phrase_practice:easy",
+   "type": "word_phrase_practice",
+   "ageBand": "11-14",
+   "difficulty": "easy",
+   "targetSkill": "easy_onset",
+   "durationMin": 3,
+   "appActivityId": "word-phrase-practice",
+   "title": {
+    "en": "Word and phrase practice",
+    "si": "වචන සහ වාක්‍ය ඛණ්ඩ පුහුණුව"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "11-14:word_phrase_practice:moderate",
+   "type": "word_phrase_practice",
+   "ageBand": "11-14",
+   "difficulty": "moderate",
+   "targetSkill": "easy_onset",
+   "durationMin": 4,
+   "appActivityId": "word-phrase-practice",
+   "title": {
+    "en": "Word and phrase practice",
+    "si": "වචන සහ වාක්‍ය ඛණ්ඩ පුහුණුව"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "11-14:word_phrase_practice:difficult",
+   "type": "word_phrase_practice",
+   "ageBand": "11-14",
+   "difficulty": "difficult",
+   "targetSkill": "easy_onset",
+   "durationMin": 5,
+   "appActivityId": "word-phrase-practice",
+   "title": {
+    "en": "Word and phrase practice",
+    "si": "වචන සහ වාක්‍ය ඛණ්ඩ පුහුණුව"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "11-14:passage_reading:easy",
+   "type": "passage_reading",
+   "ageBand": "11-14",
+   "difficulty": "easy",
+   "targetSkill": "slow_rate",
+   "durationMin": 3,
+   "appActivityId": "reading-aloud",
+   "title": {
+    "en": "Paragraph reading",
+    "si": "ඡේද කියවීම"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "11-14:passage_reading:moderate",
+   "type": "passage_reading",
+   "ageBand": "11-14",
+   "difficulty": "moderate",
+   "targetSkill": "slow_rate",
+   "durationMin": 4,
+   "appActivityId": "reading-aloud",
+   "title": {
+    "en": "Paragraph reading",
+    "si": "ඡේද කියවීම"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "11-14:passage_reading:difficult",
+   "type": "passage_reading",
+   "ageBand": "11-14",
+   "difficulty": "difficult",
+   "targetSkill": "slow_rate",
+   "durationMin": 5,
+   "appActivityId": "reading-aloud",
+   "title": {
+    "en": "Paragraph reading",
+    "si": "ඡේද කියවීම"
+   },
+   "slpApproved": true,
+   "placeholder": true
+  }
+ ],
+ "items": [
+  {
+   "id": "BR-E-01",
+   "type": "breathing",
+   "ageBand": "5-10",
+   "difficulty": "easy",
+   "contentKind": "prompt",
+   "contentRef": "assets/c3/br/BR-E-01",
+   "prompt": {
+    "en": "Smell the flower, blow out the candle: 3 slow breaths",
+    "si": "මල සුවඳ බලන්න, ඉටිපන්දම නිවන්න: හුස්ම 3ක්"
+   },
+   "targets": 3,
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "BR-E-02",
+   "type": "breathing",
+   "ageBand": "5-10",
+   "difficulty": "easy",
+   "contentKind": "prompt",
+   "contentRef": "assets/c3/br/BR-E-02",
+   "prompt": {
+    "en": "Belly balloon: breathe in and out slowly 3 times",
+    "si": "බඩේ බැලූනය: 3 වතාවක් සෙමින් හුස්ම ගන්න"
+   },
+   "targets": 3,
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "BR-M-01",
+   "type": "breathing",
+   "ageBand": "5-10",
+   "difficulty": "moderate",
+   "contentKind": "prompt",
+   "contentRef": "assets/c3/br/BR-M-01",
+   "prompt": {
+    "en": "Breathe in, then say one word on the way out",
+    "si": "හුස්ම ගෙන, පිට කරන ගමන් එක වචනයක් කියන්න"
+   },
+   "targets": 4,
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "BR-M-02",
+   "type": "breathing",
+   "ageBand": "5-10",
+   "difficulty": "moderate",
+   "contentKind": "prompt",
+   "contentRef": "assets/c3/br/BR-M-02",
+   "prompt": {
+    "en": "Breathe in, then say your name gently",
+    "si": "හුස්ම ගෙන, ඔබේ නම මෘදුව කියන්න"
+   },
+   "targets": 4,
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "BR-D-01",
+   "type": "breathing",
+   "ageBand": "5-10",
+   "difficulty": "difficult",
+   "contentKind": "prompt",
+   "contentRef": "assets/c3/br/BR-D-01",
+   "prompt": {
+    "en": "Breathe in, then say a short phrase on one breath",
+    "si": "හුස්ම ගෙන, එක හුස්මකින් කෙටි වාක්‍යයක් කියන්න"
+   },
+   "targets": 5,
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "BR-D-02",
+   "type": "breathing",
+   "ageBand": "5-10",
+   "difficulty": "difficult",
+   "contentKind": "prompt",
+   "contentRef": "assets/c3/br/BR-D-02",
+   "prompt": {
+    "en": "Breathe, pause, then answer: what did you eat today?",
+    "si": "හුස්ම ගෙන නවතා පිළිතුරු දෙන්න: අද මොනවද කෑවේ?"
+   },
+   "targets": 5,
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "BR-E-03",
+   "type": "breathing",
+   "ageBand": "11-14",
+   "difficulty": "easy",
+   "contentKind": "prompt",
+   "contentRef": "assets/c3/br/BR-E-03",
+   "prompt": {
+    "en": "Breathe in through your nose for 4, out through your mouth for 4: 3 times",
+    "si": "නාසයෙන් 4ක් ගණන් කරමින් හුස්ම ගෙන, කටින් 4ක් ගණන් කරමින් පිට කරන්න: 3 වතාවක්"
+   },
+   "targets": 3,
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "BR-E-04",
+   "type": "breathing",
+   "ageBand": "11-14",
+   "difficulty": "easy",
+   "contentKind": "prompt",
+   "contentRef": "assets/c3/br/BR-E-04",
+   "prompt": {
+    "en": "Lift your shoulders, hold, drop them and breathe out slowly: 3 times",
+    "si": "උරහිස් උස්සලා තියාගෙන, පහළට දාලා සෙමින් හුස්ම පිට කරන්න: 3 වතාවක්"
+   },
+   "targets": 3,
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "BR-M-03",
+   "type": "breathing",
+   "ageBand": "11-14",
+   "difficulty": "moderate",
+   "contentKind": "prompt",
+   "contentRef": "assets/c3/br/BR-M-03",
+   "prompt": {
+    "en": "Breathe in, then say a two-word phrase on the way out",
+    "si": "හුස්ම ගෙන, පිට කරන ගමන් වචන දෙකක වාක්‍ය ඛණ්ඩයක් කියන්න"
+   },
+   "targets": 4,
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "BR-M-04",
+   "type": "breathing",
+   "ageBand": "11-14",
+   "difficulty": "moderate",
+   "contentKind": "prompt",
+   "contentRef": "assets/c3/br/BR-M-04",
+   "prompt": {
+    "en": "Breathe in, then say your full name and your school gently",
+    "si": "හුස්ම ගෙන, ඔබේ සම්පූර්ණ නමයි පාසලයි මෘදුව කියන්න"
+   },
+   "targets": 4,
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "BR-D-03",
+   "type": "breathing",
+   "ageBand": "11-14",
+   "difficulty": "difficult",
+   "contentKind": "prompt",
+   "contentRef": "assets/c3/br/BR-D-03",
+   "prompt": {
+    "en": "Breathe in, then say one full sentence on one breath",
+    "si": "හුස්ම ගෙන, එක හුස්මකින් සම්පූර්ණ වාක්‍යයක් කියන්න"
+   },
+   "targets": 5,
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "BR-D-04",
+   "type": "breathing",
+   "ageBand": "11-14",
+   "difficulty": "difficult",
+   "contentKind": "prompt",
+   "contentRef": "assets/c3/br/BR-D-04",
+   "prompt": {
+    "en": "Breathe, pause, then answer: what did you do yesterday?",
+    "si": "හුස්ම ගෙන නවතා පිළිතුරු දෙන්න: ඊයේ ඔබ මොනවද කළේ?"
+   },
+   "targets": 5,
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "PD-E-01",
+   "type": "picture_description",
+   "ageBand": "5-10",
+   "difficulty": "easy",
+   "contentKind": "picture",
+   "contentRef": "assets/c3/pd/PD-E-01",
+   "prompt": {
+    "en": "A mother helps her child get ready for school.",
+    "si": "පාසල් යාමට මව දරුවාට උදව් කරයි."
+   },
+   "targets": 3,
+   "slpApproved": true,
+   "placeholder": true,
+   "image": "assets/images/component3/items/PD-E-01.png",
+   "keywords": {
+    "si": [
+     "අම්මා",
+     "බෑගය",
+     "පොත්"
+    ]
+   }
+  },
+  {
+   "id": "PD-E-02",
+   "type": "picture_description",
+   "ageBand": "5-10",
+   "difficulty": "easy",
+   "contentKind": "picture",
+   "contentRef": "assets/c3/pd/PD-E-02",
+   "prompt": {
+    "en": "Children head to school as a bus and cyclist pass.",
+    "si": "බස් රථයක් සහ බයිසිකලයක් අසලින් යද්දී ළමයි පාසලට යති."
+   },
+   "targets": 3,
+   "slpApproved": true,
+   "placeholder": true,
+   "image": "assets/images/component3/items/PD-E-02.png",
+   "keywords": {
+    "si": [
+     "බස්",
+     "ළමයි",
+     "බයිසිකලය"
+    ]
+   }
+  },
+  {
+   "id": "PD-M-01",
+   "type": "picture_description",
+   "ageBand": "5-10",
+   "difficulty": "moderate",
+   "contentKind": "picture",
+   "contentRef": "assets/c3/pd/PD-M-01",
+   "prompt": {
+    "en": "Children play together at the beach.",
+    "si": "ළමයි වෙරළේ එකට සෙල්ලම් කරති."
+   },
+   "targets": 4,
+   "slpApproved": true,
+   "placeholder": true,
+   "image": "assets/images/component3/items/PD-M-01.png",
+   "keywords": {
+    "si": [
+     "මුහුද",
+     "වෙරළ",
+     "බෝලය",
+     "වැලි"
+    ]
+   }
+  },
+  {
+   "id": "PD-M-02",
+   "type": "picture_description",
+   "ageBand": "5-10",
+   "difficulty": "moderate",
+   "contentKind": "picture",
+   "contentRef": "assets/c3/pd/PD-M-02",
+   "prompt": {
+    "en": "A family spends time reading and playing at home.",
+    "si": "පවුලේ අය ගෙදරදී කියවමින් සහ සෙල්ලම් කරමින් කාලය ගත කරති."
+   },
+   "targets": 4,
+   "slpApproved": true,
+   "placeholder": true,
+   "image": "assets/images/component3/items/PD-M-02.png",
+   "keywords": {
+    "si": [
+     "පවුල",
+     "පොත",
+     "ළමයි",
+     "සෙල්ලම්"
+    ]
+   }
+  },
+  {
+   "id": "PD-D-01",
+   "type": "picture_description",
+   "ageBand": "5-10",
+   "difficulty": "difficult",
+   "contentKind": "picture",
+   "contentRef": "assets/c3/pd/PD-D-01",
+   "prompt": {
+    "en": "Passengers wait at a busy railway station.",
+    "si": "කාර්යබහුල දුම්රිය ස්ථානයක මගීන් බලා සිටිති."
+   },
+   "targets": 5,
+   "slpApproved": true,
+   "placeholder": true,
+   "image": "assets/images/component3/items/PD-D-01.png",
+   "keywords": {
+    "si": [
+     "දුම්රිය",
+     "මගීන්",
+     "වේදිකාව",
+     "බෑග්",
+     "ඔරලෝසුව"
+    ]
+   }
+  },
+  {
+   "id": "PD-D-02",
+   "type": "picture_description",
+   "ageBand": "5-10",
+   "difficulty": "difficult",
+   "contentKind": "picture",
+   "contentRef": "assets/c3/pd/PD-D-02",
+   "prompt": {
+    "en": "Families celebrate Vesak at a temple with lanterns and lights.",
+    "si": "පහන් සහ වෙසක් කූඩු සමඟ පවුල් පන්සලේ වෙසක් සමරති."
+   },
+   "targets": 5,
+   "slpApproved": true,
+   "placeholder": true,
+   "image": "assets/images/component3/items/PD-D-02.png",
+   "keywords": {
+    "si": [
+     "පන්සල",
+     "වෙසක්",
+     "කූඩු",
+     "පහන්",
+     "ළමයි"
+    ]
+   }
+  },
+  {
+   "id": "PD-E-03",
+   "type": "picture_description",
+   "ageBand": "11-14",
+   "difficulty": "easy",
+   "contentKind": "picture",
+   "contentRef": "assets/c3/pi/PD-E-03",
+   "prompt": {
+    "en": "Children plant flowers together in a garden.",
+    "si": "ළමයි වත්තක එකට මල් පැළ කරති."
+   },
+   "targets": 3,
+   "image": "assets/images/component3/items/PD-E-03.png",
+   "keywords": {
+    "si": [
+     "ළමයි",
+     "මල්",
+     "පැළය"
+    ]
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "PD-E-04",
+   "type": "picture_description",
+   "ageBand": "11-14",
+   "difficulty": "easy",
+   "contentKind": "picture",
+   "contentRef": "assets/c3/pi/PD-E-04",
+   "prompt": {
+    "en": "Children play in a park after the rain.",
+    "si": "වැස්සෙන් පසු ළමයි උද්‍යානයක සෙල්ලම් කරති."
+   },
+   "targets": 3,
+   "image": "assets/images/component3/items/PD-E-04.png",
+   "keywords": {
+    "si": [
+     "දේදුන්න",
+     "බයිසිකලය",
+     "පන්දුව"
+    ]
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "PD-M-03",
+   "type": "picture_description",
+   "ageBand": "11-14",
+   "difficulty": "moderate",
+   "contentKind": "picture",
+   "contentRef": "assets/c3/pi/PD-M-03",
+   "prompt": {
+    "en": "Children play in the rain near their homes.",
+    "si": "ළමයි තම නිවෙස් අසල වැස්සේ සෙල්ලම් කරති."
+   },
+   "targets": 4,
+   "image": "assets/images/component3/items/PD-M-03.png",
+   "keywords": {
+    "si": [
+     "වැස්ස",
+     "කුඩය",
+     "ළමයි",
+     "වතුර"
+    ]
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "PD-M-04",
+   "type": "picture_description",
+   "ageBand": "11-14",
+   "difficulty": "moderate",
+   "contentKind": "picture",
+   "contentRef": "assets/c3/pi/PD-M-04",
+   "prompt": {
+    "en": "Children play games at a park playground.",
+    "si": "ළමයි උද්‍යානයේ ක්‍රීඩා පිටියේ සෙල්ලම් කරති."
+   },
+   "targets": 4,
+   "image": "assets/images/component3/items/PD-M-04.png",
+   "keywords": {
+    "si": [
+     "ළමයි",
+     "පන්දුව",
+     "බයිසිකලය",
+     "ස්ලයිඩය"
+    ]
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "PD-D-03",
+   "type": "picture_description",
+   "ageBand": "11-14",
+   "difficulty": "difficult",
+   "contentKind": "picture",
+   "contentRef": "assets/c3/pi/PD-D-03",
+   "prompt": {
+    "en": "A girl and an adult plant and water flowers in a garden.",
+    "si": "ගැහැණු ළමයෙක් සහ වැඩිහිටියෙක් වත්තක මල් පැළ කර වතුර දමති."
+   },
+   "targets": 5,
+   "image": "assets/images/component3/items/PD-D-03.png",
+   "keywords": {
+    "si": [
+     "ළමයි",
+     "ගස",
+     "මල්",
+     "වතුර",
+     "වත්ත"
+    ]
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "PD-D-04",
+   "type": "picture_description",
+   "ageBand": "11-14",
+   "difficulty": "difficult",
+   "contentKind": "picture",
+   "contentRef": "assets/c3/pi/PD-D-04",
+   "prompt": {
+    "en": "People shop for fresh produce at a market.",
+    "si": "මිනිසුන් වෙළඳපොළක නැවුම් එළවළු සහ පලතුරු මිලදී ගනිති."
+   },
+   "targets": 5,
+   "image": "assets/images/component3/items/PD-D-04.png",
+   "keywords": {
+    "si": [
+     "පොළ",
+     "එළවළු",
+     "පලතුරු",
+     "වෙළෙන්දා",
+     "ගැනුම්කරුවෝ"
+    ]
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "PN-E-01",
+   "type": "picture_naming",
+   "ageBand": "5-10",
+   "difficulty": "easy",
+   "contentKind": "picture",
+   "contentRef": "assets/c3/pn/PN-E-01",
+   "prompt": {
+    "en": "cat",
+    "si": "පූසා"
+   },
+   "targets": 5,
+   "slpApproved": true,
+   "placeholder": true,
+   "targetWords": {
+    "si": [
+     "පූසා"
+    ],
+    "en": [
+     "cat"
+    ]
+   },
+   "confusables": {
+    "පූසා": [
+     "බල්ලා"
+    ]
+   },
+   "image": "assets/images/component3/items/PN-E-01.png"
+  },
+  {
+   "id": "PN-E-02",
+   "type": "picture_naming",
+   "ageBand": "5-10",
+   "difficulty": "easy",
+   "contentKind": "picture",
+   "contentRef": "assets/c3/pn/PN-E-02",
+   "prompt": {
+    "en": "ball",
+    "si": "බෝලය"
+   },
+   "targets": 5,
+   "slpApproved": true,
+   "placeholder": true,
+   "targetWords": {
+    "si": [
+     "බෝලය"
+    ],
+    "en": [
+     "ball"
+    ]
+   },
+   "confusables": {
+    "බෝලය": [
+     "බෝතලය"
+    ]
+   },
+   "image": "assets/images/component3/items/PN-E-02.png"
+  },
+  {
+   "id": "PN-M-01",
+   "type": "picture_naming",
+   "ageBand": "5-10",
+   "difficulty": "moderate",
+   "contentKind": "picture",
+   "contentRef": "assets/c3/pn/PN-M-01",
+   "prompt": {
+    "en": "elephant",
+    "si": "අලියා"
+   },
+   "targets": 6,
+   "slpApproved": true,
+   "placeholder": true,
+   "targetWords": {
+    "si": [
+     "අලියා"
+    ],
+    "en": [
+     "elephant"
+    ]
+   },
+   "image": "assets/images/component3/items/PN-M-01.png"
+  },
+  {
+   "id": "PN-M-02",
+   "type": "picture_naming",
+   "ageBand": "5-10",
+   "difficulty": "moderate",
+   "contentKind": "picture",
+   "contentRef": "assets/c3/pn/PN-M-02",
+   "prompt": {
+    "en": "umbrella",
+    "si": "කුඩය"
+   },
+   "targets": 6,
+   "slpApproved": true,
+   "placeholder": true,
+   "targetWords": {
+    "si": [
+     "කුඩය"
+    ],
+    "en": [
+     "umbrella"
+    ]
+   },
+   "confusables": {
+    "කුඩය": [
+     "කූඩය"
+    ]
+   },
+   "image": "assets/images/component3/items/PN-M-02.png"
+  },
+  {
+   "id": "PN-D-01",
+   "type": "picture_naming",
+   "ageBand": "5-10",
+   "difficulty": "difficult",
+   "contentKind": "picture",
+   "contentRef": "assets/c3/pn/PN-D-01",
+   "prompt": {
+    "en": "butterfly",
+    "si": "සමනලයා"
+   },
+   "targets": 8,
+   "slpApproved": true,
+   "placeholder": true,
+   "targetWords": {
+    "si": [
+     "සමනලයා"
+    ],
+    "en": [
+     "butterfly"
+    ]
+   },
+   "image": "assets/images/component3/items/PN-D-01.png"
+  },
+  {
+   "id": "PN-D-02",
+   "type": "picture_naming",
+   "ageBand": "5-10",
+   "difficulty": "difficult",
+   "contentKind": "picture",
+   "contentRef": "assets/c3/pn/PN-D-02",
+   "prompt": {
+    "en": "aeroplane",
+    "si": "ගුවන්යානය"
+   },
+   "targets": 8,
+   "slpApproved": true,
+   "placeholder": true,
+   "targetWords": {
+    "si": [
+     "ගුවන්යානය"
+    ],
+    "en": [
+     "aeroplane"
+    ]
+   },
+   "image": "assets/images/component3/items/PN-D-02.png"
+  },
+  {
+   "id": "PN-E-03",
+   "type": "picture_naming",
+   "ageBand": "11-14",
+   "difficulty": "easy",
+   "contentKind": "picture",
+   "contentRef": "assets/c3/pi/PN-E-03",
+   "prompt": {
+    "en": "book",
+    "si": "පොත"
+   },
+   "targets": 5,
+   "image": "assets/images/component3/items/PN-E-03.png",
+   "targetWords": {
+    "si": [
+     "පොත"
+    ],
+    "en": [
+     "book"
+    ]
+   },
+   "confusables": {
+    "පොත": [
+     "පෙට්ටිය"
+    ]
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "PN-E-04",
+   "type": "picture_naming",
+   "ageBand": "11-14",
+   "difficulty": "easy",
+   "contentKind": "picture",
+   "contentRef": "assets/c3/pi/PN-E-04",
+   "prompt": {
+    "en": "chair",
+    "si": "පුටුව"
+   },
+   "targets": 5,
+   "image": "assets/images/component3/items/PN-E-04.png",
+   "targetWords": {
+    "si": [
+     "පුටුව"
+    ],
+    "en": [
+     "chair"
+    ]
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "PN-M-03",
+   "type": "picture_naming",
+   "ageBand": "11-14",
+   "difficulty": "moderate",
+   "contentKind": "picture",
+   "contentRef": "assets/c3/pi/PN-M-03",
+   "prompt": {
+    "en": "bicycle",
+    "si": "බයිසිකලය"
+   },
+   "targets": 6,
+   "image": "assets/images/component3/items/PN-M-03.png",
+   "targetWords": {
+    "si": [
+     "බයිසිකලය"
+    ],
+    "en": [
+     "bicycle"
+    ]
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "PN-M-04",
+   "type": "picture_naming",
+   "ageBand": "11-14",
+   "difficulty": "moderate",
+   "contentKind": "picture",
+   "contentRef": "assets/c3/pi/PN-M-04",
+   "prompt": {
+    "en": "computer",
+    "si": "පරිගණකය"
+   },
+   "targets": 6,
+   "image": "assets/images/component3/items/PN-M-04.png",
+   "targetWords": {
+    "si": [
+     "පරිගණකය"
+    ],
+    "en": [
+     "computer"
+    ]
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "PN-D-03",
+   "type": "picture_naming",
+   "ageBand": "11-14",
+   "difficulty": "difficult",
+   "contentKind": "picture",
+   "contentRef": "assets/c3/pi/PN-D-03",
+   "prompt": {
+    "en": "lighthouse",
+    "si": "ප්‍රදීපාගාරය"
+   },
+   "targets": 8,
+   "image": "assets/images/component3/items/PN-D-03.png",
+   "targetWords": {
+    "si": [
+     "ප්‍රදීපාගාරය"
+    ],
+    "en": [
+     "lighthouse"
+    ]
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "PN-D-04",
+   "type": "picture_naming",
+   "ageBand": "11-14",
+   "difficulty": "difficult",
+   "contentKind": "picture",
+   "contentRef": "assets/c3/pi/PN-D-04",
+   "prompt": {
+    "en": "microscope",
+    "si": "අන්වීක්ෂය"
+   },
+   "targets": 8,
+   "image": "assets/images/component3/items/PN-D-04.png",
+   "targetWords": {
+    "si": [
+     "අන්වීක්ෂය"
+    ],
+    "en": [
+     "microscope"
+    ]
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "SP-E-01",
+   "type": "syllable_practice",
+   "ageBand": "5-10",
+   "difficulty": "easy",
+   "contentKind": "word_list",
+   "contentRef": "assets/c3/sp/SP-E-01",
+   "prompt": {
+    "en": "mo-ther, flow-er",
+    "si": "අම්-මා, ම-ල"
+   },
+   "targets": 4,
+   "slpApproved": true,
+   "placeholder": true,
+   "targetWords": {
+    "si": [
+     "අම්මා",
+     "මල"
+    ],
+    "en": [
+     "mother",
+     "flower"
+    ]
+   },
+   "confusables": {
+    "අම්මා": [
+     "අක්කා",
+     "තාත්තා"
+    ],
+    "මල": [
+     "මාළු"
+    ]
+   }
+  },
+  {
+   "id": "SP-E-02",
+   "type": "syllable_practice",
+   "ageBand": "5-10",
+   "difficulty": "easy",
+   "contentKind": "word_list",
+   "contentRef": "assets/c3/sp/SP-E-02",
+   "prompt": {
+    "en": "ta-ble, ap-ple",
+    "si": "මේ-සය, ඇ-පල්"
+   },
+   "targets": 4,
+   "slpApproved": true,
+   "placeholder": true,
+   "targetWords": {
+    "si": [
+     "මේසය",
+     "ඇපල්"
+    ],
+    "en": [
+     "table",
+     "apple"
+    ]
+   },
+   "confusables": {
+    "ඇපල්": [
+     "කෙසෙල්"
+    ]
+   }
+  },
+  {
+   "id": "SP-M-01",
+   "type": "syllable_practice",
+   "ageBand": "5-10",
+   "difficulty": "moderate",
+   "contentKind": "word_list",
+   "contentRef": "assets/c3/sp/SP-M-01",
+   "prompt": {
+    "en": "ba-na-na, ho-li-day",
+    "si": "කෙ-සෙල්, ගෙ-ද-ර"
+   },
+   "targets": 5,
+   "slpApproved": true,
+   "placeholder": true,
+   "targetWords": {
+    "si": [
+     "කෙසෙල්",
+     "ගෙදර"
+    ],
+    "en": [
+     "banana",
+     "holiday"
+    ]
+   }
+  },
+  {
+   "id": "SP-M-02",
+   "type": "syllable_practice",
+   "ageBand": "5-10",
+   "difficulty": "moderate",
+   "contentKind": "word_list",
+   "contentRef": "assets/c3/sp/SP-M-02",
+   "prompt": {
+    "en": "ti-ger, wa-ter-fall",
+    "si": "කො-ටි-යා, ව-තු-ර"
+   },
+   "targets": 5,
+   "slpApproved": true,
+   "placeholder": true,
+   "targetWords": {
+    "si": [
+     "කොටියා",
+     "වතුර"
+    ],
+    "en": [
+     "tiger",
+     "waterfall"
+    ]
+   }
+  },
+  {
+   "id": "SP-D-01",
+   "type": "syllable_practice",
+   "ageBand": "5-10",
+   "difficulty": "difficult",
+   "contentKind": "word_list",
+   "contentRef": "assets/c3/sp/SP-D-01",
+   "prompt": {
+    "en": "but-ter-fly, el-e-phant",
+    "si": "ස-ම-න-ල-යා, අ-ලි-යා"
+   },
+   "targets": 6,
+   "slpApproved": true,
+   "placeholder": true,
+   "targetWords": {
+    "si": [
+     "සමනලයා",
+     "අලියා"
+    ],
+    "en": [
+     "butterfly",
+     "elephant"
+    ]
+   }
+  },
+  {
+   "id": "SP-D-02",
+   "type": "syllable_practice",
+   "ageBand": "5-10",
+   "difficulty": "difficult",
+   "contentKind": "word_list",
+   "contentRef": "assets/c3/sp/SP-D-02",
+   "prompt": {
+    "en": "um-brel-la, choc-o-late",
+    "si": "කු-ඩ-ය, චො-ක-ලට්"
+   },
+   "targets": 6,
+   "slpApproved": true,
+   "placeholder": true,
+   "targetWords": {
+    "si": [
+     "කුඩය",
+     "චොකලට්"
+    ],
+    "en": [
+     "umbrella",
+     "chocolate"
+    ]
+   },
+   "confusables": {
+    "කුඩය": [
+     "කූඩය"
+    ]
+   }
+  },
+  {
+   "id": "SP-E-03",
+   "type": "syllable_practice",
+   "ageBand": "11-14",
+   "difficulty": "easy",
+   "contentKind": "word_list",
+   "contentRef": "assets/c3/sp/SP-E-03",
+   "prompt": {
+    "en": "com-pu-ter, ho-li-day",
+    "si": "ප-රි-ගණ-කය, නි-වා-ඩු-ව"
+   },
+   "targets": 4,
+   "slpApproved": true,
+   "placeholder": true,
+   "targetWords": {
+    "si": [
+     "පරිගණකය",
+     "නිවාඩුව"
+    ],
+    "en": [
+     "computer",
+     "holiday"
+    ]
+   }
+  },
+  {
+   "id": "SP-E-04",
+   "type": "syllable_practice",
+   "ageBand": "11-14",
+   "difficulty": "easy",
+   "contentKind": "word_list",
+   "contentRef": "assets/c3/sp/SP-E-04",
+   "prompt": {
+    "en": "di-no-saur, ba-na-na",
+    "si": "ඩයි-න-සෝ-රය, කෙ-සෙල්"
+   },
+   "targets": 4,
+   "slpApproved": true,
+   "placeholder": true,
+   "targetWords": {
+    "si": [
+     "ඩයිනසෝරය",
+     "කෙසෙල්"
+    ],
+    "en": [
+     "dinosaur",
+     "banana"
+    ]
+   }
+  },
+  {
+   "id": "SP-M-03",
+   "type": "syllable_practice",
+   "ageBand": "11-14",
+   "difficulty": "moderate",
+   "contentKind": "word_list",
+   "contentRef": "assets/c3/sp/SP-M-03",
+   "prompt": {
+    "en": "in-for-ma-tion, en-vi-ron-ment",
+    "si": "තො-ර-තු-රු, ප-රි-ස-රය"
+   },
+   "targets": 5,
+   "slpApproved": true,
+   "placeholder": true,
+   "targetWords": {
+    "si": [
+     "තොරතුරු",
+     "පරිසරය"
+    ],
+    "en": [
+     "information",
+     "environment"
+    ]
+   }
+  },
+  {
+   "id": "SP-M-04",
+   "type": "syllable_practice",
+   "ageBand": "11-14",
+   "difficulty": "moderate",
+   "contentKind": "word_list",
+   "contentRef": "assets/c3/sp/SP-M-04",
+   "prompt": {
+    "en": "tem-per-a-ture, cel-e-bra-tion",
+    "si": "උෂ්-ණ-ත්ව-ය, උ-ත්ස-ව-ය"
+   },
+   "targets": 5,
+   "slpApproved": true,
+   "placeholder": true,
+   "targetWords": {
+    "si": [
+     "උෂ්ණත්වය",
+     "උත්සවය"
+    ],
+    "en": [
+     "temperature",
+     "celebration"
+    ]
+   }
+  },
+  {
+   "id": "SP-D-03",
+   "type": "syllable_practice",
+   "ageBand": "11-14",
+   "difficulty": "difficult",
+   "contentKind": "word_list",
+   "contentRef": "assets/c3/sp/SP-D-03",
+   "prompt": {
+    "en": "re-spon-si-bil-i-ty, u-ni-ver-si-ty",
+    "si": "ව-ග-කී-ම, වි-ශ්ව-වි-ද්‍යා-ල-ය"
+   },
+   "targets": 6,
+   "slpApproved": true,
+   "placeholder": true,
+   "targetWords": {
+    "si": [
+     "වගකීම",
+     "විශ්වවිද්‍යාලය"
+    ],
+    "en": [
+     "responsibility",
+     "university"
+    ]
+   }
+  },
+  {
+   "id": "SP-D-04",
+   "type": "syllable_practice",
+   "ageBand": "11-14",
+   "difficulty": "difficult",
+   "contentKind": "word_list",
+   "contentRef": "assets/c3/sp/SP-D-04",
+   "prompt": {
+    "en": "com-mu-ni-ca-tion, pho-to-syn-the-sis",
+    "si": "සන්-නි-වේ-ද-න-ය, ප්‍ර-භා-සං-ශ්ලේ-ෂ-ණ-ය"
+   },
+   "targets": 6,
+   "slpApproved": true,
+   "placeholder": true,
+   "targetWords": {
+    "si": [
+     "සන්නිවේදනය",
+     "ප්‍රභාසංශ්ලේෂණය"
+    ],
+    "en": [
+     "communication",
+     "photosynthesis"
+    ]
+   }
+  },
+  {
+   "id": "WP-E-01",
+   "type": "word_phrase_practice",
+   "ageBand": "5-10",
+   "difficulty": "easy",
+   "contentKind": "word_list",
+   "contentRef": "assets/c3/wp/WP-E-01",
+   "prompt": {
+    "en": "apple, egg, up",
+    "si": "ඇපල්, ඉර, උඩ"
+   },
+   "targets": 5,
+   "slpApproved": true,
+   "placeholder": true,
+   "targetWords": {
+    "si": [
+     "ඇපල්",
+     "ඉර",
+     "උඩ"
+    ],
+    "en": [
+     "apple",
+     "egg",
+     "up"
+    ]
+   },
+   "confusables": {
+    "ඇපල්": [
+     "කෙසෙල්"
+    ]
+   }
+  },
+  {
+   "id": "WP-E-02",
+   "type": "word_phrase_practice",
+   "ageBand": "5-10",
+   "difficulty": "easy",
+   "contentKind": "word_list",
+   "contentRef": "assets/c3/wp/WP-E-02",
+   "prompt": {
+    "en": "owl, ice, arm",
+    "si": "ඔරලෝසුව, අයිස්, අත"
+   },
+   "targets": 5,
+   "slpApproved": true,
+   "placeholder": true,
+   "targetWords": {
+    "si": [
+     "ඔරලෝසුව",
+     "අයිස්",
+     "අත"
+    ],
+    "en": [
+     "owl",
+     "ice",
+     "arm"
+    ]
+   },
+   "confusables": {
+    "අත": [
+     "ඇස"
+    ]
+   }
+  },
+  {
+   "id": "WP-M-01",
+   "type": "word_phrase_practice",
+   "ageBand": "5-10",
+   "difficulty": "moderate",
+   "contentKind": "word_list",
+   "contentRef": "assets/c3/wo/WP-M-01",
+   "prompt": {
+    "en": "I am here, open it",
+    "si": "මම මෙතන, ඒක අරින්න"
+   },
+   "targets": 4,
+   "targetWords": {
+    "si": [
+     "මම මෙතන",
+     "ඒක අරින්න"
+    ],
+    "en": [
+     "I am here",
+     "open it"
+    ]
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "WP-M-02",
+   "type": "word_phrase_practice",
+   "ageBand": "5-10",
+   "difficulty": "moderate",
+   "contentKind": "word_list",
+   "contentRef": "assets/c3/wo/WP-M-02",
+   "prompt": {
+    "en": "eat an apple, ask him",
+    "si": "ඇපල් කන්න, එයාගෙන් අහන්න"
+   },
+   "targets": 4,
+   "targetWords": {
+    "si": [
+     "ඇපල් කන්න",
+     "එයාගෙන් අහන්න"
+    ],
+    "en": [
+     "eat an apple",
+     "ask him"
+    ]
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "WP-D-01",
+   "type": "word_phrase_practice",
+   "ageBand": "5-10",
+   "difficulty": "difficult",
+   "contentKind": "word_list",
+   "contentRef": "assets/c3/wo/WP-D-01",
+   "prompt": {
+    "en": "every evening, I eat rice, with my family",
+    "si": "හැමදාම හවසට, මම බත් කනවා, පවුලත් එක්ක"
+   },
+   "targets": 3,
+   "targetWords": {
+    "si": [
+     "හැමදාම හවසට",
+     "මම බත් කනවා",
+     "පවුලත් එක්ක"
+    ],
+    "en": [
+     "every evening",
+     "I eat rice",
+     "with my family"
+    ]
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "WP-D-02",
+   "type": "word_phrase_practice",
+   "ageBand": "5-10",
+   "difficulty": "difficult",
+   "contentKind": "word_list",
+   "contentRef": "assets/c3/wo/WP-D-02",
+   "prompt": {
+    "en": "our auntie, always asks, about us",
+    "si": "අපේ නැන්දා, හැමදාම අහනවා, අපි ගැන"
+   },
+   "targets": 3,
+   "targetWords": {
+    "si": [
+     "අපේ නැන්දා",
+     "හැමදාම අහනවා",
+     "අපි ගැන"
+    ],
+    "en": [
+     "our auntie",
+     "always asks",
+     "about us"
+    ]
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "WP-E-03",
+   "type": "word_phrase_practice",
+   "ageBand": "11-14",
+   "difficulty": "easy",
+   "contentKind": "word_list",
+   "contentRef": "assets/c3/wp/WP-E-03",
+   "prompt": {
+    "en": "always, every, open, under",
+    "si": "හැමදාම, ඕනෑම, අරින්න, යට"
+   },
+   "targets": 5,
+   "slpApproved": true,
+   "placeholder": true,
+   "targetWords": {
+    "si": [
+     "හැමදාම",
+     "ඕනෑම",
+     "අරින්න",
+     "යට"
+    ],
+    "en": [
+     "always",
+     "every",
+     "open",
+     "under"
+    ]
+   }
+  },
+  {
+   "id": "WP-E-04",
+   "type": "word_phrase_practice",
+   "ageBand": "11-14",
+   "difficulty": "easy",
+   "contentKind": "word_list",
+   "contentRef": "assets/c3/wp/WP-E-04",
+   "prompt": {
+    "en": "island, orange, eagle, actor",
+    "si": "දූපත, දොඩම්, රාජාලියා, නළුවා"
+   },
+   "targets": 5,
+   "slpApproved": true,
+   "placeholder": true,
+   "targetWords": {
+    "si": [
+     "දූපත",
+     "දොඩම්",
+     "රාජාලියා",
+     "නළුවා"
+    ],
+    "en": [
+     "island",
+     "orange",
+     "eagle",
+     "actor"
+    ]
+   }
+  },
+  {
+   "id": "WP-M-03",
+   "type": "word_phrase_practice",
+   "ageBand": "11-14",
+   "difficulty": "moderate",
+   "contentKind": "word_list",
+   "contentRef": "assets/c3/wo/WP-M-03",
+   "prompt": {
+    "en": "I always arrive early, is anyone there",
+    "si": "මම හැමදාම කලින් එනවා, කවුරුහරි ඉන්නවද"
+   },
+   "targets": 4,
+   "targetWords": {
+    "si": [
+     "මම හැමදාම කලින් එනවා",
+     "කවුරුහරි ඉන්නවද"
+    ],
+    "en": [
+     "I always arrive early",
+     "is anyone there"
+    ]
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "WP-M-04",
+   "type": "word_phrase_practice",
+   "ageBand": "11-14",
+   "difficulty": "moderate",
+   "contentKind": "word_list",
+   "contentRef": "assets/c3/wo/WP-M-04",
+   "prompt": {
+    "en": "ask an adult, open every window",
+    "si": "වැඩිහිටියෙක්ගෙන් අහන්න, හැම ජනේලයක්ම අරින්න"
+   },
+   "targets": 4,
+   "targetWords": {
+    "si": [
+     "වැඩිහිටියෙක්ගෙන් අහන්න",
+     "හැම ජනේලයක්ම අරින්න"
+    ],
+    "en": [
+     "ask an adult",
+     "open every window"
+    ]
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "WP-D-03",
+   "type": "word_phrase_practice",
+   "ageBand": "11-14",
+   "difficulty": "difficult",
+   "contentKind": "word_list",
+   "contentRef": "assets/c3/wo/WP-D-03",
+   "prompt": {
+    "en": "I woke up early today, we all went together, I ate before school",
+    "si": "අද උදේ මම ඉක්මනින් නැගිට්ටා, අපි ඔක්කොම එකට ගියා, පාසල් යන්න කලින් කෑවා"
+   },
+   "targets": 3,
+   "targetWords": {
+    "si": [
+     "අද උදේ මම ඉක්මනින් නැගිට්ටා",
+     "අපි ඔක්කොම එකට ගියා",
+     "පාසල් යන්න කලින් කෑවා"
+    ],
+    "en": [
+     "I woke up early today",
+     "we all went together",
+     "I ate before school"
+    ]
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "WP-D-04",
+   "type": "word_phrase_practice",
+   "ageBand": "11-14",
+   "difficulty": "difficult",
+   "contentKind": "word_list",
+   "contentRef": "assets/c3/wo/WP-D-04",
+   "prompt": {
+    "en": "my brother bought a new book, the exam is next week, can you come",
+    "si": "අයියා අලුත් පොතක් ගත්තා, ඊළඟ සතියේ විභාගය තියෙනවා, ඔයාට එන්න පුළුවන්ද"
+   },
+   "targets": 3,
+   "targetWords": {
+    "si": [
+     "අයියා අලුත් පොතක් ගත්තා",
+     "ඊළඟ සතියේ විභාගය තියෙනවා",
+     "ඔයාට එන්න පුළුවන්ද"
+    ],
+    "en": [
+     "my brother bought a new book",
+     "the exam is next week",
+     "can you come"
+    ]
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "PR-E-03",
+   "type": "passage_reading",
+   "ageBand": "5-10",
+   "difficulty": "easy",
+   "contentKind": "passage",
+   "contentRef": "assets/c3/pa/PR-E-03",
+   "prompt": {
+    "en": "Read this aloud, slowly and smoothly.",
+    "si": "මෙය හෙමින්, සුමටව හඬ නගා කියවන්න."
+   },
+   "targets": 1,
+   "text": {
+    "en": "I go to school.",
+    "si": "මම පාසල් යනවා."
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "PR-E-04",
+   "type": "passage_reading",
+   "ageBand": "5-10",
+   "difficulty": "easy",
+   "contentKind": "passage",
+   "contentRef": "assets/c3/pa/PR-E-04",
+   "prompt": {
+    "en": "Read this aloud, slowly and smoothly.",
+    "si": "මෙය හෙමින්, සුමටව හඬ නගා කියවන්න."
+   },
+   "targets": 1,
+   "text": {
+    "en": "The cat drinks milk.",
+    "si": "බළලා කිරි බොනවා."
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "PR-M-03",
+   "type": "passage_reading",
+   "ageBand": "5-10",
+   "difficulty": "moderate",
+   "contentKind": "passage",
+   "contentRef": "assets/c3/pa/PR-M-03",
+   "prompt": {
+    "en": "Read this aloud, slowly and smoothly.",
+    "si": "මෙය හෙමින්, සුමටව හඬ නගා කියවන්න."
+   },
+   "targets": 2,
+   "text": {
+    "en": "There is a big tree at our house. Birds live in the tree.",
+    "si": "අපේ ගෙදර ලොකු ගහක් තියෙනවා. ගහේ කුරුල්ලෝ ඉන්නවා."
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "PR-M-04",
+   "type": "passage_reading",
+   "ageBand": "5-10",
+   "difficulty": "moderate",
+   "contentKind": "passage",
+   "contentRef": "assets/c3/pa/PR-M-04",
+   "prompt": {
+    "en": "Read this aloud, slowly and smoothly.",
+    "si": "මෙය හෙමින්, සුමටව හඬ නගා කියවන්න."
+   },
+   "targets": 2,
+   "text": {
+    "en": "It is raining today. I brought an umbrella.",
+    "si": "අද වැස්ස වැටෙනවා. මම කුඩයක් ගෙනාවා."
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "PR-D-03",
+   "type": "passage_reading",
+   "ageBand": "5-10",
+   "difficulty": "difficult",
+   "contentKind": "passage",
+   "contentRef": "assets/c3/pa/PR-D-03",
+   "prompt": {
+    "en": "Read this aloud, slowly and smoothly.",
+    "si": "මෙය හෙමින්, සුමටව හඬ නගා කියවන්න."
+   },
+   "targets": 3,
+   "text": {
+    "en": "On Sunday we went to the sea. We played in the sand. We were very tired when we came home.",
+    "si": "ඉරිදා අපි මුහුදට ගියා. වැලි වල අපි සෙල්ලම් කළා. ගෙදර එද්දී අපිට හොඳටම මහන්සියි."
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "PR-D-04",
+   "type": "passage_reading",
+   "ageBand": "5-10",
+   "difficulty": "difficult",
+   "contentKind": "passage",
+   "contentRef": "assets/c3/pa/PR-D-04",
+   "prompt": {
+    "en": "Read this aloud, slowly and smoothly.",
+    "si": "මෙය හෙමින්, සුමටව හඬ නගා කියවන්න."
+   },
+   "targets": 3,
+   "text": {
+    "en": "My friend's name is Nimal. He draws pictures well. We go to school together.",
+    "si": "මගේ යාළුවාගේ නම නිමල්. එයා හොඳට චිත්‍ර අඳිනවා. අපි එකට පාසල් යනවා."
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "PR-E-01",
+   "type": "passage_reading",
+   "ageBand": "11-14",
+   "difficulty": "easy",
+   "contentKind": "passage",
+   "contentRef": "assets/c3/pa/PR-E-01",
+   "prompt": {
+    "en": "Read this aloud, slowly and smoothly.",
+    "si": "මෙය හෙමින්, සුමටව හඬ නගා කියවන්න."
+   },
+   "targets": 2,
+   "text": {
+    "en": "The sun rose over the hills. Birds began to sing in the trees.",
+    "si": "කඳු උඩින් හිරු පායා ආවා. ගස්වල කුරුල්ලෝ නාද කරන්න පටන් ගත්තා."
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "PR-E-02",
+   "type": "passage_reading",
+   "ageBand": "11-14",
+   "difficulty": "easy",
+   "contentKind": "passage",
+   "contentRef": "assets/c3/pa/PR-E-02",
+   "prompt": {
+    "en": "Read this aloud, slowly and smoothly.",
+    "si": "මෙය හෙමින්, සුමටව හඬ නගා කියවන්න."
+   },
+   "targets": 2,
+   "text": {
+    "en": "Our school has a big playground. We play cricket there after class.",
+    "si": "අපේ පාසලට ලොකු ක්‍රීඩාංගණයක් තියෙනවා. පන්තියෙන් පස්සේ අපි එතන ක්‍රිකට් ගහනවා."
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "PR-M-01",
+   "type": "passage_reading",
+   "ageBand": "11-14",
+   "difficulty": "moderate",
+   "contentKind": "passage",
+   "contentRef": "assets/c3/pa/PR-M-01",
+   "prompt": {
+    "en": "Read this aloud, slowly and smoothly.",
+    "si": "මෙය හෙමින්, සුමටව හඬ නගා කියවන්න."
+   },
+   "targets": 3,
+   "text": {
+    "en": "In the monsoon season farmers sow paddy in the fields. The rain fills the fields with green. In a few months the crop ripens and is ready to harvest.",
+    "si": "මෝසම් කාලයේ ගොවියෝ කුඹුරු වල වී වපුරනවා. වැස්ස නිසා කුඹුරු කොළ පාටින් පිරෙනවා. මාස කීපයකින් ගොයම ඉදිලා කපන්න ලෑස්ති වෙනවා."
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "PR-M-02",
+   "type": "passage_reading",
+   "ageBand": "11-14",
+   "difficulty": "moderate",
+   "contentKind": "passage",
+   "contentRef": "assets/c3/pa/PR-M-02",
+   "prompt": {
+    "en": "Read this aloud, slowly and smoothly.",
+    "si": "මෙය හෙමින්, සුමටව හඬ නගා කියවන්න."
+   },
+   "targets": 3,
+   "text": {
+    "en": "We went to Sigiriya with our school. Climbing the steps was a little hard. From the top you can see the whole area.",
+    "si": "අපි පාසලෙන් සීගිරියට ගියා. පඩිපෙළ නගින එක ටිකක් අමාරු වුණා. උඩ ඉඳන් බලද්දී මුළු පළාතම පේනවා."
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "PR-D-01",
+   "type": "passage_reading",
+   "ageBand": "11-14",
+   "difficulty": "difficult",
+   "contentKind": "passage",
+   "contentRef": "assets/c3/pa/PR-D-01",
+   "prompt": {
+    "en": "Read this aloud, slowly and smoothly.",
+    "si": "මෙය හෙමින්, සුමටව හඬ නගා කියවන්න."
+   },
+   "targets": 4,
+   "text": {
+    "en": "A hydroelectric power station builds a dam across a river to collect water. As the water falls from a height it turns turbines. The turning turbine makes electricity through a generator. Part of Sri Lanka's electricity is made this way.",
+    "si": "ජල විදුලි බලාගාරයක් ගඟක් හරහා වේල්ලක් බැඳලා වතුර එකතු කරනවා. ඒ වතුර උසකින් පහළට ගලද්දී ටර්බයින කරකවනවා. කැරකෙන ටර්බයිනයෙන් ජනකයක් හරහා විදුලිය නිපදවනවා. ලංකාවේ විදුලියෙන් කොටසක් මේ විදිහට හැදෙනවා."
+   },
+   "slpApproved": true,
+   "placeholder": true
+  },
+  {
+   "id": "PR-D-02",
+   "type": "passage_reading",
+   "ageBand": "11-14",
+   "difficulty": "difficult",
+   "contentKind": "passage",
+   "contentRef": "assets/c3/pa/PR-D-02",
+   "prompt": {
+    "en": "Read this aloud, slowly and smoothly.",
+    "si": "මෙය හෙමින්, සුමටව හඬ නගා කියවන්න."
+   },
+   "targets": 4,
+   "text": {
+    "en": "Sri Lanka's first railway line opened in 1864 from Colombo to Ambepussa. At that time trains were very important for carrying tea and coffee. Later the line was extended through the hills to Badulla. Even today that hill journey is thought of as one of the most beautiful train rides in the world.",
+    "si": "ලංකාවේ පළමු දුම්රිය මාර්ගය 1864 දී කොළඹ සිට අඹේපුස්ස දක්වා විවෘත කළා. ඒ කාලයේ තේ සහ කෝපි ප්‍රවාහනය කරන්න දුම්රිය ගොඩක් වැදගත් වුණා. පස්සේ කාලයේ මාර්ගය කඳුකරය හරහා බදුල්ල දක්වා දිගු කළා. අදටත් ඒ කඳුකර ගමන ලෝකයේ ලස්සනම දුම්රිය ගමන් වලින් එකක් ලෙස සැලකෙනවා."
+   },
+   "slpApproved": true,
+   "placeholder": true
+  }
+ ]
+}

@@ -1,14 +1,22 @@
 part of '../../therapy_ui.dart';
 
 class _AdaptiveNextState extends State<_AdaptiveNext> {
-  _LinUcbModel? _model;
-  _LinUcbRecommendation? _recommendation;
+  // Demo mode: a fixed activity order (no learning; the recommender runs on the server).
+  _DemoPlan? _model;
+  _DemoPick? _recommendation;
   _TherapyActivityDefinition? _completedActivity;
+  // Live: the activity the server chose next, and whether the planned time is used up.
+  _C3Attempt? _liveNext;
+  bool _timeUp = false;
+  // How much a parent helped in the finished activity (0 none … 3 did most of it); a context input, not a penalty.
+  int? _parentHelp;
   bool _isLoading = true;
   bool _isSaving = false;
   String? _error;
-  double _currentParentHelp = 0.0;
-  bool _hasCurrentParentHelp = false;
+
+  // The feedback chips pass the tap reward; the API takes the tap itself (same 0.2 / 1 / 0.55 rewards).
+  static String _feedbackFor(double reward) =>
+      reward <= 0.2 ? 'too_hard' : (reward >= 1 ? 'just_right' : 'too_easy');
 
   @override
   void initState() {
@@ -16,99 +24,21 @@ class _AdaptiveNextState extends State<_AdaptiveNext> {
     _loadRecommendation();
   }
 
-  Future<void> _loadRecommendation([double? parentHelpLevel]) async {
+  Future<void> _loadRecommendation() async {
     setState(() {
       _isLoading = true;
       _error = null;
-      if (parentHelpLevel != null) {
-        _currentParentHelp = parentHelpLevel;
-        _hasCurrentParentHelp = true;
-      }
     });
-
+    if (_C3Session.isLive) return _loadLive();
     try {
-      final model = await _LinUcbModel.load();
+      final model = await _DemoPlan.load();
       if (!mounted) return;
-
-      int childAge = 7;
-      String? c1Severity = 'mild';
-      bool? c2Secondary = false;
-      List<double>? contextVec;
-      CameraEngagementSnapshot? cameraSnapshot;
-      try {
-        cameraSnapshot = await CameraEngagementSnapshot.loadLatest();
-      } catch (error, stackTrace) {
-        debugPrint(
-          'Could not load camera engagement context: $error\n$stackTrace',
-        );
-      }
-      final sessionStart = model.sessionStartedAtMilliseconds;
-      final hasCurrentCameraSnapshot = cameraSnapshot != null &&
-          sessionStart != null &&
-          cameraSnapshot.recordedAt.millisecondsSinceEpoch >= sessionStart;
-      final cameraOn = hasCurrentCameraSnapshot && cameraSnapshot.cameraEnabled;
-      final recentEngagement = hasCurrentCameraSnapshot
-          ? cameraSnapshot.engagementScore ?? 0.5
-          : 0.82;
-      final contextParentHelp = _hasCurrentParentHelp
-          ? _currentParentHelp
-          : (hasCurrentCameraSnapshot
-              ? cameraSnapshot.parentHelpLevel / 3.0
-              : _currentParentHelp);
-
-      // 1. Fetch live clinical context from backend
-      try {
-        final serverCtx = await TherapyApiService.fetchClinicalContext(
-          cameraOn: cameraOn,
-          parentHelpLevel: contextParentHelp,
-        );
-        if (serverCtx != null && serverCtx['vector'] is List) {
-          final list = (serverCtx['vector'] as List)
-              .map((v) => (v as num).toDouble())
-              .toList();
-          if (list.length == _LinUcbModel.contextSize) {
-            list[7] = cameraOn ? 1.0 : 0.0;
-            list[8] = recentEngagement;
-            list[11] = contextParentHelp.clamp(0.0, 1.0).toDouble();
-            contextVec = list;
-          }
-          final meta = serverCtx['metadata'] as Map<String, dynamic>?;
-          if (meta?['childAge'] is num) {
-            childAge = (meta!['childAge'] as num).toInt();
-          }
-          if (meta?['c1Severity'] is String) {
-            c1Severity = meta!['c1Severity'] as String;
-          }
-          if (meta?['c2SecondaryBehaviours'] is bool) {
-            c2Secondary = meta!['c2SecondaryBehaviours'] as bool;
-          }
-        }
-      } catch (e) {
-        debugPrint('Clinical context network fetch fallback: $e');
-      }
-
-      // 2. Fallback to local clinical context calculation if offline
-      contextVec ??= _LinUcbModel.buildContextVector(
-        childAge: childAge,
-        c1Severity: c1Severity,
-        c2SecondaryBehaviours: c2Secondary,
-        cameraOn: cameraOn,
-        recentEngagementTrend: recentEngagement,
-        recentPerformanceForType: 0.75,
-        sessionCount: model.sessionActivitiesCompleted,
-        parentHelpLevel: contextParentHelp,
-      );
-
       final completedActivity = _activityForId(model.pendingActivityId);
-
-      // 3. Select optimal activity via Hybrid LinUCB
       final recommendation = model.recommend(
-        context: contextVec,
-        childAge: childAge,
-        excludeArmId: model.pendingArmId,
+        activities: _therapyActivities,
+        theme: _InheritedTheme.themeOf(context),
         excludeActivityId: completedActivity?.id,
       );
-
       if (!mounted) return;
       setState(() {
         _model = model;
@@ -126,6 +56,101 @@ class _AdaptiveNextState extends State<_AdaptiveNext> {
     }
   }
 
+  /// A finished activity first gets its feedback card; otherwise show the open or the next activity.
+  Future<void> _loadLive() async {
+    try {
+      if (_C3Session.sessionId == null) {
+        throw const ApiException(
+            'no_session', "Start today's plan from the therapy home first.");
+      }
+      final current = _C3Session.current;
+      if (_C3Session.awaitingResult && current != null) {
+        setState(() {
+          _completedActivity = current.definition;
+          _liveNext = null;
+          _isLoading = false;
+        });
+        return;
+      }
+      final next = current ?? await _C3Session.next();
+      if (!mounted) return;
+      setState(() {
+        _completedActivity = null;
+        _liveNext = next;
+        _timeUp = next == null || _C3Session.advice == 'end_session';
+        _isLoading = false;
+      });
+    } catch (error) {
+      if (!mounted) return;
+      setState(() {
+        _error = ApiException.from(error).message;
+        _isLoading = false;
+      });
+    }
+  }
+
+  /// Posts the finished activity with the feedback tap, follows the server's advice, then asks for the next one.
+  Future<void> _recordLiveFeedback(double reward) async {
+    setState(() => _isSaving = true);
+    try {
+      await _C3Session.postResult(
+          feedback: _feedbackFor(reward), parentHelp: _parentHelp);
+      _parentHelp = null;
+      if (!mounted) return;
+      if (_C3Session.advice == 'offer_break') await _offerBreak();
+      if (!mounted) return;
+      if (_C3Session.advice == 'end_session') {
+        setState(() {
+          _completedActivity = null;
+          _liveNext = null;
+          _timeUp = true;
+          _isSaving = false;
+        });
+        return;
+      }
+      final next = await _C3Session.next();
+      if (!mounted) return;
+      setState(() {
+        _completedActivity = null;
+        _liveNext = next;
+        _timeUp = next == null;
+        _isSaving = false;
+      });
+    } catch (error) {
+      if (!mounted) return;
+      setState(() {
+        _error = ApiException.from(error).message;
+        _isSaving = false;
+      });
+    }
+  }
+
+  Future<void> _offerBreak() async {
+    final takeBreak = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('පොඩි විවේකයක් ගමුද?'),
+        content: const Text(
+            'Time for a short break? Stretch, have some water, then come back.'),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Keep going')),
+          TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Take a break')),
+        ],
+      ),
+    );
+    if (takeBreak == true) {
+      try {
+        await TherapyApiService.takeBreak(_C3Session.sessionId!);
+      } catch (error) {
+        debugPrint('Could not log the break: $error');
+      }
+    }
+  }
+
   _TherapyActivityDefinition? _activityForId(String? id) {
     if (id == null) return null;
     for (final activity in _therapyActivities) {
@@ -134,40 +159,45 @@ class _AdaptiveNextState extends State<_AdaptiveNext> {
     return null;
   }
 
-  Future<void> _recordParentHelp(double helpLevel) async {
+  Future<void> _recordFeedback(double reward) async {
+    if (_C3Session.isLive) return _recordLiveFeedback(reward);
     final model = _model;
     if (model == null || _isSaving) return;
     setState(() => _isSaving = true);
-
     try {
-      // Record parent assistance level (0-3 scale to server)
-      final normLevel = (helpLevel * 3.0).round();
-      final pendingId = model.pendingActivityId ?? 'syllable-practice';
-      await TherapyApiService.recordActivityResult(
-        activityId: pendingId,
-        parentHelpLevel: normLevel,
-        completed: true,
+      await model.recordPendingReward(reward);
+      if (!mounted) return;
+      final recommendation = model.recommend(
+        activities: _therapyActivities,
+        theme: _InheritedTheme.themeOf(context),
+        excludeActivityId: _completedActivity?.id,
       );
-
-      // Re-run LinUCB recommendation with this parent assistance input
-      await _loadRecommendation(helpLevel);
-
       if (!mounted) return;
       setState(() {
+        _recommendation = recommendation;
         _completedActivity = null;
         _isSaving = false;
       });
-    } catch (error) {
-      debugPrint('Parent help recording failed: $error');
+    } catch (error, stackTrace) {
+      debugPrint('Adaptive activity feedback could not be saved: '
+          '$error\n$stackTrace');
       if (!mounted) return;
       setState(() {
-        _completedActivity = null;
+        _error = 'Could not save your feedback: $error';
         _isSaving = false;
       });
     }
   }
 
   Future<void> _startRecommendedActivity() async {
+    final live = _liveNext;
+    if (_C3Session.isLive) {
+      if (live == null || _isSaving) return;
+      await _C3Session.begin();
+      if (!mounted) return;
+      _InheritedNav.of(context)?.go(_C3Session.routeFor(live));
+      return;
+    }
     final model = _model;
     final recommendation = _recommendation;
     if (model == null || recommendation == null || _isSaving) return;
@@ -177,8 +207,8 @@ class _AdaptiveNextState extends State<_AdaptiveNext> {
       if (!mounted) return;
       _InheritedNav.of(context)?.go(recommendation.activity.route);
     } catch (error, stackTrace) {
-      debugPrint(
-          'Adaptive activity selection could not be saved: $error\n$stackTrace');
+      debugPrint('Adaptive activity selection could not be saved: '
+          '$error\n$stackTrace');
       if (!mounted) return;
       setState(() {
         _error = 'Could not save this activity selection: $error';
@@ -188,11 +218,29 @@ class _AdaptiveNextState extends State<_AdaptiveNext> {
   }
 
   Future<void> _finishSession() async {
+    if (_C3Session.isLive) {
+      setState(() => _isSaving = true);
+      try {
+        // A finished activity is still saved; an open one is marked abandoned by complete.
+        if (_C3Session.awaitingResult && _C3Session.current != null)
+          await _C3Session.postResult();
+      } catch (error) {
+        if (!mounted) return;
+        setState(() {
+          _error = ApiException.from(error).message;
+          _isSaving = false;
+        });
+        return;
+      }
+      if (!mounted) return;
+      _InheritedNav.of(context)?.go(_TherapyRoute.sessionComplete);
+      return;
+    }
     final model = _model;
     if (model != null) {
       setState(() => _isSaving = true);
       try {
-        await model.clearPendingWithoutReward();
+        await model.completePendingWithoutFeedback();
       } catch (error, stackTrace) {
         debugPrint(
             'Pending activity could not be cleared: $error\n$stackTrace');
@@ -208,32 +256,39 @@ class _AdaptiveNextState extends State<_AdaptiveNext> {
     _InheritedNav.of(context)?.go(_TherapyRoute.sessionComplete);
   }
 
-  Color _getDifficultyColor(String difficulty) {
-    switch (difficulty) {
-      case 'easy':
-        return const Color(0xFF2E7D32);
-      case 'moderate':
-        return const Color(0xFFE65100);
-      case 'difficult':
-      default:
-        return const Color(0xFFC62828);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final recommendation = _recommendation;
     final completedActivity = _completedActivity;
-
+    final live = _liveNext;
+    final liveDefinition = live?.definition;
+    // What the recommendation card shows, from the server's choice or the on-device one.
+    final (String, String, String)? recommendation = live != null
+        ? (
+            liveDefinition?.emoji ?? '🎯',
+            live.titleEn.isEmpty
+                ? live.titleSi
+                : '${live.titleSi}\n${live.titleEn}',
+            [
+              liveDefinition?.focus,
+              if (live.parentLed) '👪 A parent can help with this one.'
+            ].whereType<String>().join('\n'),
+          )
+        : _recommendation == null
+            ? null
+            : (
+                _recommendation!.activity.emoji,
+                _recommendation!.activity.title,
+                _recommendation!.activity.focus
+              );
     return _BgScaffold(
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
         child: Column(
           children: [
             const _BackHeader(title: ''),
             const Text(
-              'ඔබේ ඊළඟ පුද්ගලාරෝපිත අභ්‍යාසය',
+              'ඔබේ ඊළඟ ක්‍රියාකාරකම',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 21,
@@ -241,136 +296,75 @@ class _AdaptiveNextState extends State<_AdaptiveNext> {
                 color: _C.darkText,
               ),
             ),
-            const SizedBox(height: 4),
-            const Text(
-              'Hybrid LinUCB Adaptive Therapy Recommender',
+            const SizedBox(height: 6),
+            Text(
+              _C3Session.isLive
+                  ? 'Activity ${(_C3Session.activitiesDone + (completedActivity == null && !_timeUp ? 1 : 0)).clamp(1, _C3Session.maxActivities)} of ${_C3Session.maxActivities} today'
+                  : 'Personalized from your practice and chosen adventure world',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.black54,
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(fontSize: 13, color: Colors.black54),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
             if (_isLoading)
               const Padding(
-                padding: EdgeInsets.all(40),
+                padding: EdgeInsets.all(36),
                 child: CircularProgressIndicator(),
               )
             else if (_error != null)
-              _ErrorCard(message: _error!, onRetry: () => _loadRecommendation())
+              _ErrorCard(message: _error!, onRetry: _loadRecommendation)
             else ...[
-              // Parent Assistance check for recently completed activity
               if (completedActivity != null) ...[
-                _ParentHelpCard(
-                  activityTitle: completedActivity.title,
+                _FeedbackCard(
+                  activity: completedActivity,
                   enabled: !_isSaving,
-                  onSelected: _recordParentHelp,
+                  onSelected: _recordFeedback,
+                  parentHelp: _parentHelp,
+                  onParentHelp: _C3Session.isLive
+                      ? (v) => setState(() => _parentHelp = v)
+                      : null,
                 ),
                 const SizedBox(height: 16),
               ],
-
-              // Within-session adaptation break notice (if applicable)
-              if (recommendation != null && recommendation.isBreakRecommended)
+              if (_C3Session.isLive && _timeUp && completedActivity == null)
                 Container(
                   width: double.infinity,
-                  margin: const EdgeInsets.only(bottom: 16),
-                  padding: const EdgeInsets.all(14),
+                  padding: const EdgeInsets.all(22),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFE8F5E9),
-                    borderRadius: BorderRadius.circular(16),
-                    border:
-                        Border.all(color: const Color(0xFF81C784), width: 1.5),
-                  ),
-                  child: Row(
-                    children: [
-                      const Text('🍃', style: TextStyle(fontSize: 28)),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              'සන්සුන් විවේකය (Breathing Break)',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: Color(0xFF1B5E20),
-                              ),
-                            ),
-                            SizedBox(height: 2),
-                            Text(
-                              'අවධානය නැවත ලබා ගැනීමට සන්සුන් හුස්ම ගැනීමේ අභ්‍යාසයක් කරමු.',
-                              style: TextStyle(
-                                  fontSize: 12, color: Colors.black87),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-              // Recommended Activity Card
-              if (recommendation != null)
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFFF8E1),
+                    color: const Color(0xFFFFF3E0),
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: _C.woodMid, width: 2.5),
+                    border: Border.all(color: _C.woodMid, width: 3),
+                  ),
+                  child: const Text(
+                    'අද පුහුණුව ඇති! 🎉\nThat is enough practice for today.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        color: _C.darkText),
+                  ),
+                )
+              else if (recommendation != null &&
+                  (completedActivity == null || !_C3Session.isLive))
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(22),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFF3E0),
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(color: _C.woodMid, width: 3),
                     boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 10,
-                        offset: Offset(0, 4),
-                      ),
+                      BoxShadow(color: Colors.black12, blurRadius: 10),
                     ],
                   ),
                   child: Column(
                     children: [
-                      // Header Row: Emoji & Difficulty Badge
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            recommendation.activity.emoji,
-                            style: const TextStyle(fontSize: 40),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 6,
-                            ),
-                            decoration: BoxDecoration(
-                              color: _getDifficultyColor(
-                                      recommendation.arm.difficulty)
-                                  .withOpacity(0.12),
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                color: _getDifficultyColor(
-                                    recommendation.arm.difficulty),
-                                width: 1.5,
-                              ),
-                            ),
-                            child: Text(
-                              recommendation.arm.difficultyLabelSinhala,
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: _getDifficultyColor(
-                                    recommendation.arm.difficulty),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-
-                      // Title
                       Text(
-                        recommendation.arm.titleSinhala,
+                        recommendation.$1,
+                        style: const TextStyle(fontSize: 44),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        recommendation.$2,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 19,
@@ -378,129 +372,38 @@ class _AdaptiveNextState extends State<_AdaptiveNext> {
                           color: _C.darkText,
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      const SizedBox(height: 8),
                       Text(
-                        recommendation.arm.titleEnglish,
+                        recommendation.$3,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
-                            fontSize: 13, color: Colors.black54),
-                      ),
-                      const SizedBox(height: 12),
-
-                      // Clinical Target Skill Chip
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
+                          fontSize: 14,
+                          color: Colors.black54,
                         ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.black12),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.check_circle_outline,
-                                size: 16, color: _C.green),
-                            const SizedBox(width: 6),
-                            Flexible(
-                              child: Text(
-                                recommendation.arm.targetSkill,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: _C.darkText,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-
-                      // Level 2 Prompt Preview
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.85),
-                          borderRadius: BorderRadius.circular(14),
-                          border: Border.all(color: const Color(0xFFFFCC80)),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'අභ්‍යාස ඉඟිය (Prompt Preview):',
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black54,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              recommendation.level2Item.prompt,
-                              style: const TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500,
-                                color: _C.darkText,
-                              ),
-                            ),
-                            if (recommendation.level2Item.hint.isNotEmpty) ...[
-                              const SizedBox(height: 4),
-                              Text(
-                                recommendation.level2Item.hint,
-                                style: const TextStyle(
-                                    fontSize: 11, color: Colors.black45),
-                              ),
-                            ],
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-
-                      // Algorithmic Confidence & Clinical Rationale
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.auto_awesome,
-                              size: 14, color: _C.woodMid),
-                          const SizedBox(width: 4),
-                          Flexible(
-                            child: Text(
-                              'Predicted Score: ${(recommendation.predictedReward * 10).toStringAsFixed(1)}/10 • UCB: ${recommendation.score.toStringAsFixed(2)}',
-                              style: const TextStyle(
-                                fontSize: 11,
-                                color: Colors.black54,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ],
                       ),
                     ],
                   ),
                 ),
               const SizedBox(height: 20),
-
-              // Action Buttons
-              _Btn(
-                text:
-                    _isSaving ? 'සූදානම් වෙමින්...' : 'අරඹමු! (Start Activity)',
-                onTap: _isSaving ? () {} : _startRecommendedActivity,
-              ),
-              const SizedBox(height: 6),
-              TextButton(
+              if (!_C3Session.isLive || (!_timeUp && completedActivity == null))
+                _Btn(
+                  text: _isSaving ? 'Saving...' : 'අරඹමු!',
+                  onTap: _isSaving ? () {} : _startRecommendedActivity,
+                ),
+              const SizedBox(height: 12),
+              OutlinedButton.icon(
                 onPressed: _isSaving ? null : _finishSession,
-                child: const Text(
-                  'අද සැසිය අවසන් කරන්න (Finish Session)',
-                  style: TextStyle(
-                    color: Colors.black54,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                  ),
+                icon: const Icon(Icons.flag_outlined, size: 18),
+                label: const Text('Finish today\'s session',
+                    style: TextStyle(fontSize: 14)),
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: _C.blue,
+                  side: BorderSide(color: _C.blue.withValues(alpha: 0.45)),
+                  minimumSize: const Size(0, 42),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                 ),
               ),
             ],
@@ -511,19 +414,25 @@ class _AdaptiveNextState extends State<_AdaptiveNext> {
   }
 }
 
-// ============================================================================
-// Parent Assistance Card (Input to context vector [11], not a penalty)
-// ============================================================================
-class _ParentHelpCard extends StatelessWidget {
-  final String activityTitle;
+class _FeedbackCard extends StatelessWidget {
+  final _TherapyActivityDefinition activity;
   final bool enabled;
   final ValueChanged<double> onSelected;
 
-  const _ParentHelpCard({
-    required this.activityTitle,
+  final int? parentHelp;
+
+  /// Live sessions only: the parent-help tap (0–3), sent with the result as recommender context.
+  final ValueChanged<int>? onParentHelp;
+
+  const _FeedbackCard({
+    required this.activity,
     required this.enabled,
     required this.onSelected,
+    this.parentHelp,
+    this.onParentHelp,
   });
+
+  static const _helpLevels = ['None', 'A little', 'A lot', 'Did most'];
 
   @override
   Widget build(BuildContext context) => Container(
@@ -532,77 +441,84 @@ class _ParentHelpCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: const Color(0xFFE0E0E0), width: 1.5),
           boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)],
         ),
         child: Column(
           children: [
-            const Text(
-              'දෙමාපිය සහයෝගය (Parental Assistance Level)',
-              style: TextStyle(
-                fontSize: 14,
+            Text(
+              'How did ${activity.title.toLowerCase()} feel?',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 color: _C.darkText,
               ),
             ),
-            const SizedBox(height: 4),
-            Text(
-              'පසුගිය අභ්‍යාසය සඳහා දරුවාට කොපමණ උදව් අවශ්‍ය වූවාද?',
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 12, color: Colors.black54),
-            ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
             Wrap(
               alignment: WrapAlignment.center,
               spacing: 8,
-              runSpacing: 8,
               children: [
-                _ParentHelpChoice(
-                  label: 'ස්වාධීනයි (None)',
-                  emoji: '🌟',
-                  helpLevel: 0.0,
+                _FeedbackChoice(
+                  label: 'Too hard',
+                  emoji: '😟',
+                  reward: 0.2,
                   enabled: enabled,
                   onSelected: onSelected,
                 ),
-                _ParentHelpChoice(
-                  label: 'සුළු උදව් (Minimal)',
-                  emoji: '👍',
-                  helpLevel: 0.33,
+                _FeedbackChoice(
+                  label: 'Just right',
+                  emoji: '🙂',
+                  reward: 1,
                   enabled: enabled,
                   onSelected: onSelected,
                 ),
-                _ParentHelpChoice(
-                  label: 'මධ්‍යස්ථ (Moderate)',
-                  emoji: '🤝',
-                  helpLevel: 0.67,
-                  enabled: enabled,
-                  onSelected: onSelected,
-                ),
-                _ParentHelpChoice(
-                  label: 'සම්පූර්ණ (Full)',
-                  emoji: '❤️',
-                  helpLevel: 1.0,
+                _FeedbackChoice(
+                  label: 'Too easy',
+                  emoji: '😊',
+                  reward: 0.55,
                   enabled: enabled,
                   onSelected: onSelected,
                 ),
               ],
             ),
+            if (onParentHelp != null) ...[
+              const SizedBox(height: 14),
+              const Text('How much did a parent help?',
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: _C.darkText)),
+              const SizedBox(height: 6),
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 6,
+                children: [
+                  for (var i = 0; i < _helpLevels.length; i++)
+                    ChoiceChip(
+                      label: Text(_helpLevels[i],
+                          style: const TextStyle(fontSize: 11)),
+                      selected: parentHelp == i,
+                      onSelected: enabled ? (_) => onParentHelp!(i) : null,
+                    ),
+                ],
+              ),
+            ],
           ],
         ),
       );
 }
 
-class _ParentHelpChoice extends StatelessWidget {
+class _FeedbackChoice extends StatelessWidget {
   final String label;
   final String emoji;
-  final double helpLevel;
+  final double reward;
   final bool enabled;
   final ValueChanged<double> onSelected;
 
-  const _ParentHelpChoice({
+  const _FeedbackChoice({
     required this.label,
     required this.emoji,
-    required this.helpLevel,
+    required this.reward,
     required this.enabled,
     required this.onSelected,
   });
@@ -610,9 +526,8 @@ class _ParentHelpChoice extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ActionChip(
         avatar: Text(emoji),
-        label: Text(label, style: const TextStyle(fontSize: 12)),
-        backgroundColor: const Color(0xFFF5F5F5),
-        onPressed: enabled ? () => onSelected(helpLevel) : null,
+        label: Text(label),
+        onPressed: enabled ? () => onSelected(reward) : null,
       );
 }
 
@@ -629,17 +544,12 @@ class _ErrorCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.red.shade50,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.red.shade200),
         ),
         child: Column(
           children: [
             Text(message, style: TextStyle(color: Colors.red.shade800)),
             const SizedBox(height: 8),
-            TextButton.icon(
-              onPressed: onRetry,
-              icon: const Icon(Icons.refresh, size: 16),
-              label: const Text('Try again'),
-            ),
+            TextButton(onPressed: onRetry, child: const Text('Try again')),
           ],
         ),
       );

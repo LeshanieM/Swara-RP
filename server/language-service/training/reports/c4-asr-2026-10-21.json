@@ -1,0 +1,94 @@
+{
+  "base": "SpideyDLK/wav2vec2-large-xls-r-300m-sinhala-low-LR-part1",
+  "mode": "continue",
+  "shards": [
+    "0"
+  ],
+  "steps": 200,
+  "batch": 1,
+  "accumulate": 1,
+  "device": "cpu",
+  "trainScope": "head",
+  "trainUtterances": 1024,
+  "devUtterances": 128,
+  "testUtterances": 128,
+  "speakers": {
+    "train": 429,
+    "dev": 24,
+    "test": 24
+  },
+  "baselineTest": {
+    "wer": 0.5531,
+    "cer": 0.1526,
+    "utterances": 128
+  },
+  "dev": {
+    "wer": 0.4852,
+    "cer": 0.1038,
+    "utterances": 128
+  },
+  "test": {
+    "wer": 0.5363,
+    "cer": 0.1522,
+    "utterances": 128
+  },
+  "lossLog": [
+    {
+      "step": 0,
+      "loss": 1.6653,
+      "lr": 1e-05,
+      "sec": 1.4
+    },
+    {
+      "step": 25,
+      "loss": 1.9167,
+      "lr": 9.666666666666667e-05,
+      "sec": 33.0
+    },
+    {
+      "step": 50,
+      "loss": 0.3137,
+      "lr": 8.277777777777778e-05,
+      "sec": 62.7
+    },
+    {
+      "step": 75,
+      "loss": 1.4813,
+      "lr": 6.88888888888889e-05,
+      "sec": 98.4
+    },
+    {
+      "step": 100,
+      "loss": 3.05,
+      "lr": 5.500000000000001e-05,
+      "sec": 131.5
+    },
+    {
+      "step": 125,
+      "loss": 0.0364,
+      "lr": 4.111111111111111e-05,
+      "sec": 168.8
+    },
+    {
+      "step": 150,
+      "loss": 0.6098,
+      "lr": 2.7222222222222223e-05,
+      "sec": 209.0
+    },
+    {
+      "step": 175,
+      "loss": 0.6666,
+      "lr": 1.3333333333333333e-05,
+      "sec": 242.5
+    },
+    {
+      "step": 199,
+      "loss": 0.2147,
+      "lr": 0.0,
+      "sec": 275.4
+    }
+  ],
+  "trainedAt": "2026-10-21",
+  "metricEngine": "built-in edit distance (jiwer unavailable in this environment)",
+  "note": "Fine-tuned from local OpenSLR SLR52 audio with speaker- and sentence-disjoint splits."
+}

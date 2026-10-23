@@ -3,11 +3,13 @@
 # ==========================================
 
 backend/node_modules/
+backend/api.js
 
 # Environment variables / secrets
 backend/.env
 backend/.env.*
 !backend/.env.example
+
 
 # Logs
 backend/npm-debug.log*
@@ -183,7 +185,6 @@ ai-service/c3_engagement_training/artifacts/
 *.iml
 
 # VS Code
-.vscode/
 
 # Vim / swap files
 *.swp
@@ -197,8 +198,6 @@ ai-service/c3_engagement_training/artifacts/
 # Environment / Secrets
 # ==========================================
 
-.env
-.env.*
 !.env.example
 
 # Private keys / certificates
@@ -272,3 +271,11 @@ Desktop.ini
 branch_structure.json
 temp_auto_push.bat
 temp_interactive_push.bat
+config.bat
+node_modules
+
+
+.vscode/
+
+# Local DAiSEE archive, licensed videos, extracted features, and resumable caches (never commit).
+/server/vision-service/training/data/

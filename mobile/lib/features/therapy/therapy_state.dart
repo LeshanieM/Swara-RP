@@ -4,12 +4,16 @@ part of 'therapy_ui.dart';
 // PUBLIC ENTRY POINT
 // ---------------------------------------------------------------------------
 /// Therapy journey shown inside the main Swara application.
-class SwaraTherapyUI extends StatelessWidget {
+class SwaraTherapyUI extends ConsumerWidget {
   final String screen;
   const SwaraTherapyUI({super.key, this.screen = 'home'});
 
   @override
-  Widget build(BuildContext context) => _TherapyJourneyShell(screen: screen);
+  Widget build(BuildContext context, WidgetRef ref) {
+    // The journey's screens are plain widgets; the live session reads the child from here.
+    _C3Session.child = ref.watch(activeChildProvider);
+    return _TherapyJourneyShell(screen: screen);
+  }
 }
 
 // ============================================================================

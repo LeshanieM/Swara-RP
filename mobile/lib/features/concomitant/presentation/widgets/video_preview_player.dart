@@ -73,7 +73,7 @@ class _VideoPreviewPlayerState extends State<VideoPreviewPlayer> {
       }
       return;
     }
-    final c = created;
+    final c = created!;
     if (!mounted || _disposed) {
       await c.dispose();
       return;

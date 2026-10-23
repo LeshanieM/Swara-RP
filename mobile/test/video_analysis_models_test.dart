@@ -1,201 +1,75 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:swara/features/concomitant/data/models/video_analysis_models.dart';
 
-Map<String, dynamic> _results() => {
-      'analysis_id': 'abc',
-      'status': 'completed',
-      'video_filename': 'clip.mp4',
-      'results': [
-        {
-          'technology': 'MediaPipe',
-          'technology_key': 'mediapipe',
-          'status': 'completed',
-          'processing_time': 12.45,
-          'video': {'duration': 10.0, 'fps': 30.0, 'width': 640, 'height': 480},
-          'tracking': {
-            'processed_frames': 290,
-            'missing_frames': 10,
-            'tracking_failures': 10
-          },
-          'overlay_video_path': '/tmp/x_overlay.mp4',
-          'c2_status': 'assessed',
-          'inference_ms': 18.2,
-          'c2_predictions': {
-            'status': 'assessed',
-            'model': 'srcd_gru_ordinary',
-            'assessment_status': {'FG': 'assessed', 'HM': 'not_assessed'},
-            'thresholds': {'FG': 0.05, 'HM': null},
-            'hasSecondaryBehaviors': null,
-            'inference_ms': 18.2,
-            'behaviours': {
-              'FG': {
-                'n_windows': 4,
-                'n_positive_windows': 3,
-                'positive_rate': 0.75,
-                'events': [
-                  {
-                    'start_ms': 12000,
-                    'end_ms': 14000,
-                    'mean_probability': 0.87,
-                    'n_windows': 4
-                  },
-                ],
-              },
-              'HM': {
-                'probability': 0.14,
-                'detected': null,
-                'reason': 'not_assessed: precision constraint infeasible',
-                'events': [],
-              },
-            },
-          },
-          'behaviors': {
-            'eye_blink': {
-              'status': 'supported',
-              'detected': true,
-              'frequency': 2,
-              'total_duration': 0.3,
-              'events': [
-                {
-                  'start_time': 1.0,
-                  'end_time': 1.15,
-                  'duration': 0.15,
-                  'peak_value': 0.1
-                },
-                {'start_time': 4.0, 'end_time': 4.15, 'duration': 0.15},
-                {'start_time': null, 'end_time': 5.0}, // unusable: skipped
-              ],
-            },
-            'hand_movement': {
-              'status': 'unsupported',
-              'reason': 'technology_does_not_provide_this_feature'
-            },
-          },
-        },
-        {
-          'technology': '3DDFA-V2',
-          'technology_key': '3ddfa_v2',
-          'status': 'unavailable',
-          'reason': 'model_unavailable: weights missing',
-          'behaviors': {
-            'lip_movement': {
-              'status': 'unavailable',
-              'reason': 'model_unavailable'
-            },
-          },
-        },
-        {
-          'technology': 'OpenFace',
-          'technology_key': 'openface',
-          'status': 'error',
-          'error': 'runtime_error: boom'
-        },
-      ],
-      'timeline': {'video_duration': 10.0},
-      'evaluation': {
-        'ground_truth_provided': false,
-        'evaluation_metrics': 'Not available'
-      },
+/// The vision service's real response, which the API stores as the analysis `result`.
+Map<String, dynamic> _contract() => jsonDecode(
+      File('../server/contracts/c2/analyze-video.response.example.json').readAsStringSync(),
+    ) as Map<String, dynamic>;
+
+Map<String, dynamic> _doc(String status, {Map<String, dynamic>? result, Map<String, dynamic>? error}) => {
+      'id': '6650a0c2f1b2c3d4e5f60718',
+      'childId': 'CH-001',
+      'status': status,
+      'createdAt': '2026-10-18T10:00:00.000Z',
+      'video': {'originalName': 'clip.mp4', 'sizeBytes': 1048576, 'deleted': true},
+      if (result != null) 'result': result,
+      if (error != null) 'error': error,
     };
 
 void main() {
-  test('parses completed, unavailable and failed technologies', () {
-    final r = VideoAnalysisResults.fromJson(_results());
-    expect(r.technologies.length, 3);
-    expect(r.countWhere(TechStatus.completed), 1);
-    expect(r.countWhere(TechStatus.unavailable), 1);
-    expect(r.countWhere(TechStatus.failed), 1);
+  test('parses a completed analysis from the C2 contract', () {
+    final a = VideoAnalysis.fromJson(_doc('completed', result: _contract()));
+    expect(a.isCompleted, isTrue);
+    expect(a.isTerminal, isTrue);
+    expect(a.filename, 'clip.mp4');
 
-    final mp = r.byKey('mediapipe')!;
-    expect(mp.overlayAvailable, isTrue);
-    expect(mp.behavior('eye_blink').events.length,
-        2); // event without start_time skipped
-    expect(mp.behavior('eye_blink').eventCount, 2);
-    expect(mp.tracking.missingFrames, 10);
-    expect(r.durationSeconds, 10.0);
-    expect(r.evaluation.groundTruthProvided, isFalse);
+    final r = a.result!;
+    expect(r.momentsTotal, 7);
+    expect(r.fgCount, 3);
+    expect(r.hmCount, 2);
+    expect(r.hasSecondaryBehaviors, isTrue);
+    expect(r.concomitantScore, closeTo(0.571, 1e-9));
+    expect(r.moments, hasLength(7));
+    expect(r.moments.first.signals.keys, containsAll(kSignals));
+    expect(r.video.resolution, '640x360');
+    expect(r.video.missingFrames, 0);
+
+    final (mean, peak) = r.deviationOf('jaw');
+    expect(mean, isNotNull);
+    expect(peak! >= mean!, isTrue);
+    expect(r.moments.where((m) => m.explanation.isNotEmpty), isNotEmpty);
   });
 
-  test('missing behaviors are unsupported, never zero-valued "supported"', () {
-    final r = VideoAnalysisResults.fromJson(_results());
-    final mp = r.byKey('mediapipe')!;
-    expect(mp.behavior('hand_movement').support, BehaviorSupport.unsupported);
-    expect(mp.behavior('arm_movement').support,
-        BehaviorSupport.unsupported); // not reported at all
-    expect(mp.behavior('arm_movement').isSupported, isFalse);
-    expect(r.byKey('3ddfa_v2')!.behavior('lip_movement').support,
-        BehaviorSupport.unavailable);
-    expect(r.byKey('openface')!.reason, 'runtime_error: boom');
-    expect(r.byKey('openface')!.overlayAvailable, isFalse);
+  test('stages follow the job status', () {
+    final waiting = VideoAnalysis.fromJson(_doc('awaiting_stutter_events'));
+    expect(waiting.stageStatus('queued'), TechStatus.completed);
+    expect(waiting.stageStatus('awaiting_stutter_events'), TechStatus.processing);
+    expect(waiting.stageStatus('processing'), TechStatus.waiting);
+    expect(waiting.isTerminal, isFalse);
+
+    final failed = VideoAnalysis.fromJson(
+      _doc('failed', error: {'code': 'vision_unavailable', 'message': 'The vision service is down.'}),
+    );
+    expect(failed.isTerminal, isTrue);
+    expect(failed.errorMessage, 'The vision service is down.');
+    expect(failed.stageStatus('processing'), TechStatus.failed);
+
+    expect(VideoAnalysis.fromJson(_doc('not_assessed')).isTerminal, isTrue);
   });
 
-  test('parses optional C2 predictions and preserves HM as not assessed', () {
-    final mp = VideoAnalysisResults.fromJson(_results()).byKey('mediapipe')!;
-    final c2 = mp.c2Predictions!;
-    expect(mp.c2Status, 'assessed');
-    expect(mp.inferenceMs, closeTo(18.2, 1e-9));
-    expect(c2.assessmentStatus['FG'], 'assessed');
-    expect(c2.assessmentStatus['HM'], 'not_assessed');
-    expect(c2.thresholds['HM'], isNull);
-    expect(c2.hasSecondaryBehaviors, isNull);
-    expect(c2.behaviours['FG']!.events.single.startMs, 12000);
-    expect(c2.behaviours['HM']!.detected, isNull);
-
-    final legacy = VideoAnalysisResults.fromJson({
-      'results': [
-        {'technology': 'MediaPipe', 'status': 'completed'}
+  test('a moment without enough face is not assessed, and missing fields stay null', () {
+    final r = C2Result.fromJson({
+      'stutterMoments': [
+        {'index': 0, 'start': 1, 'end': 2, 'assessed': false, 'signals': {}},
       ],
-    }).byKey('mediapipe')!;
-    expect(legacy.c2Predictions, isNull);
-  });
-
-  test('empty / malformed payloads do not throw', () {
-    final r = VideoAnalysisResults.fromJson(null);
-    expect(r.hasResults, isFalse);
-    expect(r.durationSeconds, 0);
-    expect(AnalysisStatus.fromJson('garbage').status, 'queued');
-  });
-
-  test('status derives per-technology state only from backend data', () {
-    final s = AnalysisStatus.fromJson({
-      'analysis_id': 'abc',
-      'status': 'processing',
-      'current_technology': '3DDFA-V2',
-      'completed': 2,
-      'total': 5,
-      'technologies_requested': ['mediapipe', 'openface', '3ddfa_v2', 'mmpose'],
-      'per_technology_status': {'mediapipe': 'completed', 'openface': 'error'},
+      'hasSecondaryBehaviors': null,
     });
-    expect(s.statusOf('mediapipe'), TechStatus.completed);
-    expect(s.statusOf('openface'), TechStatus.failed);
-    expect(s.statusOf('3ddfa_v2'), TechStatus.processing); // matches "3DDFA-V2"
-    expect(s.statusOf('mmpose'), TechStatus.waiting);
-    expect(s.isTerminal, isFalse);
-  });
-
-  test('evaluation metrics parse with nullable values', () {
-    final e = EvaluationMetrics.fromJson({
-      'ground_truth_provided': true,
-      'per_technology': {
-        'MediaPipe': {
-          'eye_blink': {
-            'evaluated': true,
-            'precision': 0.5,
-            'recall': 1.0,
-            'f1_score': 0.6667,
-            'frequency_error': -1
-          },
-          'lip_movement': {
-            'evaluated': false,
-            'reason': 'no ground-truth annotations for this behavior'
-          },
-        },
-      },
-    });
-    expect(e.groundTruthProvided, isTrue);
-    final b = e.perTechnology['MediaPipe']!['eye_blink']!;
-    expect(b.f1, closeTo(0.6667, 1e-9));
-    expect(b.meanTimingError, isNull);
-    expect(e.perTechnology['MediaPipe']!['lip_movement']!.evaluated, isFalse);
+    expect(r.assessedMoments, isEmpty);
+    expect(r.hasSecondaryBehaviors, isNull);
+    expect(r.deviationOf('eye'), (null, null));
+    expect(r.concomitantScore, isNull);
   });
 }

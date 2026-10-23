@@ -1,0 +1,98 @@
+{
+  "split": "SEP28k-E",
+  "minVotes": 2,
+  "layer": null,
+  "chosenOn": "dev macro-F1",
+  "input": "acoustic",
+  "encoder": null,
+  "note": "Acoustic-only model trained on locally available SEP-28k episodes; test split is speaker-separated SEP-28k-E. XLS-R embeddings were not extracted.",
+  "test": {
+    "perLabel": {
+      "block": {
+        "precision": 0.1545275590551181,
+        "recall": 0.4801223241590214,
+        "f1": 0.2338049143708116,
+        "positives": 327
+      },
+      "prolongation": {
+        "precision": 0.2780612244897959,
+        "recall": 0.40977443609022557,
+        "f1": 0.331306990881459,
+        "positives": 266
+      },
+      "sound_repetition": {
+        "precision": 0.11687170474516696,
+        "recall": 0.5635593220338984,
+        "f1": 0.19359534206695778,
+        "positives": 236
+      },
+      "word_repetition": {
+        "precision": 0.17981072555205047,
+        "recall": 0.5831202046035806,
+        "f1": 0.27486437613019893,
+        "positives": 391
+      },
+      "interjection": {
+        "precision": 0.33272561531449407,
+        "recall": 0.5447761194029851,
+        "f1": 0.41312959818902095,
+        "positives": 670
+      }
+    },
+    "macroF1": 0.2893402443276897
+  },
+  "ruleBaselineTest": {
+    "perLabel": {
+      "block": {
+        "precision": 0.1875,
+        "recall": 0.027522935779816515,
+        "f1": 0.048,
+        "positives": 327
+      },
+      "prolongation": {
+        "precision": 0.43283582089552236,
+        "recall": 0.10902255639097744,
+        "f1": 0.17417417417417416,
+        "positives": 266
+      },
+      "sound_repetition": {
+        "precision": 0.21428571428571427,
+        "recall": 0.07627118644067797,
+        "f1": 0.1125,
+        "positives": 236
+      },
+      "word_repetition": {
+        "precision": 0.6274509803921569,
+        "recall": 0.08184143222506395,
+        "f1": 0.14479638009049775,
+        "positives": 391
+      },
+      "interjection": {
+        "precision": 0.325,
+        "recall": 0.2716417910447761,
+        "f1": 0.2959349593495935,
+        "positives": 670
+      }
+    },
+    "macroF1": 0.15508110272285308
+  },
+  "comparison": [
+    {
+      "inputs": "acoustic",
+      "head": "logreg",
+      "dev macro-F1": 0.31763329476159574,
+      "test macro-F1": 0.2991673747234632
+    },
+    {
+      "inputs": "acoustic",
+      "head": "mlp",
+      "dev macro-F1": 0.3192554686831623,
+      "test macro-F1": 0.2893402443276897
+    }
+  ],
+  "clips": {
+    "train": 7625,
+    "dev": 2501,
+    "test": 2883
+  }
+}

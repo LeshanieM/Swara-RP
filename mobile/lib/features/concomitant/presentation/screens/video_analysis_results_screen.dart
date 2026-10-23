@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -7,8 +9,8 @@ import 'package:swara/features/concomitant/data/models/video_analysis_models.dar
 import 'package:swara/features/concomitant/data/providers/video_analysis_provider.dart';
 import 'package:swara/features/concomitant/presentation/widgets/video_analysis_ui.dart';
 
-/// Results for the TMMF feature-extraction workflow. This screen deliberately
-/// does not present movement signals as validated FG/HM predictions.
+/// Results of the secondary-behaviour analysis: for each stutter moment, whether the face (FG)
+/// or the head (HM) moved unusually compared with the child's own fluent speech.
 class VideoAnalysisResultsScreen extends ConsumerWidget {
   final String analysisId;
   const VideoAnalysisResultsScreen({super.key, required this.analysisId});
@@ -17,131 +19,117 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final async = ref.watch(videoAnalysisResultsProvider(analysisId));
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.groundAdult,
       appBar: AppBar(
-        title: const Text('Results · ප්‍රතිඵල'),
+        title: Text('Movement analysis results · චලන විශ්ලේෂණ ප්‍රතිඵල', style: AppTextStyles.titleMedium),
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
         actions: [
           IconButton(
-            tooltip: 'Refresh · යාවත්කාලීන කරන්න',
+          tooltip: 'Refresh · නැවුම් කරන්න',
             icon: const Icon(Icons.refresh),
-            onPressed: () =>
-                ref.invalidate(videoAnalysisResultsProvider(analysisId)),
+            onPressed: () => ref.invalidate(videoAnalysisResultsProvider(analysisId)),
           ),
         ],
       ),
-      body: SafeArea(
+      body: CalmSceneBackground(
+        child: SafeArea(
         child: ResponsiveBody(
           child: async.when(
-            loading: () => const SwaraLoadingWidget(
-                message: 'Loading results · ප්‍රතිඵල පූරණය කරමින්'),
+            loading: () => const SwaraLoadingWidget(message: 'Loading the analysis... · විශ්ලේෂණය පූරණය වෙමින් පවතී'),
             error: (e, _) => SwaraErrorWidget(
-              message: VideoAnalysisException.from(e).message,
-              onRetry: () =>
-                  ref.invalidate(videoAnalysisResultsProvider(analysisId)),
+              message: '${VideoAnalysisException.from(e).message} · සම්බන්ධතාව පරීක්ෂා කර නැවත උත්සාහ කරන්න.',
+              onRetry: () => ref.invalidate(videoAnalysisResultsProvider(analysisId)),
             ),
             data: (data) => _content(context, data),
           ),
+        ),
         ),
       ),
     );
   }
 
-  Widget _content(BuildContext context, VideoAnalysisResults data) {
-    final analysis = data.byKey('mediapipe');
-    if (analysis == null || !analysis.isCompleted) {
-      return SwaraErrorWidget(
-        message: analysis == null
-            ? 'No MediaPipe movement analysis was returned.'
-            : 'Movement feature extraction did not complete. ${humanizeReason(analysis.reason)}',
-        onRetry: () => context.pushReplacement('/c2/video/upload'),
+  Widget _content(BuildContext context, VideoAnalysis data) {
+    if (data.isNotAssessed) {
+      return const SwaraEmptyState(
+        title: 'Not assessed · තක්සේරු කර නැත',
+        subtitle: 'වීඩියෝවක් නොතිබූ නිසා අමතර හැසිරීම් තක්සේරු කළේ නැත.',
+        icon: Icons.videocam_off_outlined,
       );
     }
-
-    final tmmf = analysis.tmmf;
-    if ((tmmf == null || !tmmf.hasWindows) && analysis.c2Predictions == null) {
-      return const SwaraEmptyState(
-        title: 'No results · ප්‍රතිඵල නැත',
-        subtitle: 'Try another video · වෙනත් වීඩියෝවක් උත්සාහ කරන්න',
+    final result = data.result;
+    if (!data.isCompleted || result == null) {
+      return SwaraErrorWidget(
+        message: data.isFailed
+            ? 'The analysis did not complete · විශ්ලේෂණය සම්පූර්ණ වූයේ නැත. ${humanizeReason(data.errorMessage)} · විස්තර පරීක්ෂා කර නැවත උත්සාහ කරන්න.'
+            : 'The analysis is still running · විශ්ලේෂණය තවමත් සිදුවෙමින් පවතී.',
+        onRetry: () => context.pushReplacement(data.isFailed ? '/c2/video/upload' : '/c2/video/process/${data.id}'),
+      );
+    }
+    if (result.moments.isEmpty) {
+      return SwaraEmptyState(
+        title: 'No stutter moments were found · ගොත ගැසෙන අවස්ථා හමු නොවීය',
+        subtitle: 'අමතර හැසිරීම් පරීක්ෂා කරන්නේ ගොත ගැසෙන අවස්ථාවලදී පමණයි.',
         icon: Icons.face_retouching_off_outlined,
       );
     }
 
-    final meta = data.videoMeta;
+    final meta = result.video;
     return ListView(
-      padding: videoPagePadding(context),
+      padding: EdgeInsets.all(MediaQuery.sizeOf(context).width < 380 ? AppSpacing.md : AppSpacing.lg),
       children: [
         SwaraCard(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Row(children: [
               const Icon(Icons.videocam_outlined, color: AppColors.primary),
               const SizedBox(width: AppSpacing.sm),
               Expanded(
-                child: Text(data.videoFilename ?? 'Analyzed video',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.titleMedium),
+                child: Text(data.filename ?? 'Analyzed video · විශ්ලේෂණය කළ වීඩියෝව',
+                    maxLines: 2, overflow: TextOverflow.ellipsis, style: AppTextStyles.titleMedium),
               ),
             ]),
             const SizedBox(height: AppSpacing.md),
             Wrap(spacing: AppSpacing.sm, runSpacing: AppSpacing.xs, children: [
-              if (tmmf != null)
-                StatusPill(
-                    label: '${tmmf.windows.length} windows',
-                    color: AppColors.primaryDeep,
-                    icon: Icons.view_week_outlined),
-              if (tmmf?.windowSeconds != null)
-                StatusPill(
-                    label:
-                        '${tmmf!.windowSeconds!.toStringAsFixed(0)} s windows',
-                    color: AppColors.primaryDeep),
-              if (tmmf?.overlap != null)
-                StatusPill(
-                    label: '${(tmmf!.overlap! * 100).round()}% overlap',
-                    color: AppColors.primaryDeep),
-              if (tmmf?.targetFps != null)
-                StatusPill(
-                    label: '${tmmf!.targetFps!.toStringAsFixed(0)} sampled fps',
-                    color: AppColors.primaryDeep),
+              StatusPill(label: '${result.momentsTotal} stutter moments · ගොත ගැසීම් අවස්ථා', color: AppColors.primaryDeep,
+                  icon: Icons.view_week_outlined),
+              if (meta.duration != null)
+                StatusPill(label: fmtSeconds(meta.duration, digits: 0), color: AppColors.primaryDeep),
+              if (meta.analysedFps != null)
+                StatusPill(label: '${meta.analysedFps!.toStringAsFixed(0)} sampled fps · නියැදි රාමු/තත්පර', color: AppColors.primaryDeep),
               if (meta.resolution != null)
-                StatusPill(
-                    label: meta.resolution!, color: AppColors.primaryDeep),
+                StatusPill(label: meta.resolution!, color: AppColors.primaryDeep),
+              if (result.detectorFallback)
+                const StatusPill(label: 'Fallback detector · විකල්ප හඳුනාගැනීම', color: AppColors.warning),
             ]),
           ]),
         ),
         const SizedBox(height: AppSpacing.md),
-        const ResearchNote(
-          'Research features only · පර්යේෂණ දත්ත පමණි',
-          icon: Icons.science_outlined,
-        ),
-        if (analysis.c2Predictions != null) ...[
-          const SizedBox(height: AppSpacing.md),
-          _c2PredictionsSection(analysis.c2Predictions!),
-        ],
-        if (tmmf != null && tmmf.hasWindows) ...[
-          const SectionTitle('Movement summary · චලන සාරාංශය'),
-          _channelGrid(tmmf),
-          const SizedBox(height: AppSpacing.md),
-          _windowPreview(tmmf),
-          const SizedBox(height: AppSpacing.md),
-        ],
+        _summaryCard(result),
+        const SizedBox(height: AppSpacing.md),
+        const SectionTitle('Movement at stutter moments · ගොත ගැසෙන අවස්ථාවල චලනය'),
+        _channelGrid(result),
+        const SizedBox(height: AppSpacing.md),
+        _momentList(result),
+        const SizedBox(height: AppSpacing.md),
         SwaraCard(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('Face tracking · මුහුණු හඳුනාගැනීම',
-                style: AppTextStyles.titleMedium),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text('Tracking · නිරීක්ෂණය', style: AppTextStyles.titleMedium),
             const SizedBox(height: AppSpacing.sm),
             Text(
-              '${analysis.tracking.processedFrames ?? 0} frames analyzed'
-              '${analysis.tracking.missingFrames == null ? '' : ' · ${analysis.tracking.missingFrames} frames without a face'}',
+              '${meta.framesAnalysed ?? 0} frames analyzed · රාමු විශ්ලේෂණය කළා'
+              '${meta.missingFrames == null ? '' : ' · ${meta.missingFrames} frames without a face · මුහුණක් නොපෙනුණු රාමු'}',
               style: AppTextStyles.bodySmall,
             ),
-            if (analysis.processingTime != null)
+            if (result.processingSeconds != null)
               Padding(
                 padding: const EdgeInsets.only(top: AppSpacing.xs),
-                child: Text(
-                    'Processing time: ${fmtSeconds(analysis.processingTime)}',
+                child: Text('Processing time · සැකසීමට ගත වූ කාලය: ${fmtSeconds(result.processingSeconds)}',
                     style: AppTextStyles.caption),
+              ),
+            for (final w in result.warnings)
+              Padding(
+                padding: const EdgeInsets.only(top: AppSpacing.xs),
+                child: Text('Note · සටහන: $w', style: AppTextStyles.caption.copyWith(color: AppColors.warning)),
               ),
           ]),
         ),
@@ -149,181 +137,248 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
         TextButton.icon(
           onPressed: () => context.pushReplacement('/c2/video/upload'),
           icon: const Icon(Icons.add),
-          label: const Text('Another video · තවත් වීඩියෝවක්'),
+          label: const Text('Analyze another video · තවත් වීඩියෝවක් විශ්ලේෂණය කරන්න'),
         ),
         const SizedBox(height: AppSpacing.xl),
       ],
     );
   }
 
-  Widget _c2PredictionsSection(C2Predictions predictions) {
-    final fg = predictions.behaviours['FG'];
-    final events = fg?.events ?? const <C2PredictionEvent>[];
-    final flaggedMs = _totalFlaggedMilliseconds(events);
-
+  Widget _summaryCard(C2Result r) {
+    final (label, color) = switch (r.hasSecondaryBehaviors) {
+      true => ('Secondary behaviours seen · අමතර හැසිරීම් දක්නට ලැබුණි', AppColors.warning),
+      false => ('No secondary behaviours seen · අමතර හැසිරීම් දක්නට නොලැබුණි', AppColors.success),
+      null => ('Could not be assessed · තක්සේරු කිරීමට නොහැකි විය', AppColors.textLight),
+    };
     return SwaraCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Detected Behaviours (Research Model)',
-              style: AppTextStyles.titleMedium),
-          const SizedBox(height: AppSpacing.sm),
-          if (predictions.hasSecondaryBehaviors == null)
-            const ResearchNote(
-              'Secondary behaviours: assessment incomplete — HM not assessed by the model',
-              icon: Icons.info_outline,
-            ),
-          const SizedBox(height: AppSpacing.sm),
-          Text(
-            'FG — assessed: ${events.length} facial grimacing intervals detected · '
-            '${(flaggedMs / 1000).toStringAsFixed(1)} s total time flagged',
-            style: AppTextStyles.bodySmall,
-          ),
-          if (events.isEmpty)
-            Padding(
-              padding: const EdgeInsets.only(top: AppSpacing.xs),
-              child: Text('No FG intervals met the model’s event rule.',
-                  style: AppTextStyles.caption),
-            )
-          else
-            ...events.map((event) => ListTile(
-                  dense: true,
-                  contentPadding: EdgeInsets.zero,
-                  leading: const Icon(Icons.schedule,
-                      size: 18, color: AppColors.primaryDeep),
-                  title: Text(
-                    '${_formatC2Time(event.startMs)}–${_formatC2Time(event.endMs)}',
-                    style: AppTextStyles.label,
-                  ),
-                )),
-          const SizedBox(height: AppSpacing.xs),
-          Text(
-              'Head movement detection: not assessed by this model (see limitations)',
-              style: AppTextStyles.bodySmall),
-          const SizedBox(height: AppSpacing.md),
-          const ResearchNote(
-            'FG detection is trained on adult CASA interview/reading videos. It is not validated on children, does not diagnose stuttering, and should not replace clinical assessment.',
-            icon: Icons.warning_amber_rounded,
-          ),
-        ],
-      ),
-    );
-  }
-
-  String _formatC2Time(int milliseconds) {
-    final seconds = (milliseconds / 1000).floor();
-    final minutesPart = (seconds ~/ 60).toString().padLeft(2, '0');
-    final secondsPart = (seconds % 60).toString().padLeft(2, '0');
-    return '$minutesPart:$secondsPart';
-  }
-
-  int _totalFlaggedMilliseconds(List<C2PredictionEvent> events) {
-    if (events.isEmpty) return 0;
-    final ordered = [...events]..sort((a, b) => a.startMs.compareTo(b.startMs));
-    var start = ordered.first.startMs;
-    var end = ordered.first.endMs;
-    var total = 0;
-    for (final event in ordered.skip(1)) {
-      if (event.startMs <= end) {
-        if (event.endMs > end) end = event.endMs;
-      } else {
-        total += end - start;
-        start = event.startMs;
-        end = event.endMs;
-      }
-    }
-    return total + (end - start);
-  }
-
-  Widget _channelGrid(TmmfResult tmmf) {
-    const channels = [
-      ('eye', 'Eye · ඇස්', Icons.remove_red_eye_outlined),
-      ('lip', 'Lip · තොල්', Icons.sentiment_satisfied_alt_outlined),
-      ('jaw', 'Jaw · හකු', Icons.face_outlined),
-      ('head', 'Head · හිස', Icons.accessibility_new_outlined),
-    ];
-    return LayoutBuilder(builder: (context, constraints) {
-      final wide = constraints.maxWidth >= 560;
-      final width = wide
-          ? (constraints.maxWidth - AppSpacing.md) / 2
-          : constraints.maxWidth;
-      return Wrap(
-        spacing: AppSpacing.md,
-        runSpacing: AppSpacing.md,
-        children: [
-          for (final (key, label, icon) in channels)
-            SizedBox(
-              width: width,
-              child: _channelCard(tmmf, key, label, icon),
-            ),
-        ],
-      );
-    });
-  }
-
-  Widget _channelCard(
-      TmmfResult tmmf, String key, String label, IconData icon) {
-    final meanKey = '${key}_mean';
-    final velocityKey = '${key}_max_velocity';
-    final means = tmmf.windows
-        .map((w) => w.features[meanKey])
-        .whereType<double>()
-        .toList();
-    final velocities = tmmf.windows
-        .map((w) => w.features[velocityKey])
-        .whereType<double>()
-        .toList();
-    final average =
-        means.isEmpty ? null : means.reduce((a, b) => a + b) / means.length;
-    final peak =
-        velocities.isEmpty ? null : velocities.reduce((a, b) => a > b ? a : b);
-    return SwaraCard(
+      padding: const EdgeInsets.all(AppSpacing.md),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(children: [
-          Icon(icon, color: AppColors.primaryDeep),
+          Icon(Icons.face_retouching_natural, color: color, size: 20),
           const SizedBox(width: AppSpacing.sm),
-          Expanded(child: Text(label, style: AppTextStyles.titleMedium)),
+          Expanded(child: Text(label, style: AppTextStyles.label.copyWith(color: color))),
         ]),
         const SizedBox(height: AppSpacing.md),
-        _metricLine('Average window signal', average),
-        const SizedBox(height: AppSpacing.xs),
-        _metricLine('Peak window velocity', peak),
+        Text(
+          '${r.momentsWithBehaviour} / ${r.momentsAssessed} assessed moments · තක්සේරු කළ අවස්ථා',
+          style: AppTextStyles.label,
+        ),
+        if (r.concomitantScore != null) ...[
+          const SizedBox(height: AppSpacing.sm),
+          Text('Score · ලකුණ  ${r.concomitantScore!.toStringAsFixed(2)}', style: AppTextStyles.caption),
+        ],
+        const SizedBox(height: AppSpacing.md),
+        _pieDistribution(r),
       ]),
     );
   }
 
-  Widget _metricLine(String label, double? value) => Row(
-        children: [
-          Expanded(child: Text(label, style: AppTextStyles.caption)),
-          Text(value == null ? '—' : value.toStringAsFixed(4),
-              style: AppTextStyles.label),
-        ],
-      );
+  Widget _pieDistribution(C2Result result) {
+    var fgOnly = 0;
+    var hmOnly = 0;
+    var both = 0;
+    var neither = 0;
+    for (final moment in result.assessedMoments) {
+      if (moment.fg.present && moment.hm.present) {
+        both++;
+      } else if (moment.fg.present) {
+        fgOnly++;
+      } else if (moment.hm.present) {
+        hmOnly++;
+      } else {
+        neither++;
+      }
+    }
+    final slices = <_PieSliceData>[
+      _PieSliceData('FG only · මුහුණ පමණක්', fgOnly, AppColors.coralDeep),
+      _PieSliceData('HM only · හිස පමණක්', hmOnly, AppColors.primaryDeep),
+      _PieSliceData('Both · දෙකම', both, AppColors.sun),
+      _PieSliceData('Neither · කිසිවක් නැත', neither, AppColors.success),
+    ];
 
-  Widget _windowPreview(TmmfResult tmmf) {
-    final preview = tmmf.windows.take(8).toList(growable: false);
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text('Assessed moment results · තක්සේරු කළ අවස්ථා', style: AppTextStyles.label),
+      const SizedBox(height: AppSpacing.xs),
+      Text('Pinch to zoom · විශාල කිරීමට ඇඟිලි දෙකෙන් විහිදුවන්න', style: AppTextStyles.caption),
+      const SizedBox(height: AppSpacing.sm),
+      LayoutBuilder(builder: (context, constraints) {
+        final chartSize = constraints.maxWidth < 350 ? 180.0 : 210.0;
+        final chart = SizedBox(
+          width: chartSize,
+          height: chartSize,
+          child: InteractiveViewer(
+            minScale: 0.8,
+            maxScale: 3,
+            constrained: false,
+            boundaryMargin: const EdgeInsets.all(48),
+            child: SizedBox(
+              width: chartSize,
+              height: chartSize,
+              child: CustomPaint(
+                painter: _PieChartPainter(slices.map((slice) => slice.value.toDouble()).toList(),
+                    slices.map((slice) => slice.color).toList()),
+              ),
+            ),
+          ),
+        );
+        final legend = Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (final slice in slices) _pieLegend(slice, result.momentsAssessed),
+            const SizedBox(height: AppSpacing.xs),
+            Text('Total: ${result.momentsAssessed}', style: AppTextStyles.caption),
+          ],
+        );
+        if (constraints.maxWidth >= 440) {
+          return Row(children: [chart, const SizedBox(width: AppSpacing.md), Expanded(child: legend)]);
+        }
+        return Column(children: [chart, legend]);
+      }),
+    ]);
+  }
+
+  Widget _pieLegend(_PieSliceData slice, int total) {
+    final percent = total == 0 ? 0 : (slice.value * 100 / total).round();
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 3),
+      child: Row(children: [
+        Container(width: 11, height: 11, decoration: BoxDecoration(color: slice.color, shape: BoxShape.circle)),
+        const SizedBox(width: AppSpacing.xs),
+        Expanded(child: Text(slice.label, style: AppTextStyles.caption)),
+        Text('${slice.value} ($percent%)', style: AppTextStyles.label),
+      ]),
+    );
+  }
+
+  Widget _channelGrid(C2Result r) {
+    final channels = const [
+      ('eye', 'Eyes · ඇස්', Icons.remove_red_eye_outlined),
+      ('lip', 'Lips · තොල්', Icons.sentiment_satisfied_alt_outlined),
+      ('jaw', 'Jaw · හකු', Icons.face_outlined),
+      ('cheek', 'Cheeks · කම්මුල්', Icons.mood_outlined),
+      ('head', 'Head · හිස', Icons.accessibility_new_outlined),
+    ];
+    final values = [
+      for (final (key, label, icon) in channels)
+        (
+          label: label,
+          icon: icon,
+          mean: r.deviationOf(key).$1,
+          peak: r.deviationOf(key).$2,
+        ),
+    ];
+    final maxPeak = values.fold<double>(
+      0,
+      (maximum, item) => item.peak != null && item.peak! > maximum ? item.peak! : maximum,
+    );
+    return SwaraCard(
+      padding: const EdgeInsets.all(AppSpacing.md),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(children: [
+          Expanded(child: Text('Movement profile · චලන සාරාංශය', style: AppTextStyles.titleMedium)),
+          const Icon(Icons.insights_rounded, color: AppColors.primaryDeep),
+        ]),
+        const SizedBox(height: AppSpacing.xs),
+        Text('Mean / peak deviation (SD) · සාමාන්‍ය / උපරිම අපගමනය', style: AppTextStyles.caption),
+        const SizedBox(height: AppSpacing.xs),
+        Wrap(spacing: AppSpacing.md, children: [
+          _profileLegend(AppColors.primaryDeep, 'Mean · සාමාන්‍ය'),
+          _profileLegend(AppColors.primaryLight, 'Peak · උපරිම'),
+        ]),
+        const SizedBox(height: AppSpacing.md),
+        for (var i = 0; i < values.length; i++) ...[
+          _channelProfileRow(values[i], maxPeak),
+          if (i < values.length - 1) const SizedBox(height: AppSpacing.md),
+        ],
+      ]),
+    );
+  }
+
+  Widget _profileLegend(Color color, String label) => Row(mainAxisSize: MainAxisSize.min, children: [
+        Container(width: 9, height: 9, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
+        const SizedBox(width: AppSpacing.xs),
+        Text(label, style: AppTextStyles.caption),
+      ]);
+
+  Widget _channelProfileRow(({String label, IconData icon, double? mean, double? peak}) item, double maxPeak) {
+    final peakFraction = maxPeak <= 0 || item.peak == null
+        ? 0.0
+        : (item.peak! / maxPeak).clamp(0.0, 1.0).toDouble();
+    final meanFraction = maxPeak <= 0 || item.mean == null
+        ? 0.0
+        : (item.mean! / maxPeak).clamp(0.0, 1.0).toDouble();
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Row(children: [
+        Icon(item.icon, color: AppColors.primaryDeep, size: 18),
+        const SizedBox(width: AppSpacing.xs),
+        Expanded(child: Text(item.label, style: AppTextStyles.label)),
+        Text(
+          '${item.mean?.toStringAsFixed(1) ?? '—'} / ${item.peak?.toStringAsFixed(1) ?? '—'} SD',
+          style: AppTextStyles.caption,
+        ),
+      ]),
+      const SizedBox(height: AppSpacing.xs),
+      ClipRRect(
+        borderRadius: AppRadii.pillAll,
+        child: SizedBox(
+          height: 10,
+          child: Stack(fit: StackFit.expand, children: [
+            const ColoredBox(color: AppColors.divider),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: FractionallySizedBox(
+                widthFactor: peakFraction,
+                child: const ColoredBox(color: AppColors.primaryLight),
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: FractionallySizedBox(
+                widthFactor: meanFraction,
+                child: const ColoredBox(color: AppColors.primaryDeep),
+              ),
+            ),
+          ]),
+        ),
+      ),
+    ]);
+  }
+
+  Widget _momentList(C2Result r) {
     return SwaraCard(
       padding: EdgeInsets.zero,
       child: ExpansionTile(
-        leading: const Icon(Icons.view_timeline_outlined,
-            color: AppColors.primaryDeep),
-        title: Text('Windows · කාල පරාස', style: AppTextStyles.titleMedium),
-        subtitle: Text('${preview.length} of ${tmmf.windows.length}',
-            style: AppTextStyles.caption),
-        childrenPadding: const EdgeInsets.fromLTRB(
-            AppSpacing.md, 0, AppSpacing.md, AppSpacing.md),
+        leading: const Icon(Icons.view_timeline_outlined, color: AppColors.primaryDeep),
+        title: Text('Stutter moments · ගොත ගැසෙන අවස්ථා', style: AppTextStyles.titleMedium),
+        subtitle: Text('${r.momentsAssessed} of ${r.momentsTotal} could be assessed · තක්සේරු කළ හැකි විය', style: AppTextStyles.caption),
+        childrenPadding: const EdgeInsets.fromLTRB(AppSpacing.md, 0, AppSpacing.md, AppSpacing.md),
         children: [
-          for (var i = 0; i < preview.length; i++)
+          for (final m in r.moments)
             ListTile(
               dense: true,
               contentPadding: EdgeInsets.zero,
-              title: Text('Window ${i + 1}', style: AppTextStyles.label),
+              title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(
+                    'Moment ${m.index + 1} · අවස්ථාව ${m.index + 1} · ${m.start.toStringAsFixed(1)}–${m.end.toStringAsFixed(1)} s'
+                    '${m.types.isEmpty ? '' : ' · ${m.types.map((t) => t.replaceAll('_', ' ')).join(', ')}'}',
+                    style: AppTextStyles.label,
+                ),
+                if (!m.assessed || m.fg.present || m.hm.present) ...[
+                  const SizedBox(height: AppSpacing.xs),
+                  Wrap(spacing: AppSpacing.xs, runSpacing: AppSpacing.xs, children: [
+                    if (!m.assessed) const StatusPill(label: 'Face not visible · මුහුණ නොපෙනේ', color: AppColors.textLight),
+                    if (m.fg.present) const StatusPill(label: 'FG · මුහුණ', color: AppColors.warning),
+                    if (m.hm.present) const StatusPill(label: 'HM · හිස', color: AppColors.warning),
+                  ]),
+                ],
+              ]),
               subtitle: Text(
-                '${preview[i].startTime.toStringAsFixed(1)}–${preview[i].endTime.toStringAsFixed(1)} s\n'
-                'Eye ${_short(preview[i].features['eye_mean'])} · '
-                'Lip ${_short(preview[i].features['lip_mean'])} · '
-                'Jaw ${_short(preview[i].features['jaw_mean'])} · '
-                'Head ${_short(preview[i].features['head_mean'])}',
+                m.explanation.isNotEmpty
+                    ? '${m.explanation.join('\n')}\nResearch estimate · පර්යේෂණ ඇස්තමේන්තුවක්'
+                    : (m.assessed
+                        ? 'Within this child\'s normal movement. · මෙම දරුවාගේ සාමාන්‍ය චලන පරාසය තුළයි.'
+                        : 'Too little of the face was visible. · මුහුණ ප්‍රමාණවත් ලෙස නොපෙනුණි.'),
                 style: AppTextStyles.caption,
               ),
             ),
@@ -331,7 +386,49 @@ class VideoAnalysisResultsScreen extends ConsumerWidget {
       ),
     );
   }
+}
 
-  String _short(double? value) =>
-      value == null ? '—' : value.toStringAsFixed(2);
+class _PieSliceData {
+  final String label;
+  final int value;
+  final Color color;
+
+  const _PieSliceData(this.label, this.value, this.color);
+}
+
+class _PieChartPainter extends CustomPainter {
+  final List<double> values;
+  final List<Color> colors;
+
+  const _PieChartPainter(this.values, this.colors);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final diameter = math.min(size.width, size.height);
+    final rect = Rect.fromCircle(center: size.center(Offset.zero), radius: diameter / 2);
+    final total = values.fold<double>(0, (sum, value) => sum + value);
+    if (total <= 0) {
+      canvas.drawCircle(rect.center, rect.width / 2, Paint()..color = AppColors.divider);
+      return;
+    }
+    var start = -math.pi / 2;
+    for (var i = 0; i < values.length; i++) {
+      if (values[i] <= 0) continue;
+      final sweep = values[i] / total * math.pi * 2;
+      canvas.drawArc(rect, start, sweep, true, Paint()..color = colors[i]);
+      start += sweep;
+    }
+    canvas.drawCircle(
+      rect.center,
+      diameter / 2,
+      Paint()
+        ..color = AppColors.surfaceRaised
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant _PieChartPainter oldDelegate) =>
+      oldDelegate.values != values || oldDelegate.colors != colors;
 }

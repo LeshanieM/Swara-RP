@@ -1,0 +1,66 @@
+{
+  "audio": {
+    "originalName": "word.wav",
+    "durationSec": 0.52,
+    "deleted": true
+  },
+  "wordIndex": 0,
+  "expected": "අම්මා",
+  "alternatives": [
+    "මල",
+    "අක්කා",
+    "තාත්තා"
+  ],
+  "decision": "mismatch",
+  "heard": "අක්ක",
+  "heardRaw": "අක්ක",
+  "similarity": 0.4,
+  "confidence": 0.7772,
+  "scores": {
+    "expected": 0.9082,
+    "gop": 0.8039,
+    "alternatives": [
+      {
+        "word": "මල",
+        "nll": 1.0968,
+        "similarity": 0
+      },
+      {
+        "word": "අක්කා",
+        "nll": 0.2352,
+        "similarity": 0.8
+      },
+      {
+        "word": "තාත්තා",
+        "nll": 1.6438,
+        "similarity": 0.1667
+      }
+    ],
+    "expectedForm": "අම්මා",
+    "margin": -0.673
+  },
+  "reasons": [
+    "alternative_fits_better:අක්කා"
+  ],
+  "engine": {
+    "name": "ctc",
+    "model": "SpideyDLK/wav2vec2-large-xls-r-300m-sinhala-low-LR-part1",
+    "repetitionPreserving": true
+  },
+  "methodVersion": "c3-word-check-0.1",
+  "createdAt": "2026-10-18T13:57:20.337Z",
+  "checkId": "6ad4d040a5fd14ceb03b03bb",
+  "attemptId": "6ad4d03fa5fd14ceb03b03b7",
+  "targetWords": [
+    "අම්මා",
+    "මල"
+  ],
+  "verification": {
+    "source": "word_check",
+    "words": 2,
+    "checked": 1,
+    "matched": 0,
+    "mismatched": 1,
+    "unclear": 0
+  }
+}

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swara/core/theme/app_theme.dart';
+import '../../data/models/speech_assessment.dart';
 
 class SpeechCompletionScreen extends StatelessWidget {
-  final int durationSeconds;
+  final SpeechSubmission submission;
 
-  const SpeechCompletionScreen({super.key, required this.durationSeconds});
+  const SpeechCompletionScreen({super.key, required this.submission});
+
+  int get durationSeconds => submission.durationSeconds;
 
   String _formatTime(int sec) {
     final m = sec ~/ 60;
@@ -58,7 +61,9 @@ class SpeechCompletionScreen extends StatelessWidget {
                       const Text('Speaking Duration', style: TextStyle(fontSize: 16, color: AppColors.textLight, fontWeight: FontWeight.bold)),
                       const Text('කථන කාලය', style: TextStyle(fontSize: 14, color: AppColors.textLight)),
                       const SizedBox(height: 8),
-                      Text(_formatTime(durationSeconds), style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: AppColors.primaryDeep)),
+                      // A chosen recording has no timer; its length comes back with the analysis.
+                      Text(durationSeconds > 0 ? _formatTime(durationSeconds) : 'Uploaded',
+                          style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: AppColors.primaryDeep)),
                     ],
                   ),
                 ),
@@ -67,7 +72,7 @@ class SpeechCompletionScreen extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () => context.pushReplacement('/c1/result', extra: durationSeconds),
+                    onPressed: () => context.pushReplacement('/c1/result', extra: submission),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.ctaOrange,
                       padding: const EdgeInsets.symmetric(vertical: 18),

@@ -7,8 +7,6 @@ class _TherapyActivityDefinition {
   final String focus;
   final String instruction;
   final List<String> prompts;
-  final List<String> sentenceWords;
-  final List<List<String>> expectedAnswers;
 
   const _TherapyActivityDefinition({
     required this.id,
@@ -17,8 +15,6 @@ class _TherapyActivityDefinition {
     required this.focus,
     required this.instruction,
     required this.prompts,
-    this.sentenceWords = const [],
-    this.expectedAnswers = const [],
   });
 
   String get route {
@@ -28,69 +24,66 @@ class _TherapyActivityDefinition {
       case 'syllable-practice':
         return _TherapyRoute.syllablePractice;
       case 'picture-description':
-        return _TherapyRoute.pictureIntro;
-      case 'guided-conversation':
-        return _TherapyRoute.guidedConversation;
-      case 'word-phrase-practice':
+        return _TherapyRoute.pictureActivity;
       default:
         return '${_TherapyRoute.practiceActivity}/$id';
     }
   }
-
-  List<String> expectedAnswersForPrompt(int index) =>
-      index < expectedAnswers.length ? expectedAnswers[index] : const [];
 }
 
-// Exactly 5 clinically-selected, functional therapy activities
+/// The therapy activity library: the six activity types the team chose (same ids as the server's catalog
+/// `appActivityId`). The prompts here are only for browsing the library; a live session uses the server's item.
 const _therapyActivities = <_TherapyActivityDefinition>[
   _TherapyActivityDefinition(
     id: 'breathing-body-awareness',
-    title: 'හුස්ම ගැනීමේ විවේකය (Breathing & Relaxation)',
+    title: 'Breathing and relaxation',
     emoji: '🌬️',
     focus: 'Notice your breath and release body tension',
     instruction: 'Follow the breathing circle, then check in with your body.',
     prompts: ['Breathe in gently, then let your shoulders soften.'],
   ),
   _TherapyActivityDefinition(
-    id: 'syllable-practice',
-    title: 'අක්ෂර පුහුණුව (Syllable Practice)',
-    emoji: '🔤',
-    focus: 'Build words one calm syllable at a time',
-    instruction: 'Join the word parts slowly, then say the whole word smoothly.',
-    prompts: ['අම්-මා  (mother)', 'ම-ල  (flower)', 'ගෙ-දර  (home)', 'පා-ට  (colour)', 'පො-ත  (book)'],
-  ),
-  _TherapyActivityDefinition(
-    id: 'word-phrase-practice',
-    title: 'වචන සහ වාක්‍ය ඛණ්ඩ (Word & Phrase Practice)',
-    emoji: '💬',
-    focus: 'Move from a single word to a short phrase with gentle onset',
-    instruction: 'Begin gently. Pause between the word and the phrase to maintain easy onset.',
-    prompts: [
-      'තනි වචනය සෙමින් කියන්න: මල (Say the word: flower)',
-      'දැන් වචන දෙකක් එකතු කරන්න: ලස්සන මල (Now say: beautiful flower)',
-      'සම්පූර්ණ වාක්‍යය කියන්න: වත්තේ ලස්සන මලක් තියෙනවා (Say the sentence smoothly)',
-    ],
-    expectedAnswers: [
-      ['මල'],
-      ['ලස්සන මල'],
-      ['වත්තේ ලස්සන මලක් තියෙනවා'],
-    ],
-  ),
-  _TherapyActivityDefinition(
     id: 'picture-description',
-    title: 'පින්තූර විස්තරය (Picture Description)',
+    title: 'Picture description',
     emoji: '🖼️',
     focus: 'Describe what you notice using smooth short phrases',
-    instruction: 'Look carefully at the scene, choose one detail, and describe it in your own words.',
+    instruction:
+        'Look carefully, choose one detail, and describe it in your own words.',
     prompts: ['What do you see happening in the picture?'],
   ),
   _TherapyActivityDefinition(
-    id: 'guided-conversation',
-    title: 'මඟපෙන්වන සංවාදය (Guided Conversation)',
-    emoji: '🎙️',
-    focus: 'Share an idea and listen for a natural pause',
-    instruction: 'Answer the question in your own words. There is no right answer.',
-    prompts: ['What is something fun you did today or enjoy doing with friends?'],
+    id: 'picture-naming',
+    title: 'Picture naming',
+    emoji: '🐘',
+    focus: 'Name the picture with a gentle start',
+    instruction: 'Look at the picture and say its name slowly and gently.',
+    prompts: ['පූසා', 'බෝලය'],
+  ),
+  _TherapyActivityDefinition(
+    id: 'syllable-practice',
+    title: 'Syllable practice',
+    emoji: '🔤',
+    focus: 'Build words one calm syllable at a time',
+    instruction:
+        'Join the word parts slowly, then say the whole word smoothly.',
+    prompts: ['අම්-මා  (mother)', 'ම-ල  (flower)', 'ගෙ-දර  (home)'],
+  ),
+  _TherapyActivityDefinition(
+    id: 'word-phrase-practice',
+    title: 'Word and phrase practice',
+    emoji: '💬',
+    focus: 'Move from a single word to a short phrase',
+    instruction: 'Begin gently. Pause between the word and the phrase.',
+    prompts: ['ඇපල්', 'ඇපල් කන්න', 'මම ඇපල් කනවා'],
+  ),
+  _TherapyActivityDefinition(
+    id: 'reading-aloud',
+    title: 'Paragraph reading',
+    emoji: '📖',
+    focus: 'Read at a comfortable pace with natural pauses',
+    instruction:
+        'Read the passage aloud. Pause at the full stops and take your time.',
+    prompts: ['අපේ ගෙදර ලොකු ගහක් තියෙනවා. ගහේ කුරුල්ලෝ ඉන්නවා.'],
   ),
 ];
 
@@ -106,179 +99,30 @@ class _PracticeActivity extends StatefulWidget {
 class _PracticeActivityState extends State<_PracticeActivity> {
   int _promptIndex = 0;
   bool _recorded = false;
-  final Set<int> _recordedPrompts = {};
-  late final DateTime _startTime;
-  bool _isSaving = false;
-  bool _isCompleted = false;
-  final CameraEngagementActivityTracker _engagementTracker =
-      CameraEngagementActivityTracker();
 
-  @override
-  void initState() {
-    super.initState();
-    _startTime = DateTime.now();
-  }
+  // In a live session the server's item replaces the built-in prompts.
+  late final _C3Attempt? _attempt = _C3Session.attemptFor(widget.activity.id);
+  List<String> get _prompts => _attempt?.prompts ?? widget.activity.prompts;
 
-  @override
-  void dispose() {
-    _engagementTracker.dispose();
-    super.dispose();
-  }
-
-  Future<void> _recordCurrentPrompt() async {
-    setState(() {
-      _recorded = true;
-      _recordedPrompts.add(_promptIndex);
-    });
-  }
-
-  Future<void> _advancePrompt() async {
-    final nav = _InheritedNav.of(context);
-    final prompts = widget.activity.prompts;
-
-    if (_promptIndex < prompts.length - 1) {
-      setState(() {
-        _promptIndex++;
-        _recorded = _recordedPrompts.contains(_promptIndex);
-      });
+  void _advancePrompt() {
+    if (_promptIndex == _prompts.length - 1) {
+      _C3Session.finishAndContinue(context);
       return;
     }
-
-    // Finished all prompts
-    await _finishAndSave();
-  }
-
-  Future<void> _finishAndSave() async {
-    if (_isSaving || _isCompleted) return;
-    setState(() => _isSaving = true);
-
-    final durationSeconds = DateTime.now().difference(_startTime).inSeconds;
-    final totalPrompts = widget.activity.prompts.length;
-    final successful = _recordedPrompts.length;
-    final completion = totalPrompts > 0 ? successful / totalPrompts : 1.0;
-    final performance = _LinUcbModel.calculatePerformanceScore(
-      successes: successful,
-      targets: totalPrompts,
-      completionFraction: completion,
-    );
-    final logsEngagement = _LinUcbModel.estimateLogsOnlyEngagement(
-      completionFraction: completion,
-      targetOpportunities: totalPrompts,
-      attempts: successful,
-      durationSeconds: durationSeconds,
-    );
-    final cameraSnapshot = await _engagementTracker.completeActivity(
-      durationSeconds: durationSeconds,
-      responseCount: successful,
-      targetCount: totalPrompts,
-      completionFraction: completion,
-    );
-    final engagement = cameraSnapshot?.engagementScore ?? logsEngagement;
-    final engagementMode = cameraSnapshot?.engagementScore == null
-        ? 'logs_only'
-        : 'camera_logs';
-
-    // 1. Record to backend session
-    await TherapyApiService.recordActivityResult(
-      activityId: widget.activity.id,
-      targetOpportunities: totalPrompts,
-      successfulOpportunities: successful,
-      completionFraction: completion,
-      durationSeconds: durationSeconds,
-      completed: true,
-      engagementMode: engagementMode,
-      engagementScore: engagement,
-    );
-
-    // 2. Update local LinUCB pending reward if active
-    try {
-      final model = await _LinUcbModel.load();
-      if (model.pendingActivityId == widget.activity.id) {
-        await model.recordPendingReward(
-          performance: performance,
-          engagement: engagement,
-        );
-      }
-    } catch (_) {}
-
-    if (!mounted) return;
     setState(() {
-      _isSaving = false;
-      _isCompleted = true;
+      _promptIndex++;
+      _recorded = false;
     });
-
-    _showCompletionModal();
-  }
-
-  void _showCompletionModal() {
-    final nav = _InheritedNav.of(context);
-    showModalBottomSheet(
-      context: context,
-      isDismissible: false,
-      enableDrag: false,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (ctx) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text('🎉', style: TextStyle(fontSize: 48)),
-            const SizedBox(height: 8),
-            const Text(
-              'ක්‍රියාකාරකම සම්පූර්ණයි!',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: _C.darkText,
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              '${_recordedPrompts.length} of ${widget.activity.prompts.length} prompts practiced successfully',
-              style: const TextStyle(fontSize: 13, color: Colors.black54),
-            ),
-            const SizedBox(height: 20),
-            _Btn(
-              text: 'ඊළඟ ක්‍රියාකාරකමට යන්න',
-              onTap: () {
-                Navigator.of(ctx).pop();
-                nav?.go(_TherapyRoute.adaptiveSyllable);
-              },
-            ),
-            const SizedBox(height: 8),
-            OutlinedButton(
-              onPressed: () {
-                Navigator.of(ctx).pop();
-                nav?.go(_TherapyRoute.activityLibrary);
-              },
-              style: OutlinedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 44),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-              ),
-              child: const Text('ක්‍රියාකාරකම් එකතුවට (Activity Library)'),
-            ),
-            const SizedBox(height: 4),
-            TextButton(
-              onPressed: () {
-                Navigator.of(ctx).pop();
-                nav?.go(_TherapyRoute.sessionComplete);
-              },
-              child: const Text('සැසිය අවසන් කරන්න (Finish Session)'),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     final activity = widget.activity;
     final nav = _InheritedNav.of(context);
-    final expectedAnswers = activity.expectedAnswersForPrompt(_promptIndex);
+    final attempt = _attempt;
+    final prompts = _prompts;
+    // Picture naming shows the picture, not the word: the child names it.
+    final naming = attempt?.isPictureNaming == true;
 
     return _BgScaffold(
       child: SingleChildScrollView(
@@ -289,10 +133,10 @@ class _PracticeActivityState extends State<_PracticeActivity> {
           children: [
             const _BackHeader(title: ''),
             Text(
-              activity.title,
+              attempt == null ? activity.title : attempt.titleSi,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 20,
+                fontSize: 21,
                 fontWeight: FontWeight.bold,
                 color: _C.darkText,
               ),
@@ -303,124 +147,116 @@ class _PracticeActivityState extends State<_PracticeActivity> {
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 13, color: Colors.black54),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 20),
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
-                boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
               ),
-              child: Row(
-                children: [
-                  const Icon(Icons.info_outline_rounded, color: _C.blue, size: 22),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      activity.instruction,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        height: 1.35,
-                        color: _C.darkText,
-                      ),
-                    ),
-                  ),
-                ],
+              child: Text(
+                attempt?.isWordActivity == true
+                    ? 'Say each word slowly and gently. ${activity.instruction}'
+                    : activity.instruction,
+                style: const TextStyle(
+                  fontSize: 14,
+                  height: 1.4,
+                  color: _C.darkText,
+                ),
               ),
             ),
-            const SizedBox(height: 14),
-            CameraEngagementActivityPanel(tracker: _engagementTracker),
             const SizedBox(height: 18),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Prompt ${_promptIndex + 1} of ${activity.prompts.length}',
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black54,
-                  ),
-                ),
-                Text(
-                  '${_recordedPrompts.length} Completed',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: _C.green,
-                  ),
-                ),
-              ],
+            Text(
+              '${naming ? 'Picture' : attempt?.isWordActivity == true ? 'Word' : attempt?.isReading == true ? 'Passage' : 'Prompt'} ${_promptIndex + 1} of ${prompts.length}',
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: Colors.black54,
+              ),
             ),
             const SizedBox(height: 8),
             Container(
-              constraints: const BoxConstraints(minHeight: 120),
+              constraints: const BoxConstraints(minHeight: 110),
               alignment: Alignment.center,
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(18),
-                border: Border.all(
-                  color: _recordedPrompts.contains(_promptIndex)
-                      ? _C.green
-                      : _C.blue.withValues(alpha: 0.35),
-                  width: 2,
-                ),
-                boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)],
+                border: Border.all(color: _C.blue.withValues(alpha: 0.3)),
               ),
-              child: Text(
-                activity.prompts[_promptIndex],
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 18,
-                  height: 1.4,
-                  fontWeight: FontWeight.w600,
-                  color: _C.darkText,
-                ),
-              ),
+              child: naming
+                  ? Column(children: [
+                      _ItemPicture(asset: attempt!.image, height: 200),
+                      const SizedBox(height: 10),
+                      const Text('මේ මොකක්ද? / What is this?',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: _C.darkText)),
+                    ])
+                  : Text(
+                      prompts[_promptIndex],
+                      textAlign: attempt?.isReading == true
+                          ? TextAlign.start
+                          : TextAlign.center,
+                      style: TextStyle(
+                        fontSize: attempt?.isReading == true ? 18 : 20,
+                        height: attempt?.isReading == true ? 1.7 : 1.35,
+                        fontWeight: FontWeight.w600,
+                        color: _C.darkText,
+                      ),
+                    ),
             ),
-            const SizedBox(height: 24),
+            if (attempt?.isReading == true && attempt!.textEn.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 6),
+                child: Text(attempt.textEn,
+                    style:
+                        const TextStyle(fontSize: 12, color: Colors.black45)),
+              ),
+            const SizedBox(height: 20),
             Center(
               child: _TherapyMicButton(
-                nextScreen: _TherapyRoute.adaptiveSyllable,
-                prompt: _recorded ? 'නැවත පටිගත කරන්න' : 'හඬ පටිගත කරන්න',
-                onRecordingStopped: _recordCurrentPrompt,
+                key: ValueKey(_promptIndex),
+                nextScreen: _TherapyRoute.sessionComplete,
+                prompt: 'Practice this prompt',
+                onRecordingStopped: () {
+                  if (attempt != null) _C3Session.recorded(_promptIndex);
+                  setState(() => _recorded = true);
+                },
+                onAudio: attempt?.isWordActivity == true
+                    ? (audio) => _C3Session.checkWord(audio, _promptIndex)
+                    : attempt?.needsSpeechCheck == true
+                        ? _C3Session.checkSpeech
+                        : null,
                 onComplete: _advancePrompt,
-                activityId: expectedAnswers.isEmpty ? null : activity.id,
-                promptId: '${activity.id}_$_promptIndex',
-                expectedAnswers: expectedAnswers,
               ),
             ),
             if (_recorded) ...[
               const SizedBox(height: 10),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.check_circle_rounded, color: _C.green, size: 18),
-                  SizedBox(width: 6),
-                  Text(
-                    'හඬ පටිගත කිරීම සාර්ථකයි!',
-                    style: TextStyle(
-                      color: _C.green,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13,
-                    ),
-                  ),
-                ],
+              const Text(
+                'Recording complete',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: _C.green,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ],
-            const SizedBox(height: 20),
+            const SizedBox(height: 18),
             _Btn(
-              text: _promptIndex == activity.prompts.length - 1
-                  ? (_isSaving ? 'සුරකිමින්...' : 'ක්‍රියාකාරකම අවසන් කරන්න')
-                  : 'ඊළඟ පියවරට යන්න',
-              onTap: _isSaving ? () {} : _advancePrompt,
+              text: _promptIndex == prompts.length - 1
+                  ? 'Finish activity'
+                  : 'Next prompt',
+              onTap: _advancePrompt,
             ),
-            const SizedBox(height: 6),
-            TextButton(
-              onPressed: () => nav?.go(_TherapyRoute.activityLibrary),
-              child: const Text('ක්‍රියාකාරකම් එකතුවට ආපසු යන්න'),
-            ),
+            if (attempt != null)
+              const _SkipActivityButton()
+            else
+              TextButton(
+                onPressed: () => nav?.go(_TherapyRoute.activityLibrary),
+                child: const Text('Back to activity library'),
+              ),
             const SizedBox(height: 12),
           ],
         ),
