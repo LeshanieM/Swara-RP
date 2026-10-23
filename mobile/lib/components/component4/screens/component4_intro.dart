@@ -1,19 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:swara/core/network/api_exception.dart';
+import 'package:swara/components/component4/services/c4_flow.dart';
+import 'package:swara/features/child/data/providers/child_provider.dart';
 import 'package:swara/core/theme/app_theme.dart';
 import 'package:swara/components/component4/widgets/c4_header.dart';
 
-class Component4Intro extends StatelessWidget {
+class Component4Intro extends ConsumerStatefulWidget {
   const Component4Intro({super.key});
 
   @override
+  ConsumerState<Component4Intro> createState() => _Component4IntroState();
+}
+
+class _Component4IntroState extends ConsumerState<Component4Intro> {
+  bool _checking = false;
+
+  /// A child who already ranked 5 interests goes straight to today's topic.
+  Future<void> _start({bool changeInterests = false}) async {
+    if (!C4Flow.isLive || changeInterests) {
+      context.push('/c4/interest');
+      return;
+    }
+    setState(() => _checking = true);
+    try {
+      final onboarded = await C4Flow.hasProfile();
+      if (!mounted) return;
+      context.push(onboarded ? '/c4/personalization_processing' : '/c4/interest');
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(ApiException.from(e).message)));
+    } finally {
+      if (mounted) setState(() => _checking = false);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    C4Flow.child = ref.watch(activeChildProvider);
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.groundHome,
       body: SafeArea(
         child: Column(
           children: [
-            const C4Header(currentStep: 1, totalSteps: 12),
+            const C4Header(currentStep: 1, totalSteps: 14),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(24.0),
@@ -42,7 +73,7 @@ class Component4Intro extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      "Let's Talk About Things You Like!",
+                      'ඔයා කැමති දේවල් ගැන කතා කරමු!',
                       style: AppTextStyles.body.copyWith(color: AppColors.textLight),
                       textAlign: TextAlign.center,
                     ),
@@ -54,7 +85,7 @@ class Component4Intro extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      "Choose things you enjoy, and we'll find a topic that is interesting and comfortable for you.",
+                      'ඔයා රසවිඳින දේවල් තෝරන්න. ඔයාට රසවත් සහ පහසු මාතෘකාවක් අපි සොයා දෙන්නම්.',
                       style: AppTextStyles.bodySmall,
                       textAlign: TextAlign.center,
                     ),
@@ -62,22 +93,29 @@ class Component4Intro extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _buildStepIcon(Icons.touch_app_rounded, 'Choose'),
+                        _buildStepIcon(Icons.touch_app_rounded, 'තෝරන්න'),
                         const SizedBox(width: 8),
                         const Icon(Icons.arrow_forward_rounded, color: AppColors.divider, size: 16),
                         const SizedBox(width: 8),
-                        _buildStepIcon(Icons.record_voice_over_rounded, 'Talk'),
+                        _buildStepIcon(Icons.record_voice_over_rounded, 'කතා කරන්න'),
                         const SizedBox(width: 8),
                         const Icon(Icons.arrow_forward_rounded, color: AppColors.divider, size: 16),
                         const SizedBox(width: 8),
-                        _buildStepIcon(Icons.lightbulb_rounded, 'Discover'),
+                        _buildStepIcon(Icons.lightbulb_rounded, 'අලුත් දේ දැනගන්න'),
                       ],
                     ),
                     const SizedBox(height: 48),
                     ElevatedButton(
-                      onPressed: () => context.push('/c4/interest'),
-                      child: const Text('Start'),
+                      onPressed: _checking ? null : _start,
+                      child: _checking
+                          ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2.5))
+                          : const Text('අරඹමු'),
                     ),
+                    if (C4Flow.isLive)
+                      TextButton(
+                        onPressed: _checking ? null : () => _start(changeInterests: true),
+                        child: const Text('මගේ කැමති දේවල් වෙනස් කරන්න (Change interests)'),
+                      ),
                   ],
                 ),
               ),

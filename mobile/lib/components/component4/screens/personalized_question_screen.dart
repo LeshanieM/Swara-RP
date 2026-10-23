@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swara/core/theme/app_theme.dart';
 import 'package:swara/components/component4/widgets/c4_header.dart';
+import 'package:swara/components/component4/services/c4_flow.dart';
 
 class PersonalizedQuestionScreen extends StatefulWidget {
   const PersonalizedQuestionScreen({super.key});
@@ -15,12 +16,13 @@ class _PersonalizedQuestionScreenState extends State<PersonalizedQuestionScreen>
 
   @override
   Widget build(BuildContext context) {
+    final v = C4Flow.view;
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.groundFeel,
       body: SafeArea(
         child: Column(
           children: [
-            const C4Header(currentStep: 6, totalSteps: 12),
+            const C4Header(currentStep: 6, totalSteps: 14),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(24.0),
@@ -33,7 +35,7 @@ class _PersonalizedQuestionScreenState extends State<PersonalizedQuestionScreen>
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'A question just for you',
+                      'ඔයාටම ගැළපෙන ප්‍රශ්නයක්',
                       style: AppTextStyles.body.copyWith(color: AppColors.textLight),
                       textAlign: TextAlign.center,
                     ),
@@ -51,7 +53,7 @@ class _PersonalizedQuestionScreenState extends State<PersonalizedQuestionScreen>
                           Icon(Icons.format_quote_rounded, color: AppColors.primary.withOpacity(0.5), size: 48),
                           const SizedBox(height: 16),
                           Text(
-                            '“ඔයාගේ ප්‍රියතම බල්ලා එක්ක දවසක්ම ගත කරන්න පුළුවන් නම්, ඔයා දෙන්නා මොනවා කරයිද?”',
+                            '“${v.questionSi}”',
                             style: AppTextStyles.heading2.copyWith(color: AppColors.text, height: 1.5),
                             textAlign: TextAlign.center,
                           ),
@@ -63,7 +65,7 @@ class _PersonalizedQuestionScreenState extends State<PersonalizedQuestionScreen>
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'There is no right or wrong answer.',
+                            'නිවැරදි හෝ වැරදි පිළිතුරක් නැහැ.',
                             style: AppTextStyles.bodySmall,
                             textAlign: TextAlign.center,
                           ),
@@ -82,7 +84,7 @@ class _PersonalizedQuestionScreenState extends State<PersonalizedQuestionScreen>
                     const SizedBox(height: 32),
                     ElevatedButton(
                       onPressed: () => context.push('/c4/preparation'),
-                      child: const Text('කතා කරමු (Let\'s Talk)'),
+                      child: const Text('කතා කරමු'),
                     ),
                     const SizedBox(height: 32),
                     // Research View
@@ -90,7 +92,7 @@ class _PersonalizedQuestionScreenState extends State<PersonalizedQuestionScreen>
                       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
                       child: ExpansionTile(
                         title: Text(
-                          'Research View',
+                          'පර්යේෂණ තොරතුරු',
                           style: AppTextStyles.label.copyWith(color: AppColors.textLight),
                         ),
                         leading: const Icon(Icons.science, color: AppColors.textLight),
@@ -110,11 +112,15 @@ class _PersonalizedQuestionScreenState extends State<PersonalizedQuestionScreen>
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                _buildResearchRow('Base Topic', 'Animals'),
-                                _buildResearchRow('Child Interest', 'Dogs'),
-                                _buildResearchRow('Familiarity', '5 / 5'),
-                                _buildResearchRow('Age', '9'),
-                                _buildResearchRow('Question', 'Personalized'),
+                                _buildResearchRow('මාතෘකාව', v.categorySi),
+                                _buildResearchRow('දරුවාගේ කැමැත්ත', C4Flow.isLive ? (v.categoryRank == null ? '—' : '5න් ${v.categoryRank} වන තැන') : 'බල්ලන්'),
+                                _buildResearchRow('වයස', C4Flow.isLive ? '${C4Flow.child?.age ?? '—'}' : '9'),
+                                _buildResearchRow('ප්‍රශ්නය', 'පුද්ගලීකරණය කළ'),
+                                if (v.probability != null)
+                                  _buildResearchRow('තේරීමේ සම්භාවිතාව', v.probability!.toStringAsFixed(2)),
+                                _buildResearchRow('මාතෘකා මට්ටම', v.level),
+                                if (_showResearchView && C4Flow.session?['progressSignal']?['preferConcrete'] == true)
+                                  _buildResearchRow('මට්ටමේ නීතිය', 'පෙර සැසි කෙටි නිසා සරල මාතෘකා'),
                               ],
                             ),
                           ),

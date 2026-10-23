@@ -8,9 +8,9 @@ class CommunicationReportScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.groundRead,
       appBar: AppBar(
-        title: const Text('Linguistic & Lexical Analysis'),
+        title: const Text('භාෂා හා වචන විශ්ලේෂණය'),
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: AppColors.primaryDeep,
@@ -51,13 +51,13 @@ class CommunicationReportScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Spontaneous Speech — Sinhala', style: AppTextStyles.heading2.copyWith(color: AppColors.textLight)),
+        Text('ස්වභාවික සිංහල කථන නියැදිය', style: AppTextStyles.heading2.copyWith(color: AppColors.textLight)),
         const SizedBox(height: 24),
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: AppRadii.mdAll,
             boxShadow: [
               BoxShadow(
                 color: AppColors.divider,
@@ -68,17 +68,17 @@ class CommunicationReportScreen extends StatelessWidget {
           ),
           child: Column(
             children: [
-              _buildInfoRow('Child ID', 'SW-8472 (Anonymized)'),
+              _buildInfoRow('දරුවාගේ අංකය', 'SW-8472 (රහස්‍ය)'),
               const Divider(),
-              _buildInfoRow('Session', '04'),
+              _buildInfoRow('සැසිය', '04'),
               const Divider(),
-              _buildInfoRow('Date', 'Nov 14, 2024'),
+              _buildInfoRow('දිනය', '2024 නොවැම්බර් 14'),
               const Divider(),
-              _buildInfoRow('Task Type', 'Picture Sequence Narrative'),
+              _buildInfoRow('කාර්යය', 'රූප පෙළක් ගැන කතාවක්'),
               const Divider(),
-              _buildInfoRow('Task ID', 'TSK-PSN-02'),
+              _buildInfoRow('කාර්ය අංකය', 'TSK-PSN-02'),
               const Divider(),
-              _buildInfoRow('Analysis Status', '✅ Completed'),
+              _buildInfoRow('විශ්ලේෂණ තත්ත්වය', '✅ සම්පූර්ණයි'),
             ],
           ),
         ),
@@ -103,14 +103,14 @@ class CommunicationReportScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Speech Transcript', style: AppTextStyles.heading2),
+        Text('කථන පිටපත', style: AppTextStyles.heading2),
         const SizedBox(height: 16),
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: AppColors.surfaceRaised,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: AppRadii.mdAll,
             border: Border.all(color: AppColors.divider),
           ),
           child: Column(
@@ -139,13 +139,13 @@ class CommunicationReportScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Language Profile', style: AppTextStyles.heading2),
+        Text('භාෂා පැතිකඩ', style: AppTextStyles.heading2),
         const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: AppRadii.mdAll,
             border: Border.all(color: AppColors.primaryLight, width: 2),
             boxShadow: [
               BoxShadow(
@@ -157,13 +157,13 @@ class CommunicationReportScreen extends StatelessWidget {
           ),
           child: Column(
             children: [
-              _buildProfileItem('Lexical Diversity', 'Detected vocabulary diversity during the session.'),
+              _buildProfileItem('වචන විවිධත්වය', 'භාවිත කළ වෙනස් වචන මනින ලදී.'),
               const Divider(height: 24),
-              _buildProfileItem('Utterance Length', 'Observed average utterance length.'),
+              _buildProfileItem('ප්‍රකාශන දිග', 'එක් ප්‍රකාශනයක සාමාන්‍ය දිග මනින ලදී.'),
               const Divider(height: 24),
-              _buildProfileItem('Speech Rate', 'Observed speaking rate.'),
+              _buildProfileItem('කථන වේගය', 'කථන වේගය මනින ලදී.'),
               const Divider(height: 24),
-              _buildProfileItem('Pausing', 'Observed pause frequency and duration.'),
+              _buildProfileItem('විරාම', 'විරාම ගණන සහ කාලය මනින ලදී.'),
             ],
           ),
         ),
@@ -195,15 +195,15 @@ class CommunicationReportScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Lexical Diversity', style: AppTextStyles.heading2),
+        Text('වචන විවිධත්වය', style: AppTextStyles.heading2),
         const SizedBox(height: 16),
         Row(
           children: [
-            Expanded(child: _buildMetricCard('NDW', '38', 'Number of Different Words')),
+            Expanded(child: _buildMetricCard('NDW', '38', 'වෙනස් වචන ගණන')),
             const SizedBox(width: 12),
-            Expanded(child: _buildMetricCard('MATTR', '0.48', 'Moving-Average Type-Token Ratio')),
+            Expanded(child: _buildMetricCard('MATTR', '0.48', 'වචන විවිධත්ව අනුපාතය')),
             const SizedBox(width: 12),
-            Expanded(child: _buildMetricCard('VocD', '51', 'Vocabulary Diversity Estimate')),
+            Expanded(child: _buildMetricCard('VocD', '51', 'වචන මාලාවේ විවිධත්වය')),
           ],
         ),
       ],
@@ -214,14 +214,14 @@ class CommunicationReportScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Mean Length of Utterance', style: AppTextStyles.heading2),
+        Text('සාමාන්‍ය ප්‍රකාශන දිග', style: AppTextStyles.heading2),
         const SizedBox(height: 16),
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
             color: AppColors.primaryWash,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: AppRadii.mdAll,
             border: Border.all(color: AppColors.primaryLight),
           ),
           child: Column(
@@ -230,7 +230,7 @@ class CommunicationReportScreen extends StatelessWidget {
               const SizedBox(height: 8),
               const Text('3.5', style: TextStyle(fontSize: 48, fontWeight: FontWeight.w900, color: AppColors.primaryDeep)),
               const SizedBox(height: 8),
-              Text('Average length of analyzed utterances.', style: AppTextStyles.caption.copyWith(color: AppColors.text)),
+              Text('විශ්ලේෂණය කළ ප්‍රකාශනවල සාමාන්‍ය දිග.', style: AppTextStyles.caption.copyWith(color: AppColors.text)),
             ],
           ),
         ),
@@ -242,13 +242,13 @@ class CommunicationReportScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Speech Flow', style: AppTextStyles.heading2),
+        Text('කථන ප්‍රවාහය', style: AppTextStyles.heading2),
         const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: AppRadii.mdAll,
             border: Border.all(color: AppColors.divider),
             boxShadow: [
               BoxShadow(
@@ -260,11 +260,11 @@ class CommunicationReportScreen extends StatelessWidget {
           ),
           child: Column(
             children: [
-              _buildFlowRow('Speech Rate', '2.8 words/sec', 0.6),
+              _buildFlowRow('කථන වේගය', 'තත්පරයට වචන 2.8ක්', 0.6),
               const SizedBox(height: 16),
-              _buildFlowRow('Pause Frequency', '12 pauses', 0.4),
+              _buildFlowRow('විරාම ගණන', 'විරාම 12ක්', 0.4),
               const SizedBox(height: 16),
-              _buildFlowRow('Avg Pause Duration', '0.9s', 0.3),
+              _buildFlowRow('සාමාන්‍ය විරාම කාලය', 'තත්පර 0.9ක්', 0.3),
             ],
           ),
         ),
@@ -320,7 +320,7 @@ class CommunicationReportScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Language-Based Findings', style: AppTextStyles.heading2),
+        Text('භාෂා විශ්ලේෂණ සොයාගැනීම්', style: AppTextStyles.heading2),
         const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.all(16),
@@ -332,10 +332,10 @@ class CommunicationReportScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Observed Language Pattern', style: AppTextStyles.label),
+              Text('හඳුනාගත් භාෂා රටාව', style: AppTextStyles.label),
               const SizedBox(height: 8),
               Text(
-                '“Compared with the child\'s previous session, the current sample shows increased lexical diversity and longer average utterances.”',
+                'පෙර සැසියට සාපේක්ෂව මෙවර භාවිත කළ වෙනස් වචන ගණන සහ සාමාන්‍ය ප්‍රකාශන දිග වැඩි වී ඇත.',
                 style: AppTextStyles.bodySmall.copyWith(fontStyle: FontStyle.italic),
               ),
               const SizedBox(height: 16),
@@ -369,7 +369,7 @@ class CommunicationReportScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Language Observations', style: AppTextStyles.heading2),
+        Text('භාෂා නිරීක්ෂණ', style: AppTextStyles.heading2),
         const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.all(16),
@@ -383,16 +383,16 @@ class CommunicationReportScreen extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Text('🤖', style: TextStyle(fontSize: 20)),
+                  const Icon(Icons.auto_awesome_outlined, color: AppColors.primary, size: 22),
                   const SizedBox(width: 8),
-                  Text('Automated Observation', style: AppTextStyles.label.copyWith(color: AppColors.primaryDeep)),
+                  Text('ස්වයංක්‍රීය නිරීක්ෂණය', style: AppTextStyles.label.copyWith(color: AppColors.primaryDeep)),
                 ],
               ),
               const SizedBox(height: 12),
               Text(
-                '• A broader range of words was observed in this session compared to the previous one.\n'
-                '• Average utterance length was slightly higher than in the previous session.\n'
-                '• Speech rate remained relatively stable across the session.',
+                '• පෙර සැසියට වඩා විවිධ වචන භාවිත වී ඇත.\n'
+                '• සාමාන්‍ය ප්‍රකාශන දිග සුළු වශයෙන් වැඩි වී ඇත.\n'
+                '• කථන වේගය සැසිය පුරා ආසන්නව ස්ථාවරව පැවතුණි.',
                 style: AppTextStyles.bodySmall.copyWith(height: 1.6),
               ),
               const SizedBox(height: 16),
@@ -408,7 +408,7 @@ class CommunicationReportScreen extends StatelessWidget {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'This observation is generated from the analyzed speech sample and should be reviewed by a qualified SLP.',
+                        'මෙම නිරීක්ෂණය කථන නියැදියෙන් ස්වයංක්‍රීයව සකස් කර ඇත. සුදුසුකම් ලත් කථන චිකිත්සකයෙකු එය සමාලෝචනය කළ යුතුය.',
                         style: AppTextStyles.caption.copyWith(color: AppColors.warning),
                       ),
                     ),
@@ -430,15 +430,15 @@ class CommunicationReportScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Language Journey\n(Session Progress)', style: AppTextStyles.heading2),
+              Text('භාෂා ගමන\n(සැසි ප්‍රගතිය)', style: AppTextStyles.heading2),
               TextButton.icon(
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Session comparison filter opened (Mock)')),
+                    const SnackBar(content: Text('සැසි සැසඳීමේ පෙරහන විවෘත කළා')),
                   );
                 },
                 icon: const Icon(Icons.filter_list, size: 16),
-                label: const Text('Compare Sessions'),
+                label: const Text('සැසි සසඳන්න'),
               ),
             ],
           ),
@@ -453,17 +453,17 @@ class CommunicationReportScreen extends StatelessWidget {
             ),
             child: const Center(
               child: Text(
-                '[Line Chart]\nSession 1 → Session 2 → Session 3 → Session 4\nNDW: 38 → 41 → 45 → 49',
+                'සැසිය 1 → සැසිය 2 → සැසිය 3 → සැසිය 4\nNDW: 38 → 41 → 45 → 49',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: AppColors.textLight),
               ),
             ),
           ),
           const SizedBox(height: 12),
-          Text('Trend observed:', style: AppTextStyles.label),
+          Text('දක්නට ලැබුණු වෙනස:', style: AppTextStyles.label),
           const SizedBox(height: 4),
           Text(
-            'Lexical diversity showed an increasing trend across the recorded sessions.',
+            'පටිගත කළ සැසි අතර වෙනස් වචන භාවිතය වැඩි වන ප්‍රවණතාවක් පෙන්නුම් කළේය.',
             style: AppTextStyles.bodySmall.copyWith(fontStyle: FontStyle.italic),
           ),
         ],
@@ -475,13 +475,13 @@ class CommunicationReportScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Personalized Task Selection', style: AppTextStyles.heading2),
+        Text('පුද්ගලීකරණය කළ කාර්යය තෝරාගැනීම', style: AppTextStyles.heading2),
         const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: AppRadii.mdAll,
             border: Border.all(color: AppColors.primaryLight, width: 2),
             boxShadow: [
               BoxShadow(
@@ -494,26 +494,26 @@ class CommunicationReportScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Previous Session Profile', style: AppTextStyles.heading3),
+              Text('පෙර සැසියේ පැතිකඩ', style: AppTextStyles.heading3),
               const SizedBox(height: 12),
-              _buildProfileListItem('Component 1: Stable stuttering frequency observed in reading tasks.'),
-              _buildProfileListItem('Component 2: No significant secondary behaviors detected.'),
-              _buildProfileListItem('Component 3: Completed structured breathing activity successfully.'),
-              _buildProfileListItem('Component 4 (Previous): High lexical diversity in picture description.'),
+              _buildProfileListItem('අංගය 1: කියවීමේදී පැකිළීම් ප්‍රමාණය ස්ථාවරයි.'),
+              _buildProfileListItem('අංගය 2: සැලකිය යුතු ද්විතීයික හැසිරීම් හමු නොවීය.'),
+              _buildProfileListItem('අංගය 3: හුස්ම ගැනීමේ පුහුණුව සාර්ථකව අවසන් කළා.'),
+              _buildProfileListItem('අංගය 4 (පෙර): රූපයක් විස්තර කිරීමේදී විවිධ වචන භාවිත කළා.'),
               const SizedBox(height: 24),
               const Divider(),
               const SizedBox(height: 24),
-              Text('Recommended Speaking Task', style: AppTextStyles.label.copyWith(color: AppColors.textLight)),
+              Text('යෝජිත කථන ක්‍රියාකාරකම', style: AppTextStyles.label.copyWith(color: AppColors.textLight)),
               const SizedBox(height: 4),
               Row(
                 children: [
-                  const Text('🖼️', style: TextStyle(fontSize: 24)),
+                  const Icon(Icons.image_outlined, color: AppColors.primary, size: 24),
                   const SizedBox(width: 12),
-                  Text('Picture Sequence Narrative', style: AppTextStyles.heading3.copyWith(color: AppColors.primaryDeep)),
+                  Text('රූප පෙළක් ගැන කතාවක්', style: AppTextStyles.heading3.copyWith(color: AppColors.primaryDeep)),
                 ],
               ),
               const SizedBox(height: 24),
-              Text('Selection Rationale', style: AppTextStyles.label.copyWith(color: AppColors.textLight)),
+              Text('තෝරාගැනීමට හේතුව', style: AppTextStyles.label.copyWith(color: AppColors.textLight)),
               const SizedBox(height: 4),
               Text(
                 '“This task was selected to obtain spontaneous narrative speech while maintaining a structured speaking context.”',
@@ -553,30 +553,30 @@ class CommunicationReportScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Alternative Activities', style: AppTextStyles.heading2),
+              Text('වෙනත් ක්‍රියාකාරකම්', style: AppTextStyles.heading2),
               const SizedBox(height: 16),
               ListTile(
                 leading: const Icon(Icons.image, color: AppColors.primary),
-                title: const Text('Picture Description'),
-                subtitle: const Text('Focus on vocabulary'),
+                title: const Text('රූපයක් විස්තර කිරීම'),
+                subtitle: const Text('වචන භාවිතය පුහුණු කිරීම'),
                 trailing: const Icon(Icons.check_circle, color: AppColors.success),
                 onTap: () {
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Selected Picture Description')),
+                    const SnackBar(content: Text('රූපයක් විස්තර කිරීම තෝරාගත්තා')),
                   );
                 },
               ),
               const Divider(),
               ListTile(
                 leading: const Icon(Icons.chat_bubble_outline, color: AppColors.primary),
-                title: const Text('Open Conversation'),
-                subtitle: const Text('Focus on spontaneous utterances'),
+                title: const Text('නිදහස් කතාබහ'),
+                subtitle: const Text('ස්වභාවික කථනය පුහුණු කිරීම'),
                 trailing: const Icon(Icons.circle_outlined),
                 onTap: () {
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Selected Open Conversation')),
+                    const SnackBar(content: Text('නිදහස් කතාබහ තෝරාගත්තා')),
                   );
                 },
               ),
@@ -598,11 +598,11 @@ class CommunicationReportScreen extends StatelessWidget {
             children: [
               const Icon(Icons.check_circle, color: AppColors.success, size: 28),
               const SizedBox(width: 12),
-              Text('Activity Assigned', style: AppTextStyles.heading2),
+              Text('ක්‍රියාකාරකම පවරා ඇත', style: AppTextStyles.heading2),
             ],
           ),
           content: Text(
-            'The recommended activity has been successfully assigned to the child\'s dashboard for their next session.',
+            'ඊළඟ සැසිය සඳහා යෝජිත ක්‍රියාකාරකම දරුවාගේ මුල් පිටුවට සාර්ථකව පවරා ඇත.',
             style: AppTextStyles.bodySmall,
           ),
           actions: [
@@ -615,7 +615,7 @@ class CommunicationReportScreen extends StatelessWidget {
                   context.go('/');
                 }
               },
-              child: const Text('Return Home'),
+              child: const Text('මුල් පිටුවට යන්න'),
             ),
           ],
         );
@@ -628,11 +628,11 @@ class CommunicationReportScreen extends StatelessWidget {
       builder: (context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Suggested Next Speaking Activity', style: AppTextStyles.heading2),
+          Text('ඊළඟට යෝජිත කථන ක්‍රියාකාරකම', style: AppTextStyles.heading2),
           const SizedBox(height: 16),
           Card(
             elevation: 2,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            shape: RoundedRectangleBorder(borderRadius: AppRadii.mdAll),
             color: AppColors.surfaceRaised,
             child: Padding(
               padding: const EdgeInsets.all(20.0),
@@ -643,14 +643,14 @@ class CommunicationReportScreen extends StatelessWidget {
                     children: [
                       const Icon(Icons.auto_awesome, color: AppColors.primary, size: 20),
                       const SizedBox(width: 8),
-                      Text('Recommended: Story Retelling', style: AppTextStyles.heading3),
+                      Text('යෝජනාව: කතාවක් නැවත කියන්න', style: AppTextStyles.heading3),
                     ],
                   ),
                   const SizedBox(height: 16),
-                  Text('Reason:', style: AppTextStyles.label),
+                  Text('හේතුව:', style: AppTextStyles.label),
                   const SizedBox(height: 4),
                   Text(
-                    '“Previous sessions showed successful performance during picture description. A slightly more open-ended storytelling activity may provide an opportunity to observe spontaneous vocabulary and utterance production.”',
+                    'පෙර සැසිවලදී රූප විස්තර කිරීම සාර්ථක විය. තව ටිකක් විවෘත කතා ක්‍රියාකාරකමකින් ස්වභාවික වචන භාවිතය සහ ප්‍රකාශන නිරීක්ෂණය කළ හැකියි.',
                     style: AppTextStyles.bodySmall.copyWith(fontStyle: FontStyle.italic),
                   ),
                   const SizedBox(height: 24),
@@ -659,14 +659,14 @@ class CommunicationReportScreen extends StatelessWidget {
                       Expanded(
                         child: OutlinedButton(
                           onPressed: () => _showAlternativesBottomSheet(context),
-                          child: const Text('View Alternatives'),
+                          child: const Text('වෙනත් ක්‍රියාකාරකම් බලන්න'),
                         ),
                       ),
                       const SizedBox(width: 16),
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () => _showAssignSuccessDialog(context),
-                          child: const Text('Assign Activity'),
+                          child: const Text('ක්‍රියාකාරකම පවරන්න'),
                         ),
                       ),
                     ],
@@ -674,7 +674,7 @@ class CommunicationReportScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   Center(
                     child: Text(
-                      'AI-generated suggestion for SLP review',
+                      'කථන චිකිත්සක සමාලෝචනය සඳහා ස්වයංක්‍රීය යෝජනාවක්',
                       style: AppTextStyles.caption,
                     ),
                   ),

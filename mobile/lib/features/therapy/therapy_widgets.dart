@@ -88,6 +88,97 @@ class _SceneWidget extends StatelessWidget {
   }
 }
 
+/// An activity item's picture (picture naming / description). Falls back to the theme's scene when the item has
+/// no picture or its file is missing, so a missing image never blocks the activity.
+class _ItemPicture extends StatelessWidget {
+  final String? asset;
+  final double height;
+  const _ItemPicture({required this.asset, this.height = 200});
+
+  @override
+  Widget build(BuildContext context) {
+    final path = asset;
+    if (path == null || path.isEmpty) return _SceneWidget(height: height);
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(18),
+      child: Image.asset(
+        path,
+        height: height,
+        width: double.infinity,
+        fit: BoxFit.contain,
+        errorBuilder: (_, __, ___) => _SceneWidget(height: height),
+      ),
+    );
+  }
+}
+
+/// "Skip this activity": the server records it as skipped (P = 0, low engagement), which the recommender learns from.
+/// Picture description is restricted to the dedicated PD image set.
+class _PictureDescriptionImage extends StatelessWidget {
+  final String? asset;
+  final double height;
+  const _PictureDescriptionImage({required this.asset, this.height = 220});
+
+  static const _fallback = 'assets/images/component3/items/PD-E-01.png';
+  static const _pdAssets = <String>{
+    _fallback,
+    'assets/images/component3/items/PD-E-02.png',
+    'assets/images/component3/items/PD-E-03.png',
+    'assets/images/component3/items/PD-E-04.png',
+    'assets/images/component3/items/PD-M-01.png',
+    'assets/images/component3/items/PD-M-02.png',
+    'assets/images/component3/items/PD-M-03.png',
+    'assets/images/component3/items/PD-M-04.png',
+    'assets/images/component3/items/PD-D-01.png',
+    'assets/images/component3/items/PD-D-02.png',
+    'assets/images/component3/items/PD-D-03.png',
+    'assets/images/component3/items/PD-D-04.png',
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    final image = _pdAssets.contains(asset) ? asset! : _fallback;
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(18),
+      child: Image.asset(
+        image,
+        height: height,
+        width: double.infinity,
+        fit: BoxFit.contain,
+        errorBuilder: (_, __, ___) => Container(
+          height: height,
+          alignment: Alignment.center,
+          color: Colors.white,
+          child: const Text('Picture unavailable'),
+        ),
+      ),
+    );
+  }
+}
+
+class _SkipActivityButton extends StatelessWidget {
+  const _SkipActivityButton();
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.only(top: 12),
+        child: OutlinedButton.icon(
+          onPressed: () => _C3Session.finishAndContinue(context, skipped: true),
+          icon: const Icon(Icons.skip_next_rounded, size: 18),
+          label: const Text('මෙය මඟ හරින්න · Skip this activity',
+              style: TextStyle(fontSize: 14)),
+          style: OutlinedButton.styleFrom(
+            backgroundColor: Colors.white,
+            foregroundColor: _C.blue,
+            side: BorderSide(color: _C.blue.withValues(alpha: 0.45)),
+            minimumSize: const Size(0, 42),
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+          ),
+        ),
+      );
+}
+
 class _ScenePreview extends StatelessWidget {
   final _AppTheme theme;
   final double height;
@@ -191,19 +282,18 @@ class _TherapyMicButton extends StatelessWidget {
   final double radius;
   final VoidCallback? onComplete;
   final VoidCallback? onRecordingStopped;
-  final String? activityId;
-  final String? promptId;
-  final List<String> expectedAnswers;
+
+  /// Called with the finished WAV (e.g. the C3 word check); the message it returns is shown in the sheet.
+  final Future<(String, Color)?> Function(RecordedAudio audio)? onAudio;
   const _TherapyMicButton({
+    super.key,
     required this.nextScreen,
     this.prompt = 'කතා කරන්න',
     this.nextButtonText = 'ඊළඟ ක්‍රියාකාරකමට යන්න',
     this.radius = 32,
     this.onComplete,
     this.onRecordingStopped,
-    this.activityId,
-    this.promptId,
-    this.expectedAnswers = const [],
+    this.onAudio,
   });
 
   @override
@@ -217,9 +307,7 @@ class _TherapyMicButton extends StatelessWidget {
               nextButtonText: nextButtonText,
               onComplete: onComplete,
               onRecordingStopped: onRecordingStopped,
-              activityId: activityId,
-              promptId: promptId,
-              expectedAnswers: expectedAnswers),
+              onAudio: onAudio),
         ),
         child: Column(children: [
           CircleAvatar(
@@ -240,17 +328,13 @@ class _TherapyRecordingSheet extends StatefulWidget {
   final String nextButtonText;
   final VoidCallback? onComplete;
   final VoidCallback? onRecordingStopped;
-  final String? activityId;
-  final String? promptId;
-  final List<String> expectedAnswers;
+  final Future<(String, Color)?> Function(RecordedAudio audio)? onAudio;
   const _TherapyRecordingSheet(
       {required this.nextScreen,
       required this.nextButtonText,
       this.onComplete,
       this.onRecordingStopped,
-      this.activityId,
-      this.promptId,
-      this.expectedAnswers = const []});
+      this.onAudio});
 
   @override
   State<_TherapyRecordingSheet> createState() => _TherapyRecordingSheetState();
@@ -265,11 +349,8 @@ class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet>
   int _seconds = 0;
   final _audioRecorder = AudioRecorder();
   String? _audioPath;
-  SpeechVerificationResult? _verification;
-  bool _isVerifying = false;
-
-  bool get _hasExpectedAnswer =>
-      widget.activityId != null && widget.expectedAnswers.isNotEmpty;
+  bool _checking = false;
+  (String, Color)? _checkResult;
 
   // Pulse animation for mic during recording
   late AnimationController _pulse;
@@ -295,18 +376,12 @@ class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet>
         return;
       }
 
-      // path_provider not available on web — pass empty string; record_web ignores it
-      String? path;
-      if (!kIsWeb) {
-        final dir = await getApplicationDocumentsDirectory();
-        path =
-            '${dir.path}/therapy_rec_${DateTime.now().millisecondsSinceEpoch}.m4a';
-      }
-
-      await _audioRecorder.start(
-        const RecordConfig(encoder: AudioEncoder.aacLc),
-        path: path ?? '',
-      );
+      // 16 kHz mono WAV: the format the word check (and the rest of the API) accepts.
+      // On the web the path is empty and the recording stays in memory.
+      await _audioRecorder.start(WavRecorder.config,
+          path: await WavRecorder.newPath('therapy_rec'));
+      _C3Session.responded();
+      _checkResult = null;
 
       _seconds = 0;
       _timer = Timer.periodic(const Duration(seconds: 1), (_) {
@@ -354,30 +429,23 @@ class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet>
     } catch (e) {
       debugPrint('Stop error: $e');
     }
-    if (!mounted) return;
     setState(() => _state = _RecordState.done);
 
-    if (_audioPath == null) return;
-    if (!_hasExpectedAnswer) {
-      await deleteLocalAudio(_audioPath!);
-      widget.onRecordingStopped?.call();
-      return;
+    if (widget.onRecordingStopped != null) {
+      widget.onRecordingStopped!();
     }
-
-    setState(() => _isVerifying = true);
-    final verification = await TherapyApiService.verifySpeechResponse(
-      audioPath: _audioPath!,
-      activityId: widget.activityId!,
-      promptId: widget.promptId ?? '',
-      expectedAnswers: widget.expectedAnswers,
-    );
-    await deleteLocalAudio(_audioPath!);
-    if (!mounted) return;
-    setState(() {
-      _isVerifying = false;
-      _verification = verification;
-    });
-    if (verification.isMatch) widget.onRecordingStopped?.call();
+    if (widget.onAudio != null) {
+      setState(() => _checking = true);
+      final audio = await RecordedAudio.fromRecorder(
+          _audioPath, Duration(seconds: _seconds));
+      final result = audio == null ? null : await widget.onAudio!(audio);
+      await audio?.delete();
+      if (!mounted) return;
+      setState(() {
+        _checking = false;
+        _checkResult = result;
+      });
+    }
   }
 
   Future<void> _reRecord() async {
@@ -388,8 +456,6 @@ class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet>
     setState(() {
       _state = _RecordState.idle;
       _seconds = 0;
-      _verification = null;
-      _audioPath = null;
     });
     await _startRecording();
   }
@@ -417,67 +483,78 @@ class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(24, 14, 24, 30),
-        decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(28))),
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          // Drag handle
-          Container(
-              width: 42,
-              height: 4,
-              decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(4))),
-          const SizedBox(height: 24),
+    // The sheet is its own route, so its touches are counted here too.
+    return Listener(
+        onPointerDown: (_) => _C3Session.tapped(),
+        child: SafeArea(
+          top: false,
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(24, 14, 24, 30),
+            decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(28))),
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+              // Drag handle
+              Container(
+                  width: 42,
+                  height: 4,
+                  decoration: BoxDecoration(
+                      color: Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(4))),
+              const SizedBox(height: 24),
 
-          // ── Central mic visualizer ──
-          _buildMicVisual(),
-          const SizedBox(height: 16),
+              // ── Central mic visualizer ──
+              _buildMicVisual(),
+              const SizedBox(height: 16),
 
-          // ── Status text ──
-          _buildStatusText(),
-          const SizedBox(height: 6),
+              // ── Status text ──
+              _buildStatusText(),
+              const SizedBox(height: 6),
 
-          if (_isVerifying) const Padding(
-            padding: EdgeInsets.only(top: 6),
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)),
-              SizedBox(width: 8),
-              Text('වචනය පරීක්ෂා කරමින්...'),
+              // ── Word check ──
+              if (_checking)
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 6),
+                  child: Text('🔎 පරීක්ෂා කරමින්...',
+                      style: TextStyle(color: Colors.grey)),
+                )
+              else if (_checkResult != null)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 6),
+                  child: Text(_checkResult!.$1,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: _checkResult!.$2)),
+                ),
+
+              // ── Timer ──
+              if (_state == _RecordState.recording ||
+                  _state == _RecordState.paused ||
+                  _state == _RecordState.done)
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 200),
+                  child: Text(
+                    _state == _RecordState.done ? 'කාලය: $_time' : _time,
+                    key: ValueKey(_time),
+                    style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: _state == _RecordState.recording
+                            ? Colors.red
+                            : _state == _RecordState.paused
+                                ? Colors.orange
+                                : _C.blue),
+                  ),
+                ),
+
+              const SizedBox(height: 28),
+
+              // ── Action buttons ──
+              _buildActions(),
             ]),
-          ) else if (_verification != null) _buildVerificationMessage(),
-
-          // ── Timer ──
-          if (_state == _RecordState.recording ||
-              _state == _RecordState.paused ||
-              _state == _RecordState.done)
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
-              child: Text(
-                _state == _RecordState.done ? 'කාලය: $_time' : _time,
-                key: ValueKey(_time),
-                style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: _state == _RecordState.recording
-                        ? Colors.red
-                        : _state == _RecordState.paused
-                            ? Colors.orange
-                            : _C.blue),
-              ),
-            ),
-
-          const SizedBox(height: 28),
-
-          // ── Action buttons ──
-          _buildActions(),
-        ]),
-      ),
-    );
+          ),
+        ));
   }
 
   Widget _buildMicVisual() {
@@ -595,9 +672,7 @@ class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet>
         color = Colors.orange.shade700;
         break;
       case _RecordState.done:
-        msg = _hasExpectedAnswer
-            ? '✅ හඬ සුරැකී ඇත — ප්‍රතිඵලය පහතින් බලන්න'
-            : '✅ හඬ සාර්ථකව සුරකිනු ලැබීය!';
+        msg = '✅ හඬ සාර්ථකව සුරකිනු ලැබීය!';
         color = _C.green;
         break;
       case _RecordState.denied:
@@ -692,7 +767,7 @@ class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet>
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
-              onPressed: _isVerifying ? null : _continue,
+              onPressed: _continue,
               icon: const Icon(Icons.arrow_forward_rounded),
               label:
                   Text(widget.nextButtonText, overflow: TextOverflow.ellipsis),
@@ -721,27 +796,6 @@ class _TherapyRecordingSheetState extends State<_TherapyRecordingSheet>
       default:
         return const SizedBox.shrink();
     }
-  }
-
-  Widget _buildVerificationMessage() {
-    final result = _verification!;
-    final matched = result.isMatch;
-    final uncertain = result.isUncertain;
-    final color = matched ? _C.green : uncertain ? Colors.orange.shade800 : Colors.red.shade700;
-    final icon = matched ? Icons.check_circle_rounded : uncertain ? Icons.help_outline_rounded : Icons.refresh_rounded;
-    final text = matched
-        ? 'හරි! ඔබ කීවේ: ${result.recognizedText}'
-        : uncertain
-            ? (result.message ?? 'හඬ පැහැදිලිව හඳුනාගත නොහැකි විය. නැවත උත්සාහ කරන්න.')
-            : 'ඔබ කීවේ: ${result.recognizedText}\nඑකම වචනය සෙමින් නැවත උත්සාහ කරන්න.';
-    return Padding(
-      padding: const EdgeInsets.only(top: 6),
-      child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Icon(icon, color: color, size: 20),
-        const SizedBox(width: 8),
-        Expanded(child: Text(text, textAlign: TextAlign.center, style: TextStyle(color: color, fontSize: 13, fontWeight: FontWeight.w600))),
-      ]),
-    );
   }
 }
 
@@ -1333,11 +1387,163 @@ class _SugarBearPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter o) => false;
 }
 
-class _PathPainter extends CustomPainter {
-  final _AppTheme theme;
-  _PathPainter(this.theme);
+/// A small live preview stays visible only while an activity is being monitored.
+/// Camera frames are analyzed locally and are never uploaded.
+class _CameraPreviewTile extends StatefulWidget {
+  const _CameraPreviewTile();
+
   @override
-  void paint(Canvas canvas, Size size) {}
+  State<_CameraPreviewTile> createState() => _CameraPreviewTileState();
+}
+
+class _CameraPreviewTileState extends State<_CameraPreviewTile> {
+  final ValueListenable<bool> _running = EngagementCamera.instance.running;
+
   @override
-  bool shouldRepaint(covariant CustomPainter o) => false;
+  void initState() {
+    super.initState();
+    _running.addListener(_onCameraChanged);
+    if (_running.value) _resumeBrowserPreviewAfterMount();
+  }
+
+  void _onCameraChanged() {
+    if (_running.value) _resumeBrowserPreviewAfterMount();
+  }
+
+  void _resumeBrowserPreviewAfterMount() {
+    if (!kIsWeb) return;
+    // The web plugin initializes playback before HtmlElementView is attached.
+    // Resume after the view mounts, without pausing first: pause/play can leave
+    // the browser video surface black on some cameras.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        if (!mounted || !_running.value) return;
+        final controller = EngagementCamera.instance.previewController;
+        if (controller == null || !controller.value.isInitialized) return;
+        try {
+          await controller.resumePreview();
+        } catch (error) {
+          debugPrint('Could not resume browser camera preview: $error');
+        }
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _running.removeListener(_onCameraChanged);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => ValueListenableBuilder<bool>(
+        valueListenable: _running,
+        builder: (context, on, _) {
+          final controller = EngagementCamera.instance.previewController;
+          final activityStillOpen = _C3Session.cameraOn &&
+              _C3Session.current != null &&
+              _C3Session.startedAt != null &&
+              !_C3Session.awaitingResult;
+          if (!activityStillOpen) return const SizedBox.shrink();
+          if (!on || controller == null || !controller.value.isInitialized) {
+            return Container(
+              width: 104,
+              height: 138,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.white, width: 2),
+              ),
+              alignment: Alignment.center,
+              child: const Padding(
+                padding: EdgeInsets.all(8),
+                child: Text(
+                  'Reconnecting camera…',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white, fontSize: 11),
+                ),
+              ),
+            );
+          }
+          return Semantics(
+            label:
+                'Live front camera preview. Camera frames are analyzed on this device and are not uploaded.',
+            child: Container(
+              width: 104,
+              height: 138,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.white, width: 2),
+                boxShadow: const [
+                  BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 8,
+                      offset: Offset(0, 3)),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Stack(fit: StackFit.expand, children: [
+                  CameraPreview(controller),
+                  const Align(
+                    alignment: Alignment.bottomCenter,
+                    child: ColoredBox(
+                      color: Colors.black54,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 4),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.videocam_rounded,
+                                  size: 13, color: Colors.white),
+                              SizedBox(width: 4),
+                              Text('Preview',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 10)),
+                            ]),
+                      ),
+                    ),
+                  ),
+                ]),
+              ),
+            ),
+          );
+        },
+      );
+}
+
+/// Shown while the engagement camera is on, so the parent and child can see it.
+class _CameraOnBadge extends StatelessWidget {
+  const _CameraOnBadge();
+
+  @override
+  Widget build(BuildContext context) => ValueListenableBuilder<bool>(
+        valueListenable: EngagementCamera.instance.running,
+        builder: (context, on, _) => !on
+            ? const SizedBox.shrink()
+            : Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                    color: Colors.black54,
+                    borderRadius: BorderRadius.circular(12)),
+                child: Row(mainAxisSize: MainAxisSize.min, children: [
+                  Icon(Icons.videocam_rounded, color: Colors.white, size: 14),
+                  SizedBox(width: 4),
+                  ValueListenableBuilder<bool?>(
+                    valueListenable: EngagementCamera.instance.facePresent,
+                    builder: (context, present, _) => Text(
+                      present == null
+                          ? (kIsWeb
+                              ? 'Camera on · preview only'
+                              : 'Camera on · checking for a face')
+                          : present
+                              ? 'Camera on · face detected'
+                              : 'Camera on · no face detected',
+                      style: const TextStyle(color: Colors.white, fontSize: 11),
+                    ),
+                  ),
+                ]),
+              ),
+      );
 }

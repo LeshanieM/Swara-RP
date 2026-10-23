@@ -1,0 +1,673 @@
+{
+ "video": {
+  "durationSec": 45.8,
+  "fps": 25.0,
+  "width": 640,
+  "height": 360,
+  "container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "codec": "h264",
+  "hasAudio": true,
+  "analysedFps": 12.5,
+  "framesRead": 1145,
+  "framesAnalysed": 573,
+  "faceDetectedRatio": 1.0
+ },
+ "detector": {
+  "name": "srcd",
+  "version": "srcd-labelfree-0.2",
+  "requested": "srcd",
+  "fallback": false,
+  "fallbackReason": null,
+  "thresholds": {
+   "nullAlphaPerCategory": 0.05,
+   "minDeviationSd": 3.0,
+   "minDeviationSec": 0.3,
+   "null": "same-length stretches of the child's fluent speech; exponential tail above p80; Bonferroni over the category's features"
+  }
+ },
+ "baseline": {
+  "source": "fluent_spans",
+  "frames": 413,
+  "durationSec": 33.04,
+  "guardSec": 0.5,
+  "holdFrames": 4
+ },
+ "stutterMoments": [
+  {
+   "index": 0,
+   "start": 6.0,
+   "end": 7.0,
+   "duration": 1.0,
+   "types": [
+    "block"
+   ],
+   "faceRatio": 1.0,
+   "assessed": true,
+   "behaviourPresent": false,
+   "categories": {
+    "FG": {
+     "present": false,
+     "score": 1.73,
+     "scoreType": "deviation_sd"
+    },
+    "HM": {
+     "present": false,
+     "score": 6.06,
+     "scoreType": "deviation_sd"
+    }
+   },
+   "signals": {
+    "eye": {
+     "deviation": 1.73,
+     "direction": "below",
+     "topFeature": "browDown",
+     "threshold": 6.61,
+     "pValue": 1.0,
+     "nullSpans": 269,
+     "exceeds": false
+    },
+    "lip": {
+     "deviation": 1.15,
+     "direction": "above",
+     "topFeature": "mouthPress",
+     "threshold": 5.93,
+     "pValue": 1.0,
+     "nullSpans": 269,
+     "exceeds": false
+    },
+    "jaw": {
+     "deviation": 0.43,
+     "direction": "above",
+     "topFeature": "jawOpen",
+     "threshold": 7.92,
+     "pValue": 1.0,
+     "nullSpans": 269,
+     "exceeds": false
+    },
+    "cheek": {
+     "deviation": 0.0,
+     "direction": "above",
+     "topFeature": "cheekPuff",
+     "threshold": 4.06,
+     "pValue": 1.0,
+     "nullSpans": 269,
+     "exceeds": false
+    },
+    "head": {
+     "deviation": 6.06,
+     "direction": "above",
+     "topFeature": "roll",
+     "threshold": 6.9,
+     "pValue": 0.0121,
+     "nullSpans": 269,
+     "exceeds": false
+    }
+   },
+   "explanation": []
+  },
+  {
+   "index": 1,
+   "start": 11.48,
+   "end": 12.08,
+   "duration": 0.6,
+   "types": [
+    "sound_rep"
+   ],
+   "faceRatio": 1.0,
+   "assessed": true,
+   "behaviourPresent": false,
+   "categories": {
+    "FG": {
+     "present": false,
+     "score": 1.37,
+     "scoreType": "deviation_sd"
+    },
+    "HM": {
+     "present": false,
+     "score": 0.98,
+     "scoreType": "deviation_sd"
+    }
+   },
+   "signals": {
+    "eye": {
+     "deviation": 0.41,
+     "direction": "below",
+     "topFeature": "browDown",
+     "threshold": 5.89,
+     "pValue": 1.0,
+     "nullSpans": 309,
+     "exceeds": false
+    },
+    "lip": {
+     "deviation": 0.97,
+     "direction": "below",
+     "topFeature": "lipOpening",
+     "threshold": 5.11,
+     "pValue": 1.0,
+     "nullSpans": 309,
+     "exceeds": false
+    },
+    "jaw": {
+     "deviation": 1.37,
+     "direction": "above",
+     "topFeature": "jawOpening",
+     "threshold": 5.5,
+     "pValue": 1.0,
+     "nullSpans": 309,
+     "exceeds": false
+    },
+    "cheek": {
+     "deviation": 0.0,
+     "direction": "below",
+     "topFeature": "cheekPuff",
+     "threshold": 3.2,
+     "pValue": 1.0,
+     "nullSpans": 309,
+     "exceeds": false
+    },
+    "head": {
+     "deviation": 0.98,
+     "direction": "below",
+     "topFeature": "headZ",
+     "threshold": 4.9,
+     "pValue": 1.0,
+     "nullSpans": 309,
+     "exceeds": false
+    }
+   },
+   "explanation": []
+  },
+  {
+   "index": 2,
+   "start": 16.6,
+   "end": 17.4,
+   "duration": 0.8,
+   "types": [
+    "prolongation"
+   ],
+   "faceRatio": 1.0,
+   "assessed": true,
+   "behaviourPresent": true,
+   "categories": {
+    "FG": {
+     "present": true,
+     "score": 15.52,
+     "scoreType": "deviation_sd"
+    },
+    "HM": {
+     "present": false,
+     "score": 5.04,
+     "scoreType": "deviation_sd"
+    }
+   },
+   "signals": {
+    "eye": {
+     "deviation": 1.51,
+     "direction": "below",
+     "topFeature": "browDown",
+     "threshold": 6.26,
+     "pValue": 1.0,
+     "nullSpans": 293,
+     "exceeds": false
+    },
+    "lip": {
+     "deviation": 6.16,
+     "direction": "above",
+     "topFeature": "mouthFunnel",
+     "threshold": 7.94,
+     "pValue": 0.008,
+     "nullSpans": 293,
+     "exceeds": false
+    },
+    "jaw": {
+     "deviation": 15.52,
+     "direction": "above",
+     "topFeature": "jawOpen",
+     "threshold": 7.92,
+     "pValue": 0.0001,
+     "nullSpans": 293,
+     "exceeds": true
+    },
+    "cheek": {
+     "deviation": 0.0,
+     "direction": "below",
+     "topFeature": "cheekPuff",
+     "threshold": 3.57,
+     "pValue": 1.0,
+     "nullSpans": 293,
+     "exceeds": false
+    },
+    "head": {
+     "deviation": 5.04,
+     "direction": "below",
+     "topFeature": "headY",
+     "threshold": 5.34,
+     "pValue": 0.0095,
+     "nullSpans": 293,
+     "exceeds": false
+    }
+   },
+   "explanation": [
+    "jaw +15.5 SD above this child's normal (jaw opening); rarer than 1 in 1,000 fluent stretches"
+   ]
+  },
+  {
+   "index": 3,
+   "start": 22.4,
+   "end": 23.4,
+   "duration": 1.0,
+   "types": [
+    "block"
+   ],
+   "faceRatio": 1.0,
+   "assessed": true,
+   "behaviourPresent": true,
+   "categories": {
+    "FG": {
+     "present": true,
+     "score": 5.9,
+     "scoreType": "deviation_sd"
+    },
+    "HM": {
+     "present": false,
+     "score": 2.88,
+     "scoreType": "deviation_sd"
+    }
+   },
+   "signals": {
+    "eye": {
+     "deviation": 4.26,
+     "direction": "above",
+     "topFeature": "gazeHorizontal",
+     "threshold": 6.79,
+     "pValue": 0.022,
+     "nullSpans": 269,
+     "exceeds": false
+    },
+    "lip": {
+     "deviation": 5.9,
+     "direction": "above",
+     "topFeature": "mouthRollLower",
+     "threshold": 4.22,
+     "pValue": 0.0003,
+     "nullSpans": 269,
+     "exceeds": true
+    },
+    "jaw": {
+     "deviation": 4.14,
+     "direction": "below",
+     "topFeature": "jawOpening",
+     "threshold": 6.43,
+     "pValue": 0.0165,
+     "nullSpans": 269,
+     "exceeds": false
+    },
+    "cheek": {
+     "deviation": 0.0,
+     "direction": "below",
+     "topFeature": "cheekPuff",
+     "threshold": 4.06,
+     "pValue": 1.0,
+     "nullSpans": 269,
+     "exceeds": false
+    },
+    "head": {
+     "deviation": 2.88,
+     "direction": "above",
+     "topFeature": "pitch",
+     "threshold": 6.35,
+     "pValue": 1.0,
+     "nullSpans": 269,
+     "exceeds": false
+    }
+   },
+   "explanation": [
+    "lip +5.9 SD above this child's normal (lower lip roll); rarer than 1 in 1,000 fluent stretches"
+   ]
+  },
+  {
+   "index": 4,
+   "start": 28.4,
+   "end": 29.0,
+   "duration": 0.6,
+   "types": [
+    "sound_rep"
+   ],
+   "faceRatio": 1.0,
+   "assessed": true,
+   "behaviourPresent": true,
+   "categories": {
+    "FG": {
+     "present": false,
+     "score": 3.94,
+     "scoreType": "deviation_sd"
+    },
+    "HM": {
+     "present": true,
+     "score": 7.23,
+     "scoreType": "deviation_sd"
+    }
+   },
+   "signals": {
+    "eye": {
+     "deviation": 3.94,
+     "direction": "above",
+     "topFeature": "eyeBlink",
+     "threshold": 4.2,
+     "pValue": 0.003,
+     "nullSpans": 309,
+     "exceeds": false
+    },
+    "lip": {
+     "deviation": 0.53,
+     "direction": "below",
+     "topFeature": "lipOpening",
+     "threshold": 5.11,
+     "pValue": 1.0,
+     "nullSpans": 309,
+     "exceeds": false
+    },
+    "jaw": {
+     "deviation": 0.2,
+     "direction": "below",
+     "topFeature": "jawOpen",
+     "threshold": 7.4,
+     "pValue": 1.0,
+     "nullSpans": 309,
+     "exceeds": false
+    },
+    "cheek": {
+     "deviation": 0.0,
+     "direction": "below",
+     "topFeature": "cheekPuff",
+     "threshold": 3.2,
+     "pValue": 1.0,
+     "nullSpans": 309,
+     "exceeds": false
+    },
+    "head": {
+     "deviation": 7.23,
+     "direction": "below",
+     "topFeature": "yaw",
+     "threshold": 6.49,
+     "pValue": 0.0044,
+     "nullSpans": 309,
+     "exceeds": true
+    }
+   },
+   "explanation": [
+    "head -7.2 SD below this child's normal (head turn); about 1 in 227 fluent stretches move this much"
+   ]
+  },
+  {
+   "index": 5,
+   "start": 34.0,
+   "end": 35.0,
+   "duration": 1.0,
+   "types": [
+    "block"
+   ],
+   "faceRatio": 1.0,
+   "assessed": true,
+   "behaviourPresent": false,
+   "categories": {
+    "FG": {
+     "present": false,
+     "score": 4.61,
+     "scoreType": "deviation_sd"
+    },
+    "HM": {
+     "present": false,
+     "score": 0.81,
+     "scoreType": "deviation_sd"
+    }
+   },
+   "signals": {
+    "eye": {
+     "deviation": 4.61,
+     "direction": "above",
+     "topFeature": "gazeHorizontal",
+     "threshold": 6.79,
+     "pValue": 0.016,
+     "nullSpans": 269,
+     "exceeds": false
+    },
+    "lip": {
+     "deviation": 0.85,
+     "direction": "below",
+     "topFeature": "lipOpening",
+     "threshold": 5.82,
+     "pValue": 1.0,
+     "nullSpans": 269,
+     "exceeds": false
+    },
+    "jaw": {
+     "deviation": 0.59,
+     "direction": "below",
+     "topFeature": "jawOpening",
+     "threshold": 6.43,
+     "pValue": 1.0,
+     "nullSpans": 269,
+     "exceeds": false
+    },
+    "cheek": {
+     "deviation": 0.0,
+     "direction": "below",
+     "topFeature": "cheekPuff",
+     "threshold": 4.06,
+     "pValue": 1.0,
+     "nullSpans": 269,
+     "exceeds": false
+    },
+    "head": {
+     "deviation": 0.81,
+     "direction": "below",
+     "topFeature": "headSpeed",
+     "threshold": 5.06,
+     "pValue": 1.0,
+     "nullSpans": 269,
+     "exceeds": false
+    }
+   },
+   "explanation": []
+  },
+  {
+   "index": 6,
+   "start": 39.0,
+   "end": 39.8,
+   "duration": 0.8,
+   "types": [
+    "prolongation"
+   ],
+   "faceRatio": 1.0,
+   "assessed": true,
+   "behaviourPresent": true,
+   "categories": {
+    "FG": {
+     "present": true,
+     "score": 10.13,
+     "scoreType": "deviation_sd"
+    },
+    "HM": {
+     "present": true,
+     "score": 12.39,
+     "scoreType": "deviation_sd"
+    }
+   },
+   "signals": {
+    "eye": {
+     "deviation": 10.13,
+     "direction": "above",
+     "topFeature": "browInnerUp",
+     "threshold": 9.03,
+     "pValue": 0.0012,
+     "nullSpans": 293,
+     "exceeds": true
+    },
+    "lip": {
+     "deviation": 1.92,
+     "direction": "above",
+     "topFeature": "mouthFunnel",
+     "threshold": 7.94,
+     "pValue": 1.0,
+     "nullSpans": 293,
+     "exceeds": false
+    },
+    "jaw": {
+     "deviation": 0.93,
+     "direction": "below",
+     "topFeature": "jawOpening",
+     "threshold": 6.02,
+     "pValue": 1.0,
+     "nullSpans": 293,
+     "exceeds": false
+    },
+    "cheek": {
+     "deviation": 0.0,
+     "direction": "above",
+     "topFeature": "cheekPuff",
+     "threshold": 3.57,
+     "pValue": 1.0,
+     "nullSpans": 293,
+     "exceeds": false
+    },
+    "head": {
+     "deviation": 12.39,
+     "direction": "below",
+     "topFeature": "headY",
+     "threshold": 5.34,
+     "pValue": 0.0001,
+     "nullSpans": 293,
+     "exceeds": true
+    }
+   },
+   "explanation": [
+    "head -12.4 SD below this child's normal (vertical head shift); rarer than 1 in 1,000 fluent stretches",
+    "eye +10.1 SD above this child's normal (inner brow raise); about 1 in 833 fluent stretches move this much"
+   ]
+  }
+ ],
+ "behaviourEvents": [
+  {
+   "category": "FG",
+   "signal": "jaw",
+   "feature": "jawOpen",
+   "start": 16.72,
+   "end": 17.28,
+   "duration": 0.56,
+   "peakDeviation": 15.52,
+   "direction": "above",
+   "momentIndex": 2
+  },
+  {
+   "category": "FG",
+   "signal": "lip",
+   "feature": "mouthRollLower",
+   "start": 22.64,
+   "end": 23.2,
+   "duration": 0.56,
+   "peakDeviation": 5.9,
+   "direction": "above",
+   "momentIndex": 3
+  },
+  {
+   "category": "HM",
+   "signal": "head",
+   "feature": "yaw",
+   "start": 28.4,
+   "end": 29.12,
+   "duration": 0.72,
+   "peakDeviation": 7.23,
+   "direction": "below",
+   "momentIndex": 4
+  },
+  {
+   "category": "FG",
+   "signal": "eye",
+   "feature": "browInnerUp",
+   "start": 38.96,
+   "end": 39.84,
+   "duration": 0.88,
+   "peakDeviation": 10.13,
+   "direction": "above",
+   "momentIndex": 6
+  },
+  {
+   "category": "HM",
+   "signal": "head",
+   "feature": "headY",
+   "start": 39.12,
+   "end": 39.68,
+   "duration": 0.56,
+   "peakDeviation": 12.39,
+   "direction": "below",
+   "momentIndex": 6
+  }
+ ],
+ "counts": {
+  "momentsTotal": 7,
+  "momentsAssessed": 7,
+  "momentsWithBehaviour": 4,
+  "FG": 3,
+  "HM": 2,
+  "behaviourEvents": 5
+ },
+ "behavioursPerStutter": {
+  "FG": 0.429,
+  "HM": 0.286,
+  "any": 0.571
+ },
+ "hasSecondaryBehaviors": true,
+ "concomitantScore": 0.571,
+ "baselines": {
+  "rules": {
+   "version": "rules-prototype-0.1",
+   "momentsWithBehaviour": 7,
+   "FG": 6,
+   "HM": 5,
+   "perMoment": [
+    {
+     "FG": true,
+     "HM": true
+    },
+    {
+     "FG": true,
+     "HM": false
+    },
+    {
+     "FG": true,
+     "HM": true
+    },
+    {
+     "FG": true,
+     "HM": true
+    },
+    {
+     "FG": false,
+     "HM": true
+    },
+    {
+     "FG": true,
+     "HM": false
+    },
+    {
+     "FG": true,
+     "HM": true
+    }
+   ]
+  }
+ },
+ "summary": {
+  "assessed": true,
+  "hasSecondaryBehaviors": true,
+  "behaviourTypes": [
+   "FG",
+   "HM"
+  ],
+  "momentsWithBehaviour": 4,
+  "momentsAssessed": 7
+ },
+ "warnings": [],
+ "processingMs": 6057,
+ "serviceVersion": "0.1.0"
+}

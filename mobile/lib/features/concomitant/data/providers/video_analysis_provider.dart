@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb, TargetPlatform;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swara/core/constants/app_constants.dart';
 import 'package:swara/core/network/api_client.dart';
+import 'package:swara/core/network/api_exception.dart';
 import 'package:swara/core/storage/storage_service.dart';
 import 'package:swara/features/concomitant/data/models/video_analysis_models.dart';
 
@@ -27,12 +28,12 @@ class VideoAnalysisException implements Exception {
   const VideoAnalysisException(this.kind, this.message, {this.statusCode, this.serverMessage});
 
   static const connectionMessage =
-      'Unable to connect to the analysis service. Please check the backend connection.';
+      'Unable to connect to the analysis service. Please check the backend connection. · විශ්ලේෂණ සේවාවට සම්බන්ධ විය නොහැක. සේවා සම්බන්ධතාව පරීක්ෂා කරන්න.';
 
   factory VideoAnalysisException.fromDio(DioException e) {
     final status = e.response?.statusCode;
-    final data = e.response?.data;
-    final serverMsg = data is Map && data['message'] != null ? data['message'].toString() : null;
+    final api = ApiException.fromDio(e);
+    final serverMsg = api.isNetwork ? null : api.message;
 
     if (status == null) {
       if (e.type == DioExceptionType.sendTimeout ||
@@ -40,19 +41,21 @@ class VideoAnalysisException implements Exception {
           e.type == DioExceptionType.connectionTimeout) {
         return const VideoAnalysisException(
           VideoAnalysisErrorKind.connection,
-          'The video upload timed out. Try a smaller or shorter video, or use a faster connection.',
+          'The video upload timed out. Try a smaller or shorter video, or use a faster connection. · වීඩියෝව උඩුගත කිරීමට වැඩි කාලයක් ගත විය. කුඩා හෝ කෙටි වීඩියෝවක් හෝ වේගවත් සම්බන්ධතාවක් භාවිත කරන්න.',
         );
       }
       return const VideoAnalysisException(VideoAnalysisErrorKind.connection, connectionMessage);
     }
-    if (status == 401 || status == 403) {
+    if (status == 401 || (status == 403 && !api.needsParentMode)) {
       final demo = StorageService.isDemoMode();
       return VideoAnalysisException(
         VideoAnalysisErrorKind.unauthorized,
         demo
-            ? 'Video analysis needs a real signed-in account. Demo mode has no backend session - '
-                'sign out and log in with a registered account.'
-            : 'Your session is not authorised for this analysis. Please sign in again.',
+            ? 'Video analysis needs a real signed-in account. Demo mode has no server session - '
+                'sign out and log in with a registered account. · වීඩියෝ විශ්ලේෂණයට ලියාපදිංචි ගිණුමකින් පුරනය වන්න.'
+            : (status == 401
+                ? 'Your session has expired. Please sign in again. · ඔබේ සැසිය කල් ඉකුත් වී ඇත. නැවත පුරනය වන්න.'
+                : '${api.message} · කරුණාකර නැවත උත්සාහ කරන්න.'),
         statusCode: status,
         serverMessage: serverMsg,
       );
@@ -60,8 +63,7 @@ class VideoAnalysisException implements Exception {
     if (status == 404) {
       return VideoAnalysisException(
         VideoAnalysisErrorKind.notFound,
-        'This analysis was not found. The analysis service may have been restarted - '
-        'please start a new analysis.',
+        'This analysis was not found. It may have been deleted - please start a new analysis. · මෙම විශ්ලේෂණය සොයාගත නොහැක. එය මකා දමා තිබිය හැකියි. නව විශ්ලේෂණයක් අරඹන්න.',
         statusCode: status,
         serverMessage: serverMsg,
       );
@@ -69,8 +71,7 @@ class VideoAnalysisException implements Exception {
     if (status == 502 || status == 503 || status == 504) {
       return VideoAnalysisException(
         VideoAnalysisErrorKind.server,
-        'The server could not reach the computer-vision service. '
-        'Make sure the FastAPI service is running.',
+        serverMsg ?? 'The server could not reach the vision service. Make sure it is running. · සේවාදායකයට දෘශ්‍ය සේවාවට සම්බන්ධ විය නොහැක. එය ක්‍රියාත්මකදැයි බලන්න.',
         statusCode: status,
         serverMessage: serverMsg,
       );
@@ -78,14 +79,14 @@ class VideoAnalysisException implements Exception {
     if (status >= 400 && status < 500) {
       return VideoAnalysisException(
         VideoAnalysisErrorKind.badRequest,
-        serverMsg ?? 'The request was rejected by the server.',
+        serverMsg ?? 'The request was rejected by the server. · සේවාදායකය ඉල්ලීම පිළිගත්තේ නැත.',
         statusCode: status,
         serverMessage: serverMsg,
       );
     }
     return VideoAnalysisException(
       VideoAnalysisErrorKind.server,
-      serverMsg ?? 'The analysis service reported an error. Please try again.',
+      serverMsg ?? 'The analysis service reported an error. Please try again. · විශ්ලේෂණ සේවාවේ ගැටලුවක් ඇති විය. නැවත උත්සාහ කරන්න.',
       statusCode: status,
       serverMessage: serverMsg,
     );
@@ -94,7 +95,7 @@ class VideoAnalysisException implements Exception {
   static VideoAnalysisException from(Object e) {
     if (e is VideoAnalysisException) return e;
     if (e is DioException) return VideoAnalysisException.fromDio(e);
-    return VideoAnalysisException(VideoAnalysisErrorKind.unknown, 'Something went wrong: $e');
+    return VideoAnalysisException(VideoAnalysisErrorKind.unknown, 'Something went wrong: $e · ගැටලුවක් ඇති විය.');
   }
 
   @override
@@ -102,19 +103,23 @@ class VideoAnalysisException implements Exception {
 }
 
 // ---------------------------------------------------------------------------
-// Service (Flutter -> Node -> FastAPI)
+// Service (Swara API /api/c2)
 // ---------------------------------------------------------------------------
 
 class VideoAnalysisService {
   final ApiClient _api;
   VideoAnalysisService(this._api);
 
-  static const _base = '/api/concomitant/video-analysis';
+  static const _base = '/api/c2/analyses';
 
-  /// Uploads the ONE selected video and returns the analysis id.
+  /// Uploads the ONE selected video as a parent upload (path B) and returns the analysis id.
+  /// The API extracts the audio track and runs it through C1 to find the stutter moments,
+  /// so ages 11–14 need the reading passage the child read in the video.
   Future<String> start({
     required String childId,
+    required int age,
     required SelectedVideo video,
+    String? passageId,
     void Function(int sent, int total)? onProgress,
   }) async {
     try {
@@ -123,6 +128,8 @@ class VideoAnalysisService {
         file = await MultipartFile.fromFile(video.path!, filename: video.name);
       } else if (video.bytes != null) {
         file = MultipartFile.fromBytes(video.bytes!, filename: video.name);
+      } else if (video.readStream != null) {
+        file = MultipartFile.fromStream(() => video.readStream!, video.sizeBytes, filename: video.name);
       } else {
         throw const VideoAnalysisException(
           VideoAnalysisErrorKind.badRequest,
@@ -131,8 +138,11 @@ class VideoAnalysisService {
       }
       final form = FormData.fromMap({
         'childId': childId,
-        'technologies': 'mediapipe',
-        'generateOverlay': 'false',
+        'age': age,
+        'inputPath': 'parent_upload',
+        'videoConsent': 'true',
+        'language': 'si',
+        if (passageId != null) 'passageId': passageId,
         'video': file,
       });
       final res = await _api.postMultipart(_base, form, onSendProgress: onProgress);
@@ -147,35 +157,54 @@ class VideoAnalysisService {
     }
   }
 
-  Future<AnalysisStatus> status(String id) async {
+  /// Uploads the face video filmed during a C1 task (path A). C2 uses that C1 assessment's stutter moments,
+  /// waiting for it if its analysis is still running, so no second C1 assessment is made.
+  Future<String> startInTask({
+    required String childId,
+    required int age,
+    required String c1AssessmentId,
+    required String videoPath,
+  }) async {
+    try {
+      final form = FormData.fromMap({
+        'childId': childId,
+        'age': age,
+        'inputPath': 'in_task_camera',
+        'videoConsent': 'true',
+        'c1AssessmentId': c1AssessmentId,
+        'video': await MultipartFile.fromFile(videoPath, filename: 'task.mp4'),
+      });
+      final res = await _api.postMultipart(_base, form);
+      final id = res.data is Map ? res.data['analysisId'] : null;
+      if (id is! String || id.isEmpty) {
+        throw const VideoAnalysisException(VideoAnalysisErrorKind.server, 'The server did not return an analysis id.');
+      }
+      return id;
+    } on DioException catch (e) {
+      throw VideoAnalysisException.fromDio(e);
+    }
+  }
+
+  /// Status and, once completed, the result (one document).
+  Future<VideoAnalysis> get(String id) async {
     try {
       final res = await _api.get('$_base/$id');
-      return AnalysisStatus.fromJson(res.data);
+      return VideoAnalysis.fromJson(res.data);
     } on DioException catch (e) {
       throw VideoAnalysisException.fromDio(e);
     }
   }
 
-  Future<VideoAnalysisResults> results(String id) async {
+  Future<List<VideoAnalysis>> history(String childId) async {
     try {
-      final res = await _api.get('$_base/$id/results');
-      return VideoAnalysisResults.fromJson(res.data);
+      final res = await _api.get('/api/c2/children/$childId/analyses', queryParameters: {'limit': 10});
+      final items = res.data is Map ? res.data['items'] : null;
+      if (items is! List) return const [];
+      return items.map(VideoAnalysis.fromJson).toList(growable: false);
     } on DioException catch (e) {
       throw VideoAnalysisException.fromDio(e);
     }
   }
-
-  Future<List<VideoAnalysisSummary>> history(String childId) async {
-    try {
-      final res = await _api.get('$_base/history/$childId');
-      final data = res.data;
-      if (data is! List) return const [];
-      return data.map(VideoAnalysisSummary.fromJson).toList(growable: false);
-    } on DioException catch (e) {
-      throw VideoAnalysisException.fromDio(e);
-    }
-  }
-
 }
 
 final videoAnalysisServiceProvider = Provider<VideoAnalysisService>(
@@ -186,7 +215,7 @@ final videoAnalysisServiceProvider = Provider<VideoAnalysisService>(
 // Video selection (one video only)
 // ---------------------------------------------------------------------------
 
-const kAllowedVideoExtensions = ['mp4', 'mov', 'webm', 'avi', 'mkv'];
+const kAllowedVideoExtensions = ['mp4', 'mov', 'm4v', 'webm', 'avi', 'mkv'];
 
 class SelectedVideoState {
   final SelectedVideo? video;
@@ -202,30 +231,33 @@ class SelectedVideoNotifier extends StateNotifier<SelectedVideoState> {
       final res = await FilePicker.platform.pickFiles(
         type: FileType.video,
         allowMultiple: false,
-        withData: kIsWeb, // web has no file path; native streams from disk
+        withData: kIsWeb, // Web needs in-memory bytes; native platforms prefer a path or stream.
+        withReadStream: !kIsWeb &&
+            (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS),
       );
       if (res == null || res.files.isEmpty) return;
       final f = res.files.first;
       final ext = (f.extension ?? f.name.split('.').last).toLowerCase();
       final path = kIsWeb ? null : f.path;
+      final readStream = kIsWeb ? null : f.readStream;
 
       String? err;
       if (!kAllowedVideoExtensions.contains(ext)) {
-        err = 'Unsupported format (.$ext). Use: ${kAllowedVideoExtensions.join(', ')}.';
+        err = 'Unsupported format (.$ext). Use: ${kAllowedVideoExtensions.join(', ')}. · සහාය නොදක්වන ආකෘතියකි. ලැයිස්තුවෙන් ආකෘතියක් තෝරන්න.';
       } else if (f.size <= 0) {
-        err = 'The selected file is empty or unreadable.';
-      } else if (path == null && f.bytes == null) {
-        err = 'Could not read the file from the device.';
+        err = 'The selected file is empty or unreadable. · තෝරාගත් ගොනුව හිස් හෝ කියවිය නොහැක.';
+      } else if (path == null && f.bytes == null && readStream == null) {
+        err = 'Could not read the file from the device. · උපාංගයෙන් ගොනුව කියවිය නොහැක.';
       } else if (f.size > AppConstants.maxVideoSizeMb * 1024 * 1024) {
-        err = 'The video is larger than ${AppConstants.maxVideoSizeMb} MB. Please choose a shorter clip.';
+        err = 'The video is larger than ${AppConstants.maxVideoSizeMb} MB. Please choose a shorter clip. · වීඩියෝව ${AppConstants.maxVideoSizeMb} MB ට වඩා විශාලයි. කෙටි වීඩියෝවක් තෝරන්න.';
       }
       state = err != null
           ? SelectedVideoState(video: state.video, error: err)
           : SelectedVideoState(
-              video: SelectedVideo(name: f.name, sizeBytes: f.size, path: path, bytes: f.bytes),
+              video: SelectedVideo(name: f.name, sizeBytes: f.size, path: path, bytes: f.bytes, readStream: readStream),
             );
     } catch (_) {
-      state = SelectedVideoState(video: state.video, error: 'Could not open the file picker.');
+      state = SelectedVideoState(video: state.video, error: 'Could not open the file picker. · ගොනු තේරීම විවෘත කළ නොහැකි විය.');
     }
   }
 
@@ -258,17 +290,19 @@ class VideoAnalysisController extends StateNotifier<VideoAnalysisStartState> {
 
   /// Uploads the selected video and creates the analysis.
   /// Returns the analysis id, or null (with [state].error set) on failure.
-  Future<String?> start({required String childId}) async {
+  Future<String?> start({required String childId, required int age, String? passageId}) async {
     if (state.isUploading) return null;
     final video = _ref.read(selectedVideoProvider).video;
     if (video == null) {
-      state = const VideoAnalysisStartState(error: 'Please select a video before starting the analysis.');
+      state = const VideoAnalysisStartState(error: 'Please select a video before starting the analysis. · විශ්ලේෂණය ආරම්භ කිරීමට පෙර වීඩියෝවක් තෝරන්න.');
       return null;
     }
     state = const VideoAnalysisStartState(isUploading: true);
     try {
       final id = await _ref.read(videoAnalysisServiceProvider).start(
             childId: childId,
+            age: age,
+            passageId: passageId,
             video: video,
             onProgress: (sent, total) {
               if (!mounted || total <= 0) return;
@@ -281,7 +315,7 @@ class VideoAnalysisController extends StateNotifier<VideoAnalysisStartState> {
       final ex = VideoAnalysisException.from(e);
       final msg = switch (ex.kind) {
         VideoAnalysisErrorKind.connection || VideoAnalysisErrorKind.unauthorized => ex.message,
-        _ => 'Video upload failed. ${ex.message}',
+        _ => 'Video upload failed · වීඩියෝව උඩුගත කිරීමට නොහැකි විය. ${ex.message}',
       };
       if (mounted) state = VideoAnalysisStartState(error: msg);
       return null;
@@ -302,7 +336,7 @@ final videoAnalysisProvider =
 // ---------------------------------------------------------------------------
 
 class StatusPollState {
-  final AnalysisStatus? status;
+  final VideoAnalysis? status;
   final VideoAnalysisException? error;
   final int consecutiveFailures;
   const StatusPollState({this.status, this.error, this.consecutiveFailures = 0});
@@ -323,7 +357,7 @@ class StatusPoller extends StateNotifier<StatusPollState> {
     if (_busy || !mounted) return;
     _busy = true;
     try {
-      final s = await _service.status(analysisId);
+      final s = await _service.get(analysisId);
       if (!mounted) return;
       state = StatusPollState(status: s);
       if (s.isTerminal) _timer?.cancel();
@@ -369,12 +403,11 @@ final videoAnalysisStatusProvider =
 // ---------------------------------------------------------------------------
 
 final videoAnalysisResultsProvider =
-    FutureProvider.autoDispose.family<VideoAnalysisResults, String>((ref, id) {
-  return ref.watch(videoAnalysisServiceProvider).results(id);
+    FutureProvider.autoDispose.family<VideoAnalysis, String>((ref, id) {
+  return ref.watch(videoAnalysisServiceProvider).get(id);
 });
 
 final videoAnalysisHistoryProvider =
-    FutureProvider.autoDispose.family<List<VideoAnalysisSummary>, String>((ref, childId) {
+    FutureProvider.autoDispose.family<List<VideoAnalysis>, String>((ref, childId) {
   return ref.watch(videoAnalysisServiceProvider).history(childId);
 });
-

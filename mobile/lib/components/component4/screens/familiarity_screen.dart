@@ -50,7 +50,7 @@ class _FamiliarityScreenState extends State<FamiliarityScreen> {
     final currentCategory = widget.selectedCategories[_currentIndex];
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.groundHome,
       body: SafeArea(
         child: Column(
           children: [
@@ -83,19 +83,16 @@ class _FamiliarityScreenState extends State<FamiliarityScreen> {
                       decoration: BoxDecoration(
                         borderRadius: AppRadii.lgAll,
                         boxShadow: AppElevation.card,
-                        image: DecorationImage(
-                          image: AssetImage(currentCategory.imagePath),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                        image: currentCategory.imagePath == null
+                            ? null
+                            : DecorationImage(
+                                image: AssetImage(currentCategory.imagePath!),
+                                fit: BoxFit.cover,
+                              ),
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: AppRadii.lgAll,
-                          gradient: LinearGradient(
-                            colors: [Colors.transparent, AppColors.deepNavy.withOpacity(0.8)],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                          ),
+                          color: AppColors.surfaceRaised.withValues(alpha: 0.94),
                         ),
                         alignment: Alignment.bottomCenter,
                         padding: const EdgeInsets.all(16),
@@ -104,11 +101,11 @@ class _FamiliarityScreenState extends State<FamiliarityScreen> {
                           children: [
                             Text(
                               currentCategory.sinhalaName,
-                              style: AppTextStyles.heading2.copyWith(color: AppColors.white),
+                              style: AppTextStyles.heading2.copyWith(color: AppColors.text),
                             ),
                             Text(
                               currentCategory.englishName,
-                              style: AppTextStyles.body.copyWith(color: AppColors.white.withOpacity(0.9)),
+                              style: AppTextStyles.body.copyWith(color: AppColors.textLight),
                             ),
                           ],
                         ),
@@ -121,11 +118,6 @@ class _FamiliarityScreenState extends State<FamiliarityScreen> {
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 4),
-                    Text(
-                      'How much do you know about this?',
-                      style: AppTextStyles.bodySmall,
-                      textAlign: TextAlign.center,
-                    ),
                     const SizedBox(height: 24),
                     ...familiarityLevels.map((level) => Padding(
                           padding: const EdgeInsets.only(bottom: 12.0),

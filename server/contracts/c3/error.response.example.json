@@ -1,0 +1,7 @@
+{
+  "error": {
+    "code": "session_not_found",
+    "message": "No therapy session with id 000000000000000000000000.",
+    "details": null
+  }
+}

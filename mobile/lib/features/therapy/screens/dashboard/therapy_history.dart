@@ -8,6 +8,7 @@ class _TherapyHistory extends StatefulWidget {
 
 class _TherapyHistoryState extends State<_TherapyHistory> {
   List<dynamic> _history = [];
+  Map<String, dynamic>? _summary;
   bool _isLoading = true;
 
   @override
@@ -17,7 +18,17 @@ class _TherapyHistoryState extends State<_TherapyHistory> {
   }
 
   Future<void> _loadHistory() async {
-    final history = await TherapyApiService.getTherapyHistory();
+    final history = await _C3Session.history();
+    final c = _C3Session.child;
+    Map<String, dynamic>? summary;
+    if (_C3Session.isLive && c != null) {
+      try {
+        summary = await TherapyApiService.summary(c.childId);
+      } catch (e) {
+        debugPrint('C3 summary failed: $e');
+      }
+    }
+    _summary = summary;
     if (mounted) {
       setState(() {
         _history = history;
@@ -69,15 +80,18 @@ class _TherapyHistoryState extends State<_TherapyHistory> {
                                   children: [
                                     _HistoryStat(
                                         label: 'Sessions',
-                                        value: '${_history.length}',
+                                        value:
+                                            '${_summary?['sessionsCompleted'] ?? _history.where((s) => s['status'] == 'Completed').length}',
                                         icon: '🗓️'),
                                     _HistoryStat(
                                         label: 'Streak',
-                                        value: '${_history.isEmpty ? 0 : (_history.length > 30 ? 30 : _history.length)} Days',
+                                        value: _summary?['streakDays'] == null
+                                            ? '—'
+                                            : '${_summary!['streakDays']} Days',
                                         icon: '🔥'),
                                     _HistoryStat(
                                         label: 'Stars',
-                                        value: '${_history.fold<int>(0, (sum, s) => sum + (((s['selectedActivities'] as List?)?.length ?? 1) * 15))}',
+                                        value: '${_summary?['stars'] ?? '—'}',
                                         icon: '⭐'),
                                   ]),
                             ]),
@@ -115,15 +129,20 @@ class _TherapyHistoryState extends State<_TherapyHistory> {
                                 as Map<String, dynamic>?;
                             final score = summary == null
                                 ? session['status']?.toString() ?? 'Unknown'
-                                : 'Score ${summary['score']}/${summary['scoreOutOf']}';
+                                : 'TSS ${summary['score']}/${summary['scoreOutOf']}';
                             final details = summary == null
                                 ? <String>[
-                                    session['status'] == 'Completed'
-                                        ? 'Session completed'
-                                        : 'Session in progress',
+                                    switch (session['status']) {
+                                      'Completed' => 'Session completed',
+                                      'Not finished' => 'Left unfinished',
+                                      _ =>
+                                        'Session in progress (continue it from the therapy home)',
+                                    },
                                   ]
                                 : <String>[
                                     '${summary['activitiesCompleted']} of ${summary['activitiesTotal']} activities completed',
+                                    if ((summary['activitiesSkipped'] ?? 0) > 0)
+                                      '${summary['activitiesSkipped']} skipped',
                                     if (summary['durationMinutes'] != null)
                                       '${summary['durationMinutes']} min',
                                   ];

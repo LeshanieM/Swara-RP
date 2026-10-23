@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swara/components/component4/screens/component4_intro.dart';
-import 'package:swara/components/component4/screens/familiarity_screen.dart';
 import 'package:swara/components/component4/screens/interest_selection.dart';
 import 'package:swara/components/component4/screens/linguistic_analysis_screen.dart';
 import 'package:swara/components/component4/screens/next_session_screen.dart';
+import 'package:swara/components/component4/screens/checklist_screen.dart';
 import 'package:swara/components/component4/screens/personalization_process_screen.dart';
 import 'package:swara/components/component4/screens/personalized_question_screen.dart';
 import 'package:swara/components/component4/screens/personalized_topic_screen.dart';
@@ -17,20 +17,24 @@ import 'package:swara/components/component4/screens/speech_recording_screen.dart
 import 'package:swara/components/component4/screens/transcription_screen.dart';
 import 'package:swara/core/constants/app_constants.dart';
 import 'package:swara/core/widgets/main_scaffold.dart';
-import 'package:swara/features/commercialization/presentation/screens/revenue_model_screen.dart';
 import 'package:swara/features/auth/data/providers/auth_provider.dart';
 import 'package:swara/features/auth/presentation/screens/login_screen.dart';
 import 'package:swara/features/auth/presentation/screens/register_screen.dart';
+import 'package:swara/features/auth/presentation/screens/profile_screen.dart';
 import 'package:swara/features/auth/presentation/screens/splash_screen.dart';
 import 'package:swara/features/child/presentation/screens/child_home_screen.dart';
+import 'package:swara/features/commercialization/presentation/screens/revenue_model_screen.dart';
 import 'package:swara/features/concomitant/presentation/screens/video_analysis_results_screen.dart';
 import 'package:swara/features/concomitant/presentation/screens/video_analysis_processing_screen.dart';
 import 'package:swara/features/concomitant/presentation/screens/video_analysis_upload_screen.dart';
 import 'package:swara/features/progress/presentation/screens/progress_screen.dart';
+import 'package:swara/features/speech/data/models/speech_assessment.dart';
 import 'package:swara/features/speech/presentation/screens/speech_completion_screen.dart';
 import 'package:swara/features/speech/presentation/screens/speech_result_screen.dart';
 import 'package:swara/features/speech/presentation/screens/speech_task_screen.dart';
+import 'package:swara/features/therapist/presentation/screens/therapist_child_detail_screen.dart';
 import 'package:swara/features/therapist/presentation/screens/therapist_home_screen.dart';
+import 'package:swara/features/therapist/presentation/screens/therapy_knowledge_base_screen.dart';
 import 'package:swara/features/therapy/therapy_ui.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -98,6 +102,13 @@ final routerProvider = Provider<GoRouter>((ref) {
           redirectTo: state.uri.queryParameters['redirectTo'],
         ),
       ),
+      GoRoute(
+        path: '/commercialization',
+        builder: (context, state) => MainScaffold(
+          currentLocation: state.uri.toString(),
+          child: const RevenueModelScreen(),
+        ),
+      ),
       ShellRoute(
         navigatorKey: _shellNavigatorKey,
         builder: (context, state, child) => MainScaffold(
@@ -122,13 +133,22 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => const TherapistHomeScreen(),
           ),
           GoRoute(
-            path: '/profile',
-            builder: (context, state) =>
-                const ProgressScreen(childId: 'child_1'),
+            path: '/therapist/child/:childId',
+            builder: (context, state) => TherapistChildDetailScreen(
+              childId: state.pathParameters['childId']!,
+            ),
           ),
           GoRoute(
-            path: '/commercialization',
-            builder: (context, state) => const RevenueModelScreen(),
+            path: '/therapist/knowledge-base',
+            builder: (context, state) => const TherapyKnowledgeBaseScreen(),
+          ),
+          GoRoute(
+            path: '/profile',
+            builder: (context, state) => const ProfileScreen(),
+          ),
+          GoRoute(
+            path: '/progress',
+            builder: (context, state) => const ProgressScreen(),
           ),
           GoRoute(
             path: '/c1/record',
@@ -137,13 +157,15 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/c1/complete',
             builder: (context, state) => SpeechCompletionScreen(
-              durationSeconds: state.extra as int? ?? 0,
+              submission: state.extra as SpeechSubmission? ??
+                  const SpeechSubmission(durationSeconds: 0),
             ),
           ),
           GoRoute(
             path: '/c1/result',
             builder: (context, state) => SpeechResultScreen(
-              durationSeconds: state.extra as int? ?? 0,
+              submission: state.extra as SpeechSubmission? ??
+                  const SpeechSubmission(durationSeconds: 0),
             ),
           ),
 
@@ -154,10 +176,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/c2/video/upload',
-            builder: (context, state) =>
-                VideoAnalysisUploadScreen(
-                  childId: state.uri.queryParameters['childId'] ?? 'child_1',
-                ),
+            builder: (context, state) => const VideoAnalysisUploadScreen(),
           ),
           GoRoute(
             path: '/c2/video/process/:id',
@@ -184,14 +203,12 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => const Component4Intro(),
           ),
           GoRoute(
-            path: '/c4/interest',
-            builder: (context, state) => const InterestSelectionScreen(),
+            path: '/c4/checklist',
+            builder: (context, state) => const ChecklistScreen(),
           ),
           GoRoute(
-            path: '/c4/familiarity',
-            builder: (context, state) => FamiliarityScreen(
-              selectedCategories: state.extra as List<InterestCategory>? ?? [],
-            ),
+            path: '/c4/interest',
+            builder: (context, state) => const InterestSelectionScreen(),
           ),
           GoRoute(
             path: '/c4/personalization_processing',
@@ -259,15 +276,12 @@ final List<RouteBase> _therapyRoutes = [
   _therapyRoute('/c3/therapy/welcome', 'welcome'),
   _therapyRoute('/c3/therapy/character', 'character'),
   _therapyRoute('/c3/therapy/adventure-plan', 'adventure-plan'),
-  _therapyRoute('/c3/therapy/journey-map', 'journey-map'),
   _therapyRoute('/c3/therapy/breathing', 'breathing'),
   _therapyRoute('/c3/therapy/adaptive-syllable', 'adaptive-syllable'),
   _therapyRoute('/c3/therapy/syllable-practice', 'syllable-practice'),
   _therapyRoute('/c3/therapy/adaptive-picture', 'adaptive-picture'),
-  _therapyRoute('/c3/therapy/picture-intro', 'picture-intro'),
   _therapyRoute('/c3/therapy/picture-activity', 'picture-activity'),
   _therapyRoute('/c3/therapy/adaptive-conversation', 'adaptive-conversation'),
-  _therapyRoute('/c3/therapy/guided-conversation', 'guided-conversation'),
   _therapyRoute('/c3/therapy/journey-complete', 'journey-complete'),
   _therapyRoute('/c3/therapy/session-complete', 'session-complete'),
   _therapyRoute('/c3/therapy/progress', 'progress'),
@@ -282,6 +296,7 @@ final List<RouteBase> _therapyRoutes = [
     ),
   ),
   _therapyRoute('/c3/therapy/feedback', 'feedback'),
+  _therapyRoute('/c3/therapy/questionnaire', 'questionnaire'),
   _therapyRoute('/c3/therapy/bandit-reasoning', 'bandit-reasoning'),
   _therapyRoute('/c3/therapy/therapist-dashboard', 'therapist-dashboard'),
   _therapyRoute(

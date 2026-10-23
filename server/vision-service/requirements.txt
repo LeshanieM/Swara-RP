@@ -1,0 +1,12 @@
+# C2 vision service. Python 3.11.
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+python-multipart==0.0.20
+pydantic==2.10.4
+pydantic-settings==2.7.1
+# mediapipe 0.10.21 needs numpy < 2 and brings its own OpenCV build (opencv-contrib-python).
+numpy==1.26.4
+mediapipe==0.10.21
+opencv-contrib-python==4.11.0.86
+# Decodes the video's audio track without a system ffmpeg (the wheels bundle the libraries).
+av==14.1.0

@@ -2,18 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swara/core/theme/app_theme.dart';
 import 'package:swara/components/component4/widgets/c4_header.dart';
+import 'package:swara/components/component4/services/c4_flow.dart';
 
 class ResultsScreen extends StatelessWidget {
   const ResultsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final v = C4Flow.view;
+    final duration = fmtClock(v.durationSec);
+    final mlu = v.mlu == null ? '—' : v.mlu!.toStringAsFixed(1);
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.groundHome,
       body: SafeArea(
         child: Column(
           children: [
-            const C4Header(currentStep: 12, totalSteps: 12),
+            const C4Header(currentStep: 12, totalSteps: 14),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(24.0),
@@ -26,41 +30,64 @@ class ResultsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Communication & Language Results',
+                      'සන්නිවේදන හා භාෂා ප්‍රතිඵල',
                       style: AppTextStyles.body.copyWith(color: AppColors.textLight),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 32),
 
                     _buildResultCard(
-                      value: '5.2',
-                      unit: 'words / utterance',
-                      titleEn: 'Mean Length of Utterance',
+                      value: mlu,
+                      unit: 'වචන / ප්‍රකාශනය',
                       titleSi: 'සාමාන්‍ය ප්‍රකාශන දිග',
-                      description: 'Average number of words in each utterance.',
+                      description: 'එක් ප්‍රකාශනයක සාමාන්‍ය වචන ගණන.',
                       icon: Icons.linear_scale,
                     ),
                     const SizedBox(height: 16),
                     _buildResultCard(
-                      value: '37',
-                      unit: 'different words',
-                      titleEn: 'Number of Different Words',
+                      value: '${v.ndw}',
+                      unit: 'වෙනස් වචන',
                       titleSi: 'වෙනස් වචන ගණන',
-                      description: 'Number of different words used in the response.',
+                      description: 'පිළිතුරේ භාවිත කළ වෙනස් වචන ගණන.',
                       icon: Icons.abc,
                     ),
                     const SizedBox(height: 16),
                     _buildResultCard(
-                      value: '01:24',
+                      value: v.percentSS == null ? '—' : v.percentSS!.toStringAsFixed(1),
+                      unit: v.percentSS == null ? 'ඇගයීමට ලක් කර නැත' : 'අක්ෂරවලින් %',
+                      titleSi: 'පැකිළුණු අක්ෂර ප්‍රතිශතය',
+                      description: 'C1 විශ්ලේෂණයට අනුව අක්ෂර 100කට පැකිළුණු අක්ෂර ගණන.',
+                      icon: Icons.graphic_eq,
+                    ),
+                    const SizedBox(height: 16),
+                    _buildResultCard(
+                      value: duration,
                       unit: '',
-                      titleEn: 'Response Duration',
                       titleSi: 'පිළිතුරු කාලය',
-                      description: 'Length of the spontaneous speech response.',
+                      description: 'ස්වභාවිකව කතා කළ පිළිතුරේ කාලය.',
                       icon: Icons.timer,
                     ),
 
                     const SizedBox(height: 32),
-                    Text('This Session', style: AppTextStyles.titleLarge),
+                    if (v.utterances < 5)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: Text(
+                          'මෙවර වාක්‍ය 5කට අඩුයි. ඊළඟ වතාවේ තව ටිකක් කතා කරමු.',
+                          style: AppTextStyles.caption.copyWith(color: AppColors.warning),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    if (v.flags.contains('unreliable_sample') || v.flags.contains('short_sample'))
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: Text(
+                          'පිළිතුර වචන 50කට අඩු නිසා මෙම මිනුම්වල විශ්වාසනීයත්වය අඩු විය හැකියි.',
+                          style: AppTextStyles.caption.copyWith(color: AppColors.warning),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    Text('මෙම සැසිය', style: AppTextStyles.titleLarge),
                     const SizedBox(height: 16),
                     
                     Container(
@@ -75,11 +102,11 @@ class ResultsScreen extends StatelessWidget {
                         runSpacing: 24,
                         alignment: WrapAlignment.center,
                         children: [
-                          _buildStatItem('12', 'Utterances'),
-                          _buildStatItem('62', 'Total Words'),
-                          _buildStatItem('37', 'Different Words'),
-                          _buildStatItem('5.2', 'MLU'),
-                          _buildStatItem('01:24', 'Duration'),
+                          _buildStatItem('${v.utterances}${v.utterances < 5 ? ' / 5' : ''}', 'ප්‍රකාශන'),
+                          _buildStatItem('${v.totalWords}', 'මුළු වචන'),
+                          _buildStatItem('${v.ndw}', 'වෙනස් වචන'),
+                          _buildStatItem(mlu, 'MLU'),
+                          _buildStatItem(duration, 'කාලය'),
                         ],
                       ),
                     ),
@@ -87,7 +114,7 @@ class ResultsScreen extends StatelessWidget {
                     const SizedBox(height: 48),
                     ElevatedButton(
                       onPressed: () => context.push('/c4/comparison'),
-                      child: const Text('Compare Sessions'),
+                      child: const Text('සැසි සසඳන්න'),
                     ),
                   ],
                 ),
@@ -102,7 +129,6 @@ class ResultsScreen extends StatelessWidget {
   Widget _buildResultCard({
     required String value,
     required String unit,
-    required String titleEn,
     required String titleSi,
     required String description,
     required IconData icon,
@@ -112,7 +138,7 @@ class ResultsScreen extends StatelessWidget {
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: AppColors.surfaceRaised,
-        borderRadius: AppRadii.lgAll,
+        borderRadius: AppRadii.mdAll,
         boxShadow: AppElevation.card,
         border: Border.all(color: AppColors.primaryWash, width: 2),
       ),
@@ -128,7 +154,6 @@ class ResultsScreen extends StatelessWidget {
             Text(unit, style: AppTextStyles.label.copyWith(color: AppColors.primary)),
           const SizedBox(height: 16),
           Text(titleSi, style: AppTextStyles.titleMedium),
-          Text(titleEn, style: AppTextStyles.label),
           const SizedBox(height: 8),
           Text(
             description,

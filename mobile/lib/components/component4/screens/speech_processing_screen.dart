@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swara/core/theme/app_theme.dart';
 import 'package:swara/components/component4/widgets/c4_header.dart';
+import 'package:swara/components/component4/services/c4_flow.dart';
+import 'package:swara/core/network/api_exception.dart';
 
 class SpeechProcessingScreen extends StatefulWidget {
   const SpeechProcessingScreen({super.key});
@@ -14,10 +16,10 @@ class _SpeechProcessingScreenState extends State<SpeechProcessingScreen> {
   int _activeStage = 1; // 0 completed, 1 processing
 
   final List<Map<String, dynamic>> _stages = [
-    {'title': 'Speech Recorded', 'icon': Icons.mic},
-    {'title': 'Sinhala Speech → Text', 'icon': Icons.translate},
-    {'title': 'Language Analysis', 'icon': Icons.analytics},
-    {'title': 'Communication Results', 'icon': Icons.assignment},
+    {'title': 'කථනය පටිගත කළා', 'icon': Icons.mic},
+    {'title': 'සිංහල කථනය → ලිඛිත වචන', 'icon': Icons.translate},
+    {'title': 'භාෂා විශ්ලේෂණය', 'icon': Icons.analytics},
+    {'title': 'සන්නිවේදන ප්‍රතිඵල', 'icon': Icons.assignment},
   ];
 
   @override
@@ -26,8 +28,12 @@ class _SpeechProcessingScreenState extends State<SpeechProcessingScreen> {
     _startProcessing();
   }
 
+  String? _error;
+
+  /// The stages advance while the API transcribes and analyses the sample; the last one waits for it.
   void _startProcessing() async {
-    for (int i = 1; i <= _stages.length; i++) {
+    final analysis = C4Flow.isLive ? C4Flow.waitForSample() : Future<void>.value();
+    for (int i = 1; i < _stages.length; i++) {
       await Future.delayed(const Duration(milliseconds: 1500));
       if (mounted) {
         setState(() {
@@ -35,6 +41,14 @@ class _SpeechProcessingScreenState extends State<SpeechProcessingScreen> {
         });
       }
     }
+    try {
+      await analysis;
+    } catch (e) {
+      if (mounted) setState(() => _error = ApiException.from(e).message);
+      return;
+    }
+    await Future.delayed(const Duration(milliseconds: 600));
+    if (mounted) setState(() => _activeStage = _stages.length);
   }
 
   @override
@@ -42,11 +56,11 @@ class _SpeechProcessingScreenState extends State<SpeechProcessingScreen> {
     final isComplete = _activeStage >= _stages.length;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.groundRead,
       body: SafeArea(
         child: Column(
           children: [
-            const C4Header(currentStep: 9, totalSteps: 12),
+            const C4Header(currentStep: 9, totalSteps: 14),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 48.0),
@@ -59,7 +73,7 @@ class _SpeechProcessingScreenState extends State<SpeechProcessingScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      isComplete ? 'Analysis Complete' : 'Understanding your speech...',
+                      isComplete ? 'විශ්ලේෂණය අවසන්' : 'ඔයාගේ කථනය තේරුම් ගනිමින්...',
                       style: AppTextStyles.body.copyWith(color: AppColors.textLight),
                       textAlign: TextAlign.center,
                     ),
@@ -68,12 +82,21 @@ class _SpeechProcessingScreenState extends State<SpeechProcessingScreen> {
                       return _buildProcessRow(index, _stages[index]['title']!, _stages[index]['icon']);
                     }),
                     const SizedBox(height: 48),
+                    if (_error != null) ...[
+                      Text(_error!, style: AppTextStyles.body.copyWith(color: AppColors.error), textAlign: TextAlign.center),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        // One sample per session, so recording again starts a new session.
+                        onPressed: () => context.go('/c4'),
+                        child: const Text('නැවත උත්සාහ කරන්න'),
+                      ),
+                    ],
                     if (isComplete)
                       ElevatedButton(
                         onPressed: () {
                           Future.microtask(() => context.push('/c4/transcription'));
                         },
-                        child: const Text('View Transcript'),
+                        child: const Text('පිටපත බලන්න'),
                       ),
                   ],
                 ),
@@ -117,7 +140,7 @@ class _SpeechProcessingScreenState extends State<SpeechProcessingScreen> {
                   ),
                 ),
                 Text(
-                  isCompleted ? 'Completed' : (isCurrent ? 'Processing...' : 'Waiting'),
+                  isCompleted ? 'අවසන්' : (isCurrent ? 'සකසමින්...' : 'බලා සිටියි'),
                   style: AppTextStyles.caption,
                 ),
               ],
